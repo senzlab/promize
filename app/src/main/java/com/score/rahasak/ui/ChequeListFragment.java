@@ -32,15 +32,15 @@ import com.score.senzc.pojos.Senz;
 import java.util.ArrayList;
 
 
-public class SecretListFragment extends ListFragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class ChequeListFragment extends ListFragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
-    private static final String TAG = SecretListFragment.class.getName();
+    private static final String TAG = ChequeListFragment.class.getName();
 
     private ActionBar actionBar;
     private ImageView actionBarDelete;
 
     private ArrayList<Secret> allSecretsList;
-    private SecretListAdapter adapter;
+    private ChequeListAdapter adapter;
     private SenzorsDbSource dbSource;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
@@ -59,7 +59,7 @@ public class SecretListFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.secret_list_fragment_layout, container, false);
+        return inflater.inflate(R.layout.cheque_list_fragment_layout, container, false);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class SecretListFragment extends ListFragment implements AdapterView.OnIt
      */
     private void displayList() {
         allSecretsList = dbSource.getRecentSecretList();
-        adapter = new SecretListAdapter(getContext(), allSecretsList);
+        adapter = new ChequeListAdapter(getContext(), allSecretsList);
         getListView().setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }

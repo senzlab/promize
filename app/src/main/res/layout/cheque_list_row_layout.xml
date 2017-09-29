@@ -103,7 +103,7 @@
                         android:layout_centerVertical="true"
                         android:ellipsize="end"
                         android:lines="1"
-                        android:text="Secret"
+                        android:text="2500.00"
                         android:textSize="18sp" />
 
                     <FrameLayout

@@ -41,9 +41,6 @@ public class SenzService extends Service {
     //private static final String SENZ_HOST = "10.2.2.1";
     public static final int SENZ_PORT = 7070;
 
-    public static final String STREAM_HOST = "senz.rahasak.com";
-    public static final int STREAM_PORT = 9090;
-
     // wake lock to keep
     private PowerManager powerManager;
     private PowerManager.WakeLock senzWakeLock;

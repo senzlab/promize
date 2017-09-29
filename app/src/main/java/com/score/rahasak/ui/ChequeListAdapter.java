@@ -19,13 +19,13 @@ import com.score.rahasak.utils.TimeUtils;
 
 import java.util.ArrayList;
 
-class SecretListAdapter extends BaseAdapter {
+class ChequeListAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<Secret> userSecretList;
     private Typeface typeface;
 
-    SecretListAdapter(Context _context, ArrayList<Secret> secretList) {
+    ChequeListAdapter(Context _context, ArrayList<Secret> secretList) {
         this.context = _context;
         this.userSecretList = secretList;
 
@@ -62,7 +62,7 @@ class SecretListAdapter extends BaseAdapter {
 
         if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.secret_list_row_layout, viewGroup, false);
+            view = layoutInflater.inflate(R.layout.cheque_list_row_layout, viewGroup, false);
 
             holder = new ViewHolder();
             holder.message = (TextView) view.findViewById(R.id.message);

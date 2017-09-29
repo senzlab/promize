@@ -129,7 +129,7 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
         // initialize drawer content
         // need to determine selected item according to the currently selected sensor type
         drawerItemList = new ArrayList();
-        drawerItemList.add(new DrawerItem("Secrets", R.drawable.rahaslogo, R.drawable.rahaslogo, true));
+        drawerItemList.add(new DrawerItem("Cheques", R.drawable.rahaslogo, R.drawable.rahaslogo, true));
         drawerItemList.add(new DrawerItem("Friends", R.drawable.rahaslogo, R.drawable.rahaslogo, false));
         drawerItemList.add(new DrawerItem("Invite", R.drawable.rahaslogo, R.drawable.rahaslogo, false));
 
@@ -203,14 +203,14 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
      * Load my sensor list fragment
      */
     private void loadRahas() {
-        titleText.setText("Secrets");
+        titleText.setText("Cheques");
         clearAboutText();
 
         unSelectDrawerItems();
         drawerItemList.get(0).setSelected(true);
         drawerAdapter.notifyDataSetChanged();
 
-        SecretListFragment fragment = new SecretListFragment();
+        ChequeListFragment fragment = new ChequeListFragment();
 
         // fragment transitions
         // Replace whatever is in the fragment_container view with this fragment,
