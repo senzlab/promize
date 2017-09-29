@@ -7,7 +7,7 @@ import com.score.rahasak.enums.IntentType;
 import com.score.rahasak.exceptions.InvalidIntentType;
 
 /**
- * This class is responsible to distribute specific or general itents.
+ * This class is responsible to distribute specific or general intents.
  * Please use this wrapper to send out intents inside the app
  */
 public class IntentProvider {

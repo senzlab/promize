@@ -285,7 +285,7 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void selectAboutText() {
-        aboutText.setTextColor(Color.parseColor("#F88F8C"));
+        aboutText.setTextColor(getResources().getColor(R.color.colorPrimary));
         aboutText.setTypeface(typeface, Typeface.BOLD);
     }
 
