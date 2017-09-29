@@ -17,7 +17,6 @@ public class InviteFragment extends Fragment {
 
     // Ui elements
     private TextView invite_text;
-    private Button addFriendBtn;
     private Button openContactsBtn;
 
     private Typeface typeface;
@@ -34,7 +33,6 @@ public class InviteFragment extends Fragment {
         typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GeosansLight.ttf");
         setupUiElements();
         setupOpenContactsBtn();
-        setupAddUsersBtn();
     }
 
     private void setupUiElements() {
@@ -49,17 +47,6 @@ public class InviteFragment extends Fragment {
             public void onClick(View v) {
                 // Click action
                 Intent intent = new Intent(getActivity(), ContactListActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void setupAddUsersBtn() {
-        addFriendBtn = (Button) getActivity().findViewById(R.id.add_friend_btn);
-        addFriendBtn.setTypeface(typeface, Typeface.BOLD);
-        addFriendBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AddUsernameActivity.class);
                 startActivity(intent);
             }
         });

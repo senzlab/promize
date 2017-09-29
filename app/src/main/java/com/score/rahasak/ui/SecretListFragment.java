@@ -123,9 +123,10 @@ public class SecretListFragment extends ListFragment implements AdapterView.OnIt
             adapter.notifyDataSetChanged();
             actionBarDelete.setVisibility(View.GONE);
         } else {
-            Intent intent = new Intent(this.getActivity(), ChatActivity.class);
-            intent.putExtra("SENDER", allSecretsList.get(position).getUser().getUsername());
-            startActivity(intent);
+            // todo open cheque
+//            Intent intent = new Intent(this.getActivity(), ChatActivity.class);
+//            intent.putExtra("SENDER", allSecretsList.get(position).getUser().getUsername());
+//            startActivity(intent);
         }
     }
 

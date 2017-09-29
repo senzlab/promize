@@ -15,7 +15,6 @@ import com.score.rahasak.application.IntentProvider;
 import com.score.rahasak.application.SenzApplication;
 import com.score.rahasak.enums.NotificationType;
 import com.score.rahasak.pojo.SenzNotification;
-import com.score.rahasak.ui.ChatActivity;
 import com.score.rahasak.ui.DrawerActivity;
 
 public class SenzNotificationManager {
@@ -85,7 +84,7 @@ public class SenzNotificationManager {
         // set up pending intent
         Intent intent;
         if (senzNotification.getNotificationType() == NotificationType.NEW_SECRET) {
-            intent = new Intent(context, ChatActivity.class);
+            intent = new Intent(context, DrawerActivity.class);
             intent.putExtra("SENDER", senzNotification.getSender());
         } else {
             intent = new Intent(context, DrawerActivity.class);

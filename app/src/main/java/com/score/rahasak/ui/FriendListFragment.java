@@ -119,9 +119,10 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
             actionBarDelete.setVisibility(View.GONE);
         } else {
             if (secretUser.isActive()) {
-                Intent intent = new Intent(this.getActivity(), ChatActivity.class);
-                intent.putExtra("SENDER", secretUser.getUsername());
-                startActivity(intent);
+                // todo go to new cheque
+//                Intent intent = new Intent(this.getActivity(), ChatActivity.class);
+//                intent.putExtra("SENDER", secretUser.getUsername());
+//                startActivity(intent);
             } else {
                 if (secretUser.isSMSRequester()) {
                     String contactName = PhoneBookUtil.getContactName(getActivity(), secretUser.getPhone());

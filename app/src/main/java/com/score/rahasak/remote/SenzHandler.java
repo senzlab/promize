@@ -1,21 +1,15 @@
 package com.score.rahasak.remote;
 
-import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Base64;
 import android.util.Log;
 
-import com.score.rahasak.application.SenzApplication;
 import com.score.rahasak.db.SenzorsDbSource;
 import com.score.rahasak.enums.BlobType;
 import com.score.rahasak.enums.DeliveryState;
 import com.score.rahasak.pojo.Secret;
 import com.score.rahasak.pojo.SecretUser;
-import com.score.rahasak.ui.SecretCallAnswerActivity;
-import com.score.rahasak.ui.SelfieCallAnswerActivity;
 import com.score.rahasak.utils.CryptoUtils;
 import com.score.rahasak.utils.ImageUtils;
 import com.score.rahasak.utils.NotificationUtils;
@@ -27,7 +21,6 @@ import com.score.senzc.pojos.User;
 
 import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 class SenzHandler {
@@ -45,7 +38,7 @@ class SenzHandler {
 
     void handle(String senzMsg, SenzService senzService) {
         if (senzMsg.equalsIgnoreCase("TAK")) {
-            // senz service connected, send unack senzes if available
+            // senz service connected, send un-ack senzes if available
             handleConnect(senzService);
         } else if (senzMsg.equalsIgnoreCase("TIK")) {
             // write tuk from here
@@ -181,22 +174,7 @@ class SenzHandler {
     }
 
     private void handleGet(Senz senz, SenzService senzService) {
-        if (senz.getAttributes().containsKey("cam")) {
-            // send ack back
-            senzService.writeSenz(SenzUtils.getAckSenz(new User("", "senzswitch"), senz.getAttributes().get("uid"), "DELIVERED"));
 
-            // launch camera
-            handleCam(senz, senzService);
-        } else if (senz.getAttributes().containsKey("mic")) {
-            // send ack back
-            senzService.writeSenz(SenzUtils.getAckSenz(new User("", "senzswitch"), senz.getAttributes().get("uid"), "DELIVERED"));
-
-            // launch mic
-            handleMic(senz, senzService);
-        } else if (senz.getAttributes().containsKey("lat")) {
-            // handle location
-            handleLocation(senz, senzService);
-        }
     }
 
     private void handleData(Senz senz, SenzService senzService) {
@@ -349,49 +327,6 @@ class SenzHandler {
             SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
                     NotificationUtils.getStreamNotification(notificationUser, "New selfie received", username));
         }
-    }
-
-    private void handleCam(Senz senz, SenzService senzService) {
-        if (!SenzApplication.isOnCall()) {
-            try {
-                Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.SECOND, 2);
-
-                Intent intent = new Intent(senzService.getApplicationContext(), SelfieCallAnswerActivity.class);
-                intent.putExtra("USER", senz.getSender().getUsername());
-                PendingIntent pendingIntent = PendingIntent.getActivity(senzService.getApplicationContext(), 12345, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-                AlarmManager am = (AlarmManager) senzService.getApplicationContext().getSystemService(Activity.ALARM_SERVICE);
-                am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-            } catch (Exception e) {
-                // fail to access camera
-                senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "CAM_ERROR"));
-            }
-        } else {
-            // user in another call
-            senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "CAM_BUSY"));
-        }
-    }
-
-    private void handleMic(Senz senz, SenzService senzService) {
-        if (!SenzApplication.isOnCall()) {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.SECOND, 2);
-
-            Intent intent = new Intent(senzService.getApplicationContext(), SecretCallAnswerActivity.class);
-            intent.putExtra("USER", senz.getSender().getUsername());
-            PendingIntent pendingIntent = PendingIntent.getActivity(senzService.getApplicationContext(), 12345, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager am = (AlarmManager) senzService.getApplicationContext().getSystemService(Activity.ALARM_SERVICE);
-            am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-        } else {
-            // user in another call
-            senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "BUSY"));
-        }
-    }
-
-    private void handleLocation(Senz senz, SenzService senzService) {
-        Intent intent = new Intent(senzService.getApplicationContext(), LatLonService.class);
-        intent.putExtra("SENZ", senz);
-        senzService.getApplicationContext().startService(intent);
     }
 
     private void broadcastSenz(Senz senz, Context context) {

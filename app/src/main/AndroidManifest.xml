@@ -5,28 +5,9 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.MAPS_RECEIVE" />
 
     <!-- To boot complete broadcast receiver -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
-    <!-- My Location -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-    <!-- access to camera -->
-    <uses-permission android:name="android.permission.CAMERA" />
-
-    <!-- access to mic -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
-    <!-- access to modify audio manager -->
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
-
-    <!-- keep screen active when camera is open -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
 
     <!-- access to vibrate phone -->
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -64,15 +45,6 @@
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme">
 
-        <!-- prod/debug key -->
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDnmMtrhhkeIeNjXQTkSE1cPcwEPfufnVM" />
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
         <!-- - activities -->
         <activity
             android:name="com.score.rahasak.ui.SplashActivity"
@@ -86,52 +58,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.score.rahasak.ui.MapActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name="com.score.rahasak.ui.ChatActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name="com.score.rahasak.ui.DrawerActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
-        <activity
-            android:name="com.score.rahasak.ui.AddUsernameActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme"
-            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name="com.score.rahasak.ui.RegistrationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.score.rahasak.ui.SelfieCallAnswerActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity
             android:name="com.score.rahasak.ui.UserProfileActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
-            android:name="com.score.rahasak.ui.SelfieCallActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
-            android:name="com.score.rahasak.ui.SecretCallAnswerActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
-            android:name="com.score.rahasak.ui.SecretCallActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
@@ -144,12 +81,6 @@
             android:theme="@style/MyMaterialTheme" />
 
         <!-- Servicves -->
-        <service
-            android:name="com.score.rahasak.remote.LatLonService"
-            android:enabled="true" />
-        <service
-            android:name="com.score.rahasak.remote.CallService"
-            android:enabled="true" />
         <service
             android:name="com.score.rahasak.remote.SenzService"
             android:enabled="true">
