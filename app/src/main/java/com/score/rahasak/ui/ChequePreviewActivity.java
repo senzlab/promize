@@ -3,13 +3,13 @@ package com.score.rahasak.ui;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,18 +17,16 @@ import com.score.rahasak.R;
 import com.score.rahasak.application.IntentProvider;
 import com.score.rahasak.enums.IntentType;
 import com.score.rahasak.pojo.Cheque;
-import com.score.rahasak.utils.ActivityUtils;
+import com.score.rahasak.utils.ImageUtils;
 import com.score.senzc.pojos.Senz;
 
-public class NewChequeActivity extends BaseActivity implements View.OnClickListener {
+public class ChequePreviewActivity extends BaseActivity {
 
     private static final String TAG = NewChequeActivity.class.getName();
 
     // ui controls
-    private EditText user;
-    private EditText amount;
-    private EditText date;
-    private Button send;
+    private ImageView chqueImg;
+    private Cheque cheque;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
         @Override
@@ -44,9 +42,10 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.new_cheque_activity_layout);
+        setContentView(R.layout.cheque_preview_activity_layout);
 
-        initUi();
+        initPrefs();
+        initCheque();
         initToolbar();
         initActionBar();
     }
@@ -84,22 +83,35 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
         if (senzReceiver != null) unregisterReceiver(senzReceiver);
     }
 
-    private void initUi() {
-        user = (EditText) findViewById(R.id.new_cheque_username);
-        amount = (EditText) findViewById(R.id.new_cheque_amount);
-        date = (EditText) findViewById(R.id.new_cheque_date);
+    private void initPrefs() {
+        this.cheque = getIntent().getParcelableExtra("cheque");
+    }
 
-        user.setTypeface(typeface, Typeface.BOLD);
-        amount.setTypeface(typeface, Typeface.BOLD);
-        date.setTypeface(typeface, Typeface.BOLD);
+    private void initCheque() {
+        chqueImg = (ImageView) findViewById(R.id.cheque_preview);
 
-        send = (Button) findViewById(R.id.new_cheque_send);
-        send.setOnClickListener(this);
+        // sign cheque
+        Bitmap chq = ImageUtils.loadImg(this, "chq.jpg");
+        Bitmap sig = ImageUtils.loadImg(this, "sign.png");
+
+        // sign cheque
+        // add text
+        Bitmap sChq = ImageUtils.addSign(chq, sig);
+
+        // compress
+        byte[] bytes = ImageUtils.bmpToBytes(sChq);
+        byte[] compBytes = ImageUtils.compressImage(bytes);
+
+        // set cheque
+        cheque.setImg(Base64.encodeToString(compBytes, Base64.DEFAULT));
+
+        Bitmap cChq = ImageUtils.bytesToBmp(compBytes);
+        chqueImg.setImageBitmap(cChq);
     }
 
     private void initActionBar() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setCustomView(getLayoutInflater().inflate(R.layout.new_cheque_header, null));
+        getSupportActionBar().setCustomView(getLayoutInflater().inflate(R.layout.cheque_preview_header, null));
         getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
 
@@ -124,29 +136,7 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
     }
 
-    private void onClickPreview() {
-        // create cheque
-        Cheque cheque = new Cheque(
-                user.getText().toString().trim(),
-                Integer.parseInt(amount.getText().toString())
-        );
-        cheque.setDate(date.getText().toString().trim());
-
-        // cheque preview
-        Intent intent = new Intent(this, ChequePreviewActivity.class);
-        intent.putExtra("cheque", cheque);
-        startActivity(intent);
-    }
-
     private void handleSenz(Senz senz) {
 
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == send) {
-            ActivityUtils.hideSoftKeyboard(this);
-            onClickPreview();
-        }
     }
 }

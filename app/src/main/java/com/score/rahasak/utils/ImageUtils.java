@@ -186,17 +186,17 @@ public class ImageUtils {
         return result;
     }
 
-    private byte[] bmpToBytes(Bitmap bitmap) {
+    public static byte[] bmpToBytes(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
     }
 
-    private Bitmap bytesToBmp(byte[] bytes) {
+    public static Bitmap bytesToBmp(byte[] bytes) {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
-    private Bitmap loadImg(Context context, String imgName) {
+    public static Bitmap loadImg(Context context, String imgName) {
         Bitmap bit = null;
         try {
             InputStream bitmap = context.getAssets().open(imgName);
@@ -208,7 +208,7 @@ public class ImageUtils {
         return bit;
     }
 
-    private Bitmap addImg(Bitmap chq, Bitmap sig) {
+    public static Bitmap addSign(Bitmap chq, Bitmap sig) {
         Bitmap rSig = Bitmap.createScaledBitmap(sig, 150, 40, false);
 
         Bitmap sChq = Bitmap.createBitmap(chq.getWidth(), chq.getHeight(), chq.getConfig());
@@ -219,7 +219,7 @@ public class ImageUtils {
         return sChq;
     }
 
-    private void addText(Bitmap chq, String text) {
+    public static void addText(Bitmap chq, String text) {
 
     }
 }
