@@ -18,10 +18,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class ImageUtils {
 
-    public static byte[] compressImage(byte[] data, int camId) {
+    public static byte[] compressImage(byte[] data) {
         Bitmap scaledBitmap = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
 
@@ -91,18 +92,6 @@ public class ImageUtils {
         canvas.setMatrix(scaleMatrix);
         canvas.drawBitmap(bmp, middleX - bmp.getWidth() / 2, middleY - bmp.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
 
-        // rotate
-        Matrix matrix = new Matrix();
-        int orientation = Exif.getOrientation(data);
-        if (orientation == 0) {
-            // rotate based on camera id(front/back)
-            if (camId == 0) matrix.postRotate(90);
-            else matrix.postRotate(-90);
-        } else {
-            matrix.postRotate(orientation);
-        }
-        scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
-
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 85, out);
 
@@ -164,7 +153,7 @@ public class ImageUtils {
 
     public static String saveImg(String name, byte[] image) {
         // create root
-        File rahasakRootDir = new File(Environment.getExternalStorageDirectory().getPath() + "/Rahasak");
+        File rahasakRootDir = new File(Environment.getExternalStorageDirectory().getPath() + "/ChequeBook");
         if (!rahasakRootDir.exists()) {
             rahasakRootDir.mkdirs();
         }
@@ -184,7 +173,7 @@ public class ImageUtils {
     }
 
     public static void deleteImg(String name) {
-        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Rahasak/" + name);
+        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/ChequeBook/" + name);
         if (file.exists()) {
             file.delete();
         }
@@ -195,5 +184,42 @@ public class ImageUtils {
         for (int i = 0; i < result.length; i++)
             result[i] = src.substring(i * len, Math.min(src.length(), (i + 1) * len));
         return result;
+    }
+
+    private byte[] bmpToBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    private Bitmap bytesToBmp(byte[] bytes) {
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    private Bitmap loadImg(Context context, String imgName) {
+        Bitmap bit = null;
+        try {
+            InputStream bitmap = context.getAssets().open(imgName);
+            bit = BitmapFactory.decodeStream(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return bit;
+    }
+
+    private Bitmap addImg(Bitmap chq, Bitmap sig) {
+        Bitmap rSig = Bitmap.createScaledBitmap(sig, 150, 40, false);
+
+        Bitmap sChq = Bitmap.createBitmap(chq.getWidth(), chq.getHeight(), chq.getConfig());
+        Canvas canvas = new Canvas(sChq);
+        canvas.drawBitmap(chq, 0, 0, null);
+        canvas.drawBitmap(rSig, 400, 150, null);
+
+        return sChq;
+    }
+
+    private void addText(Bitmap chq, String text) {
+
     }
 }

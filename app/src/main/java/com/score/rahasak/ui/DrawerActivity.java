@@ -90,18 +90,8 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, slideOffset);
                 float moveFactor = (drawerListView.getWidth() * slideOffset);
-                float lastTranslate = 0.0f;
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                    frame.setTranslationX(moveFactor);
-                } else {
-                    TranslateAnimation anim = new TranslateAnimation(lastTranslate, moveFactor, 0.0f, 0.0f);
-                    anim.setDuration(0);
-                    anim.setFillAfter(true);
-                    frame.startAnimation(anim);
-
-                    lastTranslate = moveFactor;
-                }
+                frame.setTranslationX(moveFactor);
             }
         };
         drawerLayout.addDrawerListener(actionBarDrawerToggle);

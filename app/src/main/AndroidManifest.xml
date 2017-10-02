@@ -75,6 +75,10 @@
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name="com.score.rahasak.ui.NewChequeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
             android:name="com.score.rahasak.ui.UserProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />

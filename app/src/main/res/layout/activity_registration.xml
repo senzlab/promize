@@ -65,7 +65,8 @@
                 android:textColor="@color/android_grey"
                 android:textColorHint="@color/clouds"
                 android:inputType="textNoSuggestions"
-                android:background="@drawable/border_bottom"
+                android:textCursorDrawable="@drawable/cursor_drawable"
+                android:background="@drawable/edit_text_border_bottom"
                 android:textSize="25sp" />
 
             <FrameLayout

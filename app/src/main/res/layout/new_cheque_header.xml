@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent">
+    android:background="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
+        android:background="@color/white"
         android:clipToPadding="false"
         android:orientation="horizontal">
 
@@ -25,16 +25,22 @@
             android:layout_height="match_parent"
             android:layout_weight="5"
             android:gravity="center"
-            android:textColor="@color/colorPrimary"
-            android:text="Invite"
-            android:textSize="20dp"
+            android:text="New cheque"
             android:textAlignment="center"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20dp" />
 
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="7dp"/>
+            android:padding="7dp" />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:layout_alignParentBottom="true"
+        android:background="#d4d4d4" />
 </RelativeLayout>
