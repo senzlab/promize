@@ -31,11 +31,13 @@
             android:textColor="@color/colorPrimary"
             android:textSize="20dp" />
 
-        <FrameLayout
+        <ImageView
+            android:id="@+id/done_btn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:padding="7dp" />
+            android:padding="15dp"
+            android:src="@drawable/back" />
     </LinearLayout>
 
     <TextView

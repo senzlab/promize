@@ -92,6 +92,17 @@ public class ImageUtils {
         canvas.setMatrix(scaleMatrix);
         canvas.drawBitmap(bmp, middleX - bmp.getWidth() / 2, middleY - bmp.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
 
+        // rotate
+        Matrix matrix = new Matrix();
+        int orientation = Exif.getOrientation(data);
+        if (orientation == 0) {
+            // rotate based on camera id(front/back)
+            matrix.postRotate(-90);
+        } else {
+            matrix.postRotate(orientation);
+        }
+        scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
+
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 85, out);
 

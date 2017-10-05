@@ -18,6 +18,7 @@ import com.score.rahasak.application.IntentProvider;
 import com.score.rahasak.enums.IntentType;
 import com.score.rahasak.pojo.Cheque;
 import com.score.rahasak.utils.ImageUtils;
+import com.score.rahasak.utils.SenzUtils;
 import com.score.senzc.pojos.Senz;
 
 public class ChequePreviewActivity extends BaseActivity {
@@ -46,8 +47,8 @@ public class ChequePreviewActivity extends BaseActivity {
 
         initPrefs();
         initCheque();
-        initToolbar();
-        initActionBar();
+        //initToolbar();
+        //initActionBar();
     }
 
     @Override
@@ -127,6 +128,15 @@ public class ChequePreviewActivity extends BaseActivity {
                 finish();
             }
         });
+
+        // done button
+        ImageView doneBtn = (ImageView) findViewById(R.id.done_btn);
+        doneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendCheque();
+            }
+        });
     }
 
     private void initToolbar() {
@@ -138,5 +148,10 @@ public class ChequePreviewActivity extends BaseActivity {
 
     private void handleSenz(Senz senz) {
 
+    }
+
+    private void sendCheque() {
+        Senz senz = SenzUtils.getShareChequeSenz(this, cheque);
+        send(senz);
     }
 }

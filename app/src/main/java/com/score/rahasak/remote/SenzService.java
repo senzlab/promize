@@ -37,8 +37,8 @@ public class SenzService extends Service {
 
     private static final String TAG = SenzService.class.getName();
 
-    private static final String SENZ_HOST = "senz.rahasak.com";
-    //private static final String SENZ_HOST = "10.2.2.1";
+    //private static final String SENZ_HOST = "senz.rahasak.com";
+    private static final String SENZ_HOST = "10.2.2.59";
     public static final int SENZ_PORT = 7070;
 
     // wake lock to keep
@@ -196,7 +196,7 @@ public class SenzService extends Service {
                     // get digital signature of the senz
                     String senzPayload = SenzParser.getSenzPayload(senz);
                     String signature;
-                    if (senz.getSenzType() == SenzTypeEnum.STREAM) {
+                    if (senz.getSenzType() == SenzTypeEnum.SHARE) {
                         signature = "SIG";
                     } else {
                         signature = CryptoUtils.getDigitalSignature(senzPayload.replaceAll(" ", ""), privateKey);
