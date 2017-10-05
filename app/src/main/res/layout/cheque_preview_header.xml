@@ -2,12 +2,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/transparent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@android:color/transparent"
         android:clipToPadding="false"
         android:orientation="horizontal">
 
@@ -17,7 +17,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="15dp"
-            android:src="@drawable/back" />
+            android:src="@drawable/backo" />
 
         <TextView
             android:id="@+id/title"
@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:padding="15dp"
-            android:src="@drawable/back" />
+            android:src="@drawable/tick" />
     </LinearLayout>
 
     <TextView

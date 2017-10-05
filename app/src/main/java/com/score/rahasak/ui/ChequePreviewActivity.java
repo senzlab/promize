@@ -47,8 +47,8 @@ public class ChequePreviewActivity extends BaseActivity {
 
         initPrefs();
         initCheque();
-        //initToolbar();
-        //initActionBar();
+        initToolbar();
+        initActionBar();
     }
 
     @Override
