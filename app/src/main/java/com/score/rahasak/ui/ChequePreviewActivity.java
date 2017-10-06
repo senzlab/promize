@@ -10,13 +10,16 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.score.rahasak.R;
 import com.score.rahasak.application.IntentProvider;
 import com.score.rahasak.enums.IntentType;
 import com.score.rahasak.pojo.Cheque;
+import com.score.rahasak.utils.ActivityUtils;
 import com.score.rahasak.utils.ImageUtils;
 import com.score.rahasak.utils.SenzUtils;
+import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
 public class ChequePreviewActivity extends BaseActivity {
@@ -122,13 +125,21 @@ public class ChequePreviewActivity extends BaseActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ActivityUtils.showProgressDialog(ChequePreviewActivity.this, "Sharing...");
                 sendCheque();
             }
         });
     }
 
     private void handleSenz(Senz senz) {
-
+        if (senz.getSenzType() == SenzTypeEnum.DATA) {
+            if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
+                // share success
+                ActivityUtils.cancelProgressDialog();
+                Toast.makeText(ChequePreviewActivity.this, "Share success", Toast.LENGTH_LONG).show();
+                ChequePreviewActivity.this.finish();
+            }
+        }
     }
 
     private void sendCheque() {

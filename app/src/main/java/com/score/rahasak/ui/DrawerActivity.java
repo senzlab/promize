@@ -117,7 +117,8 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
         // initialize drawer content
         // need to determine selected item according to the currently selected sensor type
         drawerItemList = new ArrayList();
-        drawerItemList.add(new DrawerItem("Cheques", R.drawable.rahaslogo, R.drawable.rahaslogo, true));
+        drawerItemList.add(new DrawerItem("Inbox", R.drawable.rahaslogo, R.drawable.rahaslogo, true));
+        drawerItemList.add(new DrawerItem("Outbox", R.drawable.rahaslogo, R.drawable.rahaslogo, true));
         drawerItemList.add(new DrawerItem("Friends", R.drawable.rahaslogo, R.drawable.rahaslogo, false));
         drawerItemList.add(new DrawerItem("Invite", R.drawable.rahaslogo, R.drawable.rahaslogo, false));
 
@@ -180,8 +181,10 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
             if (position == 0) {
                 loadRahas();
             } else if (position == 1) {
-                loadFriends();
+                loadOutbox();
             } else if (position == 2) {
+                loadFriends();
+            } else if (position == 3) {
                 loadInvite();
             }
         }
@@ -191,7 +194,7 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
      * Load my sensor list fragment
      */
     private void loadRahas() {
-        titleText.setText("Cheques");
+        titleText.setText("Inbox");
         clearAboutText();
 
         unSelectDrawerItems();
@@ -208,6 +211,15 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
         transaction.commit();
     }
 
+    private void loadOutbox() {
+        titleText.setText("Inbox");
+        clearAboutText();
+
+        unSelectDrawerItems();
+        drawerItemList.get(1).setSelected(true);
+        drawerAdapter.notifyDataSetChanged();
+    }
+
     /**
      * Load my sensor list fragment
      */
@@ -216,7 +228,7 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
         clearAboutText();
 
         unSelectDrawerItems();
-        drawerItemList.get(1).setSelected(true);
+        drawerItemList.get(2).setSelected(true);
         drawerAdapter.notifyDataSetChanged();
 
         FriendListFragment fragment = new FriendListFragment();
@@ -234,7 +246,7 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
         clearAboutText();
 
         unSelectDrawerItems();
-        drawerItemList.get(2).setSelected(true);
+        drawerItemList.get(3).setSelected(true);
         drawerAdapter.notifyDataSetChanged();
 
         InviteFragment fragment = new InviteFragment();
