@@ -23,6 +23,7 @@
         android:layout_weight="1"
         android:background="@color/white"
         android:fillViewport="true"
+        android:scrollbars="none"
         android:orientation="vertical">
 
         <LinearLayout
