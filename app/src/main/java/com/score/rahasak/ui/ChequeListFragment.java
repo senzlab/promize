@@ -25,6 +25,7 @@ import com.score.rahasak.R;
 import com.score.rahasak.application.IntentProvider;
 import com.score.rahasak.db.SenzorsDbSource;
 import com.score.rahasak.enums.IntentType;
+import com.score.rahasak.pojo.Cheque;
 import com.score.rahasak.pojo.Secret;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
@@ -131,9 +132,13 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
             adapter.notifyDataSetChanged();
             actionBarDelete.setVisibility(View.GONE);
         } else {
+            // create cheque
+            Cheque cheque = new Cheque(secret.getUser().getUsername(), 400);
+            cheque.setId(secret.getId());
+
             // open cheque
-            Intent intent = new Intent(this.getActivity(), ChequePActivity.class);
-            intent.putExtra("UID", secret.getId());
+            Intent intent = new Intent(this.getActivity(), ViewChequeActivity.class);
+            intent.putExtra("CHEQUE", cheque);
             startActivity(intent);
         }
     }

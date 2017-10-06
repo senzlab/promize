@@ -4,14 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.score.rahasak.R;
 import com.score.rahasak.application.IntentProvider;
@@ -23,9 +21,11 @@ import com.score.senzc.pojos.Senz;
 
 public class ChequePreviewActivity extends BaseActivity {
 
-    private static final String TAG = NewChequeActivity.class.getName();
+    private static final String TAG = ChequePActivity.class.getName();
 
     // ui controls
+    private FloatingActionButton cancel;
+    private FloatingActionButton done;
     private ImageView chqueImg;
     private Cheque cheque;
 
@@ -43,12 +43,11 @@ public class ChequePreviewActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.cheque_preview_activity_layout);
+        setContentView(R.layout.cheque_p);
 
         initPrefs();
         initCheque();
-        initToolbar();
-        initActionBar();
+        initUi();
     }
 
     @Override
@@ -85,7 +84,7 @@ public class ChequePreviewActivity extends BaseActivity {
     }
 
     private void initPrefs() {
-        this.cheque = getIntent().getParcelableExtra("cheque");
+        this.cheque = getIntent().getParcelableExtra("CHEQUE");
     }
 
     private void initCheque() {
@@ -110,40 +109,22 @@ public class ChequePreviewActivity extends BaseActivity {
         chqueImg.setImageBitmap(cChq);
     }
 
-    private void initActionBar() {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setCustomView(getLayoutInflater().inflate(R.layout.cheque_preview_header, null));
-        getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-
-        // title
-        TextView titleText = (TextView) findViewById(R.id.title);
-        titleText.setTypeface(typeface, Typeface.BOLD);
-
-        // back button
-        ImageView backBtn = (ImageView) findViewById(R.id.back_btn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
+    private void initUi() {
+        cancel = (FloatingActionButton) findViewById(R.id.close);
+        cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
 
-        // done button
-        ImageView doneBtn = (ImageView) findViewById(R.id.done_btn);
-        doneBtn.setOnClickListener(new View.OnClickListener() {
+        done = (FloatingActionButton) findViewById(R.id.done);
+        done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendCheque();
             }
         });
-    }
-
-    private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setCollapsible(false);
-        toolbar.setOverScrollMode(Toolbar.OVER_SCROLL_NEVER);
-        setSupportActionBar(toolbar);
     }
 
     private void handleSenz(Senz senz) {

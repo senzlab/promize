@@ -4,10 +4,19 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Cheque implements Parcelable {
+    private String id;
     private String account;
     private int amount;
     private String date;
     private String img;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getAccount() {
         return account;
@@ -47,6 +56,7 @@ public class Cheque implements Parcelable {
     }
 
     protected Cheque(Parcel in) {
+        id = in.readString();
         account = in.readString();
         amount = in.readInt();
         date = in.readString();
@@ -72,6 +82,7 @@ public class Cheque implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(account);
         dest.writeInt(amount);
         dest.writeString(date);
