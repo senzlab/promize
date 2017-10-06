@@ -83,6 +83,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
+            android:name="com.score.rahasak.ui.ChequePActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
             android:name="com.score.rahasak.ui.UserProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />

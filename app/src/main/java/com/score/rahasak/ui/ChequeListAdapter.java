@@ -95,6 +95,7 @@ class ChequeListAdapter extends BaseAdapter {
             viewHolder.sender.setText("@" + secret.getUser().getUsername());
         }
 
+        viewHolder.sender.setText("@" + secret.getUser().getUsername());
         if (secret.getBlobType() == BlobType.TEXT) {
             viewHolder.message.setText("Message");
         } else if (secret.getBlobType() == BlobType.IMAGE) {

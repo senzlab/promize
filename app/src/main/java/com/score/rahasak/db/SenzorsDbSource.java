@@ -433,7 +433,7 @@ public class SenzorsDbSource {
             _deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.DELIVERY_STATE));
 
             // create secret
-            Secret secret = new Secret(_secretBlob, BlobType.valueOfType(_secretBlobType), getSecretUser(_username), _secretIsSender == 1);
+            Secret secret = new Secret(_secretBlob, BlobType.valueOfType(_secretBlobType), new SecretUser("id", _username), _secretIsSender == 1);
             secret.setId(_secretId);
             secret.setViewed(_isViewed == 1);
             secret.setMissed(_isMissed == 1);
