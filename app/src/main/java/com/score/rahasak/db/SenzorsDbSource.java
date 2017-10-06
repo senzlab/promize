@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.score.rahasak.enums.BlobType;
 import com.score.rahasak.enums.DeliveryState;
-import com.score.rahasak.pojo.Permission;
 import com.score.rahasak.pojo.Secret;
 import com.score.rahasak.pojo.SecretUser;
 import com.score.rahasak.utils.TimeUtils;
@@ -97,18 +96,6 @@ public class SenzorsDbSource {
     public void createSecretUser(SecretUser secretUser) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
-        // create two empty permissions
-        Permission givenPerm = new Permission("id", true);
-        givenPerm.setCam(true);
-        givenPerm.setLoc(true);
-        String givenPermId = createPermission(givenPerm);
-
-        // create recev permission
-        Permission recevPerm = new Permission("id", false);
-        recevPerm.setCam(true);
-        recevPerm.setLoc(true);
-        String recvPermId = createPermission(recevPerm);
-
         // content values to inset
         ContentValues values = new ContentValues();
         values.put(SenzorsDbContract.User.COLUMN_NAME_USERNAME, secretUser.getUsername());
@@ -124,8 +111,6 @@ public class SenzorsDbSource {
             values.put(SenzorsDbContract.User.COLUMN_NAME_IMAGE, secretUser.getImage());
         values.put(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE, secretUser.isActive() ? 1 : 0);
         values.put(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER, secretUser.isSMSRequester() ? 1 : 0);
-        values.put(SenzorsDbContract.User.COLUMN_NAME_GIVEN_PERM, givenPermId);
-        values.put(SenzorsDbContract.User.COLUMN_NAME_RECV_PERM, recvPermId);
 
         // Insert the new row, if fails throw an error
         // fails means user already exists
@@ -230,14 +215,9 @@ public class SenzorsDbSource {
             String _pubKey = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY));
             String _pubKeyHash = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY_HASH));
             String _image = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IMAGE));
-            String _givenPermId = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_GIVEN_PERM));
-            String _recvPermId = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_RECV_PERM));
             String _sessionKey = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_SESSION_KEY));
             int _isActive = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE));
             int _isSmsRequester = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER));
-
-            Permission givenPerm = getPermission(_givenPermId);
-            Permission recvPerm = getPermission(_recvPermId);
 
             // clear
             cursor.close();
@@ -248,8 +228,6 @@ public class SenzorsDbSource {
             secretUser.setPubKeyHash(_pubKeyHash);
             secretUser.setImage(_image);
             secretUser.setActive(_isActive == 1);
-            secretUser.setGivenPermission(givenPerm);
-            secretUser.setRecvPermission(recvPerm);
             secretUser.setSMSRequester(_isSmsRequester == 1);
             secretUser.setSessionKey(_sessionKey);
 
@@ -279,13 +257,7 @@ public class SenzorsDbSource {
             String _pubKeyHash = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY_HASH));
             int _isActive = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE));
             String _image = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IMAGE));
-            String _givenPermId = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_GIVEN_PERM));
-            String _recvPermId = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_RECV_PERM));
             int _isSmsRequester = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER));
-
-            // get permission
-            Permission givenPerm = getPermission(_givenPermId);
-            Permission recvPerm = getPermission(_recvPermId);
 
             SecretUser secretUser = new SecretUser(_userID, _username);
             secretUser.setPhone(_phone);
@@ -293,73 +265,14 @@ public class SenzorsDbSource {
             secretUser.setPubKeyHash(_pubKeyHash);
             secretUser.setImage(_image);
             secretUser.setActive(_isActive == 1);
-            secretUser.setGivenPermission(givenPerm);
-            secretUser.setRecvPermission(recvPerm);
             secretUser.setSMSRequester(_isSmsRequester == 1);
-            // Add created User to list
+
             secretUserList.add(secretUser);
         }
 
         cursor.close();
 
         return secretUserList;
-    }
-
-    private String createPermission(Permission permission) {
-        Log.d(TAG, "Add new permission with isGiven=" + permission.isGiven());
-        SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
-
-        // content values to inset
-        ContentValues values = new ContentValues();
-        values.put(SenzorsDbContract.Permission.COLUMN_NAME_CAMERA, permission.isCam() ? 1 : 0);
-        values.put(SenzorsDbContract.Permission.COLUMN_NAME_LOCATION, permission.isLoc() ? 1 : 0);
-        values.put(SenzorsDbContract.Permission.COLUMN_NAME_IS_GIVEN, permission.isGiven() ? 1 : 0);
-
-        // Insert the new row, if fails throw an error
-        long id = db.insertOrThrow(SenzorsDbContract.Permission.TABLE_NAME, null, values);
-        return Long.toString(id);
-    }
-
-    public void updatePermission(String id, String permName, boolean permVal) {
-        SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(permName, permVal ? 1 : 0);
-
-        // update
-        db.update(SenzorsDbContract.Permission.TABLE_NAME,
-                values,
-                SenzorsDbContract.Permission._ID + " =?",
-                new String[]{id});
-    }
-
-    private Permission getPermission(String id) {
-        // get matching user if exists
-        SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
-        Cursor cursor = db.query(SenzorsDbContract.Permission.TABLE_NAME, // table
-                null, // columns
-                SenzorsDbContract.Permission._ID + " = ?", // constraint
-                new String[]{id}, // prams
-                null, // order by
-                null, // group by
-                null); // join
-
-        if (cursor.moveToFirst()) {
-            boolean _location = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Permission.COLUMN_NAME_LOCATION)) == 1;
-            boolean _cam = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Permission.COLUMN_NAME_CAMERA)) == 1;
-            boolean _isGiven = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Permission.COLUMN_NAME_IS_GIVEN)) == 1;
-
-            // clear
-            cursor.close();
-
-            Permission permission = new Permission(id, _isGiven);
-            permission.setLoc(_location);
-            permission.setCam(_cam);
-
-            return permission;
-        }
-
-        return null;
     }
 
     /**
@@ -480,19 +393,20 @@ public class SenzorsDbSource {
      *
      * @return sensor list
      */
-    public ArrayList<Secret> getSecrets(SecretUser secretUser) {
+    public ArrayList<Secret> getSecrets(boolean isSender) {
         ArrayList<Secret> secretList = new ArrayList();
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
                 "SELECT _id, uid, blob, blob_type, user, is_sender, viewed, view_timestamp, missed, timestamp, in_order, delivery_state " +
                         "FROM secret " +
-                        "WHERE user = ? " +
+                        "WHERE is_sender = ? " +
                         "ORDER BY _id ASC";
-        Cursor cursor = db.rawQuery(query, new String[]{secretUser.getUsername()});
+        Cursor cursor = db.rawQuery(query, new String[]{isSender ? "1" : "0"});
 
         // secret attr
         String _secretId;
+        String _username;
         String _secretBlob;
         int _secretBlobType;
         int _secretIsSender;
@@ -507,6 +421,7 @@ public class SenzorsDbSource {
         while (cursor.moveToNext()) {
             // get secret attributes
             _secretId = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_UNIQUE_ID));
+            _username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_USER));
             _secretTimestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_TIMESTAMP));
             _secretIsSender = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_IS_SENDER));
             _secretBlobType = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_BLOB_TYPE));
@@ -518,7 +433,7 @@ public class SenzorsDbSource {
             _deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.DELIVERY_STATE));
 
             // create secret
-            Secret secret = new Secret(_secretBlob, BlobType.valueOfType(_secretBlobType), secretUser, _secretIsSender == 1);
+            Secret secret = new Secret(_secretBlob, BlobType.valueOfType(_secretBlobType), getSecretUser(_username), _secretIsSender == 1);
             secret.setId(_secretId);
             secret.setViewed(_isViewed == 1);
             secret.setMissed(_isMissed == 1);

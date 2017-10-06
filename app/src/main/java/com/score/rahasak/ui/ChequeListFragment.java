@@ -103,16 +103,24 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
      * Basically setup list adapter if have items to display otherwise display empty view
      */
     private void displayList() {
-        allSecretsList = dbSource.getRecentSecretList();
-        adapter = new ChequeListAdapter(getContext(), allSecretsList);
-        getListView().setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        try {
+            allSecretsList = dbSource.getSecrets(true);
+            adapter = new ChequeListAdapter(getContext(), allSecretsList);
+            getListView().setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void refreshList() {
-        allSecretsList.clear();
-        allSecretsList.addAll(dbSource.getRecentSecretList());
-        adapter.notifyDataSetChanged();
+        try {
+            allSecretsList.clear();
+            allSecretsList.addAll(dbSource.getSecrets(true));
+            adapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -283,15 +283,7 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
     }
 
     private void updatePermission() {
-        if (selectedPermission.equalsIgnoreCase("CAM")) {
-            boolean updateTo = !secretUser.getGivenPermission().isCam();
-            secretUser.getGivenPermission().setCam(updateTo);
-            dbSource.updatePermission(secretUser.getGivenPermission().getId(), "cam", updateTo);
-        } else if (selectedPermission.equalsIgnoreCase("LOC")) {
-            boolean updateTo = !secretUser.getGivenPermission().isLoc();
-            secretUser.getGivenPermission().setLoc(updateTo);
-            dbSource.updatePermission(secretUser.getGivenPermission().getId(), "loc", updateTo);
-        }
+
     }
 
     private void resetPermission() {

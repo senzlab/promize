@@ -141,35 +141,30 @@ class SenzHandler {
                 // send error ack
                 senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "KEY_SHARE_FAILED"));
             }
-        } else {
-            // #mic #cam #lat #lon permission
-            SenzorsDbSource dbSource = new SenzorsDbSource(senzService.getApplicationContext());
-            SecretUser secretUser = dbSource.getSecretUser(senz.getSender().getUsername());
+        } else if (senz.getAttributes().containsKey("cimg")) {
+            // new cheque most probably
+            // send status back first
+            senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "DELIVERED"));
+
+            // save and broadcast
+            Long timestamp = (System.currentTimeMillis() / 1000);
+            User user = new User("id", senz.getAttributes().get("from"));
+            saveSecret(timestamp, senz.getAttributes().get("uid"), "", BlobType.IMAGE, user, false, senzService.getApplicationContext());
+            String imgName = senz.getAttributes().get("uid") + ".jpg";
+            ImageUtils.saveImg(imgName, senz.getAttributes().get("cimg"));
+            broadcastSenz(senz, senzService.getApplicationContext());
 
             // notification user
-            String notificationUser = secretUser.getUsername();
-            if (secretUser.getPhone() != null && !secretUser.getPhone().isEmpty()) {
-                notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
-            }
+            String username = senz.getSender().getUsername();
+//            SecretUser secretUser = new SenzorsDbSource(senzService.getApplicationContext()).getSecretUser(username);
+//            String notificationUser = secretUser.getUsername();
+//            if (secretUser.getPhone() != null && !secretUser.getPhone().isEmpty()) {
+//                notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
+//            }
 
-            if (senz.getAttributes().containsKey("cam")) {
-                dbSource.updatePermission(secretUser.getRecvPermission().getId(), "cam", senz.getAttributes().get("cam").equalsIgnoreCase("on"));
-                SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
-                        NotificationUtils.getPermissionNotification(notificationUser, "camera", senz.getAttributes().get("cam")));
-            } else if (senz.getAttributes().containsKey("mic")) {
-                dbSource.updatePermission(secretUser.getRecvPermission().getId(), "mic", senz.getAttributes().get("mic").equalsIgnoreCase("on"));
-                SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
-                        NotificationUtils.getPermissionNotification(notificationUser, "mic", senz.getAttributes().get("mic")));
-            } else if (senz.getAttributes().containsKey("lat")) {
-                dbSource.updatePermission(secretUser.getRecvPermission().getId(), "loc", senz.getAttributes().get("lat").equalsIgnoreCase("on"));
-                SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
-                        NotificationUtils.getPermissionNotification(notificationUser, "location", senz.getAttributes().get("lat")));
-            }
-
-            // send status
-            // broadcast
-            senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "PERMISSION_SHARED"));
-            broadcastSenz(senz, senzService.getApplicationContext());
+            // show notification
+            SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
+                    NotificationUtils.getStreamNotification(username, "New cheque received", username));
         }
     }
 
@@ -303,30 +298,7 @@ class SenzHandler {
     }
 
     private void handleStream(Senz senz, SenzService senzService) {
-        // handle for img
-        if (senz.getAttributes().containsKey("cam")) {
-            // send status back first
-            senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "DELIVERED"));
-
-            // save and broadcast
-            Long timestamp = (System.currentTimeMillis() / 1000);
-            saveSecret(timestamp, senz.getAttributes().get("uid"), "", BlobType.IMAGE, senz.getSender(), false, senzService.getApplicationContext());
-            String imgName = senz.getAttributes().get("uid") + ".jpg";
-            ImageUtils.saveImg(imgName, senz.getAttributes().get("cam"));
-            broadcastSenz(senz, senzService.getApplicationContext());
-
-            // notification user
-            String username = senz.getSender().getUsername();
-            SecretUser secretUser = new SenzorsDbSource(senzService.getApplicationContext()).getSecretUser(username);
-            String notificationUser = secretUser.getUsername();
-            if (secretUser.getPhone() != null && !secretUser.getPhone().isEmpty()) {
-                notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
-            }
-
-            // show notification
-            SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
-                    NotificationUtils.getStreamNotification(notificationUser, "New selfie received", username));
-        }
+        // stream
     }
 
     private void broadcastSenz(Senz senz, Context context) {

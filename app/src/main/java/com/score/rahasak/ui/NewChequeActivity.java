@@ -127,7 +127,8 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
     private void onClickPreview() {
         // create cheque
         Cheque cheque = new Cheque(
-                user.getText().toString().trim(),
+                "fvzCRhEnwHoiWiAFDokMzVcFVpL",
+                //user.getText().toString().trim(),
                 Integer.parseInt(amount.getText().toString())
         );
         cheque.setDate(date.getText().toString().trim());
