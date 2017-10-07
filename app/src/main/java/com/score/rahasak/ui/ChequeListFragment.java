@@ -119,7 +119,7 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
     private void refreshList() {
         try {
             allSecretsList.clear();
-            allSecretsList.addAll(dbSource.getSecrets(true));
+            allSecretsList.addAll(dbSource.getSecrets(mySecrets));
             adapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
