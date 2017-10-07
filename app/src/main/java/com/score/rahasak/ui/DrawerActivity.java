@@ -62,7 +62,7 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
         setupActionBar();
         setupDrawer();
         initDrawerList();
-        loadRahas();
+        loadIbox();
     }
 
     @Override
@@ -179,7 +179,7 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
             drawerLayout.closeDrawer(drawerContainer);
 
             if (position == 0) {
-                loadRahas();
+                loadIbox();
             } else if (position == 1) {
                 loadOutbox();
             } else if (position == 2) {
@@ -193,7 +193,7 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
     /**
      * Load my sensor list fragment
      */
-    private void loadRahas() {
+    private void loadIbox() {
         titleText.setText("Inbox");
         clearAboutText();
 
@@ -202,6 +202,9 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
         drawerAdapter.notifyDataSetChanged();
 
         ChequeListFragment fragment = new ChequeListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("MY_SECRETS", true);
+        fragment.setArguments(bundle);
 
         // fragment transitions
         // Replace whatever is in the fragment_container view with this fragment,
@@ -218,6 +221,18 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
         unSelectDrawerItems();
         drawerItemList.get(1).setSelected(true);
         drawerAdapter.notifyDataSetChanged();
+
+        ChequeListFragment fragment = new ChequeListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("MY_SECRETS", false);
+        fragment.setArguments(bundle);
+
+        // fragment transitions
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main, fragment);
+        transaction.commit();
     }
 
     /**

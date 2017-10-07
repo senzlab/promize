@@ -41,6 +41,7 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
     private ImageView actionBarDelete;
 
     private ArrayList<Secret> allSecretsList;
+    private boolean mySecrets;
     private ChequeListAdapter adapter;
     private SenzorsDbSource dbSource;
 
@@ -60,6 +61,7 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mySecrets = getArguments().getBoolean("MY_SECRETS");
         return inflater.inflate(R.layout.cheque_list_fragment_layout, container, false);
     }
 
@@ -105,7 +107,7 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
      */
     private void displayList() {
         try {
-            allSecretsList = dbSource.getSecrets(true);
+            allSecretsList = dbSource.getSecrets(mySecrets);
             adapter = new ChequeListAdapter(getContext(), allSecretsList);
             getListView().setAdapter(adapter);
             adapter.notifyDataSetChanged();

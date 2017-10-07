@@ -139,9 +139,8 @@ public class SenzUtils {
         return senz;
     }
 
-    public static Senz getShareChequeSenz(Context context, Cheque cheque) {
+    public static Senz getShareChequeSenz(Context context, Cheque cheque, Long timestamp) {
         // create senz attributes
-        Long timestamp = (System.currentTimeMillis() / 1000);
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
         senzAttributes.put("cbnk", "sampath");
