@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.score.rahasak.enums.DeliveryState;
 import com.score.rahasak.pojo.Cheque;
-import com.score.rahasak.pojo.SecretUser;
+import com.score.rahasak.pojo.ChequeUser;
 
 import java.util.ArrayList;
 
@@ -59,7 +59,7 @@ public class SenzorsDbSource {
         return cursor.moveToFirst();
     }
 
-    public SecretUser getExistingUserWithPhoneNo(String phoneNo) {
+    public ChequeUser getExistingUserWithPhoneNo(String phoneNo) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         Cursor cursor = db.query(SenzorsDbContract.User.TABLE_NAME, // table
@@ -80,33 +80,33 @@ public class SenzorsDbSource {
             // clear
             cursor.close();
 
-            SecretUser secretUser = new SecretUser(_userID, _username);
-            secretUser.setPhone(phoneNo);
+            ChequeUser chequeUser = new ChequeUser(_userID, _username);
+            chequeUser.setPhone(phoneNo);
 
-            return secretUser;
+            return chequeUser;
         }
 
         return null;
     }
 
-    public void createSecretUser(SecretUser secretUser) {
+    public void createSecretUser(ChequeUser chequeUser) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // content values to inset
         ContentValues values = new ContentValues();
-        values.put(SenzorsDbContract.User.COLUMN_NAME_USERNAME, secretUser.getUsername());
-        if (secretUser.getSessionKey() != null)
-            values.put(SenzorsDbContract.User.COLUMN_NAME_SESSION_KEY, secretUser.getSessionKey());
-        if (secretUser.getPhone() != null)
-            values.put(SenzorsDbContract.User.COLUMN_NAME_PHONE, secretUser.getPhone());
-        if (secretUser.getPubKey() != null && secretUser.getPubKey().isEmpty())
-            values.put(SenzorsDbContract.User.COLUMN_NAME_PUBKEY, secretUser.getPubKey());
-        if (secretUser.getPubKeyHash() != null && secretUser.getPubKeyHash().isEmpty())
-            values.put(SenzorsDbContract.User.COLUMN_NAME_PUBKEY_HASH, secretUser.getPubKeyHash());
-        if (secretUser.getImage() != null && secretUser.getImage().isEmpty())
-            values.put(SenzorsDbContract.User.COLUMN_NAME_IMAGE, secretUser.getImage());
-        values.put(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE, secretUser.isActive() ? 1 : 0);
-        values.put(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER, secretUser.isSMSRequester() ? 1 : 0);
+        values.put(SenzorsDbContract.User.COLUMN_NAME_USERNAME, chequeUser.getUsername());
+        if (chequeUser.getSessionKey() != null)
+            values.put(SenzorsDbContract.User.COLUMN_NAME_SESSION_KEY, chequeUser.getSessionKey());
+        if (chequeUser.getPhone() != null)
+            values.put(SenzorsDbContract.User.COLUMN_NAME_PHONE, chequeUser.getPhone());
+        if (chequeUser.getPubKey() != null && chequeUser.getPubKey().isEmpty())
+            values.put(SenzorsDbContract.User.COLUMN_NAME_PUBKEY, chequeUser.getPubKey());
+        if (chequeUser.getPubKeyHash() != null && chequeUser.getPubKeyHash().isEmpty())
+            values.put(SenzorsDbContract.User.COLUMN_NAME_PUBKEY_HASH, chequeUser.getPubKeyHash());
+        if (chequeUser.getImage() != null && chequeUser.getImage().isEmpty())
+            values.put(SenzorsDbContract.User.COLUMN_NAME_IMAGE, chequeUser.getImage());
+        values.put(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE, chequeUser.isActive() ? 1 : 0);
+        values.put(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER, chequeUser.isSMSRequester() ? 1 : 0);
 
         // Insert the new row, if fails throw an error
         // fails means user already exists
@@ -188,10 +188,10 @@ public class SenzorsDbSource {
                 new String[]{username});
 
         // delete all secrets belongs to user
-        deleteAllSecretsThatBelongToUser(username);
+        deleteAllChequesThatBelongToUser(username);
     }
 
-    public SecretUser getSecretUser(String username) {
+    public ChequeUser getSecretUser(String username) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(SenzorsDbContract.User.TABLE_NAME, // table
                 null, // columns
@@ -218,22 +218,22 @@ public class SenzorsDbSource {
             // clear
             cursor.close();
 
-            SecretUser secretUser = new SecretUser(_userID, _username);
-            secretUser.setPhone(_phone);
-            secretUser.setPubKey(_pubKey);
-            secretUser.setPubKeyHash(_pubKeyHash);
-            secretUser.setImage(_image);
-            secretUser.setActive(_isActive == 1);
-            secretUser.setSMSRequester(_isSmsRequester == 1);
-            secretUser.setSessionKey(_sessionKey);
+            ChequeUser chequeUser = new ChequeUser(_userID, _username);
+            chequeUser.setPhone(_phone);
+            chequeUser.setPubKey(_pubKey);
+            chequeUser.setPubKeyHash(_pubKeyHash);
+            chequeUser.setImage(_image);
+            chequeUser.setActive(_isActive == 1);
+            chequeUser.setSMSRequester(_isSmsRequester == 1);
+            chequeUser.setSessionKey(_sessionKey);
 
-            return secretUser;
+            return chequeUser;
         }
 
         return null;
     }
 
-    public ArrayList<SecretUser> getSecretUserList() {
+    public ArrayList<ChequeUser> getSecretUserList() {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(SenzorsDbContract.User.TABLE_NAME, // table
                 null, // columns
@@ -243,7 +243,7 @@ public class SenzorsDbSource {
                 null, // group by
                 null); // join
 
-        ArrayList<SecretUser> secretUserList = new ArrayList<>();
+        ArrayList<ChequeUser> chequeUserList = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             String _userID = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User._ID));
@@ -255,20 +255,20 @@ public class SenzorsDbSource {
             String _image = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IMAGE));
             int _isSmsRequester = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER));
 
-            SecretUser secretUser = new SecretUser(_userID, _username);
-            secretUser.setPhone(_phone);
-            secretUser.setPubKey(_pubKey);
-            secretUser.setPubKeyHash(_pubKeyHash);
-            secretUser.setImage(_image);
-            secretUser.setActive(_isActive == 1);
-            secretUser.setSMSRequester(_isSmsRequester == 1);
+            ChequeUser chequeUser = new ChequeUser(_userID, _username);
+            chequeUser.setPhone(_phone);
+            chequeUser.setPubKey(_pubKey);
+            chequeUser.setPubKeyHash(_pubKeyHash);
+            chequeUser.setImage(_image);
+            chequeUser.setActive(_isActive == 1);
+            chequeUser.setSMSRequester(_isSmsRequester == 1);
 
-            secretUserList.add(secretUser);
+            chequeUserList.add(chequeUser);
         }
 
         cursor.close();
 
-        return secretUserList;
+        return chequeUserList;
     }
 
     /**
@@ -276,7 +276,7 @@ public class SenzorsDbSource {
      *
      * @param cheque
      */
-    public void createSecret(Cheque cheque) {
+    public void createCheque(Cheque cheque) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
         // content values to inset
         ContentValues values = new ContentValues();
@@ -300,7 +300,7 @@ public class SenzorsDbSource {
      *
      * @param uid unique identifier of message
      */
-    public void markSecretViewed(String uid) {
+    public void markChequeViewed(String uid) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // content values to inset
@@ -348,7 +348,7 @@ public class SenzorsDbSource {
      *
      * @return sensor list
      */
-    public ArrayList<Cheque> getSecrets(boolean isSender) {
+    public ArrayList<Cheque> getCheques(boolean isSender) {
         ArrayList<Cheque> cheques = new ArrayList();
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
@@ -388,7 +388,7 @@ public class SenzorsDbSource {
             // create cheque
             Cheque cheque = new Cheque();
             cheque.setUid(uid);
-            cheque.setUser(new SecretUser("_ID", username));
+            cheque.setUser(new ChequeUser("_ID", username));
             cheque.setViewed(isViewed == 1);
             cheque.setTimestamp(timestamp);
             cheque.setViewedTimeStamp(viewedTimeStamp);
@@ -408,11 +408,11 @@ public class SenzorsDbSource {
     /**
      * Get secrets from give timestamp, used for lazy loading!!!
      *
-     * @param secretUser
+     * @param chequeUser
      * @param t
      * @return
      */
-    public ArrayList<Cheque> getSecrets(SecretUser secretUser, Long t) {
+    public ArrayList<Cheque> getCheques(ChequeUser chequeUser, Long t) {
         ArrayList<Cheque> cheques = new ArrayList();
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
@@ -421,7 +421,7 @@ public class SenzorsDbSource {
                         "FROM cheque " +
                         "WHERE user = ? AND timestamp > ? " +
                         "ORDER BY _id ASC";
-        Cursor cursor = db.rawQuery(query, new String[]{secretUser.getUsername(), t.toString()});
+        Cursor cursor = db.rawQuery(query, new String[]{chequeUser.getUsername(), t.toString()});
 
         // secret attr
         String uid;
@@ -452,7 +452,7 @@ public class SenzorsDbSource {
             // create cheque
             Cheque cheque = new Cheque();
             cheque.setUid(uid);
-            cheque.setUser(new SecretUser("_ID", username));
+            cheque.setUser(new ChequeUser("_ID", username));
             cheque.setViewed(isViewed == 1);
             cheque.setTimestamp(timestamp);
             cheque.setViewedTimeStamp(viewedTimeStamp);
@@ -469,7 +469,7 @@ public class SenzorsDbSource {
         return cheques;
     }
 
-    public ArrayList<Cheque> getUnAckSecrects() {
+    public ArrayList<Cheque> getUnAckCheques() {
         ArrayList<Cheque> cheques = new ArrayList();
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
@@ -509,7 +509,7 @@ public class SenzorsDbSource {
             // create cheque
             Cheque cheque = new Cheque();
             cheque.setUid(uid);
-            cheque.setUser(new SecretUser("_ID", username));
+            cheque.setUser(new ChequeUser("_ID", username));
             cheque.setViewed(isViewed == 1);
             cheque.setTimestamp(timestamp);
             cheque.setViewedTimeStamp(viewedTimeStamp);
@@ -531,7 +531,7 @@ public class SenzorsDbSource {
      *
      * @param
      */
-    public void deleteSecret(Cheque cheque) {
+    public void deleteCheque(Cheque cheque) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // delete senz of given user
@@ -540,7 +540,7 @@ public class SenzorsDbSource {
                 new String[]{cheque.getUid()});
     }
 
-    public void deleteAllSecretsThatBelongToUser(String username) {
+    public void deleteAllChequesThatBelongToUser(String username) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // delete senz of given user

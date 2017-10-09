@@ -8,20 +8,18 @@ import com.score.senzc.pojos.User;
 /**
  * Created by eranga on 11/11/16
  */
-public class SecretUser extends User implements Parcelable {
+public class ChequeUser extends User implements Parcelable {
     private String phone;
     private String image;
     private String pubKey;
     private String pubKeyHash;
     private String sessionKey;
-    private Permission givenPermission;
-    private Permission recvPermission;
     private boolean isSMSRequester;
     private boolean isActive;
     private boolean selected;
     private int unreadSecretCount;
 
-    public SecretUser(String id, String username) {
+    public ChequeUser(String id, String username) {
         super(id, username);
     }
 
@@ -31,15 +29,13 @@ public class SecretUser extends User implements Parcelable {
      *
      * @param in a parcel to read this object
      */
-    public SecretUser(Parcel in) {
+    public ChequeUser(Parcel in) {
         super(in);
         this.phone = in.readString();
         this.image = in.readString();
         this.pubKey = in.readString();
         this.pubKeyHash = in.readString();
         this.sessionKey = in.readString();
-        this.givenPermission = in.readParcelable(Permission.class.getClassLoader());
-        this.recvPermission = in.readParcelable(Permission.class.getClassLoader());
         this.isActive = in.readByte() != 0;
         this.isSMSRequester = in.readByte() != 0;
         this.selected = in.readByte() != 0;
@@ -70,8 +66,6 @@ public class SecretUser extends User implements Parcelable {
         dest.writeString(pubKey);
         dest.writeString(pubKeyHash);
         dest.writeString(sessionKey);
-        dest.writeParcelable(givenPermission, flags);
-        dest.writeParcelable(recvPermission, flags);
         dest.writeByte((byte) (isActive ? 1 : 0));
         dest.writeByte((byte) (isSMSRequester ? 1 : 0));
         dest.writeByte((byte) (selected ? 1 : 0));
@@ -85,13 +79,13 @@ public class SecretUser extends User implements Parcelable {
      * If you don’t do that, Android framework will through exception
      * Parcelable protocol requires a Parcelable.Creator object called CREATOR
      */
-    public static final Creator<SecretUser> CREATOR = new Creator<SecretUser>() {
-        public SecretUser createFromParcel(Parcel in) {
-            return new SecretUser(in);
+    public static final Creator<ChequeUser> CREATOR = new Creator<ChequeUser>() {
+        public ChequeUser createFromParcel(Parcel in) {
+            return new ChequeUser(in);
         }
 
-        public SecretUser[] newArray(int size) {
-            return new SecretUser[size];
+        public ChequeUser[] newArray(int size) {
+            return new ChequeUser[size];
         }
     };
 
@@ -133,22 +127,6 @@ public class SecretUser extends User implements Parcelable {
 
     public void setActive(boolean active) {
         isActive = active;
-    }
-
-    public Permission getGivenPermission() {
-        return givenPermission;
-    }
-
-    public void setGivenPermission(Permission givenPermission) {
-        this.givenPermission = givenPermission;
-    }
-
-    public Permission getRecvPermission() {
-        return recvPermission;
-    }
-
-    public void setRecvPermission(Permission recvPermission) {
-        this.recvPermission = recvPermission;
     }
 
     public boolean isSMSRequester() {

@@ -19,8 +19,7 @@ import com.score.rahasak.R;
 import com.score.rahasak.application.IntentProvider;
 import com.score.rahasak.db.SenzorsDbSource;
 import com.score.rahasak.enums.IntentType;
-import com.score.rahasak.pojo.Permission;
-import com.score.rahasak.pojo.SecretUser;
+import com.score.rahasak.pojo.ChequeUser;
 import com.score.rahasak.utils.ActivityUtils;
 import com.score.rahasak.utils.ImageUtils;
 import com.score.rahasak.utils.NetworkUtil;
@@ -47,7 +46,7 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
     private TextView camText;
     private TextView locText;
 
-    private SecretUser secretUser;
+    private ChequeUser chequeUser;
     private String selectedPermission;
 
     private SenzorsDbSource dbSource;
@@ -119,7 +118,7 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         // Save the user's current game state
-        savedInstanceState.putParcelable("SECRET_USER", secretUser);
+        savedInstanceState.putParcelable("SECRET_USER", chequeUser);
 
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
@@ -130,13 +129,13 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             // Restore value of members from saved state
-            secretUser = savedInstanceState.getParcelable("SECRET_USER");
+            chequeUser = savedInstanceState.getParcelable("SECRET_USER");
         }
     }
 
     private void initUser() {
         if (getIntent().getExtras() != null)
-            secretUser = getIntent().getExtras().getParcelable("SECRET_USER");
+            chequeUser = getIntent().getExtras().getParcelable("SECRET_USER");
     }
 
     private void initUi() {
@@ -155,17 +154,11 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
         captureSelfie.setOnClickListener(this);
 
         userImageView = (ImageView) findViewById(R.id.clickable_image);
-        if (secretUser.getImage() != null)
-            userImageView.setImageBitmap(ImageUtils.decodeBitmap(secretUser.getImage()));
+        if (chequeUser.getImage() != null)
+            userImageView.setImageBitmap(ImageUtils.decodeBitmap(chequeUser.getImage()));
     }
 
     private void initPermissions() {
-        Permission permission = secretUser.getGivenPermission();
-        cameraSwitch.setChecked(permission.isCam());
-        locationSwitch.setChecked(permission.isLoc());
-
-        cameraSwitch.setOnCheckedChangeListener(this);
-        locationSwitch.setOnCheckedChangeListener(this);
     }
 
     private void initToolbar() {
@@ -176,7 +169,7 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
         setSupportActionBar(toolbar);
 
         CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(PhoneBookUtil.getContactName(this, secretUser.getPhone()));
+        collapsingToolbar.setTitle(PhoneBookUtil.getContactName(this, chequeUser.getPhone()));
         collapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(R.color.colorPrimary));
         collapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.colorPrimary));
 
@@ -198,7 +191,7 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
                 String id = "_ID";
                 String signature = "_SIGNATURE";
                 SenzTypeEnum senzType = SenzTypeEnum.GET;
-                Senz senz = new Senz(id, signature, senzType, null, new User(secretUser.getId(), secretUser.getUsername()), senzAttributes);
+                Senz senz = new Senz(id, signature, senzType, null, new User(chequeUser.getId(), chequeUser.getUsername()), senzAttributes);
 
                 ActivityUtils.showProgressDialog(this, "Calling selfie...");
                 send(senz);
@@ -230,7 +223,7 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
                 String id = "_ID";
                 String signature = "_SIGNATURE";
                 SenzTypeEnum senzType = SenzTypeEnum.SHARE;
-                Senz senz = new Senz(id, signature, senzType, null, new User(secretUser.getId(), secretUser.getUsername()), senzAttributes);
+                Senz senz = new Senz(id, signature, senzType, null, new User(chequeUser.getId(), chequeUser.getUsername()), senzAttributes);
 
                 ActivityUtils.showProgressDialog(this, "Please wait...");
                 send(senz);
@@ -270,12 +263,12 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
     }
 
     private void handleStreamSenz(Senz senz) {
-        if (senz.getSender().getUsername().equalsIgnoreCase(secretUser.getUsername()) && senz.getAttributes().containsKey("cam")) {
+        if (senz.getSender().getUsername().equalsIgnoreCase(chequeUser.getUsername()) && senz.getAttributes().containsKey("cam")) {
             ActivityUtils.cancelProgressDialog();
 
             // save profile picture in db
             String encodedImage = senz.getAttributes().get("cam");
-            dbSource.updateSecretUser(secretUser.getUsername(), "image", encodedImage);
+            dbSource.updateSecretUser(chequeUser.getUsername(), "image", encodedImage);
 
             // display image
             userImageView.setImageBitmap(ImageUtils.decodeBitmap(encodedImage));
@@ -287,11 +280,6 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
     }
 
     private void resetPermission() {
-        if (selectedPermission != null && selectedPermission.equalsIgnoreCase("CAM")) {
-            cameraSwitch.setChecked(secretUser.getGivenPermission().isCam());
-        } else if (selectedPermission != null && selectedPermission.equalsIgnoreCase("LOC")) {
-            locationSwitch.setChecked(secretUser.getGivenPermission().isLoc());
-        }
     }
 
     @Override

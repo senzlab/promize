@@ -39,8 +39,8 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
     private ActionBar actionBar;
     private ImageView actionBarDelete;
 
-    private ArrayList<Cheque> allSecretsList;
-    private boolean mySecrets;
+    private ArrayList<Cheque> cheques;
+    private boolean myCheques;
     private ChequeListAdapter adapter;
     private SenzorsDbSource dbSource;
 
@@ -60,7 +60,7 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mySecrets = getArguments().getBoolean("MY_SECRETS");
+        myCheques = getArguments().getBoolean("MY_SECRETS");
         return inflater.inflate(R.layout.cheque_list_fragment_layout, container, false);
     }
 
@@ -106,10 +106,10 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
      */
     private void displayList() {
         try {
-//            allSecretsList = dbSource.getSecrets(mySecrets);
-//            adapter = new ChequeListAdapter(getContext(), allSecretsList);
-//            getListView().setAdapter(adapter);
-//            adapter.notifyDataSetChanged();
+            cheques = dbSource.getCheques(myCheques);
+            adapter = new ChequeListAdapter(getContext(), cheques);
+            getListView().setAdapter(adapter);
+            adapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -117,9 +117,9 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
 
     private void refreshList() {
         try {
-//            allSecretsList.clear();
-//            allSecretsList.addAll(dbSource.getSecrets(mySecrets));
-//            adapter.notifyDataSetChanged();
+            cheques.clear();
+            cheques.addAll(dbSource.getCheques(myCheques));
+            adapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -127,26 +127,22 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Cheque secret = allSecretsList.get(position);
-        if (secret.isSelected()) {
-            secret.setSelected(false);
+        Cheque cheque = cheques.get(position);
+        if (cheque.isSelected()) {
+            cheque.setSelected(false);
             adapter.notifyDataSetChanged();
             actionBarDelete.setVisibility(View.GONE);
         } else {
-            // create cheque
-//            Cheque cheque = new Cheque(secret.getUser().getUsername(), 400);
-//            cheque.setId(secret.getId());
-//
-//            // open cheque
-//            Intent intent = new Intent(this.getActivity(), ViewChequeActivity.class);
-//            intent.putExtra("CHEQUE", cheque);
-//            startActivity(intent);
+            // open cheque
+            Intent intent = new Intent(this.getActivity(), ViewChequeActivity.class);
+            intent.putExtra("CHEQUE", cheque);
+            startActivity(intent);
         }
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-        final Cheque secret = allSecretsList.get(position);
+        final Cheque secret = cheques.get(position);
         secret.setSelected(true);
         adapter.notifyDataSetChanged();
 
@@ -197,11 +193,11 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
                 dialog.cancel();
 
                 // delete item
-                allSecretsList.remove(index);
+                cheques.remove(index);
                 adapter.notifyDataSetChanged();
 
                 // delete from db
-                new SenzorsDbSource(getActivity()).deleteAllSecretsThatBelongToUser(secret.getUser().getUsername());
+                new SenzorsDbSource(getActivity()).deleteAllChequesThatBelongToUser(secret.getUser().getUsername());
 
                 actionBarDelete.setVisibility(View.GONE);
             }

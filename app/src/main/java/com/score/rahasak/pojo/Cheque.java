@@ -7,7 +7,7 @@ import com.score.rahasak.enums.DeliveryState;
 
 public class Cheque implements Parcelable {
     private String uid;
-    private SecretUser user;
+    private ChequeUser user;
     private boolean isSender;
     private boolean isViewed;
     private boolean isSelected;
@@ -25,7 +25,7 @@ public class Cheque implements Parcelable {
 
     public Cheque(Parcel in) {
         uid = in.readString();
-        user = in.readParcelable(SecretUser.class.getClassLoader());
+        user = in.readParcelable(ChequeUser.class.getClassLoader());
         isSender = in.readByte() != 0;
         isViewed = in.readByte() != 0;
         isSelected = in.readByte() != 0;
@@ -63,11 +63,11 @@ public class Cheque implements Parcelable {
         this.timestamp = timestamp;
     }
 
-    public SecretUser getUser() {
+    public ChequeUser getUser() {
         return user;
     }
 
-    public void setUser(SecretUser user) {
+    public void setUser(ChequeUser user) {
         this.user = user;
     }
 

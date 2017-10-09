@@ -8,7 +8,7 @@ import android.util.Log;
 import com.score.rahasak.db.SenzorsDbSource;
 import com.score.rahasak.enums.DeliveryState;
 import com.score.rahasak.pojo.Cheque;
-import com.score.rahasak.pojo.SecretUser;
+import com.score.rahasak.pojo.ChequeUser;
 import com.score.rahasak.utils.CryptoUtils;
 import com.score.rahasak.utils.ImageUtils;
 import com.score.rahasak.utils.NotificationUtils;
@@ -49,17 +49,9 @@ class SenzHandler {
                     Log.d(TAG, "SHARE received");
                     handleShare(senz, senzService);
                     break;
-                case GET:
-                    Log.d(TAG, "GET received");
-                    handleGet(senz, senzService);
-                    break;
                 case DATA:
                     Log.d(TAG, "DATA received");
                     handleData(senz, senzService);
-                    break;
-                case STREAM:
-                    Log.d(TAG, "STREAM received");
-                    handleStream(senz, senzService);
                     break;
             }
         }
@@ -68,7 +60,7 @@ class SenzHandler {
     private void handleConnect(SenzService senzService) {
         // get all un-ack senzes from db
         List<Senz> unackSenzes = new ArrayList<>();
-        for (Cheque cheque : new SenzorsDbSource(senzService.getApplicationContext()).getUnAckSecrects()) {
+        for (Cheque cheque : new SenzorsDbSource(senzService.getApplicationContext()).getUnAckCheques()) {
             try {
                 unackSenzes.add(SenzUtils.getSenzFromCheque(senzService.getApplicationContext(), cheque));
             } catch (Exception e) {
@@ -88,14 +80,14 @@ class SenzHandler {
             try {
                 // create user
                 String username = senz.getSender().getUsername();
-                SecretUser secretUser = dbSource.getSecretUser(username);
-                if (secretUser != null) {
+                ChequeUser chequeUser = dbSource.getSecretUser(username);
+                if (chequeUser != null) {
                     String encryptedSessionKey = senz.getAttributes().get("$skey");
                     String sessionKey = CryptoUtils.decryptRSA(CryptoUtils.getPrivateKey(senzService.getApplicationContext()), encryptedSessionKey);
                     dbSource.updateSecretUser(username, "session_key", sessionKey);
                 } else {
-                    secretUser = new SecretUser(senz.getSender().getId(), senz.getSender().getUsername());
-                    dbSource.createSecretUser(secretUser);
+                    chequeUser = new ChequeUser(senz.getSender().getId(), senz.getSender().getUsername());
+                    dbSource.createSecretUser(chequeUser);
                 }
 
                 // activate user
@@ -103,8 +95,8 @@ class SenzHandler {
 
                 // notification user
                 String notificationUser = username;
-                if (secretUser.getPhone() != null && !secretUser.getPhone().isEmpty()) {
-                    notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
+                if (chequeUser.getPhone() != null && !chequeUser.getPhone().isEmpty()) {
+                    notificationUser = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
                 }
                 SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(NotificationUtils.getUserNotification(notificationUser));
 
@@ -154,7 +146,7 @@ class SenzHandler {
 
             // notification user
             String username = senz.getSender().getUsername();
-//            SecretUser secretUser = new SenzorsDbSource(senzService.getApplicationContext()).getSecretUser(username);
+//            ChequeUser secretUser = new SenzorsDbSource(senzService.getApplicationContext()).getSecretUser(username);
 //            String notificationUser = secretUser.getUsername();
 //            if (secretUser.getPhone() != null && !secretUser.getPhone().isEmpty()) {
 //                notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
@@ -164,10 +156,6 @@ class SenzHandler {
             SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
                     NotificationUtils.getStreamNotification(username, "New cheque received", username));
         }
-    }
-
-    private void handleGet(Senz senz, SenzService senzService) {
-
     }
 
     private void handleData(Senz senz, SenzService senzService) {
@@ -184,23 +172,23 @@ class SenzHandler {
                 // user added successfully
                 // save user in db
                 String username = senz.getSender().getUsername();
-                SecretUser secretUser = dbSource.getSecretUser(username);
-                if (secretUser != null) {
+                ChequeUser chequeUser = dbSource.getSecretUser(username);
+                if (chequeUser != null) {
                     // existing user, activate it
                     dbSource.activateSecretUser(senz.getSender().getUsername(), true);
                 } else {
                     // not existing user
                     // this is when sharing directly by username
                     // create and activate uer
-                    secretUser = new SecretUser("id", senz.getSender().getUsername());
-                    dbSource.createSecretUser(secretUser);
-                    dbSource.activateSecretUser(secretUser.getUsername(), true);
+                    chequeUser = new ChequeUser("id", senz.getSender().getUsername());
+                    dbSource.createSecretUser(chequeUser);
+                    dbSource.activateSecretUser(chequeUser.getUsername(), true);
                 }
 
                 // notification user
                 String notificationUser = username;
-                if (secretUser.getPhone() != null && !secretUser.getPhone().isEmpty()) {
-                    notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
+                if (chequeUser.getPhone() != null && !chequeUser.getPhone().isEmpty()) {
+                    notificationUser = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
                 }
                 SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(NotificationUtils.getUserConfirmNotification(notificationUser));
             }
@@ -215,8 +203,8 @@ class SenzHandler {
             dbSource.updateSecretUser(username, "pubkey", pubKey);
 
             // Check if this user is the requester
-            SecretUser secretUser = dbSource.getSecretUser(username);
-            if (secretUser.isSMSRequester()) {
+            ChequeUser chequeUser = dbSource.getSecretUser(username);
+            if (chequeUser.isSMSRequester()) {
                 try {
                     // create session key for this user
                     String sessionKey = CryptoUtils.getSessionKey();
@@ -242,10 +230,10 @@ class SenzHandler {
 
                 // notification user
                 String username = innerSenz.getSender().getUsername();
-                SecretUser secretUser = dbSource.getSecretUser(username);
-                String notificationUser = secretUser.getUsername();
-                if (secretUser.getPhone() != null && !secretUser.getPhone().isEmpty()) {
-                    notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
+                ChequeUser chequeUser = dbSource.getSecretUser(username);
+                String notificationUser = chequeUser.getUsername();
+                if (chequeUser.getPhone() != null && !chequeUser.getPhone().isEmpty()) {
+                    notificationUser = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
                 }
 
                 // show notification
@@ -253,10 +241,6 @@ class SenzHandler {
                         NotificationUtils.getStreamNotification(notificationUser, "Missed selfie call", username));
             }
         }
-    }
-
-    private void handleStream(Senz senz, SenzService senzService) {
-        // stream
     }
 
     private void broadcastSenz(Senz senz, Context context) {
@@ -273,7 +257,7 @@ class SenzHandler {
             cheque.setTimestamp(timestamp);
             cheque.setDeliveryState(DeliveryState.NONE);
             cheque.setBlob(blob);
-            new SenzorsDbSource(context).createSecret(cheque);
+            new SenzorsDbSource(context).createCheque(cheque);
 
             // update unread count by one
             new SenzorsDbSource(context).updateUnreadSecretCount(user.getUsername(), 1);

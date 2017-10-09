@@ -158,7 +158,7 @@ public class ChequePreviewActivity extends BaseActivity {
             cheque.setUid(uid);
             cheque.setDeliveryState(DeliveryState.PENDING);
             cheque.setTimestamp(timestamp);
-            new SenzorsDbSource(ChequePreviewActivity.this).createSecret(cheque);
+            new SenzorsDbSource(ChequePreviewActivity.this).createCheque(cheque);
 
             // update unread count by one
             new SenzorsDbSource(ChequePreviewActivity.this).updateUnreadSecretCount(cheque.getUser().getUsername(), 1);

@@ -10,7 +10,7 @@ import android.util.Log;
 
 import com.score.rahasak.application.IntentProvider;
 import com.score.rahasak.db.SenzorsDbSource;
-import com.score.rahasak.pojo.SecretUser;
+import com.score.rahasak.pojo.ChequeUser;
 import com.score.rahasak.remote.SenzNotificationManager;
 import com.score.rahasak.utils.NotificationUtils;
 import com.score.rahasak.utils.PhoneBookUtil;
@@ -89,16 +89,16 @@ public class SmsReceiver extends BroadcastReceiver {
         SenzorsDbSource dbSource = new SenzorsDbSource(context);
 
         // delete existing user
-        SecretUser existingUser = dbSource.getExistingUserWithPhoneNo(contactNo);
+        ChequeUser existingUser = dbSource.getExistingUserWithPhoneNo(contactNo);
         if (existingUser != null) {
             dbSource.deleteSecretUser(existingUser.getUsername());
         }
 
         // create user
-        SecretUser secretUser = new SecretUser("id", username);
-        secretUser.setPhone(contactNo);
-        secretUser.setPubKeyHash(pubKeyHash);
-        dbSource.createSecretUser(secretUser);
+        ChequeUser chequeUser = new ChequeUser("id", username);
+        chequeUser.setPhone(contactNo);
+        chequeUser.setPubKeyHash(pubKeyHash);
+        dbSource.createSecretUser(chequeUser);
 
         // show Notification
         SenzNotificationManager.getInstance(context.getApplicationContext()).showNotification(NotificationUtils.getSmsNotification(contactName, contactNo, username));
@@ -112,12 +112,12 @@ public class SmsReceiver extends BroadcastReceiver {
         try {
             // create user
             SenzorsDbSource dbSource = new SenzorsDbSource(context);
-            SecretUser secretUser = new SecretUser("id", username);
-            secretUser.setPhone(contactNo);
-            secretUser.setPubKeyHash(pubKeyHash);
-            secretUser.setSMSRequester(true);
+            ChequeUser chequeUser = new ChequeUser("id", username);
+            chequeUser.setPhone(contactNo);
+            chequeUser.setPubKeyHash(pubKeyHash);
+            chequeUser.setSMSRequester(true);
             if (!dbSource.isExistingUserWithPhoneNo(contactNo)) {
-                dbSource.createSecretUser(secretUser);
+                dbSource.createSecretUser(chequeUser);
             }
 
             // broadcast

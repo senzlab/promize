@@ -12,19 +12,19 @@ import android.widget.TextView;
 
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.score.rahasak.R;
+import com.score.rahasak.pojo.ChequeUser;
 import com.score.rahasak.pojo.Permission;
-import com.score.rahasak.pojo.SecretUser;
 import com.score.rahasak.utils.ImageUtils;
 import com.score.rahasak.utils.PhoneBookUtil;
 
 import java.util.ArrayList;
 
 
-class FriendListAdapter extends ArrayAdapter<SecretUser> {
+class FriendListAdapter extends ArrayAdapter<ChequeUser> {
     Context context;
     private Typeface typeface;
 
-    FriendListAdapter(Context _context, ArrayList<SecretUser> userList) {
+    FriendListAdapter(Context _context, ArrayList<ChequeUser> userList) {
         super(_context, R.layout.friend_list_row_layout, R.id.user_name, userList);
         context = _context;
         typeface = Typeface.createFromAsset(context.getAssets(), "fonts/GeosansLight.ttf");
@@ -44,7 +44,7 @@ class FriendListAdapter extends ArrayAdapter<SecretUser> {
         // to findViewById() on each row.
         final ViewHolder holder;
 
-        final SecretUser secretUser = getItem(i);
+        final ChequeUser chequeUser = getItem(i);
 
         if (view == null) {
             //inflate sensor list row layout
@@ -66,52 +66,38 @@ class FriendListAdapter extends ArrayAdapter<SecretUser> {
             holder = (ViewHolder) view.getTag();
         }
 
-        setUpRow(i, secretUser, view, holder);
+        setUpRow(i, chequeUser, view, holder);
 
         return view;
     }
 
-    private void setUpRow(int i, SecretUser secretUser, View view, ViewHolder viewHolder) {
+    private void setUpRow(int i, ChequeUser chequeUser, View view, ViewHolder viewHolder) {
         viewHolder.usernameView.setTypeface(typeface, Typeface.NORMAL);
         viewHolder.phoneBookNameView.setTypeface(typeface, Typeface.NORMAL);
 
-        // get permission (isGiven = false)
-        Permission permission = secretUser.getRecvPermission();
-        if (permission != null && permission.isCam()) {
-            viewHolder.userCameraPermView.setImageDrawable(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.perm_camera_active, null));
-        } else {
-            viewHolder.userCameraPermView.setImageDrawable(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.perm_camera_deactive, null));
-        }
-
-        if (permission != null && permission.isLoc()) {
-            viewHolder.userLocationPermView.setImageDrawable(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.perm_locations_active, null));
-        } else {
-            viewHolder.userLocationPermView.setImageDrawable(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.perm_locations_deactive, null));
-        }
-
         // extracting user image
-        if (secretUser.getImage() != null) {
-            viewHolder.userImageView.setImageBitmap(ImageUtils.decodeBitmap(secretUser.getImage()));
+        if (chequeUser.getImage() != null) {
+            viewHolder.userImageView.setImageBitmap(ImageUtils.decodeBitmap(chequeUser.getImage()));
         } else {
             viewHolder.userImageView.setImageResource(R.drawable.default_user);
         }
 
         // request text
-        if (secretUser.isActive()) {
-            viewHolder.usernameView.setText(PhoneBookUtil.getContactName(context, secretUser.getPhone()));
+        if (chequeUser.isActive()) {
+            viewHolder.usernameView.setText(PhoneBookUtil.getContactName(context, chequeUser.getPhone()));
             viewHolder.phoneBookNameView.setVisibility(View.GONE);
             viewHolder.userCameraPermView.setVisibility(View.VISIBLE);
             viewHolder.userLocationPermView.setVisibility(View.VISIBLE);
         } else {
-            viewHolder.usernameView.setText(PhoneBookUtil.getContactName(context, secretUser.getPhone()));
-            viewHolder.phoneBookNameView.setText(secretUser.isSMSRequester() ? "Sent friend request" : "Received friend request");
+            viewHolder.usernameView.setText(PhoneBookUtil.getContactName(context, chequeUser.getPhone()));
+            viewHolder.phoneBookNameView.setText(chequeUser.isSMSRequester() ? "Sent friend request" : "Received friend request");
             viewHolder.phoneBookNameView.setVisibility(View.VISIBLE);
             viewHolder.userCameraPermView.setVisibility(View.GONE);
             viewHolder.userLocationPermView.setVisibility(View.GONE);
         }
 
         // selected
-        if (secretUser.isSelected()) {
+        if (chequeUser.isSelected()) {
             viewHolder.selected.setVisibility(View.VISIBLE);
         } else {
             viewHolder.selected.setVisibility(View.GONE);

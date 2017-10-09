@@ -26,7 +26,7 @@ import com.score.rahasak.R;
 import com.score.rahasak.application.IntentProvider;
 import com.score.rahasak.db.SenzorsDbSource;
 import com.score.rahasak.enums.IntentType;
-import com.score.rahasak.pojo.SecretUser;
+import com.score.rahasak.pojo.ChequeUser;
 import com.score.rahasak.utils.ActivityUtils;
 import com.score.rahasak.utils.NetworkUtil;
 import com.score.rahasak.utils.PhoneBookUtil;
@@ -43,7 +43,7 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
     private ActionBar actionBar;
     private ImageView actionBarDelete;
 
-    private ArrayList<SecretUser> friendsList;
+    private ArrayList<ChequeUser> friendsList;
     private FriendListAdapter adapter;
     private SenzorsDbSource dbSource;
 
@@ -110,36 +110,36 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        final SecretUser secretUser = friendsList.get(position);
+        final ChequeUser chequeUser = friendsList.get(position);
         actionBarDelete.setVisibility(View.GONE);
 
-        if (secretUser.isSelected()) {
-            secretUser.setSelected(false);
+        if (chequeUser.isSelected()) {
+            chequeUser.setSelected(false);
             adapter.notifyDataSetChanged();
             actionBarDelete.setVisibility(View.GONE);
         } else {
-            if (secretUser.isActive()) {
+            if (chequeUser.isActive()) {
                 // todo go to new cheque
 //                Intent intent = new Intent(this.getActivity(), ChatActivity.class);
-//                intent.putExtra("SENDER", secretUser.getUsername());
+//                intent.putExtra("SENDER", chequeUser.getUsername());
 //                startActivity(intent);
             } else {
-                if (secretUser.isSMSRequester()) {
-                    String contactName = PhoneBookUtil.getContactName(getActivity(), secretUser.getPhone());
+                if (chequeUser.isSMSRequester()) {
+                    String contactName = PhoneBookUtil.getContactName(getActivity(), chequeUser.getPhone());
                     ActivityUtils.displayConfirmationMessageDialog("Confirm", "Would you like to resend friend request to " + contactName + "?", getActivity(), typeface, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             // start sharing again
                             // broadcast
                             Intent intent = new Intent(IntentProvider.ACTION_SMS_REQUEST_CONFIRM);
-                            intent.putExtra("USERNAME", secretUser.getUsername());
-                            intent.putExtra("PHONE", secretUser.getPhone());
+                            intent.putExtra("USERNAME", chequeUser.getUsername());
+                            intent.putExtra("PHONE", chequeUser.getPhone());
                             getActivity().sendBroadcast(intent);
                             ActivityUtils.showCustomToast("Request sent", getActivity());
                         }
                     });
                 } else {
-                    String contactName = PhoneBookUtil.getContactName(getActivity(), secretUser.getPhone());
+                    String contactName = PhoneBookUtil.getContactName(getActivity(), chequeUser.getPhone());
                     ActivityUtils.displayConfirmationMessageDialog("Confirm", "Would you like to accept the request from " + contactName + "?", getActivity(), typeface, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -147,8 +147,8 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
                             // broadcast
                             if (NetworkUtil.isAvailableNetwork(getActivity())) {
                                 Intent intent = new Intent(IntentProvider.ACTION_SMS_REQUEST_ACCEPT);
-                                intent.putExtra("USERNAME", secretUser.getUsername());
-                                intent.putExtra("PHONE", secretUser.getPhone());
+                                intent.putExtra("USERNAME", chequeUser.getUsername());
+                                intent.putExtra("PHONE", chequeUser.getPhone());
                                 getActivity().sendBroadcast(intent);
                                 ActivityUtils.showCustomToast("Confirmation sent", getActivity());
                             } else {
@@ -163,17 +163,17 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-        final SecretUser secretUser = friendsList.get(position);
+        final ChequeUser chequeUser = friendsList.get(position);
 
         actionBarDelete.setVisibility(View.VISIBLE);
-        secretUser.setSelected(true);
+        chequeUser.setSelected(true);
         adapter.notifyDataSetChanged();
 
         actionBarDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // delete item
-                displayConfirmationMessageDialog("Are you sure your want to remove the user", position, secretUser);
+                displayConfirmationMessageDialog("Are you sure your want to remove the user", position, chequeUser);
             }
         });
 
@@ -214,7 +214,7 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
      *
      * @param message - Message to ask
      */
-    public void displayConfirmationMessageDialog(String message, final int index, final SecretUser secretUser) {
+    public void displayConfirmationMessageDialog(String message, final int index, final ChequeUser chequeUser) {
         final Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GeosansLight.ttf");
         final Dialog dialog = new Dialog(this.getActivity());
 
@@ -248,7 +248,7 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
                 adapter.notifyDataSetChanged();
 
                 // delete from db
-                new SenzorsDbSource(getActivity()).deleteSecretUser(secretUser.getUsername());
+                new SenzorsDbSource(getActivity()).deleteSecretUser(chequeUser.getUsername());
 
                 actionBarDelete.setVisibility(View.GONE);
 
