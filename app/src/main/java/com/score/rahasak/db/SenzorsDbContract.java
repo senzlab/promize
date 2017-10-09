@@ -13,22 +13,24 @@ class SenzorsDbContract {
     }
 
     /* Inner class that defines secret table */
-    static abstract class Secret implements BaseColumns {
-        static final String TABLE_NAME = "secret";
-        static final String COLUMN_UNIQUE_ID = "uid";
-        static final String COLUMN_TIMESTAMP = "timestamp";
+    static abstract class Cheque implements BaseColumns {
+        static final String TABLE_NAME = "cheque";
+        static final String COLUMN_NAME_UID = "uid";
         static final String COLUMN_NAME_USER = "user";
+
         // is_sender = true -> friends secret
         // is_sender = false -> my secret
-        // TODO change this to my_secret
         static final String COLUMN_NAME_IS_SENDER = "is_sender";
-        static final String COLUMN_NAME_BLOB = "blob";
-        static final String COLUMN_BLOB_TYPE = "blob_type";
-        static final String COLUMN_NAME_VIEWED = "viewed";
+
+        static final String COLUMN_NAME_IS_VIEWED = "is_viewed";
+        static final String COLUMN_NAME_TIMESTAMP = "timestamp";
         static final String COLUMN_NAME_VIEWED_TIMESTAMP = "view_timestamp";
-        static final String COLUMN_NAME_MISSED = "missed";
-        static final String COLUMN_NAME_IN_ORDER = "in_order";
-        static final String DELIVERY_STATE = "delivery_state";
+        static final String DELIVERY_NAME_STATE = "delivery_state";
+
+        // cheque info
+        static final String COLUMN_NAME_CHEQUE_ID = "cid";
+        static final String COLUMN_NAME_CHEQUE_AMOUNT = "amount";
+        static final String COLUMN_NAME_CHEQUE_BLOB = "blob";
     }
 
     /* Inner class that defines the user table contents */

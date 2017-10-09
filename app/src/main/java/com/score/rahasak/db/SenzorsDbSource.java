@@ -4,13 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import com.score.rahasak.enums.BlobType;
 import com.score.rahasak.enums.DeliveryState;
-import com.score.rahasak.pojo.Secret;
+import com.score.rahasak.pojo.Cheque;
 import com.score.rahasak.pojo.SecretUser;
-import com.score.rahasak.utils.TimeUtils;
 
 import java.util.ArrayList;
 
@@ -31,7 +28,6 @@ public class SenzorsDbSource {
      * @param context application context
      */
     public SenzorsDbSource(Context context) {
-        Log.d(TAG, "Init: db source");
         this.context = context;
     }
 
@@ -276,31 +272,27 @@ public class SenzorsDbSource {
     }
 
     /**
-     * Create Secret message or images
+     * Create Cheque message or images
      *
-     * @param secret
+     * @param cheque
      */
-    public void createSecret(Secret secret) {
+    public void createSecret(Cheque cheque) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
         // content values to inset
         ContentValues values = new ContentValues();
-        values.put(SenzorsDbContract.Secret.COLUMN_UNIQUE_ID, secret.getId());
-        values.put(SenzorsDbContract.Secret.COLUMN_TIMESTAMP, secret.getTimeStamp());
-        values.put(SenzorsDbContract.Secret.COLUMN_NAME_USER, secret.getUser().getUsername());
-        values.put(SenzorsDbContract.Secret.COLUMN_NAME_IS_SENDER, secret.isSender() ? 1 : 0);
-        values.put(SenzorsDbContract.Secret.COLUMN_BLOB_TYPE, secret.getBlobType().getType());
-        values.put(SenzorsDbContract.Secret.COLUMN_NAME_BLOB, secret.getBlob());
-        values.put(SenzorsDbContract.Secret.COLUMN_NAME_VIEWED, secret.isViewed() ? 1 : 0);
-        values.put(SenzorsDbContract.Secret.COLUMN_NAME_VIEWED_TIMESTAMP, 0);
-        values.put(SenzorsDbContract.Secret.COLUMN_NAME_MISSED, secret.isMissed() ? 1 : 0);
-        values.put(SenzorsDbContract.Secret.COLUMN_NAME_IN_ORDER, secret.isInOrder() ? 1 : 0);
-        values.put(SenzorsDbContract.Secret.DELIVERY_STATE, secret.getDeliveryState().getState());
-
-        // update previous secret
-        updatePreviousSecretInOrderState(secret);
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_UID, cheque.getUid());
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_USER, cheque.getUser().getUsername());
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_IS_SENDER, cheque.isSender() ? 1 : 0);
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED, cheque.isViewed() ? 1 : 0);
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP, cheque.getTimestamp());
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP, 0);
+        values.put(SenzorsDbContract.Cheque.DELIVERY_NAME_STATE, cheque.getDeliveryState().getState());
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID, cheque.getCid());
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT, cheque.getAmount());
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB, cheque.getBlob());
 
         // insert the new row, if fails throw an error
-        db.insertOrThrow(SenzorsDbContract.Secret.TABLE_NAME, null, values);
+        db.insertOrThrow(SenzorsDbContract.Cheque.TABLE_NAME, null, values);
     }
 
     /**
@@ -313,14 +305,14 @@ public class SenzorsDbSource {
 
         // content values to inset
         ContentValues values = new ContentValues();
-        values.put(SenzorsDbContract.Secret.COLUMN_NAME_VIEWED, 1);
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED, 1);
         long timestamp = System.currentTimeMillis() / 1000;
-        values.put(SenzorsDbContract.Secret.COLUMN_NAME_VIEWED_TIMESTAMP, timestamp);
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP, timestamp);
 
         // update
-        db.update(SenzorsDbContract.Secret.TABLE_NAME,
+        db.update(SenzorsDbContract.Cheque.TABLE_NAME,
                 values,
-                SenzorsDbContract.Secret.COLUMN_UNIQUE_ID + " = ?",
+                SenzorsDbContract.Cheque.COLUMN_NAME_UID + " = ?",
                 new String[]{uid});
     }
 
@@ -337,51 +329,14 @@ public class SenzorsDbSource {
 
             // content values to inset
             ContentValues values = new ContentValues();
-            values.put(SenzorsDbContract.Secret.DELIVERY_STATE, deliveryState.getState());
+            values.put(SenzorsDbContract.Cheque.DELIVERY_NAME_STATE, deliveryState.getState());
 
             // update
-            db.update(SenzorsDbContract.Secret.TABLE_NAME,
+            db.update(SenzorsDbContract.Cheque.TABLE_NAME,
                     values,
-                    SenzorsDbContract.Secret.COLUMN_UNIQUE_ID + " = ?",
+                    SenzorsDbContract.Cheque.COLUMN_NAME_UID + " = ?",
                     new String[]{uid});
 
-            db.setTransactionSuccessful();
-        } finally {
-            db.endTransaction();
-        }
-    }
-
-    private void updatePreviousSecretInOrderState(Secret curSecret) {
-        SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
-        try {
-            db.beginTransaction();
-
-            // update viewed statues
-            Cursor cursor = db.query(SenzorsDbContract.Secret.TABLE_NAME, // table
-                    null, // columns
-                    null,
-                    null, // selection
-                    null, // order by
-                    null, // group by
-                    null); // join
-            if (cursor.moveToLast()) {
-                String uid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_UNIQUE_ID));
-                long time = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_TIMESTAMP));
-                boolean isSender = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_IS_SENDER)) == 1;
-                if ((curSecret.isSender() == isSender) && TimeUtils.isInOrder(time, curSecret.getTimeStamp())) {
-                    // secret is inline, viewed true
-                    ContentValues values = new ContentValues();
-                    values.put(SenzorsDbContract.Secret.COLUMN_NAME_IN_ORDER, 1);
-
-                    // update
-                    db.update(SenzorsDbContract.Secret.TABLE_NAME,
-                            values,
-                            SenzorsDbContract.Secret.COLUMN_UNIQUE_ID + " = ?",
-                            new String[]{uid});
-                }
-            }
-
-            cursor.close();
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();
@@ -393,184 +348,182 @@ public class SenzorsDbSource {
      *
      * @return sensor list
      */
-    public ArrayList<Secret> getSecrets(boolean isSender) {
-        ArrayList<Secret> secretList = new ArrayList();
+    public ArrayList<Cheque> getSecrets(boolean isSender) {
+        ArrayList<Cheque> cheques = new ArrayList();
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
-                "SELECT _id, uid, blob, blob_type, user, is_sender, viewed, view_timestamp, missed, timestamp, in_order, delivery_state " +
-                        "FROM secret " +
+                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, amount, blob " +
+                        "FROM cheque " +
                         "WHERE is_sender = ? " +
                         "ORDER BY _id ASC";
         Cursor cursor = db.rawQuery(query, new String[]{isSender ? "1" : "0"});
 
         // secret attr
-        String _secretId;
-        String _username;
-        String _secretBlob;
-        int _secretBlobType;
-        int _secretIsSender;
-        int _isViewed;
-        int _isMissed;
-        int _inOrder;
-        Long _secretTimestamp;
-        Long _secretViewTimestamp;
-        int _deliveryState;
+        String uid;
+        String username;
+        int isViewed;
+        Long timestamp;
+        Long viewedTimeStamp;
+        int deliveryState;
+
+        String cid;
+        int amount;
+        String date;
+        String blob;
 
         // extract attributes
         while (cursor.moveToNext()) {
             // get secret attributes
-            _secretId = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_UNIQUE_ID));
-            _username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_USER));
-            _secretTimestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_TIMESTAMP));
-            _secretIsSender = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_IS_SENDER));
-            _secretBlobType = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_BLOB_TYPE));
-            _secretBlob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_BLOB));
-            _isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_VIEWED));
-            _secretViewTimestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_VIEWED_TIMESTAMP));
-            _isMissed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_MISSED));
-            _inOrder = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_IN_ORDER));
-            _deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.DELIVERY_STATE));
+            uid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_UID));
+            username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_USER));
+            isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED));
+            timestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP));
+            viewedTimeStamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP));
+            deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.DELIVERY_NAME_STATE));
+            cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
+            amount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
+            blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
 
-            // create secret
-            Secret secret = new Secret(_secretBlob, BlobType.valueOfType(_secretBlobType), new SecretUser("id", _username), _secretIsSender == 1);
-            secret.setId(_secretId);
-            secret.setViewed(_isViewed == 1);
-            secret.setMissed(_isMissed == 1);
-            secret.setInOrder(_inOrder == 1);
-            secret.setTimeStamp(_secretTimestamp);
-            secret.setViewedTimeStamp(_secretViewTimestamp);
-            secret.setDeliveryState(DeliveryState.valueOfState(_deliveryState));
+            // create cheque
+            Cheque cheque = new Cheque();
+            cheque.setUid(uid);
+            cheque.setUser(new SecretUser("_ID", username));
+            cheque.setViewed(isViewed == 1);
+            cheque.setTimestamp(timestamp);
+            cheque.setViewedTimeStamp(viewedTimeStamp);
+            cheque.setDeliveryState(DeliveryState.valueOfState(deliveryState));
+            cheque.setCid(cid);
+            cheque.setAmount(amount);
+            cheque.setBlob(blob);
 
-            // fill secret list
-            secretList.add(secret);
+            cheques.add(cheque);
         }
 
-        // clean
         cursor.close();
 
-        Log.d(TAG, "got secrets count " + secretList.size());
-        return secretList;
+        return cheques;
     }
 
     /**
      * Get secrets from give timestamp, used for lazy loading!!!
      *
      * @param secretUser
-     * @param timestamp
+     * @param t
      * @return
      */
-    public ArrayList<Secret> getSecrets(SecretUser secretUser, Long timestamp) {
-        ArrayList secretList = new ArrayList();
+    public ArrayList<Cheque> getSecrets(SecretUser secretUser, Long t) {
+        ArrayList<Cheque> cheques = new ArrayList();
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
-                "SELECT _id, uid, blob, blob_type, user, is_sender, viewed, view_timestamp, missed, timestamp, in_order, delivery_state " +
-                        "FROM secret " +
+                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, amount, blob " +
+                        "FROM cheque " +
                         "WHERE user = ? AND timestamp > ? " +
                         "ORDER BY _id ASC";
-        Cursor cursor = db.rawQuery(query, new String[]{secretUser.getUsername(), timestamp.toString()});
+        Cursor cursor = db.rawQuery(query, new String[]{secretUser.getUsername(), t.toString()});
 
         // secret attr
-        String _secretId;
-        String _secretBlob;
-        int _secretBlobType;
-        int _secretIsSender;
-        int _isViewed;
-        int _isMissed;
-        int _inOrder;
-        Long _secretTimestamp;
-        Long _secretViewTimestamp;
-        int _deliveryState;
+        String uid;
+        String username;
+        int isViewed;
+        Long timestamp;
+        Long viewedTimeStamp;
+        int deliveryState;
+
+        String cid;
+        int amount;
+        String date;
+        String blob;
 
         // extract attributes
         while (cursor.moveToNext()) {
             // get secret attributes
-            _secretId = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_UNIQUE_ID));
-            _secretTimestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_TIMESTAMP));
-            _secretIsSender = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_IS_SENDER));
-            _secretBlobType = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_BLOB_TYPE));
-            _secretBlob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_BLOB));
-            _isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_VIEWED));
-            _secretViewTimestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_VIEWED_TIMESTAMP));
-            _isMissed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_MISSED));
-            _inOrder = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_IN_ORDER));
-            _deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.DELIVERY_STATE));
+            uid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_UID));
+            username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_USER));
+            isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED));
+            timestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP));
+            viewedTimeStamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP));
+            deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.DELIVERY_NAME_STATE));
+            cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
+            amount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
+            blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
 
-            // create secret
-            Secret secret = new Secret(_secretBlob, BlobType.valueOfType(_secretBlobType), secretUser, _secretIsSender == 1);
-            secret.setId(_secretId);
-            secret.setViewed(_isViewed == 1);
-            secret.setMissed(_isMissed == 1);
-            secret.setInOrder(_inOrder == 1);
-            secret.setTimeStamp(_secretTimestamp);
-            secret.setViewedTimeStamp(_secretViewTimestamp);
-            secret.setDeliveryState(DeliveryState.valueOfState(_deliveryState));
+            // create cheque
+            Cheque cheque = new Cheque();
+            cheque.setUid(uid);
+            cheque.setUser(new SecretUser("_ID", username));
+            cheque.setViewed(isViewed == 1);
+            cheque.setTimestamp(timestamp);
+            cheque.setViewedTimeStamp(viewedTimeStamp);
+            cheque.setDeliveryState(DeliveryState.valueOfState(deliveryState));
+            cheque.setCid(cid);
+            cheque.setAmount(amount);
+            cheque.setBlob(blob);
 
-            // fill secret list
-            secretList.add(secret);
+            cheques.add(cheque);
         }
 
-        // clean
         cursor.close();
 
-        Log.d(TAG, "secrets count " + secretList.size());
-
-        return secretList;
+        return cheques;
     }
 
-    public ArrayList<Secret> getUnAckSecrects() {
-        ArrayList<Secret> secretList = new ArrayList();
+    public ArrayList<Cheque> getUnAckSecrects() {
+        ArrayList<Cheque> cheques = new ArrayList();
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
-        String query = "SELECT _id, uid, blob, blob_type, user, is_sender, viewed, view_timestamp, missed, timestamp, delivery_state " +
-                "FROM secret WHERE delivery_state = ? ORDER BY _id ASC";
+        String query =
+                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, amount, blob " +
+                        "FROM cheque " +
+                        "WHERE delivery_state = ? " +
+                        "ORDER BY _id ASC";
         Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(DeliveryState.PENDING.getState())});
 
         // secret attr
-        String _secretId;
-        String _username;
-        String _secretBlob;
-        int _secretBlobType;
-        int _secretIsSender;
-        int _isViewed;
-        int _isMissed;
-        Long _secretTimestamp;
-        Long _secretViewTimestamp;
-        int _deliveryState;
+        String uid;
+        String username;
+        int isViewed;
+        Long timestamp;
+        Long viewedTimeStamp;
+        int deliveryState;
+
+        String cid;
+        int amount;
+        String date;
+        String blob;
 
         // extract attributes
         while (cursor.moveToNext()) {
             // get secret attributes
-            _secretId = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_UNIQUE_ID));
-            _username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_USER));
-            _secretTimestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_TIMESTAMP));
-            _secretIsSender = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_IS_SENDER));
-            _secretBlobType = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_BLOB_TYPE));
-            _secretBlob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_BLOB));
-            _isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_VIEWED));
-            _secretViewTimestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_VIEWED_TIMESTAMP));
-            _isMissed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_MISSED));
-            _deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.DELIVERY_STATE));
+            uid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_UID));
+            username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_USER));
+            isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED));
+            timestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP));
+            viewedTimeStamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP));
+            deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.DELIVERY_NAME_STATE));
+            cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
+            amount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
+            blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
 
-            // create secret
-            Secret secret = new Secret(_secretBlob, BlobType.valueOfType(_secretBlobType), getSecretUser(_username), _secretIsSender == 1);
-            secret.setId(_secretId);
-            secret.setViewed(_isViewed == 1);
-            secret.setMissed(_isMissed == 1);
-            secret.setTimeStamp(_secretTimestamp);
-            secret.setViewedTimeStamp(_secretViewTimestamp);
-            secret.setDeliveryState(DeliveryState.valueOfState(_deliveryState));
+            // create cheque
+            Cheque cheque = new Cheque();
+            cheque.setUid(uid);
+            cheque.setUser(new SecretUser("_ID", username));
+            cheque.setViewed(isViewed == 1);
+            cheque.setTimestamp(timestamp);
+            cheque.setViewedTimeStamp(viewedTimeStamp);
+            cheque.setDeliveryState(DeliveryState.valueOfState(deliveryState));
+            cheque.setCid(cid);
+            cheque.setAmount(amount);
+            cheque.setBlob(blob);
 
-            // fill secret list
-            secretList.add(secret);
+            cheques.add(cheque);
         }
 
-        // clean
         cursor.close();
 
-        Log.d(TAG, "GetSecretz: secrets count " + secretList.size());
-        return secretList;
+        return cheques;
     }
 
     /**
@@ -578,113 +531,22 @@ public class SenzorsDbSource {
      *
      * @param
      */
-    public void deleteSecret(Secret secret) {
+    public void deleteSecret(Cheque cheque) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // delete senz of given user
-        db.delete(SenzorsDbContract.Secret.TABLE_NAME,
-                SenzorsDbContract.Secret.COLUMN_UNIQUE_ID + " = ?",
-                new String[]{secret.getId()});
-    }
-
-    public void deleteAllSecretsExceptLast(String username) {
-        SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
-        String sqlDelete =
-                "uid in " +
-                        "(select uid from secret where " +
-                        "_id not in(select _id from secret where user = '" + username + "' order by _id DESC limit 7) and " +
-                        "user = '" + username + "')";
-        db.delete(SenzorsDbContract.Secret.TABLE_NAME, sqlDelete, null);
+        db.delete(SenzorsDbContract.Cheque.TABLE_NAME,
+                SenzorsDbContract.Cheque.COLUMN_NAME_UID + " = ?",
+                new String[]{cheque.getUid()});
     }
 
     public void deleteAllSecretsThatBelongToUser(String username) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // delete senz of given user
-        db.delete(SenzorsDbContract.Secret.TABLE_NAME,
-                SenzorsDbContract.Secret.COLUMN_NAME_USER + " = ?",
+        db.delete(SenzorsDbContract.Cheque.TABLE_NAME,
+                SenzorsDbContract.Cheque.COLUMN_NAME_USER + " = ?",
                 new String[]{username});
-    }
-
-    /**
-     * GEt list of the latest chat messages!!!!
-     *
-     * @return
-     */
-    public ArrayList<Secret> getRecentSecretList() {
-        ArrayList<Secret> secretList = new ArrayList();
-
-        SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
-        String query =
-                "SELECT " +
-                        "MAX(secret._id), " +
-                        "secret._id, " +
-                        "secret.blob, " +
-                        "secret.blob_type, " +
-                        "secret.user, " +
-                        "secret.is_sender, " +
-                        "secret.timestamp, " +
-                        "user._id, " +
-                        "user.image, " +
-                        "user.is_active, " +
-                        "user.is_sms_requester, " +
-                        "user.phone, " +
-                        "user.unread_secret_count " +
-                        "FROM secret " +
-                        "INNER JOIN user ON user.username = secret.user " +
-                        "GROUP BY user.username " +
-                        "ORDER BY timestamp DESC";
-
-        Cursor cursor = db.rawQuery(query, null);
-
-        // secret attr
-        String _userID;
-        String _secretBlob;
-        int _secretBlobType;
-        String _secretUser;
-        Long _secretTimestamp;
-        String _image;
-        int _secretIsSender;
-        int _isActive;
-        int _isRequester;
-        String _phone;
-        int _unreadSecretCount;
-
-        // extract attributes
-        while (cursor.moveToNext()) {
-            // get secret attributes
-            _userID = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User._ID));
-            _secretBlob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_BLOB));
-            _secretBlobType = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_BLOB_TYPE));
-            _secretUser = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_USER));
-            _secretTimestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_TIMESTAMP));
-            _secretIsSender = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_IS_SENDER));
-
-            // get user attributes
-            _image = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IMAGE));
-            _isActive = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE));
-            _phone = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PHONE));
-            _isRequester = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER));
-            _unreadSecretCount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_UNREAD_SECRET_COUNT));
-
-            SecretUser secretUser = new SecretUser(_userID, _secretUser);
-            secretUser.setImage(_image);
-            secretUser.setActive(_isActive == 1);
-            secretUser.setSMSRequester(_isRequester == 1);
-            secretUser.setPhone(_phone);
-            secretUser.setUnreadSecretCount(_unreadSecretCount);
-
-            Secret secret = new Secret(_secretBlob, BlobType.valueOfType(_secretBlobType), secretUser, _secretIsSender == 1);
-            secret.setTimeStamp(_secretTimestamp);
-            // fill secret list
-            secretList.add(secret);
-        }
-
-        // clean
-        cursor.close();
-
-        Log.d(TAG, "GetSecretz: secrets count " + secretList.size());
-        return secretList;
     }
 
 }

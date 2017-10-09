@@ -15,12 +15,9 @@ import android.widget.Toast;
 import com.score.rahasak.R;
 import com.score.rahasak.application.IntentProvider;
 import com.score.rahasak.db.SenzorsDbSource;
-import com.score.rahasak.enums.BlobType;
 import com.score.rahasak.enums.DeliveryState;
 import com.score.rahasak.enums.IntentType;
 import com.score.rahasak.pojo.Cheque;
-import com.score.rahasak.pojo.Secret;
-import com.score.rahasak.pojo.SecretUser;
 import com.score.rahasak.utils.ActivityUtils;
 import com.score.rahasak.utils.ImageUtils;
 import com.score.rahasak.utils.SenzUtils;
@@ -111,7 +108,7 @@ public class ChequePreviewActivity extends BaseActivity {
         byte[] compBytes = ImageUtils.compressImage(bytes);
 
         // set cheque
-        cheque.setImg(Base64.encodeToString(compBytes, Base64.DEFAULT));
+        cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
 
         Bitmap cChq = ImageUtils.bytesToBmp(compBytes);
         chqueImg.setImageBitmap(cChq);
@@ -155,17 +152,16 @@ public class ChequePreviewActivity extends BaseActivity {
 
             // save img in sdcard
             String imgName = uid + ".jpg";
-            ImageUtils.saveImg(imgName, cheque.getImg());
+            ImageUtils.saveImg(imgName, cheque.getBlob());
 
             // create secret
-            final Secret secret = new Secret("", BlobType.IMAGE, new SecretUser("id", cheque.getAccount()), false);
-            secret.setId(uid);
-            secret.setTimeStamp(timestamp);
-            secret.setDeliveryState(DeliveryState.PENDING);
-            new SenzorsDbSource(ChequePreviewActivity.this).createSecret(secret);
+            cheque.setUid(uid);
+            cheque.setDeliveryState(DeliveryState.PENDING);
+            cheque.setTimestamp(timestamp);
+            new SenzorsDbSource(ChequePreviewActivity.this).createSecret(cheque);
 
             // update unread count by one
-            new SenzorsDbSource(ChequePreviewActivity.this).updateUnreadSecretCount(cheque.getAccount(), 1);
+            new SenzorsDbSource(ChequePreviewActivity.this).updateUnreadSecretCount(cheque.getUser().getUsername(), 1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -173,7 +169,7 @@ public class ChequePreviewActivity extends BaseActivity {
 
     private void sendCheque(Long timestamp) {
         Senz senz = SenzUtils.getShareChequeSenz(this, cheque, timestamp);
-        cheque.setId(senz.getId());
+        cheque.setUid(senz.getId());
         send(senz);
     }
 }

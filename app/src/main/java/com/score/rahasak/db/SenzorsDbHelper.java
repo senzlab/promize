@@ -25,20 +25,19 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
 
-    private static final String SQL_CREATE_SECRET =
-            "CREATE TABLE " + SenzorsDbContract.Secret.TABLE_NAME + " (" +
-                    SenzorsDbContract.Secret._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", " +
-                    SenzorsDbContract.Secret.COLUMN_UNIQUE_ID + TEXT_TYPE + " UNIQUE NOT NULL" + ", " +
-                    SenzorsDbContract.Secret.COLUMN_TIMESTAMP + INT_TYPE + ", " +
-                    SenzorsDbContract.Secret.COLUMN_NAME_USER + TEXT_TYPE + ", " +
-                    SenzorsDbContract.Secret.COLUMN_NAME_IS_SENDER + INT_TYPE + ", " +
-                    SenzorsDbContract.Secret.COLUMN_BLOB_TYPE + INT_TYPE + ", " +
-                    SenzorsDbContract.Secret.COLUMN_NAME_BLOB + TEXT_TYPE + ", " +
-                    SenzorsDbContract.Secret.COLUMN_NAME_VIEWED + INT_TYPE + ", " +
-                    SenzorsDbContract.Secret.COLUMN_NAME_VIEWED_TIMESTAMP + INT_TYPE + ", " +
-                    SenzorsDbContract.Secret.COLUMN_NAME_MISSED + INT_TYPE + ", " +
-                    SenzorsDbContract.Secret.COLUMN_NAME_IN_ORDER + INT_TYPE + ", " +
-                    SenzorsDbContract.Secret.DELIVERY_STATE + INT_TYPE +
+    private static final String SQL_CREATE_CHEQUE =
+            "CREATE TABLE " + SenzorsDbContract.Cheque.TABLE_NAME + " (" +
+                    SenzorsDbContract.Cheque._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_UID + TEXT_TYPE + " UNIQUE NOT NULL" + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_USER + TEXT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_IS_SENDER + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.DELIVERY_NAME_STATE + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID + TEXT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB + TEXT_TYPE +
                     " )";
 
     private static final String SQL_CREATE_USER =
@@ -84,9 +83,9 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         Log.d(TAG, "OnCreate: creating db helper, db version - " + DATABASE_VERSION);
         Log.d(TAG, SQL_CREATE_USER);
-        Log.d(TAG, SQL_CREATE_SECRET);
+        Log.d(TAG, SQL_CREATE_CHEQUE);
 
-        db.execSQL(SQL_CREATE_SECRET);
+        db.execSQL(SQL_CREATE_CHEQUE);
         db.execSQL(SQL_CREATE_USER);
     }
 

@@ -17,6 +17,7 @@ import com.score.rahasak.R;
 import com.score.rahasak.application.IntentProvider;
 import com.score.rahasak.enums.IntentType;
 import com.score.rahasak.pojo.Cheque;
+import com.score.rahasak.pojo.SecretUser;
 import com.score.rahasak.utils.ActivityUtils;
 import com.score.senzc.pojos.Senz;
 
@@ -126,11 +127,9 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
 
     private void onClickPreview() {
         // create cheque
-        Cheque cheque = new Cheque(
-                "fvzCRhEnwHoiWiAFDokMzVcFVpL",
-                //user.getText().toString().trim(),
-                Integer.parseInt(amount.getText().toString())
-        );
+        Cheque cheque = new Cheque();
+        cheque.setUser(new SecretUser("id", "fvzCRhEnwHoiWiAFDokMzVcFVpL"));
+        cheque.setAmount(Integer.parseInt(amount.getText().toString()));
         cheque.setDate(date.getText().toString().trim());
 
         // cheque preview

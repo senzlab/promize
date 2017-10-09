@@ -75,7 +75,7 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
     private void initCheque() {
         cheque = getIntent().getParcelableExtra("CHEQUE");
 
-        userEditText.setText(cheque.getAccount());
+        userEditText.setText(cheque.getUser().getUsername());
         amountEditText.setText(Integer.toString(cheque.getAmount()));
     }
 
@@ -109,7 +109,7 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
     private void onClickPreview() {
         // cheque preview
         Intent intent = new Intent(this, ChequePActivity.class);
-        intent.putExtra("UID", cheque.getId());
+        intent.putExtra("UID", cheque.getUid());
         startActivity(intent);
     }
 

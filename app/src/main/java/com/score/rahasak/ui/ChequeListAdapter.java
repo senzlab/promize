@@ -11,8 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.rahasak.R;
-import com.score.rahasak.enums.BlobType;
-import com.score.rahasak.pojo.Secret;
+import com.score.rahasak.pojo.Cheque;
 import com.score.rahasak.utils.ImageUtils;
 import com.score.rahasak.utils.PhoneBookUtil;
 import com.score.rahasak.utils.TimeUtils;
@@ -22,10 +21,10 @@ import java.util.ArrayList;
 class ChequeListAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<Secret> userSecretList;
+    private ArrayList<Cheque> userSecretList;
     private Typeface typeface;
 
-    ChequeListAdapter(Context _context, ArrayList<Secret> secretList) {
+    ChequeListAdapter(Context _context, ArrayList<Cheque> secretList) {
         this.context = _context;
         this.userSecretList = secretList;
 
@@ -58,7 +57,7 @@ class ChequeListAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         final ViewHolder holder;
-        final Secret secret = (Secret) getItem(i);
+        final Cheque secret = (Cheque) getItem(i);
 
         if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -87,7 +86,7 @@ class ChequeListAdapter extends BaseAdapter {
         return view;
     }
 
-    private void setUpRow(Secret secret, ViewHolder viewHolder) {
+    private void setUpRow(Cheque secret, ViewHolder viewHolder) {
         // set username/name
         if (secret.getUser().getPhone() != null && !secret.getUser().getPhone().isEmpty()) {
             viewHolder.sender.setText(PhoneBookUtil.getContactName(context, secret.getUser().getPhone()));
@@ -96,18 +95,10 @@ class ChequeListAdapter extends BaseAdapter {
         }
 
         viewHolder.sender.setText("@" + secret.getUser().getUsername());
-        if (secret.getBlobType() == BlobType.TEXT) {
-            viewHolder.message.setText("Message");
-        } else if (secret.getBlobType() == BlobType.IMAGE) {
-            viewHolder.message.setText("Selfie");
-        } else if (secret.getBlobType() == BlobType.MISSED_SELFIE) {
-            viewHolder.message.setText("Missed selfie");
-        } else if (secret.getBlobType() == BlobType.MISSED_CALL) {
-            viewHolder.message.setText("Missed call");
-        }
+        viewHolder.message.setText("Rs " + secret.getAmount());
 
-        if (secret.getTimeStamp() != null) {
-            viewHolder.sentTime.setText(TimeUtils.getTimeInWords(secret.getTimeStamp()));
+        if (secret.getTimestamp() != null) {
+            viewHolder.sentTime.setText(TimeUtils.getTimeInWords(secret.getTimestamp()));
         }
 
         if (secret.getUser().getImage() != null) {

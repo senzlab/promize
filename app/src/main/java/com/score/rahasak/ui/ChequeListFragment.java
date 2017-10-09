@@ -26,7 +26,6 @@ import com.score.rahasak.application.IntentProvider;
 import com.score.rahasak.db.SenzorsDbSource;
 import com.score.rahasak.enums.IntentType;
 import com.score.rahasak.pojo.Cheque;
-import com.score.rahasak.pojo.Secret;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
@@ -40,7 +39,7 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
     private ActionBar actionBar;
     private ImageView actionBarDelete;
 
-    private ArrayList<Secret> allSecretsList;
+    private ArrayList<Cheque> allSecretsList;
     private boolean mySecrets;
     private ChequeListAdapter adapter;
     private SenzorsDbSource dbSource;
@@ -107,10 +106,10 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
      */
     private void displayList() {
         try {
-            allSecretsList = dbSource.getSecrets(mySecrets);
-            adapter = new ChequeListAdapter(getContext(), allSecretsList);
-            getListView().setAdapter(adapter);
-            adapter.notifyDataSetChanged();
+//            allSecretsList = dbSource.getSecrets(mySecrets);
+//            adapter = new ChequeListAdapter(getContext(), allSecretsList);
+//            getListView().setAdapter(adapter);
+//            adapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -118,9 +117,9 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
 
     private void refreshList() {
         try {
-            allSecretsList.clear();
-            allSecretsList.addAll(dbSource.getSecrets(mySecrets));
-            adapter.notifyDataSetChanged();
+//            allSecretsList.clear();
+//            allSecretsList.addAll(dbSource.getSecrets(mySecrets));
+//            adapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -128,26 +127,26 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Secret secret = allSecretsList.get(position);
+        Cheque secret = allSecretsList.get(position);
         if (secret.isSelected()) {
             secret.setSelected(false);
             adapter.notifyDataSetChanged();
             actionBarDelete.setVisibility(View.GONE);
         } else {
             // create cheque
-            Cheque cheque = new Cheque(secret.getUser().getUsername(), 400);
-            cheque.setId(secret.getId());
-
-            // open cheque
-            Intent intent = new Intent(this.getActivity(), ViewChequeActivity.class);
-            intent.putExtra("CHEQUE", cheque);
-            startActivity(intent);
+//            Cheque cheque = new Cheque(secret.getUser().getUsername(), 400);
+//            cheque.setId(secret.getId());
+//
+//            // open cheque
+//            Intent intent = new Intent(this.getActivity(), ViewChequeActivity.class);
+//            intent.putExtra("CHEQUE", cheque);
+//            startActivity(intent);
         }
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-        final Secret secret = allSecretsList.get(position);
+        final Cheque secret = allSecretsList.get(position);
         secret.setSelected(true);
         adapter.notifyDataSetChanged();
 
@@ -168,7 +167,7 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
      *
      * @param message - Message to ask
      */
-    public void displayConfirmationMessageDialog(String message, final int index, final Secret secret) {
+    public void displayConfirmationMessageDialog(String message, final int index, final Cheque secret) {
         final Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GeosansLight.ttf");
         final Dialog dialog = new Dialog(this.getActivity());
 

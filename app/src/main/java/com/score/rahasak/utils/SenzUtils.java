@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.score.rahasak.exceptions.NoUserException;
 import com.score.rahasak.pojo.Cheque;
-import com.score.rahasak.pojo.Secret;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 import com.score.senzc.pojos.User;
@@ -113,7 +112,7 @@ public class SenzUtils {
         return senz;
     }
 
-    public static Senz getSenzFromSecret(Context context, Secret secret) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException, UnsupportedEncodingException {
+    public static Senz getSenzFromCheque(Context context, Cheque cheque) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException, UnsupportedEncodingException {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
 
@@ -121,19 +120,19 @@ public class SenzUtils {
         // TODO update them in db
         //Long timestamp = (System.currentTimeMillis() / 1000);
         //String uid = SenzUtils.getUid(context, timestamp.toString());
-        senzAttributes.put("time", secret.getTimeStamp().toString());
-        senzAttributes.put("uid", secret.getId());
-        senzAttributes.put("user", secret.getUser().getUsername());
-        if (secret.getUser().getSessionKey() != null && !secret.getUser().getSessionKey().isEmpty()) {
-            senzAttributes.put("$msg", CryptoUtils.encryptECB(CryptoUtils.getSecretKey(secret.getUser().getSessionKey()), secret.getBlob()));
+        senzAttributes.put("time", cheque.getTimestamp().toString());
+        senzAttributes.put("uid", cheque.getUid());
+        senzAttributes.put("user", cheque.getUser().getUsername());
+        if (cheque.getUser().getSessionKey() != null && !cheque.getUser().getSessionKey().isEmpty()) {
+            senzAttributes.put("$msg", CryptoUtils.encryptECB(CryptoUtils.getSecretKey(cheque.getUser().getSessionKey()), cheque.getBlob()));
         } else {
-            senzAttributes.put("msg", secret.getBlob());
+            senzAttributes.put("msg", cheque.getBlob());
         }
 
         // new senz object
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.DATA);
-        senz.setReceiver(new User("", secret.getUser().getUsername()));
+        senz.setReceiver(new User("", cheque.getUser().getUsername()));
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -144,8 +143,8 @@ public class SenzUtils {
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
         senzAttributes.put("cbnk", "sampath");
-        senzAttributes.put("cimg", cheque.getImg());
-        senzAttributes.put("to", cheque.getAccount());
+        senzAttributes.put("cimg", cheque.getBlob());
+        senzAttributes.put("to", cheque.getUser().getUsername());
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", SenzUtils.getUid(context, timestamp.toString()));
 

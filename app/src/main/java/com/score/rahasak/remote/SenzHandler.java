@@ -6,9 +6,8 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.score.rahasak.db.SenzorsDbSource;
-import com.score.rahasak.enums.BlobType;
 import com.score.rahasak.enums.DeliveryState;
-import com.score.rahasak.pojo.Secret;
+import com.score.rahasak.pojo.Cheque;
 import com.score.rahasak.pojo.SecretUser;
 import com.score.rahasak.utils.CryptoUtils;
 import com.score.rahasak.utils.ImageUtils;
@@ -19,7 +18,6 @@ import com.score.rahasak.utils.SenzUtils;
 import com.score.senzc.pojos.Senz;
 import com.score.senzc.pojos.User;
 
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,9 +68,9 @@ class SenzHandler {
     private void handleConnect(SenzService senzService) {
         // get all un-ack senzes from db
         List<Senz> unackSenzes = new ArrayList<>();
-        for (Secret secret : new SenzorsDbSource(senzService.getApplicationContext()).getUnAckSecrects()) {
+        for (Cheque cheque : new SenzorsDbSource(senzService.getApplicationContext()).getUnAckSecrects()) {
             try {
-                unackSenzes.add(SenzUtils.getSenzFromSecret(senzService.getApplicationContext(), secret));
+                unackSenzes.add(SenzUtils.getSenzFromCheque(senzService.getApplicationContext(), cheque));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -149,7 +147,7 @@ class SenzHandler {
             // save and broadcast
             Long timestamp = (System.currentTimeMillis() / 1000);
             User user = new User("id", senz.getAttributes().get("from"));
-            saveSecret(timestamp, senz.getAttributes().get("uid"), "", BlobType.IMAGE, user, false, senzService.getApplicationContext());
+            saveSecret(timestamp, senz.getAttributes().get("uid"), "", user, senzService.getApplicationContext());
             String imgName = senz.getAttributes().get("uid") + ".jpg";
             ImageUtils.saveImg(imgName, senz.getAttributes().get("cimg"));
             broadcastSenz(senz, senzService.getApplicationContext());
@@ -208,46 +206,6 @@ class SenzHandler {
             }
 
             broadcastSenz(senz, senzService.getApplicationContext());
-        } else if (senz.getAttributes().containsKey("msg") || senz.getAttributes().containsKey("$msg")) {
-            // rahasa
-            // send ack
-            senzService.writeSenz(SenzUtils.getAckSenz(new User("", "senzswitch"), senz.getAttributes().get("uid"), "DELIVERED"));
-
-            try {
-                // save and broadcast
-                String rahasa;
-                if (senz.getAttributes().containsKey("$msg")) {
-                    // encrypted data -> decrypt
-                    String sessionKey = dbSource.getSecretUser(senz.getSender().getUsername()).getSessionKey();
-                    rahasa = CryptoUtils.decryptECB(CryptoUtils.getSecretKey(sessionKey), senz.getAttributes().get("$msg"));
-                } else {
-                    // plain data
-                    rahasa = URLDecoder.decode(senz.getAttributes().get("msg"), "UTF-8");
-                }
-
-                Long timestamp = (System.currentTimeMillis() / 1000);
-                saveSecret(timestamp, senz.getAttributes().get("uid"), rahasa, BlobType.TEXT, senz.getSender(), false, senzService.getApplicationContext());
-                senz.getAttributes().put("time", timestamp.toString());
-                senz.getAttributes().put("msg", rahasa);
-                broadcastSenz(senz, senzService.getApplicationContext());
-
-                // notification user
-                String username = senz.getSender().getUsername();
-                SecretUser secretUser = dbSource.getSecretUser(username);
-                String notificationUser = secretUser.getUsername();
-                if (secretUser.getPhone() != null && !secretUser.getPhone().isEmpty()) {
-                    notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
-                }
-
-                // show notification
-                SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
-                        NotificationUtils.getSecretNotification(notificationUser, username, "New message received"));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (senz.getAttributes().containsKey("lat") || senz.getAttributes().containsKey("lon")) {
-            // location, broadcast
-            broadcastSenz(senz, senzService.getApplicationContext());
         } else if (senz.getAttributes().containsKey("pubkey")) {
             // pubkey from switch
             String username = senz.getAttributes().get("name");
@@ -280,7 +238,7 @@ class SenzHandler {
             if (innerSenz.getAttributes().containsKey("cam")) {
                 // selfie mis
                 Long timestamp = (System.currentTimeMillis() / 1000);
-                saveSecret(timestamp, innerSenz.getAttributes().get("uid"), "", BlobType.IMAGE, innerSenz.getSender(), true, senzService.getApplicationContext());
+                saveSecret(timestamp, innerSenz.getAttributes().get("uid"), "", innerSenz.getSender(), senzService.getApplicationContext());
 
                 // notification user
                 String username = innerSenz.getSender().getUsername();
@@ -307,15 +265,15 @@ class SenzHandler {
         context.sendBroadcast(intent);
     }
 
-    private void saveSecret(Long timestamp, String uid, String blob, BlobType blobType, User user, boolean missed, final Context context) {
+    private void saveSecret(Long timestamp, String uid, String blob, User user, final Context context) {
         try {
             // create secret
-            final Secret secret = new Secret(blob, blobType, new SecretUser(user.getId(), user.getUsername()), true);
-            secret.setId(uid);
-            secret.setTimeStamp(timestamp);
-            secret.setMissed(missed);
-            secret.setDeliveryState(DeliveryState.NONE);
-            new SenzorsDbSource(context).createSecret(secret);
+            final Cheque cheque = new Cheque();
+            cheque.setUid(uid);
+            cheque.setTimestamp(timestamp);
+            cheque.setDeliveryState(DeliveryState.NONE);
+            cheque.setBlob(blob);
+            new SenzorsDbSource(context).createSecret(cheque);
 
             // update unread count by one
             new SenzorsDbSource(context).updateUnreadSecretCount(user.getUsername(), 1);

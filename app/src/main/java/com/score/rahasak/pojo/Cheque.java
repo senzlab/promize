@@ -3,27 +3,120 @@ package com.score.rahasak.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.score.rahasak.enums.DeliveryState;
+
 public class Cheque implements Parcelable {
-    private String id;
-    private String account;
+    private String uid;
+    private SecretUser user;
+    private boolean isSender;
+    private boolean isViewed;
+    private boolean isSelected;
+    private Long timestamp;
+    private Long viewedTimeStamp;
+    private DeliveryState deliveryState;
+
+    private String cid;
     private int amount;
     private String date;
-    private String img;
+    private String blob;
 
-    public String getId() {
-        return id;
+    public Cheque() {
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public Cheque(Parcel in) {
+        uid = in.readString();
+        user = in.readParcelable(SecretUser.class.getClassLoader());
+        isSender = in.readByte() != 0;
+        isViewed = in.readByte() != 0;
+        isSelected = in.readByte() != 0;
+        cid = in.readString();
+        amount = in.readInt();
+        date = in.readString();
+        blob = in.readString();
     }
 
-    public String getAccount() {
-        return account;
+    public static final Creator<Cheque> CREATOR = new Creator<Cheque>() {
+        @Override
+        public Cheque createFromParcel(Parcel in) {
+            return new Cheque(in);
+        }
+
+        @Override
+        public Cheque[] newArray(int size) {
+            return new Cheque[size];
+        }
+    };
+
+    public String getUid() {
+        return uid;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public SecretUser getUser() {
+        return user;
+    }
+
+    public void setUser(SecretUser user) {
+        this.user = user;
+    }
+
+    public boolean isSender() {
+        return isSender;
+    }
+
+    public void setSender(boolean sender) {
+        isSender = sender;
+    }
+
+    public boolean isViewed() {
+        return isViewed;
+    }
+
+    public void setViewed(boolean viewed) {
+        isViewed = viewed;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public Long getViewedTimeStamp() {
+        return viewedTimeStamp;
+    }
+
+    public void setViewedTimeStamp(Long viewedTimeStamp) {
+        this.viewedTimeStamp = viewedTimeStamp;
+    }
+
+    public DeliveryState getDeliveryState() {
+        return deliveryState;
+    }
+
+    public void setDeliveryState(DeliveryState deliveryState) {
+        this.deliveryState = deliveryState;
+    }
+
+    public String getCid() {
+        return cid;
+    }
+
+    public void setCid(String cid) {
+        this.cid = cid;
     }
 
     public int getAmount() {
@@ -42,38 +135,13 @@ public class Cheque implements Parcelable {
         this.date = date;
     }
 
-    public String getImg() {
-        return img;
+    public String getBlob() {
+        return blob;
     }
 
-    public Cheque(String account, int amount) {
-        this.account = account;
-        this.amount = amount;
+    public void setBlob(String blob) {
+        this.blob = blob;
     }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    protected Cheque(Parcel in) {
-        id = in.readString();
-        account = in.readString();
-        amount = in.readInt();
-        date = in.readString();
-        img = in.readString();
-    }
-
-    public static final Creator<Cheque> CREATOR = new Creator<Cheque>() {
-        @Override
-        public Cheque createFromParcel(Parcel in) {
-            return new Cheque(in);
-        }
-
-        @Override
-        public Cheque[] newArray(int size) {
-            return new Cheque[size];
-        }
-    };
 
     @Override
     public int describeContents() {
@@ -82,10 +150,14 @@ public class Cheque implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
-        dest.writeString(account);
+        dest.writeString(uid);
+        dest.writeParcelable(user, flags);
+        dest.writeByte((byte) (isSender ? 1 : 0));
+        dest.writeByte((byte) (isViewed ? 1 : 0));
+        dest.writeByte((byte) (isSelected ? 1 : 0));
+        dest.writeString(cid);
         dest.writeInt(amount);
         dest.writeString(date);
-        dest.writeString(img);
+        dest.writeString(blob);
     }
 }
