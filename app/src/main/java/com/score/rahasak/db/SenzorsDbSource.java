@@ -278,6 +278,7 @@ public class SenzorsDbSource {
      */
     public void createCheque(Cheque cheque) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
+
         // content values to inset
         ContentValues values = new ContentValues();
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_UID, cheque.getUid());

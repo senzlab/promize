@@ -129,7 +129,7 @@ public class ChequePreviewActivity extends BaseActivity {
             public void onClick(View v) {
                 ActivityUtils.showProgressDialog(ChequePreviewActivity.this, "Sharing...");
                 Long timestamp = System.currentTimeMillis() / 1000;
-                saveSecret(timestamp);
+                saveCheque(timestamp);
                 sendCheque(timestamp);
             }
         });
@@ -146,7 +146,7 @@ public class ChequePreviewActivity extends BaseActivity {
         }
     }
 
-    private void saveSecret(Long timestamp) {
+    private void saveCheque(Long timestamp) {
         try {
             String uid = SenzUtils.getUid(this, timestamp.toString());
 
@@ -169,7 +169,6 @@ public class ChequePreviewActivity extends BaseActivity {
 
     private void sendCheque(Long timestamp) {
         Senz senz = SenzUtils.getShareChequeSenz(this, cheque, timestamp);
-        cheque.setUid(senz.getId());
         send(senz);
     }
 }

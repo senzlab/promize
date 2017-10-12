@@ -2,7 +2,6 @@ package com.score.rahasak.remote;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Base64;
 import android.util.Log;
 
 import com.score.rahasak.db.SenzorsDbSource;
@@ -218,28 +217,6 @@ class SenzHandler {
             }
         } else if (senz.getAttributes().containsKey("mic")) {
             broadcastSenz(senz, senzService.getApplicationContext());
-        } else if (senz.getAttributes().containsKey("senz")) {
-            String senzMsg = new String(Base64.decode(senz.getAttributes().get("senz"), Base64.DEFAULT));
-            Senz innerSenz = SenzParser.parse(senzMsg);
-
-            senzService.writeSenz(SenzUtils.getAckSenz(new User("", "senzswitch"), innerSenz.getAttributes().get("uid"), "DELIVERED"));
-            if (innerSenz.getAttributes().containsKey("cam")) {
-                // selfie mis
-                Long timestamp = (System.currentTimeMillis() / 1000);
-                saveSecret(timestamp, innerSenz.getAttributes().get("uid"), "", innerSenz.getSender(), senzService.getApplicationContext());
-
-                // notification user
-                String username = innerSenz.getSender().getUsername();
-                ChequeUser chequeUser = dbSource.getSecretUser(username);
-                String notificationUser = chequeUser.getUsername();
-                if (chequeUser.getPhone() != null && !chequeUser.getPhone().isEmpty()) {
-                    notificationUser = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
-                }
-
-                // show notification
-                SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
-                        NotificationUtils.getStreamNotification(notificationUser, "Missed selfie call", username));
-            }
         }
     }
 
@@ -257,6 +234,7 @@ class SenzHandler {
             cheque.setTimestamp(timestamp);
             cheque.setDeliveryState(DeliveryState.NONE);
             cheque.setBlob(blob);
+            cheque.setUser(new ChequeUser(user.getId(), user.getUsername()));
             new SenzorsDbSource(context).createCheque(cheque);
 
             // update unread count by one
