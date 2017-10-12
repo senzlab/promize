@@ -2,7 +2,6 @@ package com.score.rahasak.ui;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.score.rahasak.R;
 import com.score.rahasak.pojo.ChequeUser;
-import com.score.rahasak.pojo.Permission;
 import com.score.rahasak.utils.ImageUtils;
 import com.score.rahasak.utils.PhoneBookUtil;
 
