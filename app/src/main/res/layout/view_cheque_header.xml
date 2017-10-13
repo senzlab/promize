@@ -40,7 +40,7 @@
             android:layout_margin="15dp"
             android:adjustViewBounds="true"
             android:cropToPadding="true"
-            android:src="@drawable/default_user"
+            android:src="@drawable/df_user"
             app:siBorderAlpha="0.0"
             app:siBorderWidth="0dp"
             app:siRadius="8dp"

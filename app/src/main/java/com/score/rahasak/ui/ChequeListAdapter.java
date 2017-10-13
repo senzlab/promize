@@ -88,13 +88,7 @@ class ChequeListAdapter extends BaseAdapter {
 
     private void setUpRow(Cheque secret, ViewHolder viewHolder) {
         // set username/name
-        if (secret.getUser().getPhone() != null && !secret.getUser().getPhone().isEmpty()) {
-            viewHolder.sender.setText(PhoneBookUtil.getContactName(context, secret.getUser().getPhone()));
-        } else {
-            viewHolder.sender.setText("@" + secret.getUser().getUsername());
-        }
-
-        viewHolder.sender.setText("@" + secret.getUser().getUsername());
+        viewHolder.sender.setText(PhoneBookUtil.getContactName(context, secret.getUser().getPhone()));
         viewHolder.message.setText("Rs " + secret.getAmount());
 
         if (secret.getTimestamp() != null) {
@@ -104,7 +98,7 @@ class ChequeListAdapter extends BaseAdapter {
         if (secret.getUser().getImage() != null) {
             viewHolder.userImage.setImageBitmap(ImageUtils.decodeBitmap(secret.getUser().getImage()));
         } else {
-            viewHolder.userImage.setImageResource(R.drawable.default_user);
+            viewHolder.userImage.setImageResource(R.drawable.df_user);
         }
 
         // selected state

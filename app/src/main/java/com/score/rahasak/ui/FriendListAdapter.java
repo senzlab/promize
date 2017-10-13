@@ -77,21 +77,17 @@ class FriendListAdapter extends ArrayAdapter<ChequeUser> {
         if (chequeUser.getImage() != null) {
             viewHolder.userImageView.setImageBitmap(ImageUtils.decodeBitmap(chequeUser.getImage()));
         } else {
-            viewHolder.userImageView.setImageResource(R.drawable.default_user);
+            viewHolder.userImageView.setImageResource(R.drawable.df_user);
         }
 
         // request text
         if (chequeUser.isActive()) {
             viewHolder.usernameView.setText(PhoneBookUtil.getContactName(context, chequeUser.getPhone()));
             viewHolder.phoneBookNameView.setVisibility(View.GONE);
-            viewHolder.userCameraPermView.setVisibility(View.VISIBLE);
-            viewHolder.userLocationPermView.setVisibility(View.VISIBLE);
         } else {
             viewHolder.usernameView.setText(PhoneBookUtil.getContactName(context, chequeUser.getPhone()));
             viewHolder.phoneBookNameView.setText(chequeUser.isSMSRequester() ? "Sent friend request" : "Received friend request");
             viewHolder.phoneBookNameView.setVisibility(View.VISIBLE);
-            viewHolder.userCameraPermView.setVisibility(View.GONE);
-            viewHolder.userLocationPermView.setVisibility(View.GONE);
         }
 
         // selected

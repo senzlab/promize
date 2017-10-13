@@ -142,7 +142,7 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
         ActionBar.LayoutParams params = new
                 ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT,
                 ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-        actionBar.setCustomView(getLayoutInflater().inflate(R.layout.home_action_bar_layout, null), params);
+        actionBar.setCustomView(getLayoutInflater().inflate(R.layout.home_header_layout, null), params);
         actionBar.setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setDisplayShowCustomEnabled(true);
 

@@ -120,9 +120,9 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
         } else {
             if (chequeUser.isActive()) {
                 // todo go to new cheque
-//                Intent intent = new Intent(this.getActivity(), ChatActivity.class);
-//                intent.putExtra("SENDER", chequeUser.getUsername());
-//                startActivity(intent);
+                Intent intent = new Intent(this.getActivity(), NewChequeActivity.class);
+                intent.putExtra("USER", chequeUser);
+                startActivity(intent);
             } else {
                 if (chequeUser.isSMSRequester()) {
                     String contactName = PhoneBookUtil.getContactName(getActivity(), chequeUser.getPhone());

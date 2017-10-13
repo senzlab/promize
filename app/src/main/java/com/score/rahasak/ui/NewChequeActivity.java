@@ -19,6 +19,7 @@ import com.score.rahasak.enums.IntentType;
 import com.score.rahasak.pojo.Cheque;
 import com.score.rahasak.pojo.ChequeUser;
 import com.score.rahasak.utils.ActivityUtils;
+import com.score.rahasak.utils.PhoneBookUtil;
 import com.score.senzc.pojos.Senz;
 
 public class NewChequeActivity extends BaseActivity implements View.OnClickListener {
@@ -30,6 +31,8 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
     private EditText amount;
     private EditText date;
     private Button send;
+
+    private ChequeUser chequeUser;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
         @Override
@@ -47,6 +50,7 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_cheque_activity_layout);
 
+        initPrefs();
         initUi();
         initToolbar();
         initActionBar();
@@ -85,6 +89,10 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
         if (senzReceiver != null) unregisterReceiver(senzReceiver);
     }
 
+    private void initPrefs() {
+        this.chequeUser = getIntent().getParcelableExtra("USER");
+    }
+
     private void initUi() {
         user = (EditText) findViewById(R.id.new_cheque_username);
         amount = (EditText) findViewById(R.id.new_cheque_amount);
@@ -93,6 +101,8 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
         user.setTypeface(typeface, Typeface.BOLD);
         amount.setTypeface(typeface, Typeface.BOLD);
         date.setTypeface(typeface, Typeface.BOLD);
+
+        user.setText(PhoneBookUtil.getContactName(this, chequeUser.getPhone()));
 
         send = (Button) findViewById(R.id.new_cheque_send);
         send.setOnClickListener(this);
@@ -128,7 +138,7 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
     private void onClickPreview() {
         // create cheque
         Cheque cheque = new Cheque();
-        cheque.setUser(new ChequeUser("id", "8XA1NmfJHLAqYe91VzPqaaPEPaD"));
+        cheque.setUser(chequeUser);
         cheque.setAmount(Integer.parseInt(amount.getText().toString()));
         cheque.setDate(date.getText().toString().trim());
 

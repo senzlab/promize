@@ -389,7 +389,7 @@ public class SenzorsDbSource {
             // create cheque
             Cheque cheque = new Cheque();
             cheque.setUid(uid);
-            cheque.setUser(new ChequeUser("_ID", username));
+            cheque.setUser(getSecretUser(username));
             cheque.setViewed(isViewed == 1);
             cheque.setTimestamp(timestamp);
             cheque.setViewedTimeStamp(viewedTimeStamp);

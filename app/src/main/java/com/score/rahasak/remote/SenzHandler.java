@@ -93,10 +93,7 @@ class SenzHandler {
                 dbSource.activateSecretUser(username, true);
 
                 // notification user
-                String notificationUser = username;
-                if (chequeUser.getPhone() != null && !chequeUser.getPhone().isEmpty()) {
-                    notificationUser = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
-                }
+                String notificationUser = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
                 SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(NotificationUtils.getUserNotification(notificationUser));
 
                 // broadcast send status back
@@ -135,25 +132,25 @@ class SenzHandler {
             // send status back first
             senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "DELIVERED"));
 
-            // save and broadcast
+            // save cheque
             Long timestamp = (System.currentTimeMillis() / 1000);
             User user = new User("id", senz.getAttributes().get("from"));
-            saveSecret(timestamp, senz.getAttributes().get("uid"), "", user, senzService.getApplicationContext());
+            int amnt = Integer.parseInt(senz.getAttributes().get("amnt"));
+            saveCheque(timestamp, senz.getAttributes().get("uid"), "", amnt, user, senzService.getApplicationContext());
+
+            // save img
             String imgName = senz.getAttributes().get("uid") + ".jpg";
             ImageUtils.saveImg(imgName, senz.getAttributes().get("cimg"));
-            broadcastSenz(senz, senzService.getApplicationContext());
 
+            // broadcast
             // notification user
-            String username = senz.getSender().getUsername();
-//            ChequeUser secretUser = new SenzorsDbSource(senzService.getApplicationContext()).getSecretUser(username);
-//            String notificationUser = secretUser.getUsername();
-//            if (secretUser.getPhone() != null && !secretUser.getPhone().isEmpty()) {
-//                notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
-//            }
+            broadcastSenz(senz, senzService.getApplicationContext());
+            ChequeUser secretUser = new SenzorsDbSource(senzService.getApplicationContext()).getSecretUser(user.getUsername());
 
             // show notification
+            String notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
             SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
-                    NotificationUtils.getStreamNotification(username, "New cheque received", username));
+                    NotificationUtils.getStreamNotification(notificationUser, "New cheque received", user.getUsername()));
         }
     }
 
@@ -185,10 +182,7 @@ class SenzHandler {
                 }
 
                 // notification user
-                String notificationUser = username;
-                if (chequeUser.getPhone() != null && !chequeUser.getPhone().isEmpty()) {
-                    notificationUser = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
-                }
+                String notificationUser = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
                 SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(NotificationUtils.getUserConfirmNotification(notificationUser));
             }
 
@@ -226,7 +220,7 @@ class SenzHandler {
         context.sendBroadcast(intent);
     }
 
-    private void saveSecret(Long timestamp, String uid, String blob, User user, final Context context) {
+    private void saveCheque(Long timestamp, String uid, String blob, int amnt, User user, final Context context) {
         try {
             // create secret
             final Cheque cheque = new Cheque();
@@ -234,7 +228,11 @@ class SenzHandler {
             cheque.setTimestamp(timestamp);
             cheque.setDeliveryState(DeliveryState.NONE);
             cheque.setBlob(blob);
-            cheque.setUser(new ChequeUser(user.getId(), user.getUsername()));
+            cheque.setSender(true);
+            cheque.setAmount(amnt);
+
+            ChequeUser chequeUser = new ChequeUser(user.getId(), user.getUsername());
+            cheque.setUser(chequeUser);
             new SenzorsDbSource(context).createCheque(cheque);
 
             // update unread count by one
