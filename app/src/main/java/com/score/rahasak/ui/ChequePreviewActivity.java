@@ -102,9 +102,10 @@ public class ChequePreviewActivity extends BaseActivity {
         // sign cheque
         // add text
         Bitmap sChq = ImageUtils.addSign(chq, sig);
+        Bitmap stChq = ImageUtils.addText(sChq, cheque.getAmount(), cheque.getUser().getUsername());
 
         // compress
-        byte[] bytes = ImageUtils.bmpToBytes(sChq);
+        byte[] bytes = ImageUtils.bmpToBytes(stChq);
         byte[] compBytes = ImageUtils.compressImage(bytes);
 
         // set cheque

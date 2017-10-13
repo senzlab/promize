@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Environment;
@@ -230,7 +231,16 @@ public class ImageUtils {
         return sChq;
     }
 
-    public static void addText(Bitmap chq, String text) {
+    public static Bitmap addText(Bitmap chq, int amount, String account) {
+        Canvas canvas = new Canvas(chq);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(14);
+        canvas.drawText(amount + ".00", 65, 130, paint);
+        canvas.drawText(account, 420, 110, paint);
+        canvas.drawText(NumberUtil.convert(amount), 45, 80, paint);
 
+        return chq;
     }
+
 }
