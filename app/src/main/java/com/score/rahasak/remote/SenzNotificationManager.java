@@ -8,11 +8,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.score.rahasak.R;
 import com.score.rahasak.application.IntentProvider;
-import com.score.rahasak.application.SenzApplication;
 import com.score.rahasak.enums.NotificationType;
 import com.score.rahasak.pojo.SenzNotification;
 import com.score.rahasak.ui.DrawerActivity;
@@ -53,16 +51,11 @@ public class SenzNotificationManager {
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(SenzNotificationManager.MESSAGE_NOTIFICATION_ID, notification);
         } else if (senzNotification.getNotificationType() == NotificationType.NEW_SECRET) {
-            if (SenzApplication.isOnChat() && SenzApplication.getOnChatUser().equalsIgnoreCase(senzNotification.getSender())) {
-                // message for currently chatting user
-                Log.d(TAG, "Message for chatting user " + senzNotification.getSender());
-            } else {
-                // display other types of notification when user not on chat
-                Notification notification = getNotification(senzNotification);
-                notification.flags |= Notification.FLAG_AUTO_CANCEL;
-                NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(SenzNotificationManager.MESSAGE_NOTIFICATION_ID, notification);
-            }
+            // display other types of notification when user not on chat
+            Notification notification = getNotification(senzNotification);
+            notification.flags |= Notification.FLAG_AUTO_CANCEL;
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(SenzNotificationManager.MESSAGE_NOTIFICATION_ID, notification);
         } else if (senzNotification.getNotificationType() == NotificationType.SMS_REQUEST) {
             // SMS request
             Notification notification = getSmsNotification(senzNotification);

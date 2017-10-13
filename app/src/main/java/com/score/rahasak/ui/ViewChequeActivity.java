@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.rahasak.R;
+import com.score.rahasak.db.SenzorsDbSource;
 import com.score.rahasak.pojo.Cheque;
 import com.score.rahasak.utils.ActivityUtils;
 import com.score.rahasak.utils.PhoneBookUtil;
@@ -75,6 +76,12 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
 
     private void initCheque() {
         cheque = getIntent().getParcelableExtra("CHEQUE");
+
+        // update viewed state
+        if (!cheque.isViewed()) {
+            cheque.setViewed(true);
+            new SenzorsDbSource(this).markChequeViewed(cheque.getUid());
+        }
 
         userEditText.setText(PhoneBookUtil.getContactName(this, cheque.getUser().getPhone()));
         amountEditText.setText(Integer.toString(cheque.getAmount()));

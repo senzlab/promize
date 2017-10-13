@@ -150,7 +150,7 @@ class SenzHandler {
             // show notification
             String notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
             SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
-                    NotificationUtils.getStreamNotification(notificationUser, "New cheque received", user.getUsername()));
+                    NotificationUtils.getChequeNotification(notificationUser, "New cheque received", user.getUsername()));
         }
     }
 
@@ -209,8 +209,6 @@ class SenzHandler {
                     e.printStackTrace();
                 }
             }
-        } else if (senz.getAttributes().containsKey("mic")) {
-            broadcastSenz(senz, senzService.getApplicationContext());
         }
     }
 
@@ -230,6 +228,7 @@ class SenzHandler {
             cheque.setBlob(blob);
             cheque.setSender(true);
             cheque.setAmount(amnt);
+            cheque.setViewed(false);
 
             ChequeUser chequeUser = new ChequeUser(user.getId(), user.getUsername());
             cheque.setUser(chequeUser);

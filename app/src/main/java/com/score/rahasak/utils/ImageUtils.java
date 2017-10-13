@@ -236,8 +236,8 @@ public class ImageUtils {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setTextSize(14);
-        canvas.drawText(amount + ".00", 65, 130, paint);
-        canvas.drawText(account, 420, 110, paint);
+        canvas.drawText(account, 65, 130, paint);
+        canvas.drawText(amount + ".00", 420, 110, paint);
         canvas.drawText(NumberUtil.convert(amount), 45, 80, paint);
 
         return chq;

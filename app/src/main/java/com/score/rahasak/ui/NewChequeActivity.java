@@ -146,6 +146,7 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
         Intent intent = new Intent(this, ChequePreviewActivity.class);
         intent.putExtra("CHEQUE", cheque);
         startActivity(intent);
+        NewChequeActivity.this.finish();
     }
 
     private void handleSenz(Senz senz) {

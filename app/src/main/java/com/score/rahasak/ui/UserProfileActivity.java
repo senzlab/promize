@@ -60,9 +60,6 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
                 case DATA:
                     handleDataSenz(senz);
                     break;
-                case STREAM:
-                    handleStreamSenz(senz);
-                    break;
                 default:
                     break;
             }

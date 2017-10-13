@@ -69,7 +69,7 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.hasExtra("SENDER")) {
-            loadFriends();
+            loadIbox();
         }
     }
 

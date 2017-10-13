@@ -227,7 +227,7 @@ public class SenzService extends Service {
                         // get digital signature of the senz
                         String senzPayload = SenzParser.getSenzPayload(senz);
                         String signature;
-                        if (senz.getSenzType() == SenzTypeEnum.STREAM) {
+                        if (senz.getSenzType() == SenzTypeEnum.SHARE) {
                             signature = "_SIG";
                         } else {
                             signature = CryptoUtils.getDigitalSignature(senzPayload.replaceAll(" ", ""), privateKey);

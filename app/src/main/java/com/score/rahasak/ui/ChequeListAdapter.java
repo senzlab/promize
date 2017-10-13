@@ -119,6 +119,14 @@ class ChequeListAdapter extends BaseAdapter {
             viewHolder.sentTime.setTypeface(typeface, Typeface.NORMAL);
             viewHolder.unreadCount.setVisibility(View.GONE);
         }
+
+        if (!secret.isViewed()) {
+            viewHolder.sentTime.setTextColor(context.getResources().getColor(R.color.colorPrimary));
+            viewHolder.sentTime.setTypeface(typeface, Typeface.BOLD);
+        } else {
+            viewHolder.sentTime.setTextColor(context.getResources().getColor(R.color.android_grey));
+            viewHolder.sentTime.setTypeface(typeface, Typeface.NORMAL);
+        }
     }
 
     /**

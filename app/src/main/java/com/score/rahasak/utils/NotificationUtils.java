@@ -1,10 +1,5 @@
 package com.score.rahasak.utils;
 
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.support.v4.app.NotificationCompat;
-
 import com.score.rahasak.R;
 import com.score.rahasak.enums.NotificationType;
 import com.score.rahasak.pojo.SenzNotification;
@@ -16,18 +11,6 @@ import com.score.rahasak.pojo.SenzNotification;
  */
 public class NotificationUtils {
 
-
-    public static SenzNotification getPermissionNotification(String user, String permissionName, String isEnabled) {
-        String msg;
-        if (isEnabled.equalsIgnoreCase("on")) {
-            msg = "You been granted " + permissionName + " permission";
-        } else {
-            msg = "Your " + permissionName + " permission has been revoked";
-        }
-
-        return new SenzNotification(R.drawable.notification_icon, user, msg, user, NotificationType.NEW_PERMISSION);
-    }
-
     public static SenzNotification getUserNotification(String user) {
         return new SenzNotification(R.drawable.notification_icon, user, "You have been invited to share secrets", user, NotificationType.NEW_PERMISSION);
     }
@@ -36,11 +19,7 @@ public class NotificationUtils {
         return new SenzNotification(R.drawable.notification_icon, user, "Confirmed your secret request", user, NotificationType.NEW_PERMISSION);
     }
 
-    public static SenzNotification getSecretNotification(String title, String user, String message) {
-        return new SenzNotification(R.drawable.notification_icon, title, message, user, NotificationType.NEW_SECRET);
-    }
-
-    public static SenzNotification getStreamNotification(String title, String message, String user) {
+    public static SenzNotification getChequeNotification(String title, String message, String user) {
         return new SenzNotification(R.drawable.notification_icon, title, message, user, NotificationType.NEW_SECRET);
     }
 
@@ -51,17 +30,6 @@ public class NotificationUtils {
         senzNotification.setSenderPhone(contactPhone);
 
         return senzNotification;
-    }
-
-    public static Notification getCallNotification(Context context, String title, String message, PendingIntent intent) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setContentTitle(title)
-                .setContentText(message)
-                .setSmallIcon(R.drawable.notification_icon)
-                .setContentIntent(intent)
-                .setOngoing(true);
-
-        return builder.build();
     }
 
 }

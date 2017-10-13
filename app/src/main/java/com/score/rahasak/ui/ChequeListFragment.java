@@ -51,7 +51,7 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
 
             if (intent.hasExtra("SENZ")) {
                 Senz senz = intent.getExtras().getParcelable("SENZ");
-                if (senz.getSenzType() == SenzTypeEnum.DATA || senz.getSenzType() == SenzTypeEnum.STREAM) {
+                if (senz.getSenzType() == SenzTypeEnum.SHARE) {
                     refreshList();
                 }
             }

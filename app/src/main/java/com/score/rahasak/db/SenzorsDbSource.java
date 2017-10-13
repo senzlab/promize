@@ -357,7 +357,7 @@ public class SenzorsDbSource {
                 "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, amount, blob " +
                         "FROM cheque " +
                         "WHERE is_sender = ? " +
-                        "ORDER BY _id ASC";
+                        "ORDER BY _id DESC";
         Cursor cursor = db.rawQuery(query, new String[]{isSender ? "1" : "0"});
 
         // secret attr
