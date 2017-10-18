@@ -43,24 +43,20 @@ public class SenzNotificationManager {
      */
     public void showNotification(SenzNotification senzNotification) {
         if (senzNotification.getNotificationType() == NotificationType.NEW_USER) {
-            Notification notification = getNotification(senzNotification);
+            Notification notification = buildNotification(senzNotification);
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(SenzNotificationManager.MESSAGE_NOTIFICATION_ID, notification);
-        } else if (senzNotification.getNotificationType() == NotificationType.NEW_SECRET) {
-            // display other types of notification when user not on chat
-            Notification notification = getNotification(senzNotification);
+        } else if (senzNotification.getNotificationType() == NotificationType.NEW_CHEQUE) {
+            Notification notification = buildNotification(senzNotification);
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(SenzNotificationManager.MESSAGE_NOTIFICATION_ID, notification);
         } else if (senzNotification.getNotificationType() == NotificationType.SMS_REQUEST) {
-            // SMS request
-            Notification notification = getSmsNotification(senzNotification);
+            Notification notification = buildSmsNotification(senzNotification);
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.notify(SenzNotificationManager.SMS_NOTIFICATION_ID, notification);
-        } else if (senzNotification.getNotificationType() == NotificationType.SMS_CONFIRM) {
-            // SMS confirm
         }
     }
 
@@ -70,15 +66,15 @@ public class SenzNotificationManager {
      *
      * @return notification
      */
-    private Notification getNotification(SenzNotification senzNotification) {
+    private Notification buildNotification(SenzNotification senzNotification) {
         // set up pending intent
         Intent intent;
-        if (senzNotification.getNotificationType() == NotificationType.NEW_SECRET) {
+        if (senzNotification.getNotificationType() == NotificationType.NEW_CHEQUE) {
             intent = new Intent(context, DrawerActivity.class);
-            intent.putExtra("SENDER", senzNotification.getSender());
+            intent.putExtra("TYPE", "CHEQUE");
         } else {
             intent = new Intent(context, DrawerActivity.class);
-            intent.putExtra("SENDER", senzNotification.getSender());
+            intent.putExtra("TYPE", "USER");
         }
 
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -99,7 +95,7 @@ public class SenzNotificationManager {
         return builder.build();
     }
 
-    private Notification getSmsNotification(SenzNotification senzNotification) {
+    private Notification buildSmsNotification(SenzNotification senzNotification) {
         // accept
         Intent acceptIntent = new Intent();
         acceptIntent.setAction(IntentProvider.ACTION_SMS_REQUEST_ACCEPT);

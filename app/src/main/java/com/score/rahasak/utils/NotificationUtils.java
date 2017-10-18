@@ -20,7 +20,7 @@ public class NotificationUtils {
     }
 
     public static SenzNotification getChequeNotification(String title, String message, String user) {
-        return new SenzNotification(R.drawable.ic_notification, title, message, user, NotificationType.NEW_SECRET);
+        return new SenzNotification(R.drawable.ic_notification, title, message, user, NotificationType.NEW_CHEQUE);
     }
 
     public static SenzNotification getSmsNotification(String contactName, String contactPhone, String rahasakUsername) {

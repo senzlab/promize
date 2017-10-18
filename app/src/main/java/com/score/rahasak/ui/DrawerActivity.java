@@ -68,8 +68,9 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.hasExtra("SENDER")) {
-            loadIbox();
+        if (intent.hasExtra("TYPE")) {
+            if (intent.getStringExtra("TYPE").equalsIgnoreCase("CHEQUE")) loadIbox();
+            else loadFriends();
         }
     }
 
