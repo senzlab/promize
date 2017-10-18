@@ -68,11 +68,14 @@ class SenzHandler {
         }
 
         // send them
-        senzService.writeSenzes(unackSenzes);
+        //senzService.writeSenzes(unackSenzes);
     }
 
     private void handleShare(Senz senz, SenzService senzService) {
         if (senz.getAttributes().containsKey("msg") && senz.getAttributes().containsKey("status")) {
+            // send status back
+            senzService.writeSenz(SenzUtils.getAckSenz(new User("", "senzswitch"), senz.getAttributes().get("uid"), "DELIVERED"));
+
             // new user
             // new user permissions, save to db
             SenzorsDbSource dbSource = new SenzorsDbSource(senzService.getApplicationContext());
@@ -131,6 +134,7 @@ class SenzHandler {
             // new cheque most probably
             // send status back first
             senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "DELIVERED"));
+            senzService.writeSenz(SenzUtils.getAckSenz(new User("", "senzswitch"), senz.getAttributes().get("uid"), "DELIVERED"));
 
             // save cheque
             Long timestamp = (System.currentTimeMillis() / 1000);

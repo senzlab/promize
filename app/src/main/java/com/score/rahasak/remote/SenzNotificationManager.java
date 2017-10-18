@@ -17,12 +17,9 @@ import com.score.rahasak.ui.DrawerActivity;
 
 public class SenzNotificationManager {
 
-    private static final String TAG = SenzNotificationManager.class.getName();
-
     // notification ids
     public static final int MESSAGE_NOTIFICATION_ID = 1;
     public static final int SMS_NOTIFICATION_ID = 2;
-    public static final int CALL_NOTIFICATION_ID = 3;
 
     private Context context;
     private static SenzNotificationManager instance;
@@ -45,7 +42,7 @@ public class SenzNotificationManager {
      * @param senzNotification
      */
     public void showNotification(SenzNotification senzNotification) {
-        if (senzNotification.getNotificationType() == NotificationType.NEW_PERMISSION) {
+        if (senzNotification.getNotificationType() == NotificationType.NEW_USER) {
             Notification notification = getNotification(senzNotification);
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
