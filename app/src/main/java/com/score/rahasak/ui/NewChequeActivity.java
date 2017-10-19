@@ -141,6 +141,7 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
         cheque.setUser(chequeUser);
         cheque.setAmount(Integer.parseInt(amount.getText().toString()));
         cheque.setDate(date.getText().toString().trim());
+        cheque.setSender(false);
 
         // cheque preview
         Intent intent = new Intent(this, ChequePreviewActivity.class);

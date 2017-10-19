@@ -216,7 +216,7 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void loadOutbox() {
-        titleText.setText("Inbox");
+        titleText.setText("Outbox");
         clearAboutText();
 
         unSelectDrawerItems();

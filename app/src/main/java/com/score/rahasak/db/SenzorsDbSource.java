@@ -391,6 +391,7 @@ public class SenzorsDbSource {
             cheque.setUid(uid);
             cheque.setUser(getSecretUser(username));
             cheque.setViewed(isViewed == 1);
+            cheque.setSender(isSender);
             cheque.setTimestamp(timestamp);
             cheque.setViewedTimeStamp(viewedTimeStamp);
             cheque.setDeliveryState(DeliveryState.valueOfState(deliveryState));

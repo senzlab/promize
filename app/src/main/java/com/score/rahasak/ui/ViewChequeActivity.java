@@ -25,7 +25,8 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
     private EditText userEditText;
     private EditText amountEditText;
     private EditText dateEditText;
-    private Button send;
+    private Button preview;
+    private Button deposit;
 
     private Cheque cheque;
 
@@ -70,8 +71,13 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
         amountEditText.setTypeface(typeface, Typeface.BOLD);
         dateEditText.setTypeface(typeface, Typeface.BOLD);
 
-        send = (Button) findViewById(R.id.view_cheque_send);
-        send.setOnClickListener(this);
+        preview = (Button) findViewById(R.id.view_cheque_send);
+        preview.setTypeface(typeface, Typeface.BOLD);
+        preview.setOnClickListener(this);
+
+        deposit = (Button) findViewById(R.id.view_cheque_deposit);
+        deposit.setTypeface(typeface, Typeface.BOLD);
+        deposit.setOnClickListener(this);
     }
 
     private void initCheque() {
@@ -85,6 +91,10 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
 
         userEditText.setText(PhoneBookUtil.getContactName(this, cheque.getUser().getPhone()));
         amountEditText.setText(Integer.toString(cheque.getAmount()));
+
+        // enable/disable deposit based on cheque owner
+        if (cheque.isSender()) deposit.setVisibility(View.VISIBLE);
+        else deposit.setVisibility(View.GONE);
     }
 
     private void initActionBar() {
@@ -123,9 +133,11 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (v == send) {
+        if (v == preview) {
             ActivityUtils.hideSoftKeyboard(this);
             onClickPreview();
+        } else if (v == deposit) {
+
         }
     }
 }
