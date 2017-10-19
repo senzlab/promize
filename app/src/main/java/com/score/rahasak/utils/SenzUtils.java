@@ -159,4 +159,25 @@ public class SenzUtils {
         return senz;
     }
 
+    public static Senz getDepositChequeSenz(Context context, Cheque cheque, Long timestamp) {
+        // create senz attributes
+        HashMap<String, String> senzAttributes = new HashMap<>();
+        senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
+        senzAttributes.put("cbnk", "sampath");
+        senzAttributes.put("to", "sampath");
+        senzAttributes.put("cid", cheque.getCid());
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("uid", SenzUtils.getUid(context, timestamp.toString()));
+
+        // new senz
+        String id = "_ID";
+        String signature = "_SIGNATURE";
+        SenzTypeEnum senzType = SenzTypeEnum.SHARE;
+        User receiver = new User("", "sampath");
+        Senz senz = new Senz(id, signature, senzType, null, receiver, senzAttributes);
+
+        // send to service
+        return senz;
+    }
+
 }

@@ -140,7 +140,7 @@ class SenzHandler {
             Long timestamp = (System.currentTimeMillis() / 1000);
             User user = new User("id", senz.getAttributes().get("from"));
             int amnt = Integer.parseInt(senz.getAttributes().get("amnt"));
-            saveCheque(timestamp, senz.getAttributes().get("uid"), "", amnt, user, senzService.getApplicationContext());
+            saveCheque(timestamp, senz.getAttributes().get("uid"), senz.getAttributes().get("cid"), "", amnt, user, senzService.getApplicationContext());
 
             // save img
             String imgName = senz.getAttributes().get("uid") + ".jpg";
@@ -222,11 +222,12 @@ class SenzHandler {
         context.sendBroadcast(intent);
     }
 
-    private void saveCheque(Long timestamp, String uid, String blob, int amnt, User user, final Context context) {
+    private void saveCheque(Long timestamp, String uid, String cid, String blob, int amnt, User user, final Context context) {
         try {
             // create secret
             final Cheque cheque = new Cheque();
             cheque.setUid(uid);
+            cheque.setCid(cid);
             cheque.setTimestamp(timestamp);
             cheque.setDeliveryState(DeliveryState.NONE);
             cheque.setBlob(blob);

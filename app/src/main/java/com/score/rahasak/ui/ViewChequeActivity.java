@@ -1,5 +1,7 @@
 package com.score.rahasak.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -10,12 +12,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.score.rahasak.R;
+import com.score.rahasak.application.IntentProvider;
 import com.score.rahasak.db.SenzorsDbSource;
+import com.score.rahasak.enums.IntentType;
 import com.score.rahasak.pojo.Cheque;
 import com.score.rahasak.utils.ActivityUtils;
 import com.score.rahasak.utils.PhoneBookUtil;
+import com.score.rahasak.utils.SenzUtils;
+import com.score.senzc.enums.SenzTypeEnum;
+import com.score.senzc.pojos.Senz;
 
 public class ViewChequeActivity extends BaseActivity implements View.OnClickListener {
 
@@ -30,6 +38,17 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
 
     private Cheque cheque;
 
+    private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "Got message from Senz service");
+            if (intent.hasExtra("SENZ")) {
+                Senz senz = intent.getExtras().getParcelable("SENZ");
+                handleSenz(senz);
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +58,18 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
         initCheque();
         initToolbar();
         initActionBar();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (senzReceiver != null) unregisterReceiver(senzReceiver);
     }
 
     @Override
@@ -124,20 +155,34 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
         setSupportActionBar(toolbar);
     }
 
-    private void onClickPreview() {
-        // cheque preview
-        Intent intent = new Intent(this, ChequePActivity.class);
-        intent.putExtra("UID", cheque.getUid());
-        startActivity(intent);
+    private void handleSenz(Senz senz) {
+        if (senz.getSenzType() == SenzTypeEnum.DATA) {
+            if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
+                // share success
+                ActivityUtils.cancelProgressDialog();
+                Toast.makeText(ViewChequeActivity.this, "Deposit success", Toast.LENGTH_LONG).show();
+                ViewChequeActivity.this.finish();
+
+                // todo update cheque status in db
+            }
+        }
     }
 
     @Override
     public void onClick(View v) {
         if (v == preview) {
             ActivityUtils.hideSoftKeyboard(this);
-            onClickPreview();
-        } else if (v == deposit) {
 
+            // cheque preview
+            Intent intent = new Intent(this, ChequePActivity.class);
+            intent.putExtra("UID", cheque.getUid());
+            startActivity(intent);
+        } else if (v == deposit) {
+            ActivityUtils.showProgressDialog(this, "Depositing...");
+
+            Long timestamp = System.currentTimeMillis() / 1000;
+            Senz senz = SenzUtils.getDepositChequeSenz(this, cheque, timestamp);
+            send(senz);
         }
     }
 }
