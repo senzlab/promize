@@ -287,7 +287,7 @@ public class SenzorsDbSource {
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED, cheque.isViewed() ? 1 : 0);
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP, cheque.getTimestamp());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP, 0);
-        values.put(SenzorsDbContract.Cheque.DELIVERY_NAME_STATE, cheque.getDeliveryState().getState());
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE, cheque.getDeliveryState().getState());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID, cheque.getCid());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT, cheque.getAmount());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB, cheque.getBlob());
@@ -330,7 +330,7 @@ public class SenzorsDbSource {
 
             // content values to inset
             ContentValues values = new ContentValues();
-            values.put(SenzorsDbContract.Cheque.DELIVERY_NAME_STATE, deliveryState.getState());
+            values.put(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE, deliveryState.getState());
 
             // update
             db.update(SenzorsDbContract.Cheque.TABLE_NAME,
@@ -381,7 +381,7 @@ public class SenzorsDbSource {
             isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED));
             timestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP));
             viewedTimeStamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP));
-            deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.DELIVERY_NAME_STATE));
+            deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE));
             cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
             amount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
             blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
@@ -446,7 +446,7 @@ public class SenzorsDbSource {
             isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED));
             timestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP));
             viewedTimeStamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP));
-            deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.DELIVERY_NAME_STATE));
+            deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE));
             cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
             amount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
             blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
@@ -503,7 +503,7 @@ public class SenzorsDbSource {
             isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED));
             timestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP));
             viewedTimeStamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP));
-            deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.DELIVERY_NAME_STATE));
+            deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE));
             cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
             amount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
             blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));

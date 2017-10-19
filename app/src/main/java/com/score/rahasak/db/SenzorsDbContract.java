@@ -25,7 +25,7 @@ class SenzorsDbContract {
         static final String COLUMN_NAME_IS_VIEWED = "is_viewed";
         static final String COLUMN_NAME_TIMESTAMP = "timestamp";
         static final String COLUMN_NAME_VIEWED_TIMESTAMP = "view_timestamp";
-        static final String DELIVERY_NAME_STATE = "delivery_state";
+        static final String COLUMN_NAME_DELIVERY_STATE = "delivery_state";
 
         // cheque info
         static final String COLUMN_NAME_CHEQUE_ID = "cid";

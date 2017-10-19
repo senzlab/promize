@@ -34,7 +34,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
                     SenzorsDbContract.Cheque.COLUMN_NAME_IS_SENDER + INT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED + INT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP + INT_TYPE + ", " +
-                    SenzorsDbContract.Cheque.DELIVERY_NAME_STATE + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE + INT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID + TEXT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT + INT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB + TEXT_TYPE +
