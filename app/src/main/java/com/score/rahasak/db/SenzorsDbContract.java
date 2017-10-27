@@ -18,8 +18,8 @@ class SenzorsDbContract {
         static final String COLUMN_NAME_UID = "uid";
         static final String COLUMN_NAME_USER = "user";
 
-        // is_sender = true -> friends secret
-        // is_sender = false -> my secret
+        // is_sender = true -> friends cheque
+        // is_sender = false -> my cheque
         static final String COLUMN_NAME_IS_SENDER = "is_sender";
 
         static final String COLUMN_NAME_IS_VIEWED = "is_viewed";
@@ -29,6 +29,7 @@ class SenzorsDbContract {
 
         // cheque info
         static final String COLUMN_NAME_CHEQUE_ID = "cid";
+        static final String COLUMN_NAME_CHEQUE_STATE = "state";
         static final String COLUMN_NAME_CHEQUE_AMOUNT = "amount";
         static final String COLUMN_NAME_CHEQUE_BLOB = "blob";
     }

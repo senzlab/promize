@@ -289,6 +289,7 @@ public class SenzorsDbSource {
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP, 0);
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE, cheque.getDeliveryState().getState());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID, cheque.getCid());
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE, cheque.getState());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT, cheque.getAmount());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB, cheque.getBlob());
 
@@ -345,6 +346,33 @@ public class SenzorsDbSource {
     }
 
     /**
+     * Mark message as delivery state
+     *
+     * @param state
+     * @param uid
+     */
+    public void updateChequeState(String state, String uid) {
+        SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
+        try {
+            db.beginTransaction();
+
+            // content values to inset
+            ContentValues values = new ContentValues();
+            values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE, state);
+
+            // update
+            db.update(SenzorsDbContract.Cheque.TABLE_NAME,
+                    values,
+                    SenzorsDbContract.Cheque.COLUMN_NAME_UID + " = ?",
+                    new String[]{uid});
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    /**
      * Get ALl secrets to be display in chat list
      *
      * @return sensor list
@@ -354,7 +382,7 @@ public class SenzorsDbSource {
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
-                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, amount, blob " +
+                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, blob " +
                         "FROM cheque " +
                         "WHERE is_sender = ? " +
                         "ORDER BY _id DESC";
@@ -369,6 +397,7 @@ public class SenzorsDbSource {
         int deliveryState;
 
         String cid;
+        String state;
         int amount;
         String date;
         String blob;
@@ -383,6 +412,7 @@ public class SenzorsDbSource {
             viewedTimeStamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP));
             deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE));
             cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
+            state = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE));
             amount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
             blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
 
@@ -396,6 +426,7 @@ public class SenzorsDbSource {
             cheque.setViewedTimeStamp(viewedTimeStamp);
             cheque.setDeliveryState(DeliveryState.valueOfState(deliveryState));
             cheque.setCid(cid);
+            cheque.setState(state);
             cheque.setAmount(amount);
             cheque.setBlob(blob);
 
@@ -419,7 +450,7 @@ public class SenzorsDbSource {
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
-                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, amount, blob " +
+                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, blob " +
                         "FROM cheque " +
                         "WHERE user = ? AND timestamp > ? " +
                         "ORDER BY _id ASC";
@@ -434,6 +465,7 @@ public class SenzorsDbSource {
         int deliveryState;
 
         String cid;
+        String state;
         int amount;
         String date;
         String blob;
@@ -448,6 +480,7 @@ public class SenzorsDbSource {
             viewedTimeStamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP));
             deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE));
             cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
+            state = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE));
             amount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
             blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
 
@@ -460,6 +493,7 @@ public class SenzorsDbSource {
             cheque.setViewedTimeStamp(viewedTimeStamp);
             cheque.setDeliveryState(DeliveryState.valueOfState(deliveryState));
             cheque.setCid(cid);
+            cheque.setState(state);
             cheque.setAmount(amount);
             cheque.setBlob(blob);
 
@@ -476,7 +510,7 @@ public class SenzorsDbSource {
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
-                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, amount, blob " +
+                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, blob " +
                         "FROM cheque " +
                         "WHERE delivery_state = ? " +
                         "ORDER BY _id ASC";
@@ -491,6 +525,7 @@ public class SenzorsDbSource {
         int deliveryState;
 
         String cid;
+        String state;
         int amount;
         String date;
         String blob;
@@ -505,6 +540,7 @@ public class SenzorsDbSource {
             viewedTimeStamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP));
             deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE));
             cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
+            state = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE));
             amount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
             blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
 
@@ -517,6 +553,7 @@ public class SenzorsDbSource {
             cheque.setViewedTimeStamp(viewedTimeStamp);
             cheque.setDeliveryState(DeliveryState.valueOfState(deliveryState));
             cheque.setCid(cid);
+            cheque.setState(state);
             cheque.setAmount(amount);
             cheque.setBlob(blob);
 

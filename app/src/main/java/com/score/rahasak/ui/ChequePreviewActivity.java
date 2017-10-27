@@ -157,6 +157,7 @@ public class ChequePreviewActivity extends BaseActivity {
 
             // create secret
             cheque.setUid(uid);
+            cheque.setState("TRANSFER");
             cheque.setDeliveryState(DeliveryState.PENDING);
             cheque.setTimestamp(timestamp);
             cheque.setSender(false);

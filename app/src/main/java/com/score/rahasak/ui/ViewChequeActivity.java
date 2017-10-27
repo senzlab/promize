@@ -124,8 +124,10 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
         amountEditText.setText(Integer.toString(cheque.getAmount()));
 
         // enable/disable deposit based on cheque owner
-        if (cheque.isSender()) deposit.setVisibility(View.VISIBLE);
-        else deposit.setVisibility(View.GONE);
+        if (cheque.isSender()) {
+            if (cheque.getState().equalsIgnoreCase("TRANSFER")) deposit.setVisibility(View.VISIBLE);
+            else deposit.setVisibility(View.GONE);
+        } else deposit.setVisibility(View.GONE);
     }
 
     private void initActionBar() {
@@ -163,7 +165,8 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
                 Toast.makeText(ViewChequeActivity.this, "Deposit success", Toast.LENGTH_LONG).show();
                 ViewChequeActivity.this.finish();
 
-                // todo update cheque status in db
+                // update cheque status in db
+                new SenzorsDbSource(ViewChequeActivity.this).updateChequeState("DEPOSIT", cheque.getUid());
             }
         }
     }

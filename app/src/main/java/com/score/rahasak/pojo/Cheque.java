@@ -16,6 +16,7 @@ public class Cheque implements Parcelable {
     private DeliveryState deliveryState;
 
     private String cid;
+    private String state;
     private int amount;
     private String date;
     private String blob;
@@ -30,6 +31,7 @@ public class Cheque implements Parcelable {
         isViewed = in.readByte() != 0;
         isSelected = in.readByte() != 0;
         cid = in.readString();
+        state = in.readString();
         amount = in.readInt();
         date = in.readString();
         blob = in.readString();
@@ -119,6 +121,14 @@ public class Cheque implements Parcelable {
         this.cid = cid;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public int getAmount() {
         return amount;
     }
@@ -156,6 +166,7 @@ public class Cheque implements Parcelable {
         dest.writeByte((byte) (isViewed ? 1 : 0));
         dest.writeByte((byte) (isSelected ? 1 : 0));
         dest.writeString(cid);
+        dest.writeString(state);
         dest.writeInt(amount);
         dest.writeString(date);
         dest.writeString(blob);

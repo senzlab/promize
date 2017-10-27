@@ -227,11 +227,12 @@ class SenzHandler {
             // create secret
             final Cheque cheque = new Cheque();
             cheque.setUid(uid);
-            cheque.setCid(cid);
             cheque.setTimestamp(timestamp);
             cheque.setDeliveryState(DeliveryState.NONE);
             cheque.setBlob(blob);
             cheque.setSender(true);
+            cheque.setCid(cid);
+            cheque.setState("TRANSFER");
             cheque.setAmount(amnt);
             cheque.setViewed(false);
 
