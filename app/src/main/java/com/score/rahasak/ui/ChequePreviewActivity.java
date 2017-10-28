@@ -4,12 +4,23 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.score.rahasak.R;
@@ -32,6 +43,7 @@ public class ChequePreviewActivity extends BaseActivity {
     private FloatingActionButton cancel;
     private FloatingActionButton done;
     private ImageView chqueImg;
+    private RelativeLayout signatureView;
     private Cheque cheque;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
@@ -48,11 +60,18 @@ public class ChequePreviewActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // remove status bar
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.cheque_p);
+
 
         initPrefs();
         initCheque();
         initUi();
+        initSignature();
     }
 
     @Override
@@ -95,22 +114,16 @@ public class ChequePreviewActivity extends BaseActivity {
     private void initCheque() {
         chqueImg = (ImageView) findViewById(R.id.cheque_preview);
 
-        // sign cheque
-        Bitmap chq = ImageUtils.loadImg(this, "chq.jpg");
-        Bitmap sig = ImageUtils.loadImg(this, "sign.png");
-
-        // sign cheque
         // add text
-        Bitmap sChq = ImageUtils.addSign(chq, sig);
-        Bitmap stChq = ImageUtils.addText(sChq, cheque.getAmount(), cheque.getUser().getUsername());
+        Bitmap chq = ImageUtils.loadImg(this, "echq.jpg");
+        Bitmap stChq = ImageUtils.addText(chq, cheque.getAmount(), cheque.getUser().getUsername());
 
         // compress
         byte[] bytes = ImageUtils.bmpToBytes(stChq);
-        byte[] compBytes = ImageUtils.compressImage(bytes);
-
-        // set cheque
+        byte[] compBytes = ImageUtils.compressImage(bytes, true);
         cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
 
+        // load cheque on layout
         Bitmap cChq = ImageUtils.bytesToBmp(compBytes);
         chqueImg.setImageBitmap(cChq);
     }
@@ -130,10 +143,18 @@ public class ChequePreviewActivity extends BaseActivity {
             public void onClick(View v) {
                 ActivityUtils.showProgressDialog(ChequePreviewActivity.this, "Sharing...");
                 Long timestamp = System.currentTimeMillis() / 1000;
+                signCheque();
                 saveCheque(timestamp);
-                sendCheque(timestamp);
+                //sendCheque(timestamp);
             }
         });
+    }
+
+    private void initSignature() {
+        signatureView = (RelativeLayout) findViewById(R.id.signature);
+
+        Signature signature = new Signature(this, null);
+        signatureView.addView(signature);
     }
 
     private void handleSenz(Senz senz) {
@@ -145,6 +166,25 @@ public class ChequePreviewActivity extends BaseActivity {
                 ChequePreviewActivity.this.finish();
             }
         }
+    }
+
+    public void signCheque() {
+        // signature on view
+        Bitmap sig = Bitmap.createBitmap(signatureView.getWidth(), signatureView.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(sig);
+        Drawable bgDrawable = signatureView.getBackground();
+        bgDrawable.draw(canvas);
+        signatureView.draw(canvas);
+
+        // add signature to cheque
+        Bitmap chq = ImageUtils.decodeBitmap(cheque.getBlob());
+        Bitmap sChq = ImageUtils.addSign(chq, sig);
+
+        // compress
+        // set cheque
+        byte[] bytes = ImageUtils.bmpToBytes(sChq);
+        byte[] compBytes = ImageUtils.compressImage(bytes, false);
+        cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
     }
 
     private void saveCheque(Long timestamp) {
@@ -174,5 +214,75 @@ public class ChequePreviewActivity extends BaseActivity {
     private void sendCheque(Long timestamp) {
         Senz senz = SenzUtils.getShareChequeSenz(this, cheque, timestamp);
         send(senz);
+    }
+
+    public class Signature extends View {
+        static final float STROKE_WIDTH = 4f;
+        static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
+        Paint paint = new Paint();
+        Path path = new Path();
+
+        float lastTouchX;
+        float lastTouchY;
+        final RectF dirtyRect = new RectF();
+
+        public Signature(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            paint.setAntiAlias(true);
+            paint.setColor(Color.BLACK);
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeJoin(Paint.Join.ROUND);
+            paint.setStrokeWidth(STROKE_WIDTH);
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            canvas.drawPath(path, paint);
+        }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent event) {
+            float eventX = event.getX();
+            float eventY = event.getY();
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    path.moveTo(eventX, eventY);
+                    lastTouchX = eventX;
+                    lastTouchY = eventY;
+                    return true;
+
+                case MotionEvent.ACTION_MOVE:
+
+                case MotionEvent.ACTION_UP:
+
+                    resetDirtyRect(eventX, eventY);
+                    int historySize = event.getHistorySize();
+                    for (int i = 0; i < historySize; i++) {
+                        float historicalX = event.getHistoricalX(i);
+                        float historicalY = event.getHistoricalY(i);
+                        path.lineTo(historicalX, historicalY);
+                    }
+                    path.lineTo(eventX, eventY);
+                    break;
+            }
+
+            invalidate((int) (dirtyRect.left - HALF_STROKE_WIDTH),
+                    (int) (dirtyRect.top - HALF_STROKE_WIDTH),
+                    (int) (dirtyRect.right + HALF_STROKE_WIDTH),
+                    (int) (dirtyRect.bottom + HALF_STROKE_WIDTH));
+
+            lastTouchX = eventX;
+            lastTouchY = eventY;
+
+            return true;
+        }
+
+        private void resetDirtyRect(float eventX, float eventY) {
+            dirtyRect.left = Math.min(lastTouchX, eventX);
+            dirtyRect.right = Math.max(lastTouchX, eventX);
+            dirtyRect.top = Math.min(lastTouchY, eventY);
+            dirtyRect.bottom = Math.max(lastTouchY, eventY);
+        }
     }
 }

@@ -23,7 +23,7 @@ import java.io.InputStream;
 
 public class ImageUtils {
 
-    public static byte[] compressImage(byte[] data) {
+    public static byte[] compressImage(byte[] data, boolean rotate) {
         Bitmap scaledBitmap = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
 
@@ -94,15 +94,17 @@ public class ImageUtils {
         canvas.drawBitmap(bmp, middleX - bmp.getWidth() / 2, middleY - bmp.getHeight() / 2, new Paint(Paint.FILTER_BITMAP_FLAG));
 
         // rotate
-        Matrix matrix = new Matrix();
-        int orientation = Exif.getOrientation(data);
-        if (orientation == 0) {
-            // rotate based on camera id(front/back)
-            matrix.postRotate(-90);
-        } else {
-            matrix.postRotate(orientation);
+        if (rotate) {
+            Matrix matrix = new Matrix();
+            int orientation = Exif.getOrientation(data);
+            if (orientation == 0) {
+                // rotate based on camera id(front/back)
+                matrix.postRotate(-90);
+            } else {
+                matrix.postRotate(orientation);
+            }
+            scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
         }
-        scaledBitmap = Bitmap.createBitmap(scaledBitmap, 0, 0, scaledBitmap.getWidth(), scaledBitmap.getHeight(), matrix, true);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 85, out);
@@ -221,26 +223,29 @@ public class ImageUtils {
     }
 
     public static Bitmap addSign(Bitmap chq, Bitmap sig) {
-        Bitmap rSig = Bitmap.createScaledBitmap(sig, 150, 40, false);
+        Bitmap rSig = Bitmap.createScaledBitmap(sig, chq.getWidth(), chq.getHeight(), false);
 
         Bitmap sChq = Bitmap.createBitmap(chq.getWidth(), chq.getHeight(), chq.getConfig());
         Canvas canvas = new Canvas(sChq);
         canvas.drawBitmap(chq, 0, 0, null);
-        canvas.drawBitmap(rSig, 400, 150, null);
+        canvas.drawBitmap(rSig, 0, 0, null);
 
         return sChq;
     }
 
     public static Bitmap addText(Bitmap chq, int amount, String account) {
-        Canvas canvas = new Canvas(chq);
+        Bitmap sChq = Bitmap.createBitmap(chq.getWidth(), chq.getHeight(), chq.getConfig());
+        Canvas canvas = new Canvas(sChq);
+        canvas.drawBitmap(chq, 0, 0, null);
+        
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
-        paint.setTextSize(14);
-        canvas.drawText(account, 65, 130, paint);
-        canvas.drawText(amount + ".00", 420, 110, paint);
-        canvas.drawText(NumberUtil.convert(amount), 45, 80, paint);
+        paint.setTextSize(32);
+        canvas.drawText(account, 130, 450, paint);
+        canvas.drawText(amount + ".00", 1000, 250, paint);
+        canvas.drawText(NumberUtil.convert(amount), 160, 250, paint);
 
-        return chq;
+        return sChq;
     }
 
 }
