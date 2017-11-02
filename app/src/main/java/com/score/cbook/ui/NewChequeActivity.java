@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,14 +16,16 @@ import android.widget.TextView;
 
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
+import com.score.cbook.async.CheckImageGenerator;
 import com.score.cbook.enums.IntentType;
+import com.score.cbook.interfaces.ICheckImageGeneratorListener;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.utils.ActivityUtils;
 import com.score.cbook.utils.PhoneBookUtil;
 import com.score.senzc.pojos.Senz;
 
-public class NewChequeActivity extends BaseActivity implements View.OnClickListener {
+public class NewChequeActivity extends BaseActivity implements View.OnClickListener, ICheckImageGeneratorListener {
 
     private static final String TAG = NewChequeActivity.class.getName();
 
@@ -33,6 +36,7 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
     private Button send;
 
     private ChequeUser chequeUser;
+    private Cheque cheque;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
         @Override
@@ -136,18 +140,18 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void onClickPreview() {
+        ActivityUtils.showProgressDialog(this, "Generating cheque...");
+
         // create cheque
-        Cheque cheque = new Cheque();
+        cheque = new Cheque();
         cheque.setUser(chequeUser);
         cheque.setAmount(Integer.parseInt(amount.getText().toString()));
         cheque.setDate(date.getText().toString().trim());
         cheque.setSender(false);
 
-        // cheque preview
-        Intent intent = new Intent(this, ChequePreviewActivity.class);
-        intent.putExtra("CHEQUE", cheque);
-        startActivity(intent);
-        NewChequeActivity.this.finish();
+        // create image via async task
+        CheckImageGenerator imageCreator = new CheckImageGenerator(this, this);
+        imageCreator.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cheque);
     }
 
     private void handleSenz(Senz senz) {
@@ -160,5 +164,18 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
             ActivityUtils.hideSoftKeyboard(this);
             onClickPreview();
         }
+    }
+
+    @Override
+    public void onCreate(String chequeImg) {
+        ActivityUtils.cancelProgressDialog();
+
+        cheque.setBlob(chequeImg);
+
+        // cheque preview
+        Intent intent = new Intent(this, ChequePreviewActivity.class);
+        intent.putExtra("CHEQUE", cheque);
+        startActivity(intent);
+        NewChequeActivity.this.finish();
     }
 }

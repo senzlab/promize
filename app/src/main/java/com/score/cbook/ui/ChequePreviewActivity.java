@@ -68,7 +68,6 @@ public class ChequePreviewActivity extends BaseActivity {
         setContentView(R.layout.cheque_p);
 
 
-        initPrefs();
         initCheque();
         initUi();
         initSignature();
@@ -107,24 +106,13 @@ public class ChequePreviewActivity extends BaseActivity {
         if (senzReceiver != null) unregisterReceiver(senzReceiver);
     }
 
-    private void initPrefs() {
-        this.cheque = getIntent().getParcelableExtra("CHEQUE");
-    }
-
     private void initCheque() {
         chqueImg = (ImageView) findViewById(R.id.cheque_preview);
 
-        // add text
-        Bitmap chq = ImageUtils.loadImg(this, "echq.jpg");
-        Bitmap stChq = ImageUtils.addText(chq, cheque.getAmount(), cheque.getUser().getUsername());
-
-        // compress
-        byte[] bytes = ImageUtils.bmpToBytes(stChq);
-        byte[] compBytes = ImageUtils.compressImage(bytes, true);
-        cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
+        this.cheque = getIntent().getParcelableExtra("CHEQUE");
 
         // load cheque on layout
-        Bitmap cChq = ImageUtils.bytesToBmp(compBytes);
+        Bitmap cChq = ImageUtils.decodeBitmap(cheque.getBlob());
         chqueImg.setImageBitmap(cChq);
     }
 
