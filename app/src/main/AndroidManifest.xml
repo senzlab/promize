@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.score.rahasak">
+    package="com.score.cbook">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -47,14 +47,14 @@
 
     <!-- android:name=".application.SenzApplication" -->
     <application
-        android:name="com.score.rahasak.application.SenzApplication"
+        android:name="com.score.cbook.application.SenzApplication"
         android:icon="@drawable/sampath_logo"
         android:label="@string/app_name"
         android:theme="@style/MyMaterialTheme">
 
         <!-- - activities -->
         <activity
-            android:name="com.score.rahasak.ui.SplashActivity"
+            android:name="com.score.cbook.ui.SplashActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme"
@@ -65,66 +65,66 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.score.rahasak.ui.DrawerActivity"
+            android:name="com.score.cbook.ui.DrawerActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name="com.score.rahasak.ui.RegistrationActivity"
+            android:name="com.score.cbook.ui.RegistrationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.score.rahasak.ui.NewChequeActivity"
+            android:name="com.score.cbook.ui.NewChequeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name="com.score.rahasak.ui.ViewChequeActivity"
+            android:name="com.score.cbook.ui.ViewChequeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name="com.score.rahasak.ui.ChequePreviewActivity"
+            android:name="com.score.cbook.ui.ChequePreviewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name="com.score.rahasak.ui.ChequePActivity"
+            android:name="com.score.cbook.ui.ChequePActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name="com.score.rahasak.ui.UserProfileActivity"
+            android:name="com.score.cbook.ui.UserProfileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name="com.score.rahasak.ui.ContactListActivity"
+            android:name="com.score.cbook.ui.ContactListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name="com.score.rahasak.ui.PrivacyTermsActivity"
+            android:name="com.score.cbook.ui.PrivacyTermsActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
 
         <!-- Servicves -->
         <service
-            android:name="com.score.rahasak.remote.SenzService"
+            android:name="com.score.cbook.remote.SenzService"
             android:enabled="true">
             <intent-filter>
-                <action android:name="com.score.rahasak.remote.SenzService" />
+                <action android:name="com.score.cbook.remote.SenzService" />
             </intent-filter>
         </service>
 
         <!-- Receievers -->
-        <receiver android:name="com.score.rahasak.receivers.SenzStartReceiver">
+        <receiver android:name="com.score.cbook.receivers.SenzStartReceiver">
             <intent-filter>
-                <action android:name="com.score.rahasak.RESTART" />
+                <action android:name="com.score.cbook.RESTART" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.score.rahasak.receivers.NetworkStatusReceiver">
+        <receiver android:name="com.score.cbook.receivers.NetworkStatusReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />.
             </intent-filter>
         </receiver>
-        <receiver android:name="com.score.rahasak.receivers.SmsReceiver">
+        <receiver android:name="com.score.cbook.receivers.SmsReceiver">
             <intent-filter android:priority="1000">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
