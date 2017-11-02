@@ -1,7 +1,5 @@
 package com.score.cbook.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -15,15 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.application.IntentProvider;
 import com.score.cbook.async.CheckImageGenerator;
-import com.score.cbook.enums.IntentType;
 import com.score.cbook.interfaces.ICheckImageGeneratorListener;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.utils.ActivityUtils;
 import com.score.cbook.utils.PhoneBookUtil;
-import com.score.senzc.pojos.Senz;
 
 public class NewChequeActivity extends BaseActivity implements View.OnClickListener, ICheckImageGeneratorListener {
 
@@ -37,17 +32,6 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
 
     private ChequeUser chequeUser;
     private Cheque cheque;
-
-    private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "Got message from Senz service");
-            if (intent.hasExtra("SENZ")) {
-                Senz senz = intent.getExtras().getParcelable("SENZ");
-                handleSenz(senz);
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,18 +63,6 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
 
             isServiceBound = false;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (senzReceiver != null) unregisterReceiver(senzReceiver);
     }
 
     private void initPrefs() {
@@ -154,10 +126,6 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
         imageCreator.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cheque);
     }
 
-    private void handleSenz(Senz senz) {
-
-    }
-
     @Override
     public void onClick(View v) {
         if (v == send) {
@@ -167,7 +135,7 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onCreate(String chequeImg) {
+    public void onGenerate(String chequeImg) {
         ActivityUtils.cancelProgressDialog();
 
         cheque.setBlob(chequeImg);
