@@ -233,15 +233,16 @@ public class ImageUtils {
         return sChq;
     }
 
-    public static Bitmap addText(Bitmap chq, int amount, String account) {
-        Bitmap sChq = Bitmap.createBitmap(chq.getWidth(), chq.getHeight(), chq.getConfig());
+    public static Bitmap addText(Bitmap chqImg, int amount, String account, String date) {
+        Bitmap sChq = Bitmap.createBitmap(chqImg.getWidth(), chqImg.getHeight(), chqImg.getConfig());
         Canvas canvas = new Canvas(sChq);
-        canvas.drawBitmap(chq, 0, 0, null);
-        
+        canvas.drawBitmap(chqImg, 0, 0, null);
+
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setTextSize(32);
         canvas.drawText(account, 130, 450, paint);
+        canvas.drawText(date, 1010, 150, paint);
         canvas.drawText(amount + ".00", 1000, 250, paint);
         canvas.drawText(NumberUtil.convert(amount), 160, 250, paint);
 

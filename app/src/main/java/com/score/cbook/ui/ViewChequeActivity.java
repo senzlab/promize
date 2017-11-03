@@ -122,6 +122,7 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
 
         userEditText.setText(PhoneBookUtil.getContactName(this, cheque.getUser().getPhone()));
         amountEditText.setText(Integer.toString(cheque.getAmount()));
+        dateEditText.setText(cheque.getDate());
 
         // enable/disable deposit based on cheque owner
         if (cheque.isSender()) {

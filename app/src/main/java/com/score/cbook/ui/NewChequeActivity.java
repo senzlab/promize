@@ -1,5 +1,6 @@
 package com.score.cbook.ui;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,7 +22,11 @@ import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.utils.ActivityUtils;
 import com.score.cbook.utils.PhoneBookUtil;
 
-public class NewChequeActivity extends BaseActivity implements View.OnClickListener, ICheckImageGeneratorListener {
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+public class NewChequeActivity extends BaseActivity implements ICheckImageGeneratorListener, DatePickerDialog.OnDateSetListener {
 
     private static final String TAG = NewChequeActivity.class.getName();
 
@@ -80,8 +86,30 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
 
         user.setText(PhoneBookUtil.getContactName(this, chequeUser.getPhone()));
 
+        date.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    // show date picker
+                    onFocusDate();
+                }
+            }
+        });
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onFocusDate();
+            }
+        });
+
         send = (Button) findViewById(R.id.new_cheque_send);
-        send.setOnClickListener(this);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityUtils.hideSoftKeyboard(NewChequeActivity.this);
+                onClickPreview();
+            }
+        });
     }
 
     private void initActionBar() {
@@ -111,6 +139,11 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
     }
 
+    private void onFocusDate() {
+        DatePickerFragment fragment = new DatePickerFragment();
+        fragment.show(getSupportFragmentManager(), "date");
+    }
+
     private void onClickPreview() {
         ActivityUtils.showProgressDialog(this, "Generating cheque...");
 
@@ -127,11 +160,13 @@ public class NewChequeActivity extends BaseActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
-        if (v == send) {
-            ActivityUtils.hideSoftKeyboard(this);
-            onClickPreview();
-        }
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month, day);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+        String selectedDate = sdf.format(cal.getTime());
+        date.setText(selectedDate);
     }
 
     @Override

@@ -31,6 +31,7 @@ class SenzorsDbContract {
         static final String COLUMN_NAME_CHEQUE_ID = "cid";
         static final String COLUMN_NAME_CHEQUE_STATE = "state";
         static final String COLUMN_NAME_CHEQUE_AMOUNT = "amount";
+        static final String COLUMN_NAME_CHEQUE_DATE = "date";
         static final String COLUMN_NAME_CHEQUE_BLOB = "blob";
     }
 

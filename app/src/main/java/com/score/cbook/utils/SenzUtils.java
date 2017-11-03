@@ -142,6 +142,7 @@ public class SenzUtils {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
+        senzAttributes.put("cdate", cheque.getDate());
         senzAttributes.put("cbnk", "sampath");
         senzAttributes.put("cimg", cheque.getBlob());
         senzAttributes.put("to", cheque.getUser().getUsername());

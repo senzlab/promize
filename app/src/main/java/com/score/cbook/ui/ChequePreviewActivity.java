@@ -131,9 +131,9 @@ public class ChequePreviewActivity extends BaseActivity {
             public void onClick(View v) {
                 ActivityUtils.showProgressDialog(ChequePreviewActivity.this, "Sharing...");
                 Long timestamp = System.currentTimeMillis() / 1000;
+                cheque.setTimestamp(timestamp);
                 signCheque();
-                saveCheque(timestamp);
-                sendCheque(timestamp);
+                sendCheque();
             }
         });
     }
@@ -150,6 +150,10 @@ public class ChequePreviewActivity extends BaseActivity {
             if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
                 // share success
                 ActivityUtils.cancelProgressDialog();
+
+                // save cheque
+                saveCheque();
+
                 Toast.makeText(ChequePreviewActivity.this, "Share success", Toast.LENGTH_LONG).show();
                 ChequePreviewActivity.this.finish();
             }
@@ -175,9 +179,9 @@ public class ChequePreviewActivity extends BaseActivity {
         cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
     }
 
-    private void saveCheque(Long timestamp) {
+    private void saveCheque() {
         try {
-            String uid = SenzUtils.getUid(this, timestamp.toString());
+            String uid = SenzUtils.getUid(this, cheque.getTimestamp().toString());
 
             // save img in sdcard
             String imgName = uid + ".jpg";
@@ -187,7 +191,6 @@ public class ChequePreviewActivity extends BaseActivity {
             cheque.setUid(uid);
             cheque.setState("TRANSFER");
             cheque.setDeliveryState(DeliveryState.PENDING);
-            cheque.setTimestamp(timestamp);
             cheque.setSender(false);
             cheque.setViewed(true);
             new SenzorsDbSource(ChequePreviewActivity.this).createCheque(cheque);
@@ -199,8 +202,8 @@ public class ChequePreviewActivity extends BaseActivity {
         }
     }
 
-    private void sendCheque(Long timestamp) {
-        Senz senz = SenzUtils.getShareChequeSenz(this, cheque, timestamp);
+    private void sendCheque() {
+        Senz senz = SenzUtils.getShareChequeSenz(this, cheque, cheque.getTimestamp());
         send(senz);
     }
 

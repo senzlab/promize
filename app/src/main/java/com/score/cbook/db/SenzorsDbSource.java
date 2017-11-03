@@ -291,6 +291,7 @@ public class SenzorsDbSource {
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID, cheque.getCid());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE, cheque.getState());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT, cheque.getAmount());
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE, cheque.getDate());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB, cheque.getBlob());
 
         // insert the new row, if fails throw an error
@@ -382,7 +383,7 @@ public class SenzorsDbSource {
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
-                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, blob " +
+                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, date, blob " +
                         "FROM cheque " +
                         "WHERE is_sender = ? " +
                         "ORDER BY _id DESC";
@@ -414,6 +415,7 @@ public class SenzorsDbSource {
             cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
             state = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE));
             amount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
+            date = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE));
             blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
 
             // create cheque
@@ -428,6 +430,7 @@ public class SenzorsDbSource {
             cheque.setCid(cid);
             cheque.setState(state);
             cheque.setAmount(amount);
+            cheque.setDate(date);
             cheque.setBlob(blob);
 
             cheques.add(cheque);
@@ -450,7 +453,7 @@ public class SenzorsDbSource {
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
-                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, blob " +
+                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, date, blob " +
                         "FROM cheque " +
                         "WHERE user = ? AND timestamp > ? " +
                         "ORDER BY _id ASC";
@@ -482,6 +485,7 @@ public class SenzorsDbSource {
             cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
             state = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE));
             amount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
+            date = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE));
             blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
 
             // create cheque
@@ -495,6 +499,7 @@ public class SenzorsDbSource {
             cheque.setCid(cid);
             cheque.setState(state);
             cheque.setAmount(amount);
+            cheque.setDate(date);
             cheque.setBlob(blob);
 
             cheques.add(cheque);
@@ -510,7 +515,7 @@ public class SenzorsDbSource {
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
-                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, blob " +
+                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, date, blob " +
                         "FROM cheque " +
                         "WHERE delivery_state = ? " +
                         "ORDER BY _id ASC";
@@ -542,6 +547,7 @@ public class SenzorsDbSource {
             cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
             state = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE));
             amount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
+            date = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE));
             blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
 
             // create cheque
@@ -555,6 +561,7 @@ public class SenzorsDbSource {
             cheque.setCid(cid);
             cheque.setState(state);
             cheque.setAmount(amount);
+            cheque.setDate(date);
             cheque.setBlob(blob);
 
             cheques.add(cheque);
