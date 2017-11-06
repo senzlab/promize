@@ -13,6 +13,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.async.CheckImageGenerator;
@@ -31,10 +32,10 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
     private static final String TAG = NewChequeActivity.class.getName();
 
     // ui controls
-    private EditText user;
-    private EditText amount;
-    private EditText date;
-    private Button send;
+    private EditText userEditText;
+    private EditText amountEditText;
+    private EditText dateEditText;
+    private Button sendButton;
 
     private ChequeUser chequeUser;
     private Cheque cheque;
@@ -76,17 +77,17 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
     }
 
     private void initUi() {
-        user = (EditText) findViewById(R.id.new_cheque_username);
-        amount = (EditText) findViewById(R.id.new_cheque_amount);
-        date = (EditText) findViewById(R.id.new_cheque_date);
+        userEditText = (EditText) findViewById(R.id.new_cheque_username);
+        amountEditText = (EditText) findViewById(R.id.new_cheque_amount);
+        dateEditText = (EditText) findViewById(R.id.new_cheque_date);
 
-        user.setTypeface(typeface, Typeface.BOLD);
-        amount.setTypeface(typeface, Typeface.BOLD);
-        date.setTypeface(typeface, Typeface.BOLD);
+        userEditText.setTypeface(typeface, Typeface.BOLD);
+        amountEditText.setTypeface(typeface, Typeface.BOLD);
+        dateEditText.setTypeface(typeface, Typeface.BOLD);
 
-        user.setText(PhoneBookUtil.getContactName(this, chequeUser.getPhone()));
+        userEditText.setText(PhoneBookUtil.getContactName(this, chequeUser.getPhone()));
 
-        date.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        dateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -95,15 +96,15 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
                 }
             }
         });
-        date.setOnClickListener(new View.OnClickListener() {
+        dateEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onFocusDate();
             }
         });
 
-        send = (Button) findViewById(R.id.new_cheque_send);
-        send.setOnClickListener(new View.OnClickListener() {
+        sendButton = (Button) findViewById(R.id.new_cheque_send);
+        sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActivityUtils.hideSoftKeyboard(NewChequeActivity.this);
@@ -145,18 +146,24 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
     }
 
     private void onClickPreview() {
-        ActivityUtils.showProgressDialog(this, "Generating cheque...");
+        String amount = amountEditText.getText().toString().trim();
+        String date = dateEditText.getText().toString().trim();
+        if (amount.isEmpty() || date.isEmpty()) {
+            Toast.makeText(this, "Empty fields", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityUtils.showProgressDialog(this, "Generating cheque...");
 
-        // create cheque
-        cheque = new Cheque();
-        cheque.setUser(chequeUser);
-        cheque.setAmount(Integer.parseInt(amount.getText().toString()));
-        cheque.setDate(date.getText().toString().trim());
-        cheque.setSender(false);
+            // create cheque
+            cheque = new Cheque();
+            cheque.setUser(chequeUser);
+            cheque.setAmount(Integer.parseInt(amount));
+            cheque.setDate(date);
+            cheque.setSender(false);
 
-        // create image via async task
-        CheckImageGenerator imageCreator = new CheckImageGenerator(this, this);
-        imageCreator.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cheque);
+            // create image via async task
+            CheckImageGenerator imageCreator = new CheckImageGenerator(this, this);
+            imageCreator.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cheque);
+        }
     }
 
     @Override
@@ -166,7 +173,7 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         String selectedDate = sdf.format(cal.getTime());
-        date.setText(selectedDate);
+        dateEditText.setText(selectedDate);
     }
 
     @Override

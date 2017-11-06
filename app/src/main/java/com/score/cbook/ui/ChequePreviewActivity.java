@@ -156,6 +156,8 @@ public class ChequePreviewActivity extends BaseActivity {
 
                 Toast.makeText(ChequePreviewActivity.this, "Share success", Toast.LENGTH_LONG).show();
                 ChequePreviewActivity.this.finish();
+            } else {
+                Toast.makeText(ChequePreviewActivity.this, "Fail to share cheque", Toast.LENGTH_LONG).show();
             }
         }
     }

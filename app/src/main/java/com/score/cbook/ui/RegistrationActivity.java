@@ -3,7 +3,6 @@ package com.score.cbook.ui;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -11,13 +10,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.enums.IntentType;
-import com.score.cbook.exceptions.InvalidInputFieldsException;
+import com.score.cbook.exceptions.InvalidAccountException;
+import com.score.cbook.exceptions.InvalidPasswordException;
+import com.score.cbook.exceptions.PasswordMisMatchException;
 import com.score.cbook.utils.ActivityUtils;
 import com.score.cbook.utils.CryptoUtils;
 import com.score.cbook.utils.NetworkUtil;
@@ -36,7 +36,9 @@ public class RegistrationActivity extends BaseActivity {
 
     // ui controls
     private Button registerBtn;
-    private EditText editTextUserId;
+    private EditText editTextAccount;
+    private EditText editTextPassword;
+    private EditText editTextConfirmPassword;
     private User registeringUser;
     private Toolbar toolbar;
 
@@ -57,8 +59,7 @@ public class RegistrationActivity extends BaseActivity {
         setContentView(R.layout.activity_registration);
 
         initUi();
-        initToolbar();
-        initActionBar();
+        doPreRegistration();
     }
 
     @Override
@@ -109,13 +110,16 @@ public class RegistrationActivity extends BaseActivity {
     }
 
     private void initUi() {
-        editTextUserId = (EditText) findViewById(R.id.registering_user_id);
-        editTextUserId.setTypeface(typefaceThin, Typeface.NORMAL);
-        editTextUserId.getBackground().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-        ((TextView) findViewById(R.id.welcome_message)).setTypeface(typefaceThin, Typeface.NORMAL);
+        editTextAccount = (EditText) findViewById(R.id.registering_user_id);
+        editTextPassword = (EditText) findViewById(R.id.registering_password);
+        editTextConfirmPassword = (EditText) findViewById(R.id.registering_confirm_password);
+
+        editTextAccount.setTypeface(typeface, Typeface.BOLD);
+        editTextPassword.setTypeface(typeface, Typeface.BOLD);
+        editTextConfirmPassword.setTypeface(typeface, Typeface.BOLD);
 
         registerBtn = (Button) findViewById(R.id.register_btn);
-        registerBtn.setTypeface(typefaceThin, Typeface.BOLD);
+        registerBtn.setTypeface(typeface, Typeface.BOLD);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (NetworkUtil.isAvailableNetwork(RegistrationActivity.this)) {
@@ -132,30 +136,53 @@ public class RegistrationActivity extends BaseActivity {
      * create user and validate fields from here
      */
     private void onClickRegister() {
+        ActivityUtils.hideSoftKeyboard(this);
+
+        // crate user
+        String account = editTextAccount.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
+        String confirmPassword = editTextConfirmPassword.getText().toString().trim();
         try {
-            // validate input field
-            ActivityUtils.isValidRegistrationFields(new User("0", editTextUserId.getText().toString().trim()));
-
-            // pre registration
-            CryptoUtils.initKeys(this);
-
-            // init reg user
-            String senzieAddress = CryptoUtils.getSenzieAddress(this);
-            registeringUser = new User("0", senzieAddress);
-
-            // register
-            ActivityUtils.showProgressDialog(this, "Please wait...");
-            doRegistration();
-        } catch (NoSuchProviderException | NoSuchAlgorithmException e) {
+            ActivityUtils.isValidRegistrationFields(account, password, confirmPassword);
+            registeringUser = new User("0", account);
+            String confirmationMessage = "<font color=#636363>Are you sure you want to register with account </font> <font color=#F37920>" + "<b>" + registeringUser.getUsername() + "</b>" + "</font>";
+            displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (NetworkUtil.isAvailableNetwork(RegistrationActivity.this)) {
+                        ActivityUtils.showProgressDialog(RegistrationActivity.this, "Please wait...");
+                        doRegistration();
+                    } else {
+                        ActivityUtils.showCustomToastShort("No network connection", RegistrationActivity.this);
+                    }
+                }
+            });
+        } catch (InvalidAccountException e) {
             e.printStackTrace();
-
-            Toast.makeText(this, "Registration failed", Toast.LENGTH_LONG).show();
-        } catch (InvalidInputFieldsException e) {
+            displayInformationMessageDialog("Error", "Invalid Account no. Account no should be 12 character length");
+        } catch (InvalidPasswordException e) {
             e.printStackTrace();
-
-            Toast.makeText(this, "Invalid username", Toast.LENGTH_LONG).show();
+            displayInformationMessageDialog("Error", "Invalid password. Password should contains more than 4 characters");
+        } catch (PasswordMisMatchException e) {
+            e.printStackTrace();
+            displayInformationMessageDialog("Error", "Mismatching password and confirm password");
         }
     }
+
+    /**
+     * Create user
+     * First initialize key pair
+     * start service
+     * bind service
+     */
+    private void doPreRegistration() {
+        try {
+            CryptoUtils.initKeys(this);
+        } catch (NoSuchProviderException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Create register senz
@@ -195,6 +222,7 @@ public class RegistrationActivity extends BaseActivity {
                 // save user
                 // navigate home
                 PreferenceUtils.saveUser(this, registeringUser);
+                PreferenceUtils.savePassword(this, editTextPassword.getText().toString().trim());
                 navigateToHome();
             } else if (msg != null && msg.equalsIgnoreCase("REG_FAIL")) {
                 String informationMessage = "<font size=10>Seems username </font> <font color=#F88F8C>" + "<b>" + registeringUser.getUsername() + "</b>" + "</font> <font> already obtained by some other user, try a different username</font>";

@@ -19,8 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
+import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
-import com.score.senzc.pojos.User;
+import com.score.cbook.exceptions.InvalidPasswordException;
+import com.score.cbook.exceptions.PasswordMisMatchException;
 
 /**
  * Utility class to handle activity related common functions
@@ -79,13 +81,18 @@ public class ActivityUtils {
      * 3. non empty passwords
      * 4. two passwords should be match
      *
-     * @param user User object
      * @return valid or not
      */
-    public static boolean isValidRegistrationFields(User user) throws InvalidInputFieldsException {
-        if (user.getUsername().isEmpty() || user.getUsername().contains("@") || user.getUsername().contains("#") || user.getUsername().contains(" ")) {
-            throw new InvalidInputFieldsException();
+    public static boolean isValidRegistrationFields(String account, String password, String confirmPassword) throws InvalidAccountException, InvalidPasswordException, PasswordMisMatchException {
+        if (account.isEmpty() || account.length() != 12) {
+            throw new InvalidAccountException();
         }
+
+        if (password.isEmpty() || password.length() < 4)
+            throw new InvalidPasswordException();
+
+        if (!password.equals(confirmPassword))
+            throw new PasswordMisMatchException();
 
         return true;
     }
@@ -93,11 +100,18 @@ public class ActivityUtils {
     /**
      * validate input fields of login form
      *
-     * @param user login user
      * @return valid of not
      */
-    public static boolean isValidLoginFields(User user) {
-        return !(user.getUsername().isEmpty());
+    public static boolean isValidLoginFields(String givenAccount, String givenPassword, String account, String password) throws InvalidInputFieldsException, PasswordMisMatchException {
+        if (givenAccount.isEmpty() || givenPassword.isEmpty())
+            // empty fields
+            throw new InvalidInputFieldsException();
+
+        if (!givenAccount.equalsIgnoreCase(account) || !givenPassword.equalsIgnoreCase(password))
+            // invalid username/password
+            throw new PasswordMisMatchException();
+
+        return true;
     }
 
     /**

@@ -21,7 +21,6 @@ import com.score.cbook.utils.PreferenceUtils;
 import com.score.cbook.utils.SenzParser;
 import com.score.cbook.utils.SenzUtils;
 import com.score.senz.ISenzService;
-import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 import com.score.senzc.pojos.User;
 
@@ -38,7 +37,7 @@ public class SenzService extends Service {
     private static final String TAG = SenzService.class.getName();
 
     //private static final String SENZ_HOST = "senz.rahasak.com";
-    private static final String SENZ_HOST = "10.2.3.159";
+    private static final String SENZ_HOST = "10.2.3.255";
     public static final int SENZ_PORT = 7070;
 
     // wake lock to keep
@@ -195,12 +194,7 @@ public class SenzService extends Service {
 
                     // get digital signature of the senz
                     String senzPayload = SenzParser.getSenzPayload(senz);
-                    String signature;
-                    if (senz.getSenzType() == SenzTypeEnum.SHARE) {
-                        signature = "SIG";
-                    } else {
-                        signature = CryptoUtils.getDigitalSignature(senzPayload.replaceAll(" ", ""), privateKey);
-                    }
+                    String signature = CryptoUtils.getDigitalSignature(senzPayload.replaceAll(" ", ""), privateKey);
                     String message = SenzParser.getSenzMessage(senzPayload, signature);
                     Log.d(TAG, "Senz to be send: " + message);
 
@@ -226,12 +220,7 @@ public class SenzService extends Service {
 
                         // get digital signature of the senz
                         String senzPayload = SenzParser.getSenzPayload(senz);
-                        String signature;
-                        if (senz.getSenzType() == SenzTypeEnum.SHARE) {
-                            signature = "_SIG";
-                        } else {
-                            signature = CryptoUtils.getDigitalSignature(senzPayload.replaceAll(" ", ""), privateKey);
-                        }
+                        String signature = CryptoUtils.getDigitalSignature(senzPayload.replaceAll(" ", ""), privateKey);
 
                         // sends the message to the server
                         String message = SenzParser.getSenzMessage(senzPayload, signature);

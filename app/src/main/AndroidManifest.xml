@@ -75,6 +75,11 @@
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name="com.score.cbook.ui.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
             android:name="com.score.cbook.ui.NewChequeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
