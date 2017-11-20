@@ -103,7 +103,7 @@
             android:layout_alignParentBottom="true"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <RelativeLayout
                 android:layout_width="match_parent"
