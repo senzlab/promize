@@ -129,13 +129,13 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
     private void onContactItemClick(final Contact contact) {
         // check existing secret user with given phone no
         if (!new SenzorsDbSource(this).isExistingUserWithPhoneNo(contact.getPhoneNo())) {
-            String confirmationMessage = "<font size=10>Are you sure you want to share your rahsak username to </font> <font color=#F37920>" + "<b>" + contact.getName() + "</b>" + "</font> (" + contact.getPhoneNo() + "), via sms?";
+            String confirmationMessage = "<font size=10>Are you sure you want to add customer </font> <font color=#F37920>" + "<b>" + contact.getName() + "</b>" + "</font> (" + contact.getPhoneNo() + ")?";
             try {
                 final String username = PreferenceUtils.getUser(this).getUsername();
                 displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(NetworkUtil.isAvailableNetwork(ContactListActivity.this)) {
+                        if (NetworkUtil.isAvailableNetwork(ContactListActivity.this)) {
                             String message = "#Rahasak #request\nI'm using Rahasak app(http://play.google.com/store/apps/details?id=com.score.rahasak) #username " + username + " #code 41r33";
                             sendSMS(contact.getPhoneNo(), message);
 

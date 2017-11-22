@@ -86,7 +86,7 @@ class FriendListAdapter extends ArrayAdapter<ChequeUser> {
             viewHolder.phoneBookNameView.setVisibility(View.GONE);
         } else {
             viewHolder.usernameView.setText(PhoneBookUtil.getContactName(context, chequeUser.getPhone()));
-            viewHolder.phoneBookNameView.setText(chequeUser.isSMSRequester() ? "Sent friend request" : "Received friend request");
+            viewHolder.phoneBookNameView.setText(chequeUser.isSMSRequester() ? "Sent request" : "Received request");
             viewHolder.phoneBookNameView.setVisibility(View.VISIBLE);
         }
 

@@ -129,7 +129,7 @@ public class ChequePreviewActivity extends BaseActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.showProgressDialog(ChequePreviewActivity.this, "Sharing...");
+                ActivityUtils.showProgressDialog(ChequePreviewActivity.this, "Sending...");
                 Long timestamp = System.currentTimeMillis() / 1000;
                 cheque.setTimestamp(timestamp);
                 signCheque();
@@ -154,10 +154,10 @@ public class ChequePreviewActivity extends BaseActivity {
                 // save cheque
                 saveCheque();
 
-                Toast.makeText(ChequePreviewActivity.this, "Share success", Toast.LENGTH_LONG).show();
+                Toast.makeText(ChequePreviewActivity.this, "Successfully sent", Toast.LENGTH_LONG).show();
                 ChequePreviewActivity.this.finish();
             } else {
-                Toast.makeText(ChequePreviewActivity.this, "Fail to share cheque", Toast.LENGTH_LONG).show();
+                Toast.makeText(ChequePreviewActivity.this, "Fail to send", Toast.LENGTH_LONG).show();
             }
         }
     }

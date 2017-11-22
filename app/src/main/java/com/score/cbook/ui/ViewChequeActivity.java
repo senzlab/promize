@@ -35,6 +35,7 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
     private EditText dateEditText;
     private Button preview;
     private Button deposit;
+    private Button transfer;
 
     private Cheque cheque;
 
@@ -109,6 +110,10 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
         deposit = (Button) findViewById(R.id.view_cheque_deposit);
         deposit.setTypeface(typeface, Typeface.BOLD);
         deposit.setOnClickListener(this);
+
+        transfer = (Button) findViewById(R.id.view_cheque_transfer);
+        transfer.setTypeface(typeface, Typeface.BOLD);
+        transfer.setOnClickListener(this);
     }
 
     private void initCheque() {
@@ -121,14 +126,22 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
         }
 
         userEditText.setText(PhoneBookUtil.getContactName(this, cheque.getUser().getPhone()));
-        amountEditText.setText(Integer.toString(cheque.getAmount()));
+        amountEditText.setText("Rs " + cheque.getAmount());
         dateEditText.setText(cheque.getDate());
 
         // enable/disable deposit based on cheque owner
         if (cheque.isSender()) {
-            if (cheque.getState().equalsIgnoreCase("TRANSFER")) deposit.setVisibility(View.VISIBLE);
-            else deposit.setVisibility(View.GONE);
-        } else deposit.setVisibility(View.GONE);
+            if (cheque.getState().equalsIgnoreCase("TRANSFER")) {
+                deposit.setVisibility(View.VISIBLE);
+                transfer.setVisibility(View.VISIBLE);
+            } else {
+                deposit.setVisibility(View.GONE);
+                transfer.setVisibility(View.GONE);
+            }
+        } else {
+            deposit.setVisibility(View.GONE);
+            transfer.setVisibility(View.GONE);
+        }
     }
 
     private void initActionBar() {

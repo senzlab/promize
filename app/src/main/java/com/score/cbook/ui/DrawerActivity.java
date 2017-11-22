@@ -62,7 +62,7 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
         setupActionBar();
         setupDrawer();
         initDrawerList();
-        loadIbox();
+        loadFriends();
     }
 
     @Override
@@ -118,10 +118,10 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
         // initialize drawer content
         // need to determine selected item according to the currently selected sensor type
         drawerItemList = new ArrayList();
-        drawerItemList.add(new DrawerItem("Inbox", R.drawable.rahaslogo, R.drawable.rahaslogo, true));
-        drawerItemList.add(new DrawerItem("Outbox", R.drawable.rahaslogo, R.drawable.rahaslogo, true));
-        drawerItemList.add(new DrawerItem("Friends", R.drawable.rahaslogo, R.drawable.rahaslogo, false));
-        drawerItemList.add(new DrawerItem("Invite", R.drawable.rahaslogo, R.drawable.rahaslogo, false));
+        drawerItemList.add(new DrawerItem("Write", R.drawable.rahaslogo, R.drawable.rahaslogo, false));
+        drawerItemList.add(new DrawerItem("Received", R.drawable.rahaslogo, R.drawable.rahaslogo, true));
+        drawerItemList.add(new DrawerItem("Sent", R.drawable.rahaslogo, R.drawable.rahaslogo, true));
+        drawerItemList.add(new DrawerItem("Add Customer", R.drawable.rahaslogo, R.drawable.rahaslogo, false));
 
         drawerAdapter = new DrawerAdapter(this, drawerItemList);
         drawerListView = (ListView) findViewById(R.id.drawer);
@@ -180,26 +180,48 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
             drawerLayout.closeDrawer(drawerContainer);
 
             if (position == 0) {
-                loadIbox();
-            } else if (position == 1) {
-                loadOutbox();
-            } else if (position == 2) {
                 loadFriends();
+            } else if (position == 1) {
+                loadIbox();
+            } else if (position == 2) {
+                loadOutbox();
             } else if (position == 3) {
                 loadInvite();
             }
         }
     }
 
+
     /**
      * Load my sensor list fragment
      */
-    private void loadIbox() {
-        titleText.setText("Inbox");
+    private void loadFriends() {
+        titleText.setText("Write cheque");
         clearAboutText();
 
         unSelectDrawerItems();
         drawerItemList.get(0).setSelected(true);
+        drawerAdapter.notifyDataSetChanged();
+
+        FriendListFragment fragment = new FriendListFragment();
+
+        // fragment transitions
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main, fragment);
+        transaction.commit();
+    }
+
+    /**
+     * Load my sensor list fragment
+     */
+    private void loadIbox() {
+        titleText.setText("Received cheques");
+        clearAboutText();
+
+        unSelectDrawerItems();
+        drawerItemList.get(1).setSelected(true);
         drawerAdapter.notifyDataSetChanged();
 
         ChequeListFragment fragment = new ChequeListFragment();
@@ -216,11 +238,11 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void loadOutbox() {
-        titleText.setText("Outbox");
+        titleText.setText("Sent cheques");
         clearAboutText();
 
         unSelectDrawerItems();
-        drawerItemList.get(1).setSelected(true);
+        drawerItemList.get(2).setSelected(true);
         drawerAdapter.notifyDataSetChanged();
 
         ChequeListFragment fragment = new ChequeListFragment();
@@ -236,29 +258,8 @@ public class DrawerActivity extends AppCompatActivity implements View.OnClickLis
         transaction.commit();
     }
 
-    /**
-     * Load my sensor list fragment
-     */
-    private void loadFriends() {
-        titleText.setText("Friends");
-        clearAboutText();
-
-        unSelectDrawerItems();
-        drawerItemList.get(2).setSelected(true);
-        drawerAdapter.notifyDataSetChanged();
-
-        FriendListFragment fragment = new FriendListFragment();
-
-        // fragment transitions
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack so the user can navigate back
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main, fragment);
-        transaction.commit();
-    }
-
     private void loadInvite() {
-        titleText.setText("Invite");
+        titleText.setText("Add customer");
         clearAboutText();
 
         unSelectDrawerItems();

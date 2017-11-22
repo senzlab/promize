@@ -126,7 +126,7 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
             } else {
                 if (chequeUser.isSMSRequester()) {
                     String contactName = PhoneBookUtil.getContactName(getActivity(), chequeUser.getPhone());
-                    ActivityUtils.displayConfirmationMessageDialog("Confirm", "Would you like to resend friend request to " + contactName + "?", getActivity(), typeface, new View.OnClickListener() {
+                    ActivityUtils.displayConfirmationMessageDialog("Confirm", "Would you like to resend request to " + contactName + "?", getActivity(), typeface, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             // start sharing again
