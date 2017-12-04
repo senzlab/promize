@@ -12,7 +12,7 @@ import com.score.cbook.pojo.SenzNotification;
 public class NotificationUtils {
 
     public static SenzNotification getUserNotification(String user) {
-        return new SenzNotification(R.drawable.ic_notification, user, "You have been invited to share cheques", user, NotificationType.NEW_USER);
+        return new SenzNotification(R.drawable.ic_notification, user, "You have been added as a cheque book customer", user, NotificationType.NEW_USER);
     }
 
     public static SenzNotification getUserConfirmNotification(String user) {
@@ -24,7 +24,7 @@ public class NotificationUtils {
     }
 
     public static SenzNotification getSmsNotification(String contactName, String contactPhone, String rahasakUsername) {
-        String msg = "Would you like share cheques?";
+        String msg = "Would you to add " + contactName + " as cheque book customer?";
         SenzNotification senzNotification = new SenzNotification(R.drawable.ic_notification, contactName, msg, rahasakUsername, NotificationType.SMS_REQUEST);
         senzNotification.setSenderPhone(contactPhone);
 

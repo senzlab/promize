@@ -75,7 +75,7 @@
                 android:layout_marginTop="35dp"
                 android:background="@drawable/edit_text_border_bottom"
                 android:hint="Amount"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:maxLength="10"
                 android:paddingBottom="10dp"
                 android:textColor="@color/android_grey"

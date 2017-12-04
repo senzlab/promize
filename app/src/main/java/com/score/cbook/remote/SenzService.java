@@ -37,8 +37,7 @@ public class SenzService extends Service {
     private static final String TAG = SenzService.class.getName();
 
     //private static final String SENZ_HOST = "senz.rahasak.com";
-    //private static final String SENZ_HOST = "10.2.3.34";
-    // private static final String SENZ_HOST = "54.169.71.117";
+    //private static final String SENZ_HOST = "10.2.2.1";
     private static final String SENZ_HOST = "52.77.242.96";
     public static final int SENZ_PORT = 7070;
 
@@ -81,7 +80,7 @@ public class SenzService extends Service {
                 String phone = intent.getStringExtra("PHONE").trim();
                 String username = intent.getStringExtra("USERNAME").trim();
                 try {
-                    sendSMS(phone, "#Rahasak #confirm\nI have confirmed your request. #username " + PreferenceUtils.getUser(SenzService.this).getUsername() + " #code 31e3e");
+                    sendSMS(phone, "#ChequeBook #confirm\nI have confirmed your request. #username " + PreferenceUtils.getUser(SenzService.this).getUsername() + " #code 31e3e");
 
                     // get pubkey
                     getPubKey(username);

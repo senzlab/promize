@@ -136,7 +136,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
                     @Override
                     public void onClick(View v) {
                         if (NetworkUtil.isAvailableNetwork(ContactListActivity.this)) {
-                            String message = "#Rahasak #request\nI'm using Rahasak app(http://play.google.com/store/apps/details?id=com.score.rahasak) #username " + username + " #code 41r33";
+                            String message = "#ChequeBook #request\nI'm using sampath bank digital cheque book app, #username " + username + " #code 41r33";
                             sendSMS(contact.getPhoneNo(), message);
 
                             ActivityUtils.showCustomToastShort("Request sent via SMS", ContactListActivity.this);

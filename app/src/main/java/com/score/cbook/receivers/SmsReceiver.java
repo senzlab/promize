@@ -55,7 +55,7 @@ public class SmsReceiver extends BroadcastReceiver {
     }
 
     private boolean isMessageFromRahasakApp(String smsMessage) {
-        return smsMessage.toLowerCase().contains("#rahasak");
+        return smsMessage.toLowerCase().contains("#chequebook");
     }
 
     private boolean isMessageConfirm(String smsMessage) {
