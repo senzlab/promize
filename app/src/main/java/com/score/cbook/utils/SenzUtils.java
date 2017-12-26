@@ -78,6 +78,21 @@ public class SenzUtils {
         return senz;
     }
 
+    public static Senz getAwaSenz(User user, String uid) {
+        // create senz attributes
+        HashMap<String, String> senzAttributes = new HashMap<>();
+        senzAttributes.put("time", ((Long) (System.currentTimeMillis() / 1000)).toString());
+        senzAttributes.put("uid", uid);
+
+        // new senz object
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.AWA);
+        senz.setReceiver(user);
+        senz.setAttributes(senzAttributes);
+
+        return senz;
+    }
+
     public static String getUid(Context context, String timestamp) {
         try {
             String username = PreferenceUtils.getUser(context).getUsername();

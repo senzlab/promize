@@ -3,6 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f5944e"
     android:orientation="vertical">
 
     <LinearLayout
@@ -10,15 +11,13 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:addStatesFromChildren="true"
-        android:background="@color/white"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/friend_list_selector">
+            android:layout_weight="1">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -27,29 +26,34 @@
 
                 <ImageView
                     android:id="@+id/new_cheque"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/write_cheque" />
+                    android:src="@drawable/group_write" />
 
                 <TextView
                     android:id="@+id/new_cheque_text"
                     android:layout_width="wrap_content"
-                    android:textColor="@color/android_grey"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/new_cheque"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:text="Write Cheque"
+                    android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
         </RelativeLayout>
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20sp"
+            android:background="#f9bc91" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/friend_list_selector">
+            android:layout_weight="1">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -58,10 +62,10 @@
 
                 <ImageView
                     android:id="@+id/customers"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/customers" />
+                    android:src="@drawable/group_customer" />
 
                 <TextView
                     android:id="@+id/customer_text"
@@ -71,25 +75,31 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:text="Customers"
+                    android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
         </RelativeLayout>
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#f9bc91" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/white"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/friend_list_selector">
+            android:layout_weight="1">
 
 
             <RelativeLayout
@@ -99,10 +109,10 @@
 
                 <ImageView
                     android:id="@+id/received_cheques"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/inbox" />
+                    android:src="@drawable/group_inbox" />
 
                 <TextView
                     android:id="@+id/inbox_text"
@@ -112,15 +122,20 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:text="Received Cheques"
+                    android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
         </RelativeLayout>
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#f9bc91" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/friend_list_selector">
+            android:layout_weight="1">
 
 
             <RelativeLayout
@@ -130,10 +145,10 @@
 
                 <ImageView
                     android:id="@+id/messages"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/messages" />
+                    android:src="@drawable/group_messages" />
 
                 <TextView
                     android:id="@+id/messages_text"
@@ -143,25 +158,32 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:text="Messages"
+                    android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
         </RelativeLayout>
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#f9bc91" />
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@color/white"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/more_layout_selector_normal">
+            android:layout_weight="1">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -170,10 +192,10 @@
 
                 <ImageView
                     android:id="@+id/sent_cheques"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/outbox" />
+                    android:src="@drawable/group_outbox" />
 
                 <TextView
                     android:id="@+id/outbox_text"
@@ -183,15 +205,21 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:text="Sent Cheques"
+                    android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
         </RelativeLayout>
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="20sp"
+            android:background="#f9bc91" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/more_layout_selector_normal">
+            android:layout_weight="1">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -200,10 +228,10 @@
 
                 <ImageView
                     android:id="@+id/customer_care"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/customer_care" />
+                    android:src="@drawable/group_support" />
 
                 <TextView
                     android:id="@+id/support_text"
@@ -213,6 +241,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
                     android:text="Contact Bank"
+                    android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
         </RelativeLayout>

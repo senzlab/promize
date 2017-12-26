@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
-import com.score.cbook.db.SenzorsDbSource;
+import com.score.cbook.db.UserSource;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.utils.ActivityUtils;
@@ -49,8 +49,6 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
     private ChequeUser chequeUser;
     private String selectedPermission;
 
-    private SenzorsDbSource dbSource;
-
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -70,8 +68,6 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_profile);
-
-        dbSource = new SenzorsDbSource(this);
 
         initUser();
         initUi();
@@ -265,7 +261,7 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
 
             // save profile picture in db
             String encodedImage = senz.getAttributes().get("cam");
-            dbSource.updateUser(chequeUser.getUsername(), "image", encodedImage);
+            UserSource.updateUser(this, chequeUser.getUsername(), "image", encodedImage);
 
             // display image
             userImageView.setImageBitmap(ImageUtils.decodeBitmap(encodedImage));

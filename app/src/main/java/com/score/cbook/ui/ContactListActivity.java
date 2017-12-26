@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 import com.score.cbook.R;
 import com.score.cbook.async.ContactReader;
-import com.score.cbook.db.SenzorsDbSource;
+import com.score.cbook.db.UserSource;
 import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.interfaces.IContactReaderListener;
 import com.score.cbook.pojo.Contact;
@@ -128,7 +128,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
 
     private void onContactItemClick(final Contact contact) {
         // check existing secret user with given phone no
-        if (!new SenzorsDbSource(this).isExistingUserWithPhoneNo(contact.getPhoneNo())) {
+        if (!UserSource.isExistingUserWithPhoneNo(this, contact.getPhoneNo())) {
             String confirmationMessage = "<font size=10>Are you sure you want to add customer </font> <font color=#F37920>" + "<b>" + contact.getName() + "</b>" + "</font> (" + contact.getPhoneNo() + ")?";
             try {
                 final String username = PreferenceUtils.getUser(this).getUsername();

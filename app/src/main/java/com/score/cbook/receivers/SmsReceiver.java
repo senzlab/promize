@@ -9,7 +9,7 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 
 import com.score.cbook.application.IntentProvider;
-import com.score.cbook.db.SenzorsDbSource;
+import com.score.cbook.db.UserSource;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.remote.SenzNotificationManager;
 import com.score.cbook.utils.NotificationUtils;
@@ -86,19 +86,17 @@ public class SmsReceiver extends BroadcastReceiver {
         String username = getUsernameFromSms(smsMessage.getMessageBody());
         String pubKeyHash = getKeyHashFromSms(smsMessage.getMessageBody());
 
-        SenzorsDbSource dbSource = new SenzorsDbSource(context);
-
         // delete existing user
-        ChequeUser existingUser = dbSource.getExistingUserWithPhoneNo(contactNo);
+        ChequeUser existingUser = UserSource.getExistingUserWithPhoneNo(context, contactNo);
         if (existingUser != null) {
-            dbSource.deleteUser(existingUser.getUsername());
+            UserSource.deleteUser(context, existingUser.getUsername());
         }
 
         // create user
         ChequeUser chequeUser = new ChequeUser("id", username);
         chequeUser.setPhone(contactNo);
         chequeUser.setPubKeyHash(pubKeyHash);
-        dbSource.createUser(chequeUser);
+        UserSource.createUser(context, chequeUser);
 
         // show Notification
         SenzNotificationManager.getInstance(context.getApplicationContext()).showNotification(NotificationUtils.getSmsNotification(contactName, contactNo, username));
@@ -111,13 +109,12 @@ public class SmsReceiver extends BroadcastReceiver {
 
         try {
             // create user
-            SenzorsDbSource dbSource = new SenzorsDbSource(context);
             ChequeUser chequeUser = new ChequeUser("id", username);
             chequeUser.setPhone(contactNo);
             chequeUser.setPubKeyHash(pubKeyHash);
             chequeUser.setSMSRequester(true);
-            if (!dbSource.isExistingUserWithPhoneNo(contactNo)) {
-                dbSource.createUser(chequeUser);
+            if (UserSource.isExistingUserWithPhoneNo(context, contactNo)) {
+                UserSource.createUser(context, chequeUser);
             }
 
             // broadcast

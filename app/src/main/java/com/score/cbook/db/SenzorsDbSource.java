@@ -18,8 +18,6 @@ import java.util.ArrayList;
  */
 public class SenzorsDbSource {
 
-    private static final String TAG = SenzorsDbSource.class.getName();
-
     private static Context context;
 
     public SenzorsDbSource(Context context) {

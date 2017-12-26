@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class SecretSource {
 
-    public void createSecret(Context context, Secret secret) {
+    public static void createSecret(Context context, Secret secret) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
         // content values to inset
         ContentValues values = new ContentValues();
@@ -37,7 +37,7 @@ public class SecretSource {
         db.insertOrThrow(SenzorsDbContract.Secret.TABLE_NAME, null, values);
     }
 
-    public void markSecretViewed(Context context, String uid) {
+    public static void markSecretViewed(Context context, String uid) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // content values to inset
@@ -53,7 +53,7 @@ public class SecretSource {
                 new String[]{uid});
     }
 
-    public void updateSecretDeliveryState(Context context, String uid, DeliveryState deliveryState) {
+    public static void updateSecretDeliveryState(Context context, String uid, DeliveryState deliveryState) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
         try {
             db.beginTransaction();
@@ -74,7 +74,7 @@ public class SecretSource {
         }
     }
 
-    private void setSecretInOrder(Context context, Secret secret) {
+    private static void setSecretInOrder(Context context, Secret secret) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
         try {
             db.beginTransaction();
@@ -110,7 +110,7 @@ public class SecretSource {
         }
     }
 
-    public ArrayList<Secret> getSecretsOfUser(Context context, String username) {
+    public static ArrayList<Secret> getSecretsOfUser(Context context, String username) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
                 "SELECT _id, " +
@@ -132,7 +132,7 @@ public class SecretSource {
         return getSecretsFromCursor(context, cursor);
     }
 
-    public ArrayList<Secret> getSecretsOfUserByTime(Context context, String username, Long timestamp) {
+    public static ArrayList<Secret> getSecretsOfUserByTime(Context context, String username, Long timestamp) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
                 "SELECT _id, " +
@@ -154,7 +154,7 @@ public class SecretSource {
         return getSecretsFromCursor(context, cursor);
     }
 
-    public ArrayList<Secret> getPendingDeliverySecrects(Context context) {
+    public static ArrayList<Secret> getPendingDeliverySecrects(Context context) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
                 "SELECT _id, " +
@@ -174,7 +174,7 @@ public class SecretSource {
         return getSecretsFromCursor(context, cursor);
     }
 
-    public ArrayList<Secret> getRecentSecrets(Context context) {
+    public static ArrayList<Secret> getRecentSecrets(Context context) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
                 "SELECT MAX(secret._id), " +
@@ -199,7 +199,7 @@ public class SecretSource {
     }
 
 
-    public void deleteSecret(Context context, Secret secret) {
+    public static void deleteSecret(Context context, Secret secret) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // delete senz of given user
@@ -208,7 +208,7 @@ public class SecretSource {
                 new String[]{secret.getId()});
     }
 
-    public void deleteSecretsOfUserExceptLast(Context context, String username) {
+    public static void deleteSecretsOfUserExceptLast(Context context, String username) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
         String sqlDelete =
                 "uid in " +
@@ -218,7 +218,7 @@ public class SecretSource {
         db.delete(SenzorsDbContract.Secret.TABLE_NAME, sqlDelete, null);
     }
 
-    public void deleteSecretsOfUser(Context context, String username) {
+    public static void deleteSecretsOfUser(Context context, String username) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // delete senz of given user

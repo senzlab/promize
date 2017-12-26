@@ -23,6 +23,10 @@ public class NotificationUtils {
         return new SenzNotification(R.drawable.ic_notification, title, message, user, NotificationType.NEW_CHEQUE);
     }
 
+    public static SenzNotification getSecretNotification(String title, String user, String message) {
+        return new SenzNotification(R.drawable.ic_notification, title, message, user, NotificationType.NEW_SECRET);
+    }
+
     public static SenzNotification getSmsNotification(String contactName, String contactPhone, String rahasakUsername) {
         String msg = "Would you to add " + contactName + " as cheque book customer?";
         SenzNotification senzNotification = new SenzNotification(R.drawable.ic_notification, contactName, msg, rahasakUsername, NotificationType.SMS_REQUEST);

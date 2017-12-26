@@ -50,7 +50,7 @@ public class ChequeSource {
                 new String[]{uid});
     }
 
-    public static void updateChequeDeliveryState(Context context, DeliveryState deliveryState, String uid) {
+    public static void updateChequeDeliveryState(Context context, String uid, DeliveryState deliveryState) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
         try {
             db.beginTransaction();

@@ -140,6 +140,29 @@ public class UserSource {
                 new String[]{username});
     }
 
+    public static void updateUnreadChequeCount(Context context, String username, int count) {
+        SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
+
+        db.execSQL("UPDATE " + SenzorsDbContract.User.TABLE_NAME +
+                        " SET " + SenzorsDbContract.User.COLUMN_NAME_UNREAD_CHEQUE_COUNT + " = " + SenzorsDbContract.User.COLUMN_NAME_UNREAD_CHEQUE_COUNT + " + ? " +
+                        " WHERE " + SenzorsDbContract.User.COLUMN_NAME_USERNAME + " = ? ",
+                new String[]{String.valueOf(count), username});
+    }
+
+    public static void resetUnreadChequeCount(Context context, String username) {
+        SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
+
+        // content values to inset
+        ContentValues values = new ContentValues();
+        values.put(SenzorsDbContract.User.COLUMN_NAME_UNREAD_CHEQUE_COUNT, 0);
+
+        // update
+        db.update(SenzorsDbContract.User.TABLE_NAME,
+                values,
+                SenzorsDbContract.User.COLUMN_NAME_USERNAME + " = ?",
+                new String[]{username});
+    }
+
     public static void activateUser(Context context, String username) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 

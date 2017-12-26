@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
-import com.score.cbook.db.SenzorsDbSource;
+import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.Cheque;
 import com.score.senzc.enums.SenzTypeEnum;
@@ -42,7 +42,6 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
     private ArrayList<Cheque> cheques;
     private boolean myCheques;
     private ChequeListAdapter adapter;
-    private SenzorsDbSource dbSource;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
         @Override
@@ -68,7 +67,6 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        dbSource = new SenzorsDbSource(getContext());
         setupEmptyTextFont();
         initActionBar();
         displayList();
@@ -100,13 +98,9 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
         actionBarDelete = (ImageView) actionBar.getCustomView().findViewById(R.id.delete);
     }
 
-    /**
-     * Display sensor list
-     * Basically setup list adapter if have items to display otherwise display empty view
-     */
     private void displayList() {
         try {
-            cheques = dbSource.getCheques(myCheques);
+            cheques = ChequeSource.getCheques(this.getContext(), myCheques);
             adapter = new ChequeListAdapter(getContext(), cheques);
             getListView().setAdapter(adapter);
             adapter.notifyDataSetChanged();
@@ -118,7 +112,7 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
     private void refreshList() {
         try {
             cheques.clear();
-            cheques.addAll(dbSource.getCheques(myCheques));
+            cheques.addAll(ChequeSource.getCheques(this.getContext(), myCheques));
             adapter.notifyDataSetChanged();
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,7 +191,7 @@ public class ChequeListFragment extends ListFragment implements AdapterView.OnIt
                 adapter.notifyDataSetChanged();
 
                 // delete from db
-                new SenzorsDbSource(getActivity()).deleteAllChequesThatBelongToUser(secret.getUser().getUsername());
+                ChequeSource.deleteChequesOfUser(ChequeListFragment.this.getContext(), secret.getUser().getUsername());
 
                 actionBarDelete.setVisibility(View.GONE);
             }

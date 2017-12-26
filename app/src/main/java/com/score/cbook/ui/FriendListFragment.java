@@ -24,7 +24,9 @@ import android.widget.TextView;
 
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
-import com.score.cbook.db.SenzorsDbSource;
+import com.score.cbook.db.ChequeSource;
+import com.score.cbook.db.SecretSource;
+import com.score.cbook.db.UserSource;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.utils.ActivityUtils;
@@ -45,7 +47,6 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
 
     private ArrayList<ChequeUser> friendsList;
     private FriendListAdapter adapter;
-    private SenzorsDbSource dbSource;
 
     private Typeface typeface;
 
@@ -74,7 +75,6 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        dbSource = new SenzorsDbSource(getContext());
         initUi();
         initActionBar();
         initList();
@@ -186,7 +186,7 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
      */
     private void initList() {
         // get User from db
-        friendsList = dbSource.getUserList();
+        friendsList = UserSource.getAllUsers(this.getContext());
         // construct list adapter
         if (friendsList.size() > 0) {
             adapter = new FriendListAdapter(getContext(), friendsList);
@@ -200,7 +200,7 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
 
     private void refreshList() {
         friendsList.clear();
-        friendsList.addAll(dbSource.getUserList());
+        friendsList.addAll(UserSource.getAllUsers(this.getContext()));
         adapter.notifyDataSetChanged();
     }
 
@@ -209,11 +209,6 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
                 senz.getSenzType() == SenzTypeEnum.DATA && (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("USER_SHARED"));
     }
 
-    /**
-     * Generic display confirmation pop up
-     *
-     * @param message - Message to ask
-     */
     public void displayConfirmationMessageDialog(String message, final int index, final ChequeUser chequeUser) {
         final Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GeosansLight.ttf");
         final Dialog dialog = new Dialog(this.getActivity());
@@ -248,7 +243,9 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
                 adapter.notifyDataSetChanged();
 
                 // delete from db
-                new SenzorsDbSource(getActivity()).deleteUser(chequeUser.getUsername());
+                UserSource.deleteUser(FriendListFragment.this.getContext(), chequeUser.getUsername());
+                ChequeSource.deleteChequesOfUser(FriendListFragment.this.getContext(), chequeUser.getUsername());
+                SecretSource.deleteSecretsOfUser(FriendListFragment.this.getContext(), chequeUser.getUsername());
 
                 actionBarDelete.setVisibility(View.GONE);
 

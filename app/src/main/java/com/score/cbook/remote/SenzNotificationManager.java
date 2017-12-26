@@ -72,6 +72,9 @@ public class SenzNotificationManager {
         if (senzNotification.getNotificationType() == NotificationType.NEW_CHEQUE) {
             intent = new Intent(context, DrawerActivity.class);
             intent.putExtra("TYPE", "CHEQUE");
+        } else if (senzNotification.getNotificationType() == NotificationType.NEW_SECRET) {
+            intent = new Intent(context, DrawerActivity.class);
+            intent.putExtra("TYPE", "SECRET");
         } else {
             intent = new Intent(context, DrawerActivity.class);
             intent.putExtra("TYPE", "USER");

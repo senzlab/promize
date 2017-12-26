@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
-import com.score.cbook.db.SenzorsDbSource;
+import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.utils.ActivityUtils;
@@ -122,7 +122,7 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
         // update viewed state
         if (!cheque.isViewed()) {
             cheque.setViewed(true);
-            new SenzorsDbSource(this).markChequeViewed(cheque.getUid());
+            ChequeSource.markChequeViewed(this, cheque.getUid());
         }
 
         userEditText.setText(PhoneBookUtil.getContactName(this, cheque.getUser().getPhone()));
@@ -180,7 +180,7 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
                 ViewChequeActivity.this.finish();
 
                 // update cheque status in db
-                new SenzorsDbSource(ViewChequeActivity.this).updateChequeState("DEPOSIT", cheque.getUid());
+                ChequeSource.updateChequeState(this, "DEPOSIT", cheque.getUid());
             }
         }
     }
