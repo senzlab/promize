@@ -30,11 +30,22 @@ public class DashBoardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // navigate to new cheque
+                Intent intent = new Intent(DashBoardActivity.this, CustomerListActivity.class);
+                intent.putExtra("USER", new ChequeUser("322", "eranga"));
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.customers_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to customer list
                 Intent intent = new Intent(DashBoardActivity.this, NewChequeActivity.class);
                 intent.putExtra("USER", new ChequeUser("322", "eranga"));
                 startActivity(intent);
             }
         });
+
     }
 
     private void navigateRegistration() {
