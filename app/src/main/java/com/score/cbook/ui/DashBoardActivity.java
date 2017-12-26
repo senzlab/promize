@@ -7,7 +7,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.score.cbook.R;
+import com.score.cbook.db.SecretSource;
+import com.score.cbook.db.UserSource;
+import com.score.cbook.enums.BlobType;
+import com.score.cbook.enums.CustomerActionType;
+import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.ChequeUser;
+import com.score.cbook.pojo.Secret;
+import com.score.cbook.utils.SenzUtils;
 
 public class DashBoardActivity extends BaseActivity {
 
@@ -31,7 +38,7 @@ public class DashBoardActivity extends BaseActivity {
             public void onClick(View v) {
                 // navigate to new cheque
                 Intent intent = new Intent(DashBoardActivity.this, CustomerListActivity.class);
-                intent.putExtra("USER", new ChequeUser("322", "eranga"));
+                intent.putExtra("ACTION", CustomerActionType.NEW_CHEQUE.toString());
                 startActivity(intent);
             }
         });
@@ -40,8 +47,49 @@ public class DashBoardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // navigate to customer list
-                Intent intent = new Intent(DashBoardActivity.this, NewChequeActivity.class);
-                intent.putExtra("USER", new ChequeUser("322", "eranga"));
+                Intent intent = new Intent(DashBoardActivity.this, CustomerListActivity.class);
+                intent.putExtra("ACTION", CustomerActionType.CUSTOMER_LIST.toString());
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.messages_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to customer list
+                Intent intent = new Intent(DashBoardActivity.this, CustomerListActivity.class);
+                intent.putExtra("ACTION", CustomerActionType.NEW_MESSAGE.toString());
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.support_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ChequeUser chequeUser = new ChequeUser("sampath", "sampath");
+
+                if (!UserSource.isExistingUser(DashBoardActivity.this, "sampath")) {
+                    // create sampath user and secret if not exists
+                    chequeUser.setActive(true);
+                    UserSource.createUser(DashBoardActivity.this, chequeUser);
+
+                    // crate secret with help text
+                    Secret secret = new Secret();
+                    secret.setMySecret(false);
+                    secret.setBlobType(BlobType.TEXT);
+                    secret.setBlob("How can we help you? We will get back to you as soon as possible");
+                    secret.setUser(chequeUser);
+                    Long timestamp = System.currentTimeMillis() / 1000;
+                    secret.setTimeStamp(timestamp);
+                    secret.setId(SenzUtils.getUid(DashBoardActivity.this, timestamp.toString()));
+                    secret.setDeliveryState(DeliveryState.NONE);
+
+                    SecretSource.createSecret(DashBoardActivity.this, secret);
+                }
+
+                // navigate to chat activity
+                Intent intent = new Intent(DashBoardActivity.this, ChatActivity.class);
+                intent.putExtra("SENDER", chequeUser.getUsername());
                 startActivity(intent);
             }
         });

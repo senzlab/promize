@@ -89,8 +89,8 @@ public class SecretSource {
             if (cursor.moveToLast()) {
                 String uid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_UNIQUE_ID));
                 long time = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_TIMESTAMP));
-                boolean isSender = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_MY_SECRET)) == 1;
-                if ((secret.isMySecret() == isSender) && TimeUtils.isInOrder(time, secret.getTimeStamp())) {
+                boolean mySecret = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_MY_SECRET)) == 1;
+                if ((secret.isMySecret() == mySecret) && TimeUtils.isInOrder(time, secret.getTimeStamp())) {
                     // secret is inline, viewed true
                     ContentValues values = new ContentValues();
                     values.put(SenzorsDbContract.Secret.COLUMN_NAME_IN_ORDER, 1);
@@ -118,7 +118,7 @@ public class SecretSource {
                         "blob, " +
                         "blob_type, " +
                         "user, " +
-                        "is_sender, " +
+                        "my_secret, " +
                         "viewed, " +
                         "view_timestamp, " +
                         "missed, " +
@@ -140,7 +140,7 @@ public class SecretSource {
                         "blob, " +
                         "blob_type, " +
                         "user, " +
-                        "is_sender, " +
+                        "my_secret, " +
                         "viewed, " +
                         "view_timestamp, " +
                         "missed, " +
@@ -162,7 +162,7 @@ public class SecretSource {
                         "blob, " +
                         "blob_type, " +
                         "user, " +
-                        "is_sender, " +
+                        "my_secret, " +
                         "viewed, " +
                         "view_timestamp, " +
                         "missed, timestamp, " +
@@ -182,7 +182,7 @@ public class SecretSource {
                         "secret.blob, " +
                         "secret.blob_type, " +
                         "secret.user, " +
-                        "secret.is_sender, " +
+                        "secret.my_secret, " +
                         "secret.timestamp, " +
                         "user._id, " +
                         "user.image, " +
@@ -197,7 +197,6 @@ public class SecretSource {
         Cursor cursor = db.rawQuery(query, null);
         return getSecretsFromCursor(context, cursor);
     }
-
 
     public static void deleteSecret(Context context, Secret secret) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
@@ -238,6 +237,7 @@ public class SecretSource {
         int mySecret;
         int isViewed;
         int isMissed;
+        int isInOrder;
         Long timestamp;
         Long viewTimestamp;
         int deliveryState;
@@ -254,6 +254,7 @@ public class SecretSource {
             isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_VIEWED));
             viewTimestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_VIEWED_TIMESTAMP));
             isMissed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_MISSED));
+            isInOrder = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_IN_ORDER));
             deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.DELIVERY_STATE));
 
             // create secret
@@ -262,9 +263,10 @@ public class SecretSource {
             secret.setBlob(blob);
             secret.setBlobType(BlobType.valueOfType(blobType));
             secret.setUser(UserSource.getUser(context, username));
-            secret.setMissed(mySecret == 1);
+            secret.setMySecret(mySecret == 1);
             secret.setViewed(isViewed == 1);
             secret.setMissed(isMissed == 1);
+            secret.setInOrder(isInOrder == 1);
             secret.setTimeStamp(timestamp);
             secret.setViewedTimeStamp(viewTimestamp);
             secret.setDeliveryState(DeliveryState.valueOfState(deliveryState));

@@ -15,7 +15,10 @@ import android.widget.TextView;
 
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
+import com.score.cbook.db.ChequeSource;
+import com.score.cbook.db.SecretSource;
 import com.score.cbook.db.UserSource;
+import com.score.cbook.enums.CustomerActionType;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.utils.ActivityUtils;
@@ -27,10 +30,12 @@ import com.score.senzc.pojos.Senz;
 import java.util.ArrayList;
 
 
-public class CustomerListActivity extends BaseActivity implements AdapterView.OnItemClickListener {
+public class CustomerListActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private ArrayList<ChequeUser> customerList;
     private FriendListAdapter customerListAdapter;
+
+    private CustomerActionType actionType = CustomerActionType.CUSTOMER_LIST;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
         @Override
@@ -88,6 +93,10 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     }
 
     private void initPrefs() {
+        String action = getIntent().getStringExtra("ACTION");
+        if (action != null && !action.isEmpty()) {
+            actionType = CustomerActionType.valueOf(action);
+        }
     }
 
     private void initActionBar() {
@@ -120,9 +129,6 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     private void initNewButton() {
         // new
         FloatingActionButton newCustomer = (FloatingActionButton) findViewById(R.id.new_customer);
-        if (customerList.size() > 0) newCustomer.setVisibility(View.GONE);
-        else newCustomer.setVisibility(View.VISIBLE);
-
         newCustomer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,11 +137,19 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                 startActivity(intent);
             }
         });
+
+        if (actionType == CustomerActionType.CUSTOMER_LIST) {
+            newCustomer.setVisibility(View.VISIBLE);
+        } else {
+            if (customerList.size() > 0) newCustomer.setVisibility(View.GONE);
+            else newCustomer.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initListView() {
         ListView friendListView = (ListView) findViewById(R.id.customer_list_view);
         friendListView.setOnItemClickListener(this);
+        friendListView.setOnItemLongClickListener(this);
 
         customerList = UserSource.getAllUsers(this);
         if (customerList.size() > 0) {
@@ -184,7 +198,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                 });
             } else {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
-                ActivityUtils.displayConfirmationMessageDialog("Confirm", "Would you like to accept the request from " + contactName + "?", CustomerListActivity.this, typeface, new View.OnClickListener() {
+                displayConfirmationMessageDialog("Would you like to accept the request from " + contactName + "?", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // start getting public key and sending confirmation sms
@@ -202,7 +216,27 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                 });
             }
         }
-
     }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+        final ChequeUser chequeUser = customerList.get(position);
+        displayConfirmationMessageDialog("Are you sure your want to remove the user", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // delete item
+                customerList.remove(position);
+                customerListAdapter.notifyDataSetChanged();
+
+                // delete from db
+                UserSource.deleteUser(CustomerListActivity.this, chequeUser.getUsername());
+                ChequeSource.deleteChequesOfUser(CustomerListActivity.this, chequeUser.getUsername());
+                SecretSource.deleteSecretsOfUser(CustomerListActivity.this, chequeUser.getUsername());
+            }
+        });
+
+        return true;
+    }
+
 
 }
