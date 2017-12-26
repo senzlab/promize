@@ -130,7 +130,7 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
         dateEditText.setText(cheque.getDate());
 
         // enable/disable deposit based on cheque owner
-        if (cheque.isSender()) {
+        if (cheque.isMyCheque()) {
             if (cheque.getState().equalsIgnoreCase("TRANSFER")) {
                 deposit.setVisibility(View.VISIBLE);
                 transfer.setVisibility(View.VISIBLE);

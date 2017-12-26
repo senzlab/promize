@@ -25,23 +25,6 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
 
-    private static final String SQL_CREATE_CHEQUE =
-            "CREATE TABLE " + SenzorsDbContract.Cheque.TABLE_NAME + " (" +
-                    SenzorsDbContract.Cheque._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_UID + TEXT_TYPE + " UNIQUE NOT NULL" + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP + INT_TYPE + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_USER + TEXT_TYPE + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_IS_SENDER + INT_TYPE + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED + INT_TYPE + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP + INT_TYPE + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE + INT_TYPE + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID + TEXT_TYPE + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE + TEXT_TYPE + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT + INT_TYPE + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE + TEXT_TYPE + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB + TEXT_TYPE +
-                    " )";
-
     private static final String SQL_CREATE_USER =
             "CREATE TABLE " + SenzorsDbContract.User.TABLE_NAME + " (" +
                     SenzorsDbContract.User._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + "," +
@@ -53,7 +36,41 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
                     SenzorsDbContract.User.COLUMN_NAME_PUBKEY_HASH + TEXT_TYPE + "," +
                     SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE + INT_TYPE + "," +
                     SenzorsDbContract.User.COLUMN_NAME_IMAGE + TEXT_TYPE + "," +
+                    SenzorsDbContract.User.COLUMN_NAME_UNREAD_CHEQUE_COUNT + INT_TYPE + " DEFAULT 0" + "," +
                     SenzorsDbContract.User.COLUMN_NAME_UNREAD_SECRET_COUNT + INT_TYPE + " DEFAULT 0" +
+                    " )";
+
+    private static final String SQL_CREATE_CHEQUE =
+            "CREATE TABLE " + SenzorsDbContract.Cheque.TABLE_NAME + " (" +
+                    SenzorsDbContract.Cheque._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_UID + TEXT_TYPE + " UNIQUE NOT NULL" + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_USER + TEXT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_MY_CHEQUE + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID + TEXT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE + TEXT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE + TEXT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB + TEXT_TYPE +
+                    " )";
+
+    private static final String SQL_CREATE_SECRET =
+            "CREATE TABLE " + SenzorsDbContract.Secret.TABLE_NAME + " (" +
+                    SenzorsDbContract.Secret._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", " +
+                    SenzorsDbContract.Secret.COLUMN_UNIQUE_ID + TEXT_TYPE + " UNIQUE NOT NULL" + ", " +
+                    SenzorsDbContract.Secret.COLUMN_TIMESTAMP + INT_TYPE + ", " +
+                    SenzorsDbContract.Secret.COLUMN_NAME_USER + TEXT_TYPE + ", " +
+                    SenzorsDbContract.Secret.COLUMN_NAME_MY_SECRET + INT_TYPE + ", " +
+                    SenzorsDbContract.Secret.COLUMN_BLOB_TYPE + INT_TYPE + ", " +
+                    SenzorsDbContract.Secret.COLUMN_NAME_BLOB + TEXT_TYPE + ", " +
+                    SenzorsDbContract.Secret.COLUMN_NAME_VIEWED + INT_TYPE + ", " +
+                    SenzorsDbContract.Secret.COLUMN_NAME_VIEWED_TIMESTAMP + INT_TYPE + ", " +
+                    SenzorsDbContract.Secret.COLUMN_NAME_MISSED + INT_TYPE + ", " +
+                    SenzorsDbContract.Secret.COLUMN_NAME_IN_ORDER + INT_TYPE + ", " +
+                    SenzorsDbContract.Secret.DELIVERY_STATE + INT_TYPE +
                     " )";
 
     /**
@@ -62,7 +79,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
      *
      * @param context application context
      */
-    public SenzorsDbHelper(Context context) {
+    private SenzorsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -86,9 +103,11 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
         Log.d(TAG, "OnCreate: creating db helper, db version - " + DATABASE_VERSION);
         Log.d(TAG, SQL_CREATE_USER);
         Log.d(TAG, SQL_CREATE_CHEQUE);
+        Log.d(TAG, SQL_CREATE_SECRET);
 
-        db.execSQL(SQL_CREATE_CHEQUE);
         db.execSQL(SQL_CREATE_USER);
+        db.execSQL(SQL_CREATE_CHEQUE);
+        db.execSQL(SQL_CREATE_SECRET);
     }
 
     /**

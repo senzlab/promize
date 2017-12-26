@@ -39,6 +39,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:9.4.0'
     compile 'com.google.maps.android:android-maps-utils:0.4.4'
     compile 'com.github.siyamed:android-shape-imageview:0.9.3@aar'
+    compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.googlecode.libphonenumber:libphonenumber:7.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'io.kvh:amr:1.1.1'

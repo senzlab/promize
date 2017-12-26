@@ -12,7 +12,7 @@
                     android:startColor="#ecbe9e"
                     android:endColor="#ecbe9e"
                     android:angle="270" />
-            <stroke android:width="1dip" android:color="#d0f2ed"/>
+            <stroke android:width="0.2dip" android:color="#d0f2ed"/>
 
         </shape>
 
@@ -31,7 +31,7 @@
                     android:endColor="#ffffff"
                     android:angle="270"/>
 
-            <stroke android:width="1dip" android:color="#cdcbcb"/>
+            <stroke android:width="0.2dip" android:color="#cdcbcb"/>
 
         </shape>
 

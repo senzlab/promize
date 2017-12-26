@@ -82,18 +82,18 @@ class SenzHandler {
             try {
                 // create user
                 String username = senz.getSender().getUsername();
-                ChequeUser chequeUser = dbSource.getSecretUser(username);
+                ChequeUser chequeUser = dbSource.getUser(username);
                 if (chequeUser != null) {
                     String encryptedSessionKey = senz.getAttributes().get("$skey");
                     String sessionKey = CryptoUtils.decryptRSA(CryptoUtils.getPrivateKey(senzService.getApplicationContext()), encryptedSessionKey);
-                    dbSource.updateSecretUser(username, "session_key", sessionKey);
+                    dbSource.updateUser(username, "session_key", sessionKey);
                 } else {
                     chequeUser = new ChequeUser(senz.getSender().getId(), senz.getSender().getUsername());
-                    dbSource.createSecretUser(chequeUser);
+                    dbSource.createUser(chequeUser);
                 }
 
                 // activate user
-                dbSource.activateSecretUser(username, true);
+                dbSource.activateUser(username);
 
                 // notification user
                 String notificationUser = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
@@ -116,7 +116,7 @@ class SenzHandler {
                 if (dbSource.isExistingUser(senz.getSender().getUsername())) {
                     String encryptedSessionKey = senz.getAttributes().get("$skey");
                     String sessionKey = CryptoUtils.decryptRSA(CryptoUtils.getPrivateKey(senzService.getApplicationContext()), encryptedSessionKey);
-                    dbSource.updateSecretUser(senz.getSender().getUsername(), "session_key", sessionKey);
+                    dbSource.updateUser(senz.getSender().getUsername(), "session_key", sessionKey);
 
                     broadcastSenz(senz, senzService.getApplicationContext());
                     senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "KEY_SHARED"));
@@ -150,7 +150,7 @@ class SenzHandler {
             // broadcast
             // notification user
             broadcastSenz(senz, senzService.getApplicationContext());
-            ChequeUser secretUser = new SenzorsDbSource(senzService.getApplicationContext()).getSecretUser(user.getUsername());
+            ChequeUser secretUser = new SenzorsDbSource(senzService.getApplicationContext()).getUser(user.getUsername());
 
             // show notification
             String notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
@@ -173,17 +173,17 @@ class SenzHandler {
                 // user added successfully
                 // save user in db
                 String username = senz.getSender().getUsername();
-                ChequeUser chequeUser = dbSource.getSecretUser(username);
+                ChequeUser chequeUser = dbSource.getUser(username);
                 if (chequeUser != null) {
                     // existing user, activate it
-                    dbSource.activateSecretUser(senz.getSender().getUsername(), true);
+                    dbSource.activateUser(senz.getSender().getUsername());
                 } else {
                     // not existing user
                     // this is when sharing directly by username
                     // create and activate uer
                     chequeUser = new ChequeUser("id", senz.getSender().getUsername());
-                    dbSource.createSecretUser(chequeUser);
-                    dbSource.activateSecretUser(chequeUser.getUsername(), true);
+                    dbSource.createUser(chequeUser);
+                    dbSource.activateUser(chequeUser.getUsername());
                 }
 
                 // notification user
@@ -198,15 +198,15 @@ class SenzHandler {
             String pubKey = senz.getAttributes().get("pubkey");
 
             // update pubkey on db
-            dbSource.updateSecretUser(username, "pubkey", pubKey);
+            dbSource.updateUser(username, "pubkey", pubKey);
 
             // Check if this user is the requester
-            ChequeUser chequeUser = dbSource.getSecretUser(username);
+            ChequeUser chequeUser = dbSource.getUser(username);
             if (chequeUser.isSMSRequester()) {
                 try {
                     // create session key for this user
                     String sessionKey = CryptoUtils.getSessionKey();
-                    dbSource.updateSecretUser(username, "session_key", sessionKey);
+                    dbSource.updateUser(username, "session_key", sessionKey);
 
                     String encryptedSessionKey = CryptoUtils.encryptRSA(CryptoUtils.getPublicKey(pubKey), sessionKey);
                     senzService.writeSenz(SenzUtils.getShareSenz(senzService.getApplicationContext(), username, encryptedSessionKey));
@@ -231,7 +231,7 @@ class SenzHandler {
             cheque.setTimestamp(timestamp);
             cheque.setDeliveryState(DeliveryState.NONE);
             cheque.setBlob(blob);
-            cheque.setSender(true);
+            cheque.setMyCheque(true);
             cheque.setCid(cid);
             cheque.setState("TRANSFER");
             cheque.setAmount(amnt);

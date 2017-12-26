@@ -67,7 +67,6 @@ public class ChequePreviewActivity extends BaseActivity {
 
         setContentView(R.layout.cheque_p);
 
-
         initCheque();
         initUi();
         initSignature();
@@ -193,12 +192,9 @@ public class ChequePreviewActivity extends BaseActivity {
             cheque.setUid(uid);
             cheque.setState("TRANSFER");
             cheque.setDeliveryState(DeliveryState.PENDING);
-            cheque.setSender(false);
+            cheque.setMyCheque(false);
             cheque.setViewed(true);
             new SenzorsDbSource(ChequePreviewActivity.this).createCheque(cheque);
-
-            // update unread count by one
-            new SenzorsDbSource(ChequePreviewActivity.this).updateUnreadSecretCount(cheque.getUser().getUsername(), 1);
         } catch (Exception e) {
             e.printStackTrace();
         }

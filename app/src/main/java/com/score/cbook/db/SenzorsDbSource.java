@@ -22,11 +22,6 @@ public class SenzorsDbSource {
 
     private static Context context;
 
-    /**
-     * Init db helper
-     *
-     * @param context application context
-     */
     public SenzorsDbSource(Context context) {
         this.context = context;
     }
@@ -89,7 +84,7 @@ public class SenzorsDbSource {
         return null;
     }
 
-    public void createSecretUser(ChequeUser chequeUser) {
+    public void createUser(ChequeUser chequeUser) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // content values to inset
@@ -113,7 +108,7 @@ public class SenzorsDbSource {
         db.insertOrThrow(SenzorsDbContract.User.TABLE_NAME, null, values);
     }
 
-    public void updateSecretUser(String username, String key, String value) {
+    public void updateUser(String username, String key, String value) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // content values to inset
@@ -160,12 +155,12 @@ public class SenzorsDbSource {
                 new String[]{username});
     }
 
-    public void activateSecretUser(String username, boolean isActive) {
+    public void activateUser(String username) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // content values to inset
         ContentValues values = new ContentValues();
-        values.put(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE, isActive ? 1 : 0);
+        values.put(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE, 1);
 
         // update
         db.update(SenzorsDbContract.User.TABLE_NAME,
@@ -174,12 +169,7 @@ public class SenzorsDbSource {
                 new String[]{username});
     }
 
-    /**
-     * Delete user from database,
-     *
-     * @param
-     */
-    public void deleteSecretUser(String username) {
+    public void deleteUser(String username) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // delete senz of given user
@@ -191,7 +181,7 @@ public class SenzorsDbSource {
         deleteAllChequesThatBelongToUser(username);
     }
 
-    public ChequeUser getSecretUser(String username) {
+    public ChequeUser getUser(String username) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(SenzorsDbContract.User.TABLE_NAME, // table
                 null, // columns
@@ -233,7 +223,7 @@ public class SenzorsDbSource {
         return null;
     }
 
-    public ArrayList<ChequeUser> getSecretUserList() {
+    public ArrayList<ChequeUser> getUserList() {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(SenzorsDbContract.User.TABLE_NAME, // table
                 null, // columns
@@ -271,11 +261,6 @@ public class SenzorsDbSource {
         return chequeUserList;
     }
 
-    /**
-     * Create Cheque message or images
-     *
-     * @param cheque
-     */
     public void createCheque(Cheque cheque) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
@@ -283,8 +268,8 @@ public class SenzorsDbSource {
         ContentValues values = new ContentValues();
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_UID, cheque.getUid());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_USER, cheque.getUser().getUsername());
-        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_IS_SENDER, cheque.isSender() ? 1 : 0);
-        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED, cheque.isViewed() ? 1 : 0);
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_MY_CHEQUE, cheque.isMyCheque() ? 1 : 0);
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED, cheque.isViewed() ? 1 : 0);
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP, cheque.getTimestamp());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP, 0);
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE, cheque.getDeliveryState().getState());
@@ -298,17 +283,12 @@ public class SenzorsDbSource {
         db.insertOrThrow(SenzorsDbContract.Cheque.TABLE_NAME, null, values);
     }
 
-    /**
-     * Mark message as viewed
-     *
-     * @param uid unique identifier of message
-     */
     public void markChequeViewed(String uid) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 
         // content values to inset
         ContentValues values = new ContentValues();
-        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED, 1);
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED, 1);
         long timestamp = System.currentTimeMillis() / 1000;
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP, timestamp);
 
@@ -319,12 +299,6 @@ public class SenzorsDbSource {
                 new String[]{uid});
     }
 
-    /**
-     * Mark message as delivery state
-     *
-     * @param deliveryState
-     * @param uid
-     */
     public void updateDeliveryStatus(DeliveryState deliveryState, String uid) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
         try {
@@ -346,12 +320,6 @@ public class SenzorsDbSource {
         }
     }
 
-    /**
-     * Mark message as delivery state
-     *
-     * @param state
-     * @param uid
-     */
     public void updateChequeState(String state, String uid) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
         try {
@@ -373,21 +341,16 @@ public class SenzorsDbSource {
         }
     }
 
-    /**
-     * Get ALl secrets to be display in chat list
-     *
-     * @return sensor list
-     */
-    public ArrayList<Cheque> getCheques(boolean isSender) {
+    public ArrayList<Cheque> getCheques(boolean myCheques) {
         ArrayList<Cheque> cheques = new ArrayList();
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
-                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, date, blob " +
+                "SELECT _id, uid, user, my_cheque, viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, date, blob " +
                         "FROM cheque " +
                         "WHERE is_sender = ? " +
                         "ORDER BY _id DESC";
-        Cursor cursor = db.rawQuery(query, new String[]{isSender ? "1" : "0"});
+        Cursor cursor = db.rawQuery(query, new String[]{myCheques ? "1" : "0"});
 
         // secret attr
         String uid;
@@ -408,7 +371,7 @@ public class SenzorsDbSource {
             // get secret attributes
             uid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_UID));
             username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_USER));
-            isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED));
+            isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED));
             timestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP));
             viewedTimeStamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP));
             deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE));
@@ -421,9 +384,9 @@ public class SenzorsDbSource {
             // create cheque
             Cheque cheque = new Cheque();
             cheque.setUid(uid);
-            cheque.setUser(getSecretUser(username));
+            cheque.setUser(getUser(username));
             cheque.setViewed(isViewed == 1);
-            cheque.setSender(isSender);
+            cheque.setMyCheque(myCheques);
             cheque.setTimestamp(timestamp);
             cheque.setViewedTimeStamp(viewedTimeStamp);
             cheque.setDeliveryState(DeliveryState.valueOfState(deliveryState));
@@ -441,19 +404,12 @@ public class SenzorsDbSource {
         return cheques;
     }
 
-    /**
-     * Get secrets from give timestamp, used for lazy loading!!!
-     *
-     * @param chequeUser
-     * @param t
-     * @return
-     */
     public ArrayList<Cheque> getCheques(ChequeUser chequeUser, Long t) {
         ArrayList<Cheque> cheques = new ArrayList();
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
-                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, date, blob " +
+                "SELECT _id, uid, user, my_cheque, viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, date, blob " +
                         "FROM cheque " +
                         "WHERE user = ? AND timestamp > ? " +
                         "ORDER BY _id ASC";
@@ -478,7 +434,7 @@ public class SenzorsDbSource {
             // get secret attributes
             uid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_UID));
             username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_USER));
-            isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED));
+            isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED));
             timestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP));
             viewedTimeStamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP));
             deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE));
@@ -515,7 +471,7 @@ public class SenzorsDbSource {
 
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
-                "SELECT _id, uid, user, is_sender, is_viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, date, blob " +
+                "SELECT _id, uid, user, my_cheque, viewed, timestamp, view_timestamp, delivery_state, cid, state, amount, date, blob " +
                         "FROM cheque " +
                         "WHERE delivery_state = ? " +
                         "ORDER BY _id ASC";
@@ -540,7 +496,7 @@ public class SenzorsDbSource {
             // get secret attributes
             uid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_UID));
             username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_USER));
-            isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_IS_VIEWED));
+            isViewed = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED));
             timestamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP));
             viewedTimeStamp = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP));
             deliveryState = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE));
@@ -572,11 +528,6 @@ public class SenzorsDbSource {
         return cheques;
     }
 
-    /**
-     * Delete sec from database,
-     *
-     * @param
-     */
     public void deleteCheque(Cheque cheque) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
 

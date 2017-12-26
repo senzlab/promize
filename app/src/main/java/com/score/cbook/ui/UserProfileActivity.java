@@ -265,7 +265,7 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
 
             // save profile picture in db
             String encodedImage = senz.getAttributes().get("cam");
-            dbSource.updateSecretUser(chequeUser.getUsername(), "image", encodedImage);
+            dbSource.updateUser(chequeUser.getUsername(), "image", encodedImage);
 
             // display image
             userImageView.setImageBitmap(ImageUtils.decodeBitmap(encodedImage));

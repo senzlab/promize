@@ -186,7 +186,7 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
      */
     private void initList() {
         // get User from db
-        friendsList = dbSource.getSecretUserList();
+        friendsList = dbSource.getUserList();
         // construct list adapter
         if (friendsList.size() > 0) {
             adapter = new FriendListAdapter(getContext(), friendsList);
@@ -200,7 +200,7 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
 
     private void refreshList() {
         friendsList.clear();
-        friendsList.addAll(dbSource.getSecretUserList());
+        friendsList.addAll(dbSource.getUserList());
         adapter.notifyDataSetChanged();
     }
 
@@ -248,7 +248,7 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
                 adapter.notifyDataSetChanged();
 
                 // delete from db
-                new SenzorsDbSource(getActivity()).deleteSecretUser(chequeUser.getUsername());
+                new SenzorsDbSource(getActivity()).deleteUser(chequeUser.getUsername());
 
                 actionBarDelete.setVisibility(View.GONE);
 

@@ -91,14 +91,14 @@ public class SmsReceiver extends BroadcastReceiver {
         // delete existing user
         ChequeUser existingUser = dbSource.getExistingUserWithPhoneNo(contactNo);
         if (existingUser != null) {
-            dbSource.deleteSecretUser(existingUser.getUsername());
+            dbSource.deleteUser(existingUser.getUsername());
         }
 
         // create user
         ChequeUser chequeUser = new ChequeUser("id", username);
         chequeUser.setPhone(contactNo);
         chequeUser.setPubKeyHash(pubKeyHash);
-        dbSource.createSecretUser(chequeUser);
+        dbSource.createUser(chequeUser);
 
         // show Notification
         SenzNotificationManager.getInstance(context.getApplicationContext()).showNotification(NotificationUtils.getSmsNotification(contactName, contactNo, username));
@@ -117,7 +117,7 @@ public class SmsReceiver extends BroadcastReceiver {
             chequeUser.setPubKeyHash(pubKeyHash);
             chequeUser.setSMSRequester(true);
             if (!dbSource.isExistingUserWithPhoneNo(contactNo)) {
-                dbSource.createSecretUser(chequeUser);
+                dbSource.createUser(chequeUser);
             }
 
             // broadcast

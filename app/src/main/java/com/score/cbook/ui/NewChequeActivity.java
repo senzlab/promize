@@ -158,7 +158,7 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
             cheque.setUser(chequeUser);
             cheque.setAmount(Integer.parseInt(amount));
             cheque.setDate(date);
-            cheque.setSender(false);
+            cheque.setMyCheque(false);
 
             // create image via async task
             CheckImageGenerator imageCreator = new CheckImageGenerator(this, this);

@@ -8,13 +8,12 @@ import com.score.cbook.enums.DeliveryState;
 public class Cheque implements Parcelable {
     private String uid;
     private ChequeUser user;
-    private boolean isSender;
+    private boolean isMyCheque;
     private boolean isViewed;
     private boolean isSelected;
     private Long timestamp;
     private Long viewedTimeStamp;
     private DeliveryState deliveryState;
-
     private String cid;
     private String state;
     private int amount;
@@ -27,7 +26,7 @@ public class Cheque implements Parcelable {
     public Cheque(Parcel in) {
         uid = in.readString();
         user = in.readParcelable(ChequeUser.class.getClassLoader());
-        isSender = in.readByte() != 0;
+        isMyCheque = in.readByte() != 0;
         isViewed = in.readByte() != 0;
         isSelected = in.readByte() != 0;
         cid = in.readString();
@@ -73,12 +72,12 @@ public class Cheque implements Parcelable {
         this.user = user;
     }
 
-    public boolean isSender() {
-        return isSender;
+    public boolean isMyCheque() {
+        return isMyCheque;
     }
 
-    public void setSender(boolean sender) {
-        isSender = sender;
+    public void setMyCheque(boolean myCheque) {
+        isMyCheque = myCheque;
     }
 
     public boolean isViewed() {
@@ -162,7 +161,7 @@ public class Cheque implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(uid);
         dest.writeParcelable(user, flags);
-        dest.writeByte((byte) (isSender ? 1 : 0));
+        dest.writeByte((byte) (isMyCheque ? 1 : 0));
         dest.writeByte((byte) (isViewed ? 1 : 0));
         dest.writeByte((byte) (isSelected ? 1 : 0));
         dest.writeString(cid);
