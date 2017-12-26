@@ -16,6 +16,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:id="@+id/write_cheque_layout"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
@@ -52,6 +53,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:id="@+id/customers_layout"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
@@ -99,6 +101,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/inbox_layout"
             android:layout_weight="1">
 
 
@@ -135,6 +138,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/messages_layout"
             android:layout_weight="1">
 
 
@@ -183,6 +187,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/outbox_layout"
             android:layout_weight="1">
 
             <RelativeLayout
@@ -219,6 +224,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/support_layout"
             android:layout_weight="1">
 
             <RelativeLayout

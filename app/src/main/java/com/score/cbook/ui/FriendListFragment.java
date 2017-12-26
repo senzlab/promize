@@ -119,7 +119,6 @@ public class FriendListFragment extends ListFragment implements AdapterView.OnIt
             actionBarDelete.setVisibility(View.GONE);
         } else {
             if (chequeUser.isActive()) {
-                // todo go to new cheque
                 Intent intent = new Intent(this.getActivity(), NewChequeActivity.class);
                 intent.putExtra("USER", chequeUser);
                 startActivity(intent);

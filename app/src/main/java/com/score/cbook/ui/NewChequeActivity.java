@@ -104,6 +104,7 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
         });
 
         sendButton = (Button) findViewById(R.id.new_cheque_send);
+        sendButton.setTypeface(typeface, Typeface.BOLD);
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

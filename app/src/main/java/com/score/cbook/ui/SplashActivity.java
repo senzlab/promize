@@ -26,20 +26,14 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.activity_dash_board);
-        //startService();
-        //initNavigation();
+        setContentView(R.layout.splash_layout);
+        startService();
+        initNavigation();
         setupSplashText();
     }
 
     private void setupSplashText() {
-        //((TextView) findViewById(R.id.splash_name)).setTypeface(typefaceThin, Typeface.BOLD);
-        ((TextView) findViewById(R.id.new_cheque_text)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.customer_text)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.inbox_text)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.messages_text)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.outbox_text)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.support_text)).setTypeface(typeface, Typeface.BOLD);
+        ((TextView) findViewById(R.id.splash_name)).setTypeface(typefaceThin, Typeface.BOLD);
     }
 
     private void startService() {
@@ -91,7 +85,7 @@ public class SplashActivity extends BaseActivity {
      * This method will be call after successful login
      */
     public void navigateToHome() {
-        Intent intent = new Intent(this, DrawerActivity.class);
+        Intent intent = new Intent(this, DashBoardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         SplashActivity.this.finish();
