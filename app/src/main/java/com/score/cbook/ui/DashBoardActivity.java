@@ -33,6 +33,15 @@ public class DashBoardActivity extends BaseActivity {
         ((TextView) findViewById(R.id.outbox_text)).setTypeface(typeface, Typeface.BOLD);
         ((TextView) findViewById(R.id.support_text)).setTypeface(typeface, Typeface.BOLD);
 
+        onClickWriteCheque();
+        onClickReceivedCheques();
+        onClickSentCheques();
+        onClickCustomers();
+        onClickMessages();
+        onClickSupport();
+    }
+
+    private void onClickWriteCheque() {
         findViewById(R.id.write_cheque_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,7 +51,17 @@ public class DashBoardActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+    }
 
+    private void onClickReceivedCheques() {
+
+    }
+
+    private void onClickSentCheques() {
+
+    }
+
+    private void onClickCustomers() {
         findViewById(R.id.customers_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +71,9 @@ public class DashBoardActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+    }
 
+    private void onClickMessages() {
         findViewById(R.id.messages_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +83,9 @@ public class DashBoardActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+    }
 
+    private void onClickSupport() {
         findViewById(R.id.support_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

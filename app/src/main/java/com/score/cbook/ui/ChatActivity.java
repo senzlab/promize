@@ -14,7 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
@@ -99,7 +98,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 Senz senz = intent.getExtras().getParcelable("SENZ");
                 switch (senz.getSenzType()) {
                     case DATA:
-                        onDataReceived(senz);
+                        if (senz.getAttributes().containsKey("msg")) onSenzMsgReceived(senz);
                         break;
                     case AWA:
                         updateStatus(senz.getAttributes().get("uid"), "RECEIVED");
@@ -265,6 +264,24 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
             }
         });
+
+        // profile button
+        ImageView profileBtn = (ImageView) findViewById(R.id.user_profile_image);
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate ro profile
+            }
+        });
+
+        // show bank logo for admin users
+        // show profile image for other users
+        if (chequeUser.isAdmin()) {
+            profileBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_sampath));
+        } else {
+            if (chequeUser.getImage() != null)
+                profileBtn.setImageBitmap(ImageUtils.decodeBitmap(chequeUser.getImage()));
+        }
     }
 
     private void initSecretList() {
@@ -413,24 +430,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             sendSenz(senz);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public void onDataReceived(Senz senz) {
-        if (senz.getAttributes().containsKey("status")) {
-            // status message
-            String msg = senz.getAttributes().get("status");
-            if (msg.equalsIgnoreCase("NO_LOCATION")) {
-                ActivityUtils.cancelProgressDialog();
-                Toast.makeText(this, "No location available", Toast.LENGTH_LONG).show();
-            } else if (msg.equalsIgnoreCase("OFFLINE")) {
-                // user offline
-                ActivityUtils.cancelProgressDialog();
-                Toast.makeText(this, PhoneBookUtil.getContactName(this, chequeUser.getPhone()) + " not available at this moment", Toast.LENGTH_LONG).show();
-            }
-        } else if (senz.getAttributes().containsKey("msg")) {
-            // chat message
-            onSenzMsgReceived(senz);
         }
     }
 
