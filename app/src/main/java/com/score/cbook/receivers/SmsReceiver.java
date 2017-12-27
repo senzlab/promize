@@ -113,7 +113,7 @@ public class SmsReceiver extends BroadcastReceiver {
             chequeUser.setPhone(contactNo);
             chequeUser.setPubKeyHash(pubKeyHash);
             chequeUser.setSMSRequester(true);
-            if (UserSource.isExistingUserWithPhoneNo(context, contactNo)) {
+            if (!UserSource.isExistingUserWithPhoneNo(context, contactNo)) {
                 UserSource.createUser(context, chequeUser);
             }
 

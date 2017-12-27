@@ -13,7 +13,7 @@ import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.enums.NotificationType;
 import com.score.cbook.pojo.SenzNotification;
-import com.score.cbook.ui.DrawerActivity;
+import com.score.cbook.ui.DashBoardActivity;
 
 public class SenzNotificationManager {
 
@@ -70,13 +70,13 @@ public class SenzNotificationManager {
         // set up pending intent
         Intent intent;
         if (senzNotification.getNotificationType() == NotificationType.NEW_CHEQUE) {
-            intent = new Intent(context, DrawerActivity.class);
+            intent = new Intent(context, DashBoardActivity.class);
             intent.putExtra("TYPE", "CHEQUE");
         } else if (senzNotification.getNotificationType() == NotificationType.NEW_SECRET) {
-            intent = new Intent(context, DrawerActivity.class);
+            intent = new Intent(context, DashBoardActivity.class);
             intent.putExtra("TYPE", "SECRET");
         } else {
-            intent = new Intent(context, DrawerActivity.class);
+            intent = new Intent(context, DashBoardActivity.class);
             intent.putExtra("TYPE", "USER");
         }
 
@@ -114,7 +114,7 @@ public class SenzNotificationManager {
         PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(context, 0, cancelIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         // content intent
-        Intent contentIntent = new Intent(context, DrawerActivity.class);
+        Intent contentIntent = new Intent(context, DashBoardActivity.class);
         contentIntent.putExtra("SENDER", senzNotification.getSender());
         contentIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent contentPendingIntent = PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_CANCEL_CURRENT);

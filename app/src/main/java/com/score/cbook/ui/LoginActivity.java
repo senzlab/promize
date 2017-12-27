@@ -109,7 +109,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * This method will be call after successful login
      */
     private void navigateToHome() {
-        Intent intent = new Intent(this, DrawerActivity.class);
+        Intent intent = new Intent(this, DashBoardActivity.class);
         startActivity(intent);
         this.finish();
     }

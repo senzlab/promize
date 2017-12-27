@@ -1,8 +1,5 @@
 package com.score.cbook.enums;
 
-/**
- * Created by eranga on 11/18/16.
- */
 public enum DeliveryState {
     NONE(0),
     PENDING(1),
