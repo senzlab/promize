@@ -86,6 +86,7 @@ public class UserSource {
         if (chequeUser.getImage() != null && chequeUser.getImage().isEmpty())
             values.put(SenzorsDbContract.User.COLUMN_NAME_IMAGE, chequeUser.getImage());
         values.put(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE, chequeUser.isActive() ? 1 : 0);
+        values.put(SenzorsDbContract.User.COLUMN_NAME_IS_ADMIN, chequeUser.isAdmin() ? 1 : 0);
         values.put(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER, chequeUser.isSMSRequester() ? 1 : 0);
 
         // Insert the new row, if fails throw an error
@@ -200,27 +201,28 @@ public class UserSource {
             // have matching user
             // so get user data
             // we return id as password since we no storing users password in database
-            String _userID = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User._ID));
-            String _username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_USERNAME));
-            String _phone = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PHONE));
-            String _pubKey = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY));
-            String _pubKeyHash = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY_HASH));
-            String _image = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IMAGE));
-            String _sessionKey = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_SESSION_KEY));
-            int _isActive = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE));
-            int _isSmsRequester = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER));
+            String userId = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User._ID));
+            String phone = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PHONE));
+            String pubKey = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY));
+            String pubKeyHash = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY_HASH));
+            String image = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IMAGE));
+            String sessionKey = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_SESSION_KEY));
+            int isActive = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE));
+            int isAdmin = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ADMIN));
+            int isSmsRequester = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER));
 
             // clear
             cursor.close();
 
-            ChequeUser chequeUser = new ChequeUser(_userID, _username);
-            chequeUser.setPhone(_phone);
-            chequeUser.setPubKey(_pubKey);
-            chequeUser.setPubKeyHash(_pubKeyHash);
-            chequeUser.setImage(_image);
-            chequeUser.setActive(_isActive == 1);
-            chequeUser.setSMSRequester(_isSmsRequester == 1);
-            chequeUser.setSessionKey(_sessionKey);
+            ChequeUser chequeUser = new ChequeUser(userId, username);
+            chequeUser.setPhone(phone);
+            chequeUser.setPubKey(pubKey);
+            chequeUser.setPubKeyHash(pubKeyHash);
+            chequeUser.setImage(image);
+            chequeUser.setActive(isActive == 1);
+            chequeUser.setAdmin(isAdmin == 1);
+            chequeUser.setSMSRequester(isSmsRequester == 1);
+            chequeUser.setSessionKey(sessionKey);
 
             return chequeUser;
         }
@@ -229,11 +231,12 @@ public class UserSource {
     }
 
     public static ArrayList<ChequeUser> getAllUsers(Context context) {
+        // get all non admin users
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(SenzorsDbContract.User.TABLE_NAME, // table
                 null, // columns
-                null,
-                null, // selection
+                SenzorsDbContract.User.COLUMN_NAME_IS_ADMIN + " = ?", // constraint
+                new String[]{"0"}, // prams,
                 null, // order by
                 null, // group by
                 null); // join
@@ -241,22 +244,24 @@ public class UserSource {
         ArrayList<ChequeUser> chequeUserList = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            String _userID = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User._ID));
-            String _username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_USERNAME));
-            String _phone = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PHONE));
-            String _pubKey = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY));
-            String _pubKeyHash = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY_HASH));
-            int _isActive = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE));
-            String _image = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IMAGE));
-            int _isSmsRequester = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER));
+            String userId = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User._ID));
+            String username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_USERNAME));
+            String phone = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PHONE));
+            String pubKey = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY));
+            String pubKeyHash = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY_HASH));
+            int isActive = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE));
+            int isAdmin = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ADMIN));
+            String image = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IMAGE));
+            int isSmsRequester = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER));
 
-            ChequeUser chequeUser = new ChequeUser(_userID, _username);
-            chequeUser.setPhone(_phone);
-            chequeUser.setPubKey(_pubKey);
-            chequeUser.setPubKeyHash(_pubKeyHash);
-            chequeUser.setImage(_image);
-            chequeUser.setActive(_isActive == 1);
-            chequeUser.setSMSRequester(_isSmsRequester == 1);
+            ChequeUser chequeUser = new ChequeUser(userId, username);
+            chequeUser.setPhone(phone);
+            chequeUser.setPubKey(pubKey);
+            chequeUser.setPubKeyHash(pubKeyHash);
+            chequeUser.setImage(image);
+            chequeUser.setActive(isActive == 1);
+            chequeUser.setAdmin(isAdmin == 1);
+            chequeUser.setSMSRequester(isSmsRequester == 1);
 
             chequeUserList.add(chequeUser);
         }

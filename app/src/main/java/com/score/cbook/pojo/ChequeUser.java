@@ -16,6 +16,7 @@ public class ChequeUser extends User implements Parcelable {
     private String sessionKey;
     private boolean isSMSRequester;
     private boolean isActive;
+    private boolean isAdmin;
     private boolean selected;
     private int unreadSecretCount;
 
@@ -37,6 +38,7 @@ public class ChequeUser extends User implements Parcelable {
         this.pubKeyHash = in.readString();
         this.sessionKey = in.readString();
         this.isActive = in.readByte() != 0;
+        this.isAdmin = in.readByte() != 0;
         this.isSMSRequester = in.readByte() != 0;
         this.selected = in.readByte() != 0;
         this.unreadSecretCount = in.readInt();
@@ -67,6 +69,7 @@ public class ChequeUser extends User implements Parcelable {
         dest.writeString(pubKeyHash);
         dest.writeString(sessionKey);
         dest.writeByte((byte) (isActive ? 1 : 0));
+        dest.writeByte((byte) (isAdmin ? 1 : 0));
         dest.writeByte((byte) (isSMSRequester ? 1 : 0));
         dest.writeByte((byte) (selected ? 1 : 0));
         dest.writeInt(unreadSecretCount);
@@ -127,6 +130,14 @@ public class ChequeUser extends User implements Parcelable {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
     }
 
     public boolean isSMSRequester() {

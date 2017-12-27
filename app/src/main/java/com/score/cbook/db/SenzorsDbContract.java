@@ -22,6 +22,7 @@ class SenzorsDbContract {
         static final String COLUMN_NAME_PUBKEY = "pubkey";
         static final String COLUMN_NAME_PUBKEY_HASH = "pubkey_hash";
         static final String COLUMN_NAME_IS_ACTIVE = "is_active";
+        static final String COLUMN_NAME_IS_ADMIN = "is_admin";
         static final String COLUMN_NAME_IMAGE = "image";
         static final String COLUMN_NAME_UNREAD_CHEQUE_COUNT = "unread_cheque_count";
         static final String COLUMN_NAME_UNREAD_SECRET_COUNT = "unread_secret_count";

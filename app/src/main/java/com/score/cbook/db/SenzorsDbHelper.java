@@ -18,7 +18,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
     private static SenzorsDbHelper senzorsDbHelper;
 
     // If you change the database schema, you must increment the database version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "Cheque.db";
 
     // data types, keywords and queries
@@ -35,6 +35,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
                     SenzorsDbContract.User.COLUMN_NAME_PUBKEY + TEXT_TYPE + "," +
                     SenzorsDbContract.User.COLUMN_NAME_PUBKEY_HASH + TEXT_TYPE + "," +
                     SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE + INT_TYPE + "," +
+                    SenzorsDbContract.User.COLUMN_NAME_IS_ADMIN + INT_TYPE + "," +
                     SenzorsDbContract.User.COLUMN_NAME_IMAGE + TEXT_TYPE + "," +
                     SenzorsDbContract.User.COLUMN_NAME_UNREAD_CHEQUE_COUNT + INT_TYPE + " DEFAULT 0" + "," +
                     SenzorsDbContract.User.COLUMN_NAME_UNREAD_SECRET_COUNT + INT_TYPE + " DEFAULT 0" +
@@ -130,6 +131,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
 
         db.execSQL("DROP TABLE USER;");
         db.execSQL("DROP TABLE CHEQUE;");
+        db.execSQL("DROP TABLE SECRET;");
         onCreate(db);
     }
 

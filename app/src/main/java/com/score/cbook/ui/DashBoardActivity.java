@@ -69,8 +69,9 @@ public class DashBoardActivity extends BaseActivity {
                 ChequeUser chequeUser = new ChequeUser("sampath", "sampath");
 
                 if (!UserSource.isExistingUser(DashBoardActivity.this, "sampath")) {
-                    // create sampath user and secret if not exists
+                    // create admin sampath user and secret if not exists
                     chequeUser.setActive(true);
+                    chequeUser.setAdmin(true);
                     UserSource.createUser(DashBoardActivity.this, chequeUser);
 
                     // crate secret with help text
@@ -93,16 +94,6 @@ public class DashBoardActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
-    }
-
-    private void navigateRegistration() {
-        // no user, so move to registration
-        Intent intent = new Intent(this, RegistrationActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
-        finish();
     }
 
 }
