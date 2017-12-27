@@ -165,7 +165,8 @@ public class SecretSource {
                         "my_secret, " +
                         "viewed, " +
                         "view_timestamp, " +
-                        "missed, timestamp, " +
+                        "missed, " +
+                        "timestamp, " +
                         "delivery_state " +
                         "FROM secret " +
                         "WHERE delivery_state = ? " +
@@ -179,22 +180,23 @@ public class SecretSource {
         String query =
                 "SELECT MAX(secret._id), " +
                         "secret._id, " +
+                        "secret.uid, " +
                         "secret.blob, " +
                         "secret.blob_type, " +
                         "secret.user, " +
                         "secret.my_secret, " +
+                        "secret.viewed, " +
+                        "secret.view_timestamp, " +
+                        "secret.missed, " +
                         "secret.timestamp, " +
-                        "user._id, " +
-                        "user.image, " +
-                        "user.is_active, " +
-                        "user.is_sms_requester, " +
-                        "user.phone, " +
-                        "user.unread_secret_count " +
+                        "secret.in_order, " +
+                        "secret.delivery_state " +
                         "FROM secret " +
                         "INNER JOIN user ON user.username = secret.user " +
+                        "WHERE user.is_admin = ? " +
                         "GROUP BY user.username " +
                         "ORDER BY timestamp DESC";
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = db.rawQuery(query, new String[]{"0"});
         return getSecretsFromCursor(context, cursor);
     }
 

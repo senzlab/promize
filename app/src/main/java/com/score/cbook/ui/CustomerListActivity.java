@@ -178,9 +178,19 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         final ChequeUser chequeUser = customerList.get(position);
 
         if (chequeUser.isActive()) {
-            Intent intent = new Intent(CustomerListActivity.this, NewChequeActivity.class);
-            intent.putExtra("USER", chequeUser);
-            startActivity(intent);
+            if (actionType == CustomerActionType.NEW_CHEQUE) {
+                Intent intent = new Intent(CustomerListActivity.this, NewChequeActivity.class);
+                intent.putExtra("USER", chequeUser);
+                startActivity(intent);
+            } else if (actionType == CustomerActionType.NEW_MESSAGE) {
+                Intent intent = new Intent(CustomerListActivity.this, ChatActivity.class);
+                intent.putExtra("SENDER", chequeUser.getUsername());
+                startActivity(intent);
+            } else if (actionType == CustomerActionType.CUSTOMER_LIST) {
+                Intent intent = new Intent(CustomerListActivity.this, UserProfileActivity.class);
+                intent.putExtra("SECRET_USER", chequeUser);
+                startActivity(intent);
+            }
         } else {
             if (chequeUser.isSMSRequester()) {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());

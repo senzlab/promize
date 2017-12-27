@@ -121,6 +121,10 @@
             android:name=".ui.CustomerListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.SecretListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
         <!-- Servicves -->
         <service
             android:name="com.score.cbook.remote.SenzService"

@@ -78,8 +78,7 @@ public class DashBoardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // navigate to customer list
-                Intent intent = new Intent(DashBoardActivity.this, CustomerListActivity.class);
-                intent.putExtra("ACTION", CustomerActionType.NEW_MESSAGE.toString());
+                Intent intent = new Intent(DashBoardActivity.this, SecretListActivity.class);
                 startActivity(intent);
             }
         });
