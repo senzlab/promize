@@ -1,6 +1,5 @@
 package com.score.cbook.ui;
 
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -79,8 +78,6 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
 
     private void setupSearchView() {
         searchView = (EditText) findViewById(R.id.inputSearch);
-        searchView.getBackground().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-
         searchView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
