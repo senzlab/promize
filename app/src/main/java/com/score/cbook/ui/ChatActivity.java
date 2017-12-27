@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -205,7 +204,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         // init
         txtSecret = (EditText) findViewById(R.id.text_message);
         txtSecret.setTypeface(typeface, Typeface.NORMAL);
-        txtSecret.getBackground().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
 
         btnSend = (TextView) findViewById(R.id.sendBtn);
         btnSend.setTypeface(typeface, Typeface.BOLD);
