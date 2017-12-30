@@ -3,6 +3,7 @@ package com.score.cbook.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.DeliveryState;
 
 public class Cheque implements Parcelable {
@@ -14,8 +15,8 @@ public class Cheque implements Parcelable {
     private Long timestamp;
     private Long viewedTimeStamp;
     private DeliveryState deliveryState;
+    private ChequeState chequeState;
     private String cid;
-    private String state;
     private int amount;
     private String date;
     private String blob;
@@ -29,8 +30,9 @@ public class Cheque implements Parcelable {
         isMyCheque = in.readByte() != 0;
         isViewed = in.readByte() != 0;
         isSelected = in.readByte() != 0;
+        deliveryState = DeliveryState.valueOf(in.readString());
+        chequeState = ChequeState.valueOf(in.readString());
         cid = in.readString();
-        state = in.readString();
         amount = in.readInt();
         date = in.readString();
         blob = in.readString();
@@ -112,20 +114,20 @@ public class Cheque implements Parcelable {
         this.deliveryState = deliveryState;
     }
 
+    public ChequeState getChequeState() {
+        return chequeState;
+    }
+
+    public void setChequeState(ChequeState chequeState) {
+        this.chequeState = chequeState;
+    }
+
     public String getCid() {
         return cid;
     }
 
     public void setCid(String cid) {
         this.cid = cid;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
     }
 
     public int getAmount() {
@@ -164,8 +166,9 @@ public class Cheque implements Parcelable {
         dest.writeByte((byte) (isMyCheque ? 1 : 0));
         dest.writeByte((byte) (isViewed ? 1 : 0));
         dest.writeByte((byte) (isSelected ? 1 : 0));
+        dest.writeString(deliveryState.name());
+        dest.writeString(chequeState.name());
         dest.writeString(cid);
-        dest.writeString(state);
         dest.writeInt(amount);
         dest.writeString(date);
         dest.writeString(blob);

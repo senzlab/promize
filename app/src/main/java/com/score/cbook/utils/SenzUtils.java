@@ -66,11 +66,12 @@ public class SenzUtils {
         return senz;
     }
 
-    public static Senz getAckSenz(User user, String uid, String statusCode) {
+    public static Senz getShareAckSenz(Context context, User user, String statusCode) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put("time", ((Long) (System.currentTimeMillis() / 1000)).toString());
-        senzAttributes.put("uid", uid);
+        Long timestamp = System.currentTimeMillis() / 1000;
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("uid", getUid(context, timestamp.toString()));
         senzAttributes.put("status", statusCode);
 
         // new senz object
@@ -97,16 +98,6 @@ public class SenzUtils {
         return senz;
     }
 
-    public static String getUid(Context context, String timestamp) {
-        try {
-            String username = PreferenceUtils.getUser(context).getUsername();
-            return username + timestamp;
-        } catch (NoUserException e) {
-            e.printStackTrace();
-        }
-
-        return timestamp;
-    }
 
     public static Senz getShareSenz(Context context, String username, String sessionKey) throws NoSuchAlgorithmException {
         // create senz attributes
@@ -198,6 +189,17 @@ public class SenzUtils {
 
         // send to service
         return senz;
+    }
+
+    public static String getUid(Context context, String timestamp) {
+        try {
+            String username = PreferenceUtils.getUser(context).getUsername();
+            return username + timestamp;
+        } catch (NoUserException e) {
+            e.printStackTrace();
+        }
+
+        return timestamp;
     }
 
 }

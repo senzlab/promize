@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.db.SenzorsDbSource;
+import com.score.cbook.db.UserSource;
 import com.score.cbook.enums.BlobType;
 import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.ChequeUser;
@@ -33,7 +33,6 @@ class ChatListAdapter extends BaseAdapter {
     private Context context;
     private ChequeUser chequeUser;
     private LimitedList<Secret> secretList;
-    private SenzorsDbSource dbSource;
 
     private Typeface typeface;
 
@@ -45,10 +44,9 @@ class ChatListAdapter extends BaseAdapter {
         this.context = context;
         this.chequeUser = user;
         this.secretList = secretList;
-        this.dbSource = new SenzorsDbSource(context);
 
         // reset users unread secret count
-        dbSource.resetUnreadSecretCount(chequeUser.getUsername());
+        UserSource.resetUnreadSecretCount(context, chequeUser.getUsername());
 
         typeface = Typeface.createFromAsset(context.getAssets(), "fonts/GeosansLight.ttf");
     }
@@ -78,7 +76,7 @@ class ChatListAdapter extends BaseAdapter {
         super.notifyDataSetChanged();
 
         // reset users unread secret count
-        dbSource.resetUnreadSecretCount(chequeUser.getUsername());
+        UserSource.resetUnreadSecretCount(context, chequeUser.getUsername());
     }
 
     @Override

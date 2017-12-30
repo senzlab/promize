@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.db.ChequeSource;
+import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.utils.ActivityUtils;
@@ -131,16 +132,16 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
 
         // enable/disable deposit based on cheque owner
         if (cheque.isMyCheque()) {
-            if (cheque.getState().equalsIgnoreCase("TRANSFER")) {
+            deposit.setVisibility(View.GONE);
+            transfer.setVisibility(View.GONE);
+        } else {
+            if (cheque.getChequeState() == ChequeState.TRANSFER) {
                 deposit.setVisibility(View.VISIBLE);
                 transfer.setVisibility(View.VISIBLE);
             } else {
                 deposit.setVisibility(View.GONE);
                 transfer.setVisibility(View.GONE);
             }
-        } else {
-            deposit.setVisibility(View.GONE);
-            transfer.setVisibility(View.GONE);
         }
     }
 
@@ -153,6 +154,11 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
+        if (cheque.isMyCheque()) {
+            titleText.setText("Sent cheque");
+        } else {
+            titleText.setText("Received cheque");
+        }
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);

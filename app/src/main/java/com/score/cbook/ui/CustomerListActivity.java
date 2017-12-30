@@ -7,10 +7,15 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.score.cbook.R;
@@ -59,6 +64,8 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         initActionBar();
         initListView();
         initNewButton();
+        initSearchView();
+        initEmptyView();
     }
 
     @Override
@@ -108,6 +115,13 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
+        if (UserSource.getAllUsers(this).size() == 0) {
+            titleText.setText("Add customers");
+        } else if (actionType == CustomerActionType.NEW_CHEQUE || actionType == CustomerActionType.NEW_MESSAGE) {
+            titleText.setText("Choose customer");
+        } else {
+            titleText.setText("Customers");
+        }
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);
@@ -146,10 +160,49 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         }
     }
 
+    private void initSearchView() {
+        LinearLayout search = (LinearLayout) findViewById(R.id.search_layout);
+        EditText searchView = (EditText) findViewById(R.id.inputSearch);
+        if (actionType == CustomerActionType.CUSTOMER_LIST || customerList.size() == 0) {
+            search.setVisibility(View.GONE);
+        } else {
+            search.setVisibility(View.VISIBLE);
+            searchView.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    customerListAdapter.getFilter().filter(s);
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+        }
+    }
+
+    private void initEmptyView() {
+        TextView emptyText = (TextView) findViewById(R.id.empty_view_text);
+        emptyText.setTypeface(typeface, Typeface.NORMAL);
+    }
+
     private void initListView() {
         ListView friendListView = (ListView) findViewById(R.id.customer_list_view);
         friendListView.setOnItemClickListener(this);
         friendListView.setOnItemLongClickListener(this);
+
+        RelativeLayout emptyView = (RelativeLayout) findViewById(R.id.empty_view);
+        if (UserSource.getAllUsers(this).size() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+            friendListView.setEmptyView(emptyView);
+        } else {
+            emptyView.setVisibility(View.GONE);
+        }
 
         customerList = UserSource.getAllUsers(this);
         if (customerList.size() > 0) {

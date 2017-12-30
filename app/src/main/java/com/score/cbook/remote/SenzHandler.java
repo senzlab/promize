@@ -8,6 +8,7 @@ import com.score.cbook.db.ChequeSource;
 import com.score.cbook.db.SecretSource;
 import com.score.cbook.db.UserSource;
 import com.score.cbook.enums.BlobType;
+import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
@@ -102,12 +103,12 @@ class SenzHandler {
 
                 // broadcast send status back
                 broadcastSenz(senz, senzService.getApplicationContext());
-                senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "USER_SHARED"));
+                senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "USER_SHARED"));
             } catch (Exception ex) {
                 ex.printStackTrace();
 
                 // send error ack
-                senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "USER_SHARE_FAILED"));
+                senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "USER_SHARE_FAILED"));
             }
         } else if (senz.getAttributes().containsKey("$skey")) {
             try {
@@ -117,21 +118,47 @@ class SenzHandler {
                     UserSource.updateUser(senzService.getApplicationContext(), senz.getSender().getUsername(), "session_key", sessionKey);
 
                     broadcastSenz(senz, senzService.getApplicationContext());
-                    senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "KEY_SHARED"));
+                    senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARED"));
                 } else {
                     // means error
-                    senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "KEY_SHARE_FAILED"));
+                    senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARE_FAILED"));
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
 
                 // send error ack
-                senzService.writeSenz(SenzUtils.getAckSenz(senz.getSender(), senz.getAttributes().get("uid"), "KEY_SHARE_FAILED"));
+                senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARE_FAILED"));
             }
+        } else if (senz.getAttributes().containsKey("cimg")) {
+            // save cheque
+            Long timestamp = (System.currentTimeMillis() / 1000);
+            User user = new User("id", senz.getAttributes().get("from"));
+            int amnt = Integer.parseInt(senz.getAttributes().get("camnt"));
+            String date = senz.getAttributes().get("cdate");
+            saveCheque(timestamp, senz.getAttributes().get("uid"), senz.getAttributes().get("cid"), "", amnt, date, user, senzService.getApplicationContext());
+
+            // save img
+            String imgName = senz.getAttributes().get("uid") + ".jpg";
+            ImageUtils.saveImg(imgName, senz.getAttributes().get("cimg"));
+
+            // broadcast
+            // notification user
+            broadcastSenz(senz, senzService.getApplicationContext());
+            ChequeUser secretUser = UserSource.getUser(senzService.getApplicationContext(), user.getUsername());
+
+            // show notification
+            String notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
+            SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
+                    NotificationUtils.getChequeNotification(notificationUser, "New cheque received", user.getUsername()));
+
+            senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "CHEQUE_SHARED"));
         }
     }
 
     private void handleData(Senz senz, SenzService senzService) {
+        // send AWA back
+        senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
+
         if (senz.getAttributes().containsKey("status")) {
             String status = senz.getAttributes().get("status");
             if (status.equalsIgnoreCase("USER_SHARED")) {
@@ -159,9 +186,6 @@ class SenzHandler {
             broadcastSenz(senz, senzService.getApplicationContext());
         } else if (senz.getAttributes().containsKey("msg") || senz.getAttributes().containsKey("$msg")) {
             // rahasa
-            // send AWA back
-            senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
-
             try {
                 // save and broadcast
                 String rahasa;
@@ -216,31 +240,6 @@ class SenzHandler {
                     e.printStackTrace();
                 }
             }
-        } else if (senz.getAttributes().containsKey("cimg")) {
-            // rahasa
-            // send AWA back
-            senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
-
-            // save cheque
-            Long timestamp = (System.currentTimeMillis() / 1000);
-            User user = new User("id", senz.getAttributes().get("from"));
-            int amnt = Integer.parseInt(senz.getAttributes().get("camnt"));
-            String date = senz.getAttributes().get("cdate");
-            saveCheque(timestamp, senz.getAttributes().get("uid"), senz.getAttributes().get("cid"), "", amnt, date, user, senzService.getApplicationContext());
-
-            // save img
-            String imgName = senz.getAttributes().get("uid") + ".jpg";
-            ImageUtils.saveImg(imgName, senz.getAttributes().get("cimg"));
-
-            // broadcast
-            // notification user
-            broadcastSenz(senz, senzService.getApplicationContext());
-            ChequeUser secretUser = UserSource.getUser(senzService.getApplicationContext(), user.getUsername());
-
-            // show notification
-            String notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
-            SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
-                    NotificationUtils.getChequeNotification(notificationUser, "New cheque received", user.getUsername()));
         }
     }
 
@@ -254,7 +253,7 @@ class SenzHandler {
             cheque.setBlob(blob);
             cheque.setMyCheque(false);
             cheque.setCid(cid);
-            cheque.setState("TRANSFER");
+            cheque.setChequeState(ChequeState.TRANSFER);
             cheque.setAmount(amnt);
             cheque.setDate(date);
             cheque.setViewed(false);

@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.db.ChequeSource;
+import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.Cheque;
@@ -190,10 +191,6 @@ public class ChequePreviewActivity extends BaseActivity {
 
             // create secret
             cheque.setUid(uid);
-            cheque.setState("TRANSFER");
-            cheque.setDeliveryState(DeliveryState.PENDING);
-            cheque.setMyCheque(false);
-            cheque.setViewed(true);
             ChequeSource.createCheque(this, cheque);
         } catch (Exception e) {
             e.printStackTrace();

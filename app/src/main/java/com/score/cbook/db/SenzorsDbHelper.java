@@ -18,7 +18,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
     private static SenzorsDbHelper senzorsDbHelper;
 
     // If you change the database schema, you must increment the database version
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "Cheque.db";
 
     // data types, keywords and queries
@@ -26,7 +26,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
     private static final String INT_TYPE = " INTEGER";
 
     private static final String SQL_CREATE_USER =
-            "CREATE TABLE " + SenzorsDbContract.User.TABLE_NAME + " (" +
+            "CREATE TABLE IF NOT EXISTS " + SenzorsDbContract.User.TABLE_NAME + " (" +
                     SenzorsDbContract.User._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + "," +
                     SenzorsDbContract.User.COLUMN_NAME_USERNAME + TEXT_TYPE + " UNIQUE NOT NULL" + "," +
                     SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER + INT_TYPE + "," +
@@ -42,7 +42,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
                     " )";
 
     private static final String SQL_CREATE_CHEQUE =
-            "CREATE TABLE " + SenzorsDbContract.Cheque.TABLE_NAME + " (" +
+            "CREATE TABLE IF NOT EXISTS " + SenzorsDbContract.Cheque.TABLE_NAME + " (" +
                     SenzorsDbContract.Cheque._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_UID + TEXT_TYPE + " UNIQUE NOT NULL" + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_TIMESTAMP + INT_TYPE + ", " +
@@ -51,15 +51,15 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
                     SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED + INT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_VIEWED_TIMESTAMP + INT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_DELIVERY_STATE + INT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE + INT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID + TEXT_TYPE + ", " +
-                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE + TEXT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT + INT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE + TEXT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB + TEXT_TYPE +
                     " )";
 
     private static final String SQL_CREATE_SECRET =
-            "CREATE TABLE " + SenzorsDbContract.Secret.TABLE_NAME + " (" +
+            "CREATE TABLE IF NOT EXISTS " + SenzorsDbContract.Secret.TABLE_NAME + " (" +
                     SenzorsDbContract.Secret._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", " +
                     SenzorsDbContract.Secret.COLUMN_UNIQUE_ID + TEXT_TYPE + " UNIQUE NOT NULL" + ", " +
                     SenzorsDbContract.Secret.COLUMN_TIMESTAMP + INT_TYPE + ", " +
@@ -129,7 +129,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "OnUpgrade: updating db helper, db version - " + DATABASE_VERSION);
 
-        db.execSQL("DROP TABLE USER;");
+        //db.execSQL("DROP TABLE USER;");
         db.execSQL("DROP TABLE CHEQUE;");
         db.execSQL("DROP TABLE SECRET;");
         onCreate(db);

@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.async.CheckImageGenerator;
+import com.score.cbook.enums.ChequeState;
+import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.interfaces.ICheckImageGeneratorListener;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
@@ -159,7 +161,10 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
             cheque.setUser(chequeUser);
             cheque.setAmount(Integer.parseInt(amount));
             cheque.setDate(date);
-            cheque.setMyCheque(false);
+            cheque.setDeliveryState(DeliveryState.PENDING);
+            cheque.setChequeState(ChequeState.TRANSFER);
+            cheque.setMyCheque(true);
+            cheque.setViewed(true);
 
             // create image via async task
             CheckImageGenerator imageCreator = new CheckImageGenerator(this, this);

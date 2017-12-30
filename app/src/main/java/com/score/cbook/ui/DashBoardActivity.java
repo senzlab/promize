@@ -54,11 +54,27 @@ public class DashBoardActivity extends BaseActivity {
     }
 
     private void onClickReceivedCheques() {
-
+        findViewById(R.id.inbox_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to new cheque
+                Intent intent = new Intent(DashBoardActivity.this, ChequeListActivity.class);
+                intent.putExtra("SHOW_MY_CHEQUES", false);
+                startActivity(intent);
+            }
+        });
     }
 
     private void onClickSentCheques() {
-
+        findViewById(R.id.outbox_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to new cheque
+                Intent intent = new Intent(DashBoardActivity.this, ChequeListActivity.class);
+                intent.putExtra("SHOW_MY_CHEQUES", true);
+                startActivity(intent);
+            }
+        });
     }
 
     private void onClickCustomers() {
