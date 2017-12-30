@@ -1,124 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:background="@color/white">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
-        app:contentInsetEnd="0dp"
-        app:contentInsetStart="0dp"
-        app:popupTheme="@style/MyMaterialTheme" />
-
-    <ScrollView
-        android:id="@+id/scrollview"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/white"
-        android:fillViewport="true"
-        android:orientation="vertical"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            android:background="@color/white"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/welcome_message"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/registering_user_id"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:text="First you have to register with your account no  \n\nThis account no will be your username for the bankz application"
-                android:textColor="@color/android_grey"
-                android:textSize="28sp"
-                android:visibility="gone" />
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white"
+                app:contentInsetEnd="0dp"
+                app:contentInsetStart="0dp"
+                app:popupTheme="@style/MyMaterialTheme" />
 
-            <EditText
-                android:id="@+id/new_cheque_username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:background="@drawable/edit_text_border_bottom"
-                android:clickable="false"
-                android:enabled="false"
-                android:focusableInTouchMode="false"
-                android:hint="User"
-                android:inputType="text"
-                android:maxLength="12"
-                android:paddingBottom="10dp"
-                android:textColor="@color/android_grey"
-                android:textColorHint="#ABABAB"
-                android:textCursorDrawable="@drawable/cursor_drawable"
-                android:textSize="25sp" />
+            <ScrollView
+                android:id="@+id/scrollview"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:fillViewport="true"
+                android:orientation="vertical"
+                android:scrollbars="none">
 
-            <EditText
-                android:id="@+id/new_cheque_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginTop="35dp"
-                android:background="@drawable/edit_text_border_bottom"
-                android:hint="Amount"
-                android:inputType="number"
-                android:maxLength="10"
-                android:paddingBottom="10dp"
-                android:textColor="@color/android_grey"
-                android:textColorHint="#ABABAB"
-                android:textCursorDrawable="@drawable/cursor_drawable"
-                android:textSize="25sp" />
-
-            <EditText
-                android:id="@+id/new_cheque_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginTop="35dp"
-                android:background="@drawable/edit_text_border_bottom"
-                android:hint="Date"
-                android:inputType="date"
-                android:maxLength="16"
-                android:paddingBottom="10dp"
-                android:textColor="@color/android_grey"
-                android:textColorHint="#ABABAB"
-                android:textCursorDrawable="@drawable/cursor_drawable"
-                android:textSize="25sp" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/new_cheque_send"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="35dp"
-                    android:background="@drawable/rounded_corner_button"
-                    android:text="Sign"
-                    android:textColor="@color/white" />
-            </FrameLayout>
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/new_cheque_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
+                        android:background="@drawable/edit_text_border_bottom"
+                        android:hint="Customer name"
+                        android:inputType="text"
+                        android:paddingBottom="10dp"
+                        android:textColor="@color/android_grey"
+                        android:textColorHint="#ABABAB"
+                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:textSize="25sp" />
+
+                    <EditText
+                        android:id="@+id/new_cheque_account"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="35dp"
+                        android:background="@drawable/edit_text_border_bottom"
+                        android:hint="Account"
+                        android:inputType="number"
+                        android:maxLength="12"
+                        android:paddingBottom="10dp"
+                        android:textColor="@color/android_grey"
+                        android:textColorHint="#ABABAB"
+                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:textSize="25sp"
+                        android:visibility="gone" />
+
+                    <EditText
+                        android:id="@+id/new_cheque_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="35dp"
+                        android:background="@drawable/edit_text_border_bottom"
+                        android:hint="Amount"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:paddingBottom="10dp"
+                        android:textColor="@color/android_grey"
+                        android:textColorHint="#ABABAB"
+                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:textSize="25sp" />
+
+                    <EditText
+                        android:id="@+id/new_cheque_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
+                        android:layout_marginTop="35dp"
+                        android:background="@drawable/edit_text_border_bottom"
+                        android:hint="Date"
+                        android:inputType="date"
+                        android:maxLength="16"
+                        android:paddingBottom="10dp"
+                        android:textColor="@color/android_grey"
+                        android:textColorHint="#ABABAB"
+                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:textSize="25sp" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
+
+                        <Button
+                            android:id="@+id/new_cheque_send"
+                            android:layout_width="match_parent"
+                            android:layout_height="55dp"
+                            android:layout_marginLeft="50dp"
+                            android:layout_marginRight="50dp"
+                            android:layout_marginTop="35dp"
+                            android:background="@drawable/rounded_corner_button"
+                            android:text="Sign"
+                            android:textColor="@color/white" />
+                    </FrameLayout>
+
+                </LinearLayout>
+            </ScrollView>
 
         </LinearLayout>
-    </ScrollView>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp">
+
+            <RelativeLayout
+                android:id="@+id/sign_l"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/sign"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/view" />
+
+                <TextView
+                    android:id="@+id/sign_t"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/sign"
+                    android:background="@drawable/text_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="5dp"
+                    android:text="Sign cheque"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </FrameLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

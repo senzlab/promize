@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -35,9 +34,9 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
 
     // ui controls
     private EditText userEditText;
+    private EditText accountEditText;
     private EditText amountEditText;
     private EditText dateEditText;
-    private Button sendButton;
 
     private ChequeUser chequeUser;
     private Cheque cheque;
@@ -80,14 +79,16 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
 
     private void initUi() {
         userEditText = (EditText) findViewById(R.id.new_cheque_username);
+        accountEditText = (EditText) findViewById(R.id.new_cheque_account);
         amountEditText = (EditText) findViewById(R.id.new_cheque_amount);
         dateEditText = (EditText) findViewById(R.id.new_cheque_date);
 
         userEditText.setTypeface(typeface, Typeface.BOLD);
+        accountEditText.setTypeface(typeface, Typeface.BOLD);
         amountEditText.setTypeface(typeface, Typeface.BOLD);
         dateEditText.setTypeface(typeface, Typeface.BOLD);
 
-        userEditText.setText(PhoneBookUtil.getContactName(this, chequeUser.getPhone()));
+        accountEditText.setText(chequeUser.getUsername());
 
         dateEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -105,9 +106,11 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
             }
         });
 
-        sendButton = (Button) findViewById(R.id.new_cheque_send);
-        sendButton.setTypeface(typeface, Typeface.BOLD);
-        sendButton.setOnClickListener(new View.OnClickListener() {
+        TextView signT = (TextView) findViewById(R.id.sign_t);
+        signT.setTypeface(typeface);
+
+        ImageView sign = (ImageView) findViewById(R.id.sign);
+        sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActivityUtils.hideSoftKeyboard(NewChequeActivity.this);
@@ -125,6 +128,7 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
+        titleText.setText("To: " + PhoneBookUtil.getContactName(this, chequeUser.getPhone()));
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);

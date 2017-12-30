@@ -8,9 +8,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,17 +26,19 @@ import com.score.cbook.utils.SenzUtils;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
-public class ViewChequeActivity extends BaseActivity implements View.OnClickListener {
+public class ViewChequeActivity extends BaseActivity {
 
     private static final String TAG = ViewChequeActivity.class.getName();
 
     // ui controls
     private EditText userEditText;
+    private EditText accountEditText;
     private EditText amountEditText;
     private EditText dateEditText;
-    private Button preview;
-    private Button deposit;
-    private Button transfer;
+
+    private RelativeLayout depositLayout;
+    private RelativeLayout transferLayout;
+    private RelativeLayout viewLayout;
 
     private Cheque cheque;
 
@@ -97,24 +99,62 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
 
     private void initUi() {
         userEditText = (EditText) findViewById(R.id.view_cheque_username);
+        userEditText.setTypeface(typeface, Typeface.NORMAL);
+
+        accountEditText = (EditText) findViewById(R.id.view_cheque_account);
+        accountEditText.setTypeface(typeface, Typeface.NORMAL);
+
         amountEditText = (EditText) findViewById(R.id.view_cheque_amount);
+        amountEditText.setTypeface(typeface, Typeface.NORMAL);
+
         dateEditText = (EditText) findViewById(R.id.view_cheque_date);
+        dateEditText.setTypeface(typeface, Typeface.NORMAL);
 
-        userEditText.setTypeface(typeface, Typeface.BOLD);
-        amountEditText.setTypeface(typeface, Typeface.BOLD);
-        dateEditText.setTypeface(typeface, Typeface.BOLD);
+        depositLayout = (RelativeLayout) findViewById(R.id.deposit_l);
+        transferLayout = (RelativeLayout) findViewById(R.id.transfer_l);
+        viewLayout = (RelativeLayout) findViewById(R.id.view_l);
 
-        preview = (Button) findViewById(R.id.view_cheque_send);
-        preview.setTypeface(typeface, Typeface.BOLD);
-        preview.setOnClickListener(this);
+        TextView depositT = (TextView) findViewById(R.id.deposit_t);
+        depositT.setTypeface(typeface);
 
-        deposit = (Button) findViewById(R.id.view_cheque_deposit);
-        deposit.setTypeface(typeface, Typeface.BOLD);
-        deposit.setOnClickListener(this);
+        TextView viewT = (TextView) findViewById(R.id.view_t);
+        viewT.setTypeface(typeface);
 
-        transfer = (Button) findViewById(R.id.view_cheque_transfer);
-        transfer.setTypeface(typeface, Typeface.BOLD);
-        transfer.setOnClickListener(this);
+        TextView transferT = (TextView) findViewById(R.id.transfer_t);
+        transferT.setTypeface(typeface);
+
+        ImageView deposit = (ImageView) findViewById(R.id.deposit);
+        deposit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityUtils.showProgressDialog(ViewChequeActivity.this, "Depositing...");
+
+                Long timestamp = System.currentTimeMillis() / 1000;
+                Senz senz = SenzUtils.getDepositChequeSenz(ViewChequeActivity.this, cheque, timestamp);
+                send(senz);
+            }
+        });
+
+        ImageView transfer = (ImageView) findViewById(R.id.transfer);
+        transfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        ImageView view = (ImageView) findViewById(R.id.view);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityUtils.hideSoftKeyboard(ViewChequeActivity.this);
+
+                // cheque preview
+                Intent intent = new Intent(ViewChequeActivity.this, ChequePActivity.class);
+                intent.putExtra("UID", cheque.getUid());
+                startActivity(intent);
+            }
+        });
     }
 
     private void initCheque() {
@@ -127,20 +167,21 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
         }
 
         userEditText.setText(PhoneBookUtil.getContactName(this, cheque.getUser().getPhone()));
-        amountEditText.setText("Rs " + cheque.getAmount());
+        accountEditText.setText(cheque.getUser().getUsername());
+        amountEditText.setText("Rs " + cheque.getAmount() + ".00");
         dateEditText.setText(cheque.getDate());
 
         // enable/disable deposit based on cheque owner
         if (cheque.isMyCheque()) {
-            deposit.setVisibility(View.GONE);
-            transfer.setVisibility(View.GONE);
+            depositLayout.setVisibility(View.GONE);
+            transferLayout.setVisibility(View.GONE);
         } else {
             if (cheque.getChequeState() == ChequeState.TRANSFER) {
-                deposit.setVisibility(View.VISIBLE);
-                transfer.setVisibility(View.VISIBLE);
+                depositLayout.setVisibility(View.VISIBLE);
+                transferLayout.setVisibility(View.VISIBLE);
             } else {
-                deposit.setVisibility(View.GONE);
-                transfer.setVisibility(View.GONE);
+                depositLayout.setVisibility(View.GONE);
+                transferLayout.setVisibility(View.GONE);
             }
         }
     }
@@ -155,9 +196,9 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
         if (cheque.isMyCheque()) {
-            titleText.setText("Sent cheque");
+            titleText.setText("To: " + PhoneBookUtil.getContactName(this, cheque.getUser().getPhone()));
         } else {
-            titleText.setText("Received cheque");
+            titleText.setText("From: " + PhoneBookUtil.getContactName(this, cheque.getUser().getPhone()));
         }
 
         // back button
@@ -188,24 +229,6 @@ public class ViewChequeActivity extends BaseActivity implements View.OnClickList
                 // update cheque status in db
                 ChequeSource.updateChequeState(this, "DEPOSIT", cheque.getUid());
             }
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == preview) {
-            ActivityUtils.hideSoftKeyboard(this);
-
-            // cheque preview
-            Intent intent = new Intent(this, ChequePActivity.class);
-            intent.putExtra("UID", cheque.getUid());
-            startActivity(intent);
-        } else if (v == deposit) {
-            ActivityUtils.showProgressDialog(this, "Depositing...");
-
-            Long timestamp = System.currentTimeMillis() / 1000;
-            Senz senz = SenzUtils.getDepositChequeSenz(this, cheque, timestamp);
-            send(senz);
         }
     }
 }

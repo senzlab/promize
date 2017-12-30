@@ -31,6 +31,7 @@
     <color name="gray_back">#e5e5e5</color>
 
     <color name="colorPrimary">#f5944e</color>
+    <color name="colorPrimaryTrans">#B3f5944e</color>
     <color name="colorPrimaryLight">#FCD6C7</color>
     <color name="colorPrimaryDark">#125688</color>
     <color name="colorAccent">#c8e8ff</color>

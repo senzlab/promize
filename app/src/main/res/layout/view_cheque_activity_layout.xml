@@ -1,147 +1,283 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:background="@color/white">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
-        app:contentInsetEnd="0dp"
-        app:contentInsetStart="0dp"
-        app:popupTheme="@style/MyMaterialTheme" />
-
-    <ScrollView
-        android:id="@+id/scrollview"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@color/white"
-        android:fillViewport="true"
-        android:orientation="vertical"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            android:background="@color/white"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/view_cheque_username"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:background="@drawable/edit_text_border_bottom"
-                android:clickable="false"
-                android:enabled="false"
-                android:focusableInTouchMode="false"
-                android:hint="User"
-                android:inputType="text"
-                android:maxLength="12"
-                android:paddingBottom="10dp"
-                android:textColor="@color/android_grey"
-                android:textColorHint="#ABABAB"
-                android:textSize="25sp" />
+                android:layout_height="?attr/actionBarSize"
+                app:contentInsetEnd="0dp"
+                app:contentInsetStart="0dp"
+                app:popupTheme="@style/MyMaterialTheme" />
 
-            <EditText
-                android:id="@+id/view_cheque_amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+            <ScrollView
+                android:id="@+id/scrollview"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:orientation="vertical"
+                android:scrollbars="none">
 
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginTop="35dp"
-                android:background="@drawable/edit_text_border_bottom"
-                android:clickable="false"
-                android:enabled="false"
-                android:focusableInTouchMode="false"
-                android:hint="Amount"
-                android:inputType="numberDecimal"
-                android:maxLength="10"
-                android:paddingBottom="10dp"
-                android:textColor="@color/android_grey"
-                android:textColorHint="#ABABAB"
-                android:textSize="25sp" />
-
-            <EditText
-                android:id="@+id/view_cheque_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:layout_marginTop="35dp"
-                android:clickable="false"
-                android:enabled="false"
-                android:focusableInTouchMode="false"
-                android:hint="Date"
-                android:inputType="date"
-                android:maxLength="16"
-                android:paddingBottom="10dp"
-                android:textColor="@color/android_grey"
-                android:textColorHint="#ABABAB"
-                android:textCursorDrawable="@drawable/cursor_drawable"
-                android:textSize="25sp" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="35dp"
+                    android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/view_cheque_send"
+                    <EditText
+                        android:id="@+id/view_cheque_username"
                         android:layout_width="match_parent"
-                        android:layout_height="55dp"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
+                        android:background="@drawable/edit_text_border_bottom"
+                        android:clickable="false"
+                        android:enabled="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Name"
+                        android:inputType="text"
+                        android:paddingBottom="10dp"
+                        android:textColor="@color/android_grey"
+                        android:textColorHint="#ABABAB"
+                        android:textSize="25sp" />
+
+                    <EditText
+                        android:id="@+id/view_cheque_account"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="50dp"
                         android:layout_marginTop="35dp"
-                        android:background="@drawable/rounded_corner_button"
-                        android:text="Preview"
-                        android:textColor="@color/white" />
+                        android:background="@drawable/edit_text_border_bottom"
+                        android:clickable="false"
+                        android:enabled="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Account no"
+                        android:inputType="numberDecimal"
+                        android:maxLength="12"
+                        android:paddingBottom="10dp"
+                        android:textColor="@color/android_grey"
+                        android:textColorHint="#ABABAB"
+                        android:textSize="25sp"
+                        android:visibility="gone" />
 
-                    <Button
-                        android:id="@+id/view_cheque_deposit"
+                    <EditText
+                        android:id="@+id/view_cheque_amount"
                         android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:layout_below="@+id/view_cheque_send"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="50dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@drawable/rounded_corner_button"
-                        android:text="Deposit"
-                        android:textColor="@color/white" />
+                        android:layout_marginTop="35dp"
+                        android:background="@drawable/edit_text_border_bottom"
+                        android:clickable="false"
+                        android:enabled="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Amount"
+                        android:inputType="numberDecimal"
+                        android:paddingBottom="10dp"
+                        android:textColor="@color/android_grey"
+                        android:textColorHint="#ABABAB"
+                        android:textSize="25sp" />
 
-                    <Button
-                        android:id="@+id/view_cheque_transfer"
+                    <EditText
+                        android:id="@+id/view_cheque_date"
                         android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:layout_below="@+id/view_cheque_deposit"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_marginLeft="50dp"
                         android:layout_marginRight="50dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@drawable/rounded_corner_button"
-                        android:text="Transfer"
-                        android:textColor="@color/white" />
-                </RelativeLayout>
+                        android:layout_marginTop="35dp"
+                        android:background="@drawable/edit_text_border_bottom"
+                        android:clickable="false"
+                        android:enabled="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="Date"
+                        android:inputType="date"
+                        android:paddingBottom="10dp"
+                        android:textColor="@color/android_grey"
+                        android:textColorHint="#ABABAB"
+                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:textSize="25sp" />
 
-            </FrameLayout>
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone">
+
+                            <Button
+                                android:id="@+id/view_cheque_send"
+                                android:layout_width="match_parent"
+                                android:layout_height="55dp"
+                                android:layout_marginLeft="50dp"
+                                android:layout_marginRight="50dp"
+                                android:layout_marginTop="35dp"
+                                android:background="@drawable/rounded_corner_button"
+                                android:text="Preview"
+                                android:textColor="@color/white" />
+
+                            <Button
+                                android:id="@+id/view_cheque_deposit"
+                                android:layout_width="match_parent"
+                                android:layout_height="55dp"
+                                android:layout_below="@+id/view_cheque_send"
+                                android:layout_marginLeft="50dp"
+                                android:layout_marginRight="50dp"
+                                android:layout_marginTop="15dp"
+                                android:background="@drawable/rounded_corner_button"
+                                android:text="Deposit"
+                                android:textColor="@color/white" />
+
+                            <Button
+                                android:id="@+id/view_cheque_transfer"
+                                android:layout_width="match_parent"
+                                android:layout_height="55dp"
+                                android:layout_below="@+id/view_cheque_deposit"
+                                android:layout_marginLeft="50dp"
+                                android:layout_marginRight="50dp"
+                                android:layout_marginTop="15dp"
+                                android:background="@drawable/rounded_corner_button"
+                                android:text="Transfer"
+                                android:textColor="@color/white" />
+                        </RelativeLayout>
+
+                    </FrameLayout>
+                </LinearLayout>
+            </ScrollView>
         </LinearLayout>
-    </ScrollView>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp">
+
+            <RelativeLayout
+                android:id="@+id/view_l"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="10dp">
+
+                <ImageView
+                    android:id="@+id/view"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/view" />
+
+                <TextView
+                    android:id="@+id/view_t"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/view"
+                    android:background="@drawable/text_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="5dp"
+                    android:text="View"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/transfer_l"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/view_l"
+                android:layout_marginBottom="20dp">
+
+                <ImageView
+                    android:id="@+id/transfer"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/done" />
+
+                <TextView
+                    android:id="@+id/transfer_t"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/transfer"
+                    android:background="@drawable/text_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="5dp"
+                    android:text="Transfer"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
 
 
-</LinearLayout>
+            <RelativeLayout
+                android:id="@+id/deposit_l"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/transfer_l"
+                android:layout_marginBottom="20dp">
+
+                <ImageView
+                    android:id="@+id/deposit"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/view" />
+
+                <TextView
+                    android:id="@+id/deposit_t"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_toStartOf="@+id/deposit"
+                    android:background="@drawable/text_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:paddingTop="5dp"
+                    android:text="Deposit"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+</RelativeLayout>
