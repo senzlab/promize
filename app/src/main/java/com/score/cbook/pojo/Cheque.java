@@ -30,6 +30,7 @@ public class Cheque implements Parcelable {
         isMyCheque = in.readByte() != 0;
         isViewed = in.readByte() != 0;
         isSelected = in.readByte() != 0;
+        timestamp = in.readLong();
         deliveryState = DeliveryState.valueOf(in.readString());
         chequeState = ChequeState.valueOf(in.readString());
         cid = in.readString();
@@ -166,6 +167,7 @@ public class Cheque implements Parcelable {
         dest.writeByte((byte) (isMyCheque ? 1 : 0));
         dest.writeByte((byte) (isViewed ? 1 : 0));
         dest.writeByte((byte) (isSelected ? 1 : 0));
+        dest.writeLong(timestamp);
         dest.writeString(deliveryState.name());
         dest.writeString(chequeState.name());
         dest.writeString(cid);

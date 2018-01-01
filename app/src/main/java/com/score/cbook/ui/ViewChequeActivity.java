@@ -23,6 +23,7 @@ import com.score.cbook.pojo.Cheque;
 import com.score.cbook.utils.ActivityUtils;
 import com.score.cbook.utils.PhoneBookUtil;
 import com.score.cbook.utils.SenzUtils;
+import com.score.cbook.utils.TimeUtils;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
@@ -194,12 +195,16 @@ public class ViewChequeActivity extends BaseActivity {
 
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
+        TextView timeText = (TextView) findViewById(R.id.time);
         titleText.setTypeface(typeface, Typeface.BOLD);
+        timeText.setTypeface(typeface, Typeface.BOLD);
         if (cheque.isMyCheque()) {
             titleText.setText("To: " + PhoneBookUtil.getContactName(this, cheque.getUser().getPhone()));
         } else {
             titleText.setText("From: " + PhoneBookUtil.getContactName(this, cheque.getUser().getPhone()));
         }
+
+        timeText.setText(TimeUtils.getTimeInWords(cheque.getTimestamp()));
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);

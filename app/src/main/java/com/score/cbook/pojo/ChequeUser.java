@@ -19,6 +19,7 @@ public class ChequeUser extends User implements Parcelable {
     private boolean isAdmin;
     private boolean selected;
     private int unreadSecretCount;
+    private int unreadChequeCount;
 
     public ChequeUser(String id, String username) {
         super(id, username);
@@ -42,6 +43,7 @@ public class ChequeUser extends User implements Parcelable {
         this.isSMSRequester = in.readByte() != 0;
         this.selected = in.readByte() != 0;
         this.unreadSecretCount = in.readInt();
+        this.unreadChequeCount = in.readInt();
     }
 
     /**
@@ -73,6 +75,7 @@ public class ChequeUser extends User implements Parcelable {
         dest.writeByte((byte) (isSMSRequester ? 1 : 0));
         dest.writeByte((byte) (selected ? 1 : 0));
         dest.writeInt(unreadSecretCount);
+        dest.writeInt(unreadChequeCount);
     }
 
     /**
@@ -170,5 +173,13 @@ public class ChequeUser extends User implements Parcelable {
 
     public void setUnreadSecretCount(int unreadSecretCount) {
         this.unreadSecretCount = unreadSecretCount;
+    }
+
+    public int getUnreadChequeCount() {
+        return unreadChequeCount;
+    }
+
+    public void setUnreadChequeCount(int unreadChequeCount) {
+        this.unreadChequeCount = unreadChequeCount;
     }
 }

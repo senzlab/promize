@@ -210,6 +210,8 @@ public class UserSource {
             int isActive = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE));
             int isAdmin = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ADMIN));
             int isSmsRequester = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER));
+            int unreadSecretCount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_UNREAD_SECRET_COUNT));
+            int unreadChequeCount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_UNREAD_CHEQUE_COUNT));
 
             // clear
             cursor.close();
@@ -223,6 +225,8 @@ public class UserSource {
             chequeUser.setAdmin(isAdmin == 1);
             chequeUser.setSMSRequester(isSmsRequester == 1);
             chequeUser.setSessionKey(sessionKey);
+            chequeUser.setUnreadSecretCount(unreadSecretCount);
+            chequeUser.setUnreadChequeCount(unreadChequeCount);
 
             return chequeUser;
         }

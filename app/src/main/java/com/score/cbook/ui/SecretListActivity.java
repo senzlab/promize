@@ -17,7 +17,6 @@ import android.widget.TextView;
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.db.SecretSource;
-import com.score.cbook.db.UserSource;
 import com.score.cbook.enums.CustomerActionType;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.Secret;
@@ -79,6 +78,7 @@ public class SecretListActivity extends BaseActivity implements AdapterView.OnIt
     protected void onResume() {
         super.onResume();
         registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
+        refreshList();
     }
 
     @Override
@@ -160,8 +160,8 @@ public class SecretListActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     private boolean needToRefreshList(Senz senz) {
-        return senz.getSenzType() == SenzTypeEnum.SHARE ||
-                senz.getSenzType() == SenzTypeEnum.DATA && (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("USER_SHARED"));
+        return senz.getSenzType() == SenzTypeEnum.DATA &&
+                ((senz.getAttributes().containsKey("msg") || senz.getAttributes().containsKey("$msg")));
     }
 
     @Override

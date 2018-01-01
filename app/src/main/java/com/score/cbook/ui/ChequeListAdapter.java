@@ -92,7 +92,7 @@ class ChequeListAdapter extends BaseAdapter {
     private void setUpRow(Cheque secret, ViewHolder viewHolder) {
         // set username/name
         viewHolder.sender.setText(PhoneBookUtil.getContactName(context, secret.getUser().getPhone()));
-        viewHolder.message.setText("Rs " + secret.getAmount());
+        viewHolder.message.setText("Rs " + secret.getAmount() + ".00");
 
         if (secret.getTimestamp() != null) {
             viewHolder.sentTime.setText(TimeUtils.getTimeInWords(secret.getTimestamp()));

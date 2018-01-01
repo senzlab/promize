@@ -76,6 +76,7 @@ public class ChequeListActivity extends BaseActivity implements AdapterView.OnIt
     protected void onResume() {
         super.onResume();
         registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
+        refreshList();
     }
 
     @Override
@@ -134,8 +135,7 @@ public class ChequeListActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     private boolean needToRefreshList(Senz senz) {
-        return senz.getSenzType() == SenzTypeEnum.SHARE ||
-                senz.getSenzType() == SenzTypeEnum.DATA && (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("USER_SHARED"));
+        return senz.getSenzType() == SenzTypeEnum.SHARE && senz.getAttributes().containsKey("cimg");
     }
 
     @Override
