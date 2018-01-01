@@ -37,7 +37,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="7dp"
                 android:layout_marginRight="5dp"
-                android:src="@drawable/check_c" />
+                android:src="@drawable/check_c"
+                android:visibility="gone" />
 
         </RelativeLayout>
 
@@ -58,7 +59,6 @@
                     android:gravity="center_vertical"
                     android:paddingBottom="0dp"
                     android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
                     android:paddingTop="0dp">
 
                     <LinearLayout
@@ -86,43 +86,67 @@
                             android:id="@+id/sent_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="5dp"
+                            android:layout_marginRight="10dp"
                             android:text="11:00 AM"
                             android:textColor="@color/android_grey"
                             android:textSize="12sp" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/message"
-                        android:layout_width="fill_parent"
+
+                    <LinearLayout
+                        android:id="@+id/am_holder"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="false"
                         android:layout_alignParentTop="false"
                         android:layout_below="@+id/text_holder"
                         android:layout_centerVertical="true"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:text="2500.00"
-                        android:textSize="18sp" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/message"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:lines="1"
+                            android:text="2500.00"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/deposit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/text_bg3"
+                            android:paddingBottom="3dp"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp"
+                            android:paddingTop="3dp"
+                            android:text="Deposit"
+                            android:textColor="@color/white"
+                            android:textSize="15sp" />
+                    </LinearLayout>
+
 
                     <FrameLayout
+                        android:id="@+id/unread_msg_count"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_alignParentRight="true"
-                        android:id="@+id/unread_msg_count"
-                        android:layout_marginRight="5dp"
-                        android:visibility="gone"
                         android:layout_below="@+id/text_holder"
-                        android:background="@drawable/circle_shape_red">
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/circle_shape_red"
+                        android:visibility="gone">
 
                         <TextView
-                            android:layout_width="match_parent"
                             android:id="@+id/unread_msg_text"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:textSize="12sp"
                             android:text="6"
-                            android:textColor="@color/white" />
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
                     </FrameLayout>
 
                 </RelativeLayout>
@@ -130,8 +154,8 @@
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:visibility="gone"
-                    android:background="@drawable/bottom_border" />
+                    android:background="@drawable/bottom_border"
+                    android:visibility="gone" />
             </LinearLayout>
         </FrameLayout>
 

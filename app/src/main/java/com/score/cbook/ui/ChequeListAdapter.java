@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
+import com.score.cbook.enums.ChequeState;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.utils.ImageUtils;
 import com.score.cbook.utils.PhoneBookUtil;
@@ -71,11 +72,13 @@ class ChequeListAdapter extends BaseAdapter {
             holder.selected = (ImageView) view.findViewById(R.id.selected);
             holder.unreadCount = (FrameLayout) view.findViewById(R.id.unread_msg_count);
             holder.unreadText = (TextView) view.findViewById(R.id.unread_msg_text);
+            holder.depositText = (TextView) view.findViewById(R.id.deposit);
 
             holder.sender.setTypeface(typeface, Typeface.NORMAL);
             holder.message.setTypeface(typeface, Typeface.NORMAL);
             holder.sentTime.setTypeface(typeface, Typeface.NORMAL);
             holder.unreadText.setTypeface(typeface, Typeface.BOLD);
+            holder.depositText.setTypeface(typeface);
 
             view.setTag(holder);
         } else {
@@ -127,6 +130,17 @@ class ChequeListAdapter extends BaseAdapter {
             viewHolder.sentTime.setTextColor(context.getResources().getColor(R.color.android_grey));
             viewHolder.sentTime.setTypeface(typeface, Typeface.NORMAL);
         }
+
+        // set deposit text
+        if (secret.isMyCheque()) {
+            viewHolder.depositText.setVisibility(View.GONE);
+        } else {
+            if (secret.getChequeState() == ChequeState.TRANSFER) {
+                viewHolder.depositText.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.depositText.setVisibility(View.GONE);
+            }
+        }
     }
 
     /**
@@ -140,5 +154,6 @@ class ChequeListAdapter extends BaseAdapter {
         ImageView selected;
         FrameLayout unreadCount;
         TextView unreadText;
+        TextView depositText;
     }
 }
