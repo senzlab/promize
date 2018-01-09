@@ -191,6 +191,8 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
         ActivityUtils.cancelProgressDialog();
 
         cheque.setBlob(chequeImg);
+        Long timestamp = System.currentTimeMillis() / 1000;
+        cheque.setTimestamp(timestamp);
 
         // cheque preview
         Intent intent = new Intent(this, ChequePreviewActivity.class);

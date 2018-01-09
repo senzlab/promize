@@ -78,7 +78,7 @@ class SenzHandler {
 
     private void handleShare(Senz senz, SenzService senzService) {
         // first write AWA to switch
-        senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
+        //senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
 
         if (senz.getAttributes().containsKey("msg") && senz.getAttributes().containsKey("status")) {
             try {
@@ -157,7 +157,7 @@ class SenzHandler {
 
     private void handleData(Senz senz, SenzService senzService) {
         // send AWA back
-        senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
+        //senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
 
         if (senz.getAttributes().containsKey("status")) {
             String status = senz.getAttributes().get("status");

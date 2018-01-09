@@ -36,10 +36,10 @@ public class SenzService extends Service {
 
     private static final String TAG = SenzService.class.getName();
 
-    //public static final String SENZ_HOST = "senz.rahasak.com";
+    //public static final String SENZ_HOST = "www.rahasak.com";
     //public static final String SENZ_HOST = "10.2.2.2";
-    public static final String SENZ_HOST =  "52.77.242.96";
-    public static final String STREAM_HOST = "10.2.2.1";
+    public static final String SENZ_HOST = "54.251.150.217";
+    //public static final String STREAM_HOST = "10.2.2.1";
     public static final int SENZ_PORT = 3000;
     public static final int STREAM_PORT = 9090;
 
@@ -206,7 +206,9 @@ public class SenzService extends Service {
 
                     // get digital signature of the senz
                     String senzPayload = SenzParser.getSenzPayload(senz);
-                    String signature = CryptoUtils.getDigitalSignature(senzPayload.replaceAll(" ", ""), privateKey);
+                    String signature = CryptoUtils.getDigitalSignature(senzPayload, privateKey);
+                    boolean a = CryptoUtils.verifyDigitalSignature(senzPayload, signature, CryptoUtils.getPublicKey(SenzService.this));
+                    Log.d(TAG, "hooooo " + a);
                     String message = SenzParser.getSenzMessage(senzPayload, signature);
                     Log.d(TAG, "Senz to be send: " + message);
 
@@ -232,7 +234,7 @@ public class SenzService extends Service {
 
                         // get digital signature of the senz
                         String senzPayload = SenzParser.getSenzPayload(senz);
-                        String signature = CryptoUtils.getDigitalSignature(senzPayload.replaceAll(" ", ""), privateKey);
+                        String signature = CryptoUtils.getDigitalSignature(senzPayload, privateKey);
 
                         // sends the message to the server
                         String message = SenzParser.getSenzMessage(senzPayload, signature);

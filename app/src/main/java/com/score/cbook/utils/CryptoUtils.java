@@ -122,18 +122,28 @@ public class CryptoUtils {
     }
 
     public static String getDigitalSignature(String payload, PrivateKey privateKey) throws SignatureException, InvalidKeyException, NoSuchAlgorithmException {
+        // reformat payload
+        String fPayload = payload.replaceAll(" ", "")
+                .replaceAll("\n", "")
+                .replaceAll("\r", "")
+                .trim();
         Signature signature = Signature.getInstance("SHA256withRSA");
         signature.initSign(privateKey);
-        signature.update(payload.getBytes());
+        signature.update(fPayload.getBytes());
+
 
         // Base64 encoded string
         return Base64.encodeToString(signature.sign(), Base64.DEFAULT).replaceAll("\n", "").replaceAll("\r", "");
     }
 
     public static boolean verifyDigitalSignature(String payload, String signedPayload, PublicKey publicKey) throws NoSuchAlgorithmException, InvalidKeyException, SignatureException {
+        String fPayload = payload.replaceAll(" ", "")
+                .replaceAll("\n", "")
+                .replaceAll("\r", "")
+                .trim();
         Signature signature = Signature.getInstance("SHA256withRSA");
         signature.initVerify(publicKey);
-        signature.update(payload.getBytes());
+        signature.update(fPayload.getBytes());
 
         byte[] signedPayloadContent = Base64.decode(signedPayload, Base64.DEFAULT);
 
