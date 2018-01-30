@@ -50,10 +50,16 @@ class SenzHandler {
             switch (senz.getSenzType()) {
                 case SHARE:
                     Log.d(TAG, "SHARE received");
+                    // first write AWA to switch
+                    // then handle
+                    senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
                     handleShare(senz, senzService);
                     break;
                 case DATA:
                     Log.d(TAG, "DATA received");
+                    // send AWA back
+                    // then handle
+                    senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
                     handleData(senz, senzService);
                     break;
                 case AWA:
@@ -77,9 +83,6 @@ class SenzHandler {
     }
 
     private void handleShare(Senz senz, SenzService senzService) {
-        // first write AWA to switch
-        //senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
-
         if (senz.getAttributes().containsKey("msg") && senz.getAttributes().containsKey("status")) {
             try {
                 // create user
@@ -156,9 +159,6 @@ class SenzHandler {
     }
 
     private void handleData(Senz senz, SenzService senzService) {
-        // send AWA back
-        //senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
-
         if (senz.getAttributes().containsKey("status")) {
             String status = senz.getAttributes().get("status");
             if (status.equalsIgnoreCase("USER_SHARED")) {

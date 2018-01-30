@@ -183,7 +183,7 @@ public class SecretListActivity extends BaseActivity implements AdapterView.OnIt
                 secretListAdapter.notifyDataSetChanged();
 
                 // delete from db
-                SecretSource.deleteSecret(SecretListActivity.this, secret);
+                SecretSource.deleteSecretsOfUser(SecretListActivity.this, secret.getUser().getUsername());
             }
         });
 

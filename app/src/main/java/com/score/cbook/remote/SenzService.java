@@ -36,11 +36,11 @@ public class SenzService extends Service {
 
     private static final String TAG = SenzService.class.getName();
 
-    //public static final String SENZ_HOST = "www.rahasak.com";
-    //public static final String SENZ_HOST = "10.2.2.2";
-    public static final String SENZ_HOST = "54.251.150.217";
+    public static final String SENZ_HOST = "www.rahasak.com";
+    //public static final String SENZ_HOST = "10.2.2.1";
+    //public static final String SENZ_HOST = "52.77.220.147";
     //public static final String STREAM_HOST = "10.2.2.1";
-    public static final int SENZ_PORT = 3000;
+    public static final int SENZ_PORT = 7070;
     public static final int STREAM_PORT = 9090;
 
     // wake lock to keep
