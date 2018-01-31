@@ -11,21 +11,13 @@ public class SenzApplication extends Application {
 
     private static boolean onChat = false;
 
-    private static String onChatUser = null;
+    private static String chatUser = null;
 
-    private static boolean onCall = false;
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onCreate() {
         super.onCreate();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onTerminate() {
         super.onTerminate();
@@ -39,19 +31,12 @@ public class SenzApplication extends Application {
         SenzApplication.onChat = onChat;
     }
 
-    public static String getOnChatUser() {
-        return onChatUser;
+    public static String getChatUser() {
+        return chatUser;
     }
 
-    public static void setOnChatUser(String onChatUser) {
-        SenzApplication.onChatUser = onChatUser;
+    public static void setChatUser(String chatUser) {
+        SenzApplication.chatUser = chatUser;
     }
 
-    public static boolean isOnCall() {
-        return onCall;
-    }
-
-    public static void setOnCall(boolean onCall) {
-        SenzApplication.onCall = onCall;
-    }
 }

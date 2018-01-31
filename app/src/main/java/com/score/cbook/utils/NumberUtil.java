@@ -2,7 +2,7 @@ package com.score.cbook.utils;
 
 import java.text.DecimalFormat;
 
-public class NumberUtil {
+class NumberUtil {
     private static final String[] tensNames = {
             "",
             " ten",
@@ -57,7 +57,7 @@ public class NumberUtil {
     }
 
 
-    public static String convert(long number) {
+    static String convert(long number) {
         // 0 to 999 999 999 999
         if (number == 0) {
             return "zero";
@@ -83,12 +83,10 @@ public class NumberUtil {
                 tradBillions = "";
                 break;
             case 1:
-                tradBillions = convertLessThanOneThousand(billions)
-                        + " billion ";
+                tradBillions = convertLessThanOneThousand(billions) + " billion ";
                 break;
             default:
-                tradBillions = convertLessThanOneThousand(billions)
-                        + " billion ";
+                tradBillions = convertLessThanOneThousand(billions) + " billion ";
         }
         String result = tradBillions;
 
@@ -98,12 +96,10 @@ public class NumberUtil {
                 tradMillions = "";
                 break;
             case 1:
-                tradMillions = convertLessThanOneThousand(millions)
-                        + " million ";
+                tradMillions = convertLessThanOneThousand(millions) + " million ";
                 break;
             default:
-                tradMillions = convertLessThanOneThousand(millions)
-                        + " million ";
+                tradMillions = convertLessThanOneThousand(millions) + " million ";
         }
         result = result + tradMillions;
 

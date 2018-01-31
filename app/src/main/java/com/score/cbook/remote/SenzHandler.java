@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.score.cbook.R;
+import com.score.cbook.application.SenzApplication;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.db.SecretSource;
 import com.score.cbook.db.UserSource;
@@ -12,6 +14,7 @@ import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
+import com.score.cbook.pojo.Notifcationz;
 import com.score.cbook.pojo.Secret;
 import com.score.cbook.utils.CryptoUtils;
 import com.score.cbook.utils.ImageUtils;
@@ -100,13 +103,13 @@ class SenzHandler {
                 // activate user
                 UserSource.activateUser(senzService.getApplicationContext(), username);
 
-                // notification user
-                String notificationUser = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
-                SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(NotificationUtils.getUserNotification(notificationUser));
-
                 // broadcast send status back
                 broadcastSenz(senz, senzService.getApplicationContext());
                 senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "USER_SHARED"));
+
+                // notification user
+                String notificationUser = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
+                SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(NotificationUtils.getUserNotification(notificationUser));
             } catch (Exception ex) {
                 ex.printStackTrace();
 
@@ -145,16 +148,15 @@ class SenzHandler {
             ImageUtils.saveImg(imgName, senz.getAttributes().get("cimg"));
 
             // broadcast
-            // notification user
             broadcastSenz(senz, senzService.getApplicationContext());
             ChequeUser secretUser = UserSource.getUser(senzService.getApplicationContext(), user.getUsername());
 
-            // show notification
-            String notificationUser = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
-            SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
-                    NotificationUtils.getChequeNotification(notificationUser, "New cheque received", user.getUsername()));
-
             senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "CHEQUE_SHARED"));
+
+            // show notification
+            String title = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
+            Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, title, "New cheque received", user.getUsername());
+            NotificationzHandler.notifyCheque(senzService.getApplicationContext(), notifcationz);
         }
     }
 
@@ -204,17 +206,13 @@ class SenzHandler {
                 senz.getAttributes().put("msg", rahasa);
                 broadcastSenz(senz, senzService.getApplicationContext());
 
-                // notification user
-                String username = senz.getSender().getUsername();
-                ChequeUser chequeUser = UserSource.getUser(senzService.getApplicationContext(), username);
-                String notificationUser = chequeUser.getUsername();
-                if (chequeUser.getPhone() != null && !chequeUser.getPhone().isEmpty()) {
-                    notificationUser = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
+                // show notification when not in chat with senz sender
+                if (!SenzApplication.isOnChat() || !SenzApplication.getChatUser().equalsIgnoreCase(senz.getSender().getUsername())) {
+                    ChequeUser chequeUser = UserSource.getUser(senzService.getApplicationContext(), senz.getSender().getUsername());
+                    String title = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
+                    Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, title, "New message received", senz.getSender().getUsername());
+                    NotificationzHandler.notifyMessage(senzService.getApplicationContext(), notifcationz);
                 }
-
-                // show notification
-                SenzNotificationManager.getInstance(senzService.getApplicationContext()).showNotification(
-                        NotificationUtils.getSecretNotification(notificationUser, username, "New message received"));
             } catch (Exception e) {
                 e.printStackTrace();
             }
