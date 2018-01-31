@@ -65,11 +65,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.score.cbook.ui.DrawerActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
             android:name="com.score.cbook.ui.ChatActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
