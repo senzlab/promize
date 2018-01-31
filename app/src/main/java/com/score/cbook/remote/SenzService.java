@@ -76,7 +76,7 @@ public class SenzService extends Service {
     private BroadcastReceiver smsRequestAcceptReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            SenzNotificationManager.getInstance(SenzService.this).cancelNotification(SenzNotificationManager.SMS_NOTIFICATION_ID, SenzService.this);
+            NotificationzHandler.cancel(context, NotificationzHandler.CUSTOMER_NOTIFICATION_ID);
 
             if (NetworkUtil.isAvailableNetwork(context)) {
                 String phone = intent.getStringExtra("PHONE").trim();
@@ -98,7 +98,7 @@ public class SenzService extends Service {
     private BroadcastReceiver smsRequestRejectReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            SenzNotificationManager.getInstance(SenzService.this).cancelNotification(SenzNotificationManager.SMS_NOTIFICATION_ID, SenzService.this);
+            NotificationzHandler.cancel(context, NotificationzHandler.CUSTOMER_NOTIFICATION_ID);
         }
     };
 

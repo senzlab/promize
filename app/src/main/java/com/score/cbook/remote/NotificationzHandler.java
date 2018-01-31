@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 
 import com.score.cbook.R;
+import com.score.cbook.application.IntentProvider;
 import com.score.cbook.pojo.Notifcationz;
 import com.score.cbook.ui.ChatActivity;
 import com.score.cbook.ui.ChequeListActivity;
@@ -20,7 +21,8 @@ public class NotificationzHandler {
 
     private static final int MESSAGE_NOTIFICATION_ID = 1;
     private static final int CHEQUE_NOTIFICATION_ID = 2;
-    private static final int CUSTOMER_NOTIFICATION_ID = 3;
+    private static final int STATUS_NOTIFICATION_ID = 3;
+    static final int CUSTOMER_NOTIFICATION_ID = 4;
 
     static void notifyMessage(Context context, Notifcationz notifcationz) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -38,7 +40,15 @@ public class NotificationzHandler {
         notificationManager.notify(CHEQUE_NOTIFICATION_ID, notification);
     }
 
-    static void notifiyCustomer(Context context, Notifcationz notifcationz) {
+    static void notifiyStatus(Context context, Notifcationz notifcationz) {
+        Intent intent = new Intent(context, CustomerListActivity.class);
+
+        Notification notification = buildNotification(context, intent, notifcationz);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(STATUS_NOTIFICATION_ID, notification);
+    }
+
+    public static void notifiyCustomer(Context context, Notifcationz notifcationz) {
         Intent intent = new Intent(context, CustomerListActivity.class);
 
         Notification notification = buildNotification(context, intent, notifcationz);
@@ -67,6 +77,25 @@ public class NotificationzHandler {
                 .setContentIntent(pendingIntent)
                 .setSound(Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.eyes))
                 .setLights(Color.GREEN, 500, 7000);
+
+        if (notifcationz.addActions()) {
+            // accept action
+            Intent acceptIntent = new Intent();
+            acceptIntent.setAction(IntentProvider.ACTION_SMS_REQUEST_ACCEPT);
+            acceptIntent.putExtra("PHONE", notifcationz.getSenderPhone());
+            acceptIntent.putExtra("USERNAME", notifcationz.getSender());
+            acceptIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent acceptPendingIntent = PendingIntent.getBroadcast(context, 0, acceptIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            // cancel/dismiss action
+            Intent cancelIntent = new Intent();
+            cancelIntent.setAction(IntentProvider.ACTION_SMS_REQUEST_REJECT);
+            cancelIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(context, 0, cancelIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            builder.addAction(R.drawable.accept, "Accept", acceptPendingIntent);
+            builder.addAction(R.drawable.reject, "Reject", cancelPendingIntent);
+        }
 
         Notification notification = builder.build();
         notification.flags |= Notification.FLAG_AUTO_CANCEL;

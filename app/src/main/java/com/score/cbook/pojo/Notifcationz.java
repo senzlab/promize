@@ -5,6 +5,8 @@ public class Notifcationz {
     private String title;
     private String message;
     private String sender;
+    private String senderPhone;
+    private boolean addActions;
 
     public Notifcationz(int icon, String title, String message, String sender) {
         this.icon = icon;
@@ -43,6 +45,22 @@ public class Notifcationz {
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public String getSenderPhone() {
+        return senderPhone;
+    }
+
+    public void setSenderPhone(String senderPhone) {
+        this.senderPhone = senderPhone;
+    }
+
+    public boolean addActions() {
+        return addActions;
+    }
+
+    public void setAddActions(boolean addActions) {
+        this.addActions = addActions;
     }
 }
 

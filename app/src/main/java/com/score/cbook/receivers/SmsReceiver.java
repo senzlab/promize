@@ -6,13 +6,13 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
-import android.util.Log;
 
+import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.db.UserSource;
 import com.score.cbook.pojo.ChequeUser;
-import com.score.cbook.remote.SenzNotificationManager;
-import com.score.cbook.utils.NotificationUtils;
+import com.score.cbook.pojo.Notifcationz;
+import com.score.cbook.remote.NotificationzHandler;
 import com.score.cbook.utils.PhoneBookUtil;
 
 import java.util.regex.Matcher;
@@ -20,8 +20,6 @@ import java.util.regex.Pattern;
 
 
 public class SmsReceiver extends BroadcastReceiver {
-    private static final String TAG = SmsReceiver.class.getName();
-
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
@@ -39,30 +37,29 @@ public class SmsReceiver extends BroadcastReceiver {
                         smsMessage = SmsMessage.createFromPdu((byte[]) pdus[0]);
                     }
 
-                    if (isMessageFromRahasakApp(smsMessage.getMessageBody())) {
-                        // valid message
-                        if (isMessageConfirm(smsMessage.getMessageBody())) {
+                    if (isMessageFromSenz(smsMessage.getMessageBody())) {
+                        if (isRequestConfirm(smsMessage.getMessageBody())) {
                             initFriendConfirmation(smsMessage, context);
-                        } else if (isMessageRequest(smsMessage.getMessageBody())) {
+                        } else if (isRequest(smsMessage.getMessageBody())) {
                             initFriendRequest(smsMessage, context);
                         }
                     }
-                } catch (Exception e) {
-                    Log.d("Exception caught", e.getMessage());
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         }
     }
 
-    private boolean isMessageFromRahasakApp(String smsMessage) {
+    private boolean isMessageFromSenz(String smsMessage) {
         return smsMessage.toLowerCase().contains("#chequebook");
     }
 
-    private boolean isMessageConfirm(String smsMessage) {
+    private boolean isRequestConfirm(String smsMessage) {
         return smsMessage.toLowerCase().contains("#confirm");
     }
 
-    private boolean isMessageRequest(String smsMessage) {
+    private boolean isRequest(String smsMessage) {
         return smsMessage.toLowerCase().contains("#request");
     }
 
@@ -98,8 +95,12 @@ public class SmsReceiver extends BroadcastReceiver {
         chequeUser.setPubKeyHash(pubKeyHash);
         UserSource.createUser(context, chequeUser);
 
-        // show Notification
-        SenzNotificationManager.getInstance(context.getApplicationContext()).showNotification(NotificationUtils.getSmsNotification(contactName, contactNo, username));
+        // notify
+        String msg = "Would you to add " + contactName + " as cheque book customer?";
+        Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, contactName, msg, username);
+        notifcationz.setSenderPhone(contactNo);
+        notifcationz.setAddActions(true);
+        NotificationzHandler.notifiyCustomer(context, notifcationz);
     }
 
     private void initFriendConfirmation(SmsMessage smsMessage, Context context) {
