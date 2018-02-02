@@ -1,24 +1,18 @@
 package com.score.cbook.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.application.IntentProvider;
-import com.score.cbook.db.UserSource;
-import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.utils.ActivityUtils;
 import com.score.cbook.utils.ImageUtils;
@@ -31,38 +25,22 @@ import com.score.senzc.pojos.User;
 
 import java.util.HashMap;
 
-public class UserProfileActivity extends BaseActivity implements Switch.OnCheckedChangeListener, View.OnClickListener {
+public class UserProfileActivity extends BaseActivity implements View.OnClickListener {
 
     private static final String TAG = UserProfileActivity.class.getName();
 
-    private Switch cameraSwitch;
-    private Switch locationSwitch;
-
-    private FloatingActionButton captureSelfie;
     private ImageView backImageView;
     private ImageView userImageView;
 
-    private TextView info;
-    private TextView camText;
-    private TextView locText;
+    private TextView phone;
+    private TextView phoneV;
+    private TextView account;
+    private TextView accountV;
+    private Button writeCheque;
+    private Button writeMessage;
+    private NestedScrollView scrollView;
 
     private ChequeUser chequeUser;
-    private String selectedPermission;
-
-    private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "Got message from Senz service");
-            Senz senz = intent.getExtras().getParcelable("SENZ");
-            switch (senz.getSenzType()) {
-                case DATA:
-                    handleDataSenz(senz);
-                    break;
-                default:
-                    break;
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +50,6 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
         initUser();
         initUi();
         initToolbar();
-        initPermissions();
     }
 
     @Override
@@ -94,18 +71,6 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
 
             isServiceBound = false;
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (senzReceiver != null) unregisterReceiver(senzReceiver);
     }
 
     @Override
@@ -132,26 +97,35 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
     }
 
     private void initUi() {
-        cameraSwitch = (Switch) findViewById(R.id.perm_camera_switch);
-        locationSwitch = (Switch) findViewById(R.id.perm_location_switch);
-
-        info = (TextView) findViewById(R.id.info);
-        camText = (TextView) findViewById(R.id.perm_cam_text);
-        locText = (TextView) findViewById(R.id.perm_loc_text);
-
-        info.setTypeface(typeface);
-        camText.setTypeface(typeface);
-        locText.setTypeface(typeface);
-
-        captureSelfie = (FloatingActionButton) findViewById(R.id.capture_selfie);
-        captureSelfie.setOnClickListener(this);
+        // text views
+        phone = (TextView) findViewById(R.id.phone);
+        phoneV = (TextView) findViewById(R.id.phonev);
+        account = (TextView) findViewById(R.id.account);
+        accountV = (TextView) findViewById(R.id.accountv);
+        phone.setTypeface(typeface, Typeface.NORMAL);
+        phoneV.setTypeface(typeface, Typeface.NORMAL);
+        account.setTypeface(typeface, Typeface.NORMAL);
+        accountV.setTypeface(typeface, Typeface.NORMAL);
 
         userImageView = (ImageView) findViewById(R.id.clickable_image);
+
+        // user values
+        phoneV.setText(chequeUser.getPhone());
+        accountV.setText(chequeUser.getUsername());
         if (chequeUser.getImage() != null)
             userImageView.setImageBitmap(ImageUtils.decodeBitmap(chequeUser.getImage()));
-    }
 
-    private void initPermissions() {
+        // buttons
+        writeCheque = (Button) findViewById(R.id.write_cheque);
+        writeMessage = (Button) findViewById(R.id.writer_message);
+        writeCheque.setTypeface(typeface, Typeface.BOLD);
+        writeMessage.setTypeface(typeface, Typeface.BOLD);
+        writeCheque.setOnClickListener(this);
+        writeMessage.setOnClickListener(this);
+
+        // scroller view
+        //scrollView = (NestedScrollView) findViewById(R.id.nested_scroll);
+        //scrollView.scrollTo(0, 200);
     }
 
     private void initToolbar() {
@@ -196,103 +170,9 @@ public class UserProfileActivity extends BaseActivity implements Switch.OnChecke
         }
     }
 
-    public void sharePermission(String permName, String permValue) {
-        if (NetworkUtil.isAvailableNetwork(UserProfileActivity.this)) {
-            if (isServiceBound) {
-                // create senz attributes
-                HashMap<String, String> senzAttributes = new HashMap<>();
-                if (permName.equalsIgnoreCase("loc")) {
-                    senzAttributes.put("lat", permValue);
-                    senzAttributes.put("lon", permValue);
-                } else {
-                    senzAttributes.put(permName, permValue);
-                }
-
-                String timestamp = ((Long) (System.currentTimeMillis() / 1000)).toString();
-                senzAttributes.put("time", timestamp);
-                senzAttributes.put("uid", SenzUtils.getUid(this, timestamp));
-
-                // new senz
-                String id = "_ID";
-                String signature = "_SIGNATURE";
-                SenzTypeEnum senzType = SenzTypeEnum.SHARE;
-                Senz senz = new Senz(id, signature, senzType, null, new User(chequeUser.getId(), chequeUser.getUsername()), senzAttributes);
-
-                ActivityUtils.showProgressDialog(this, "Please wait...");
-                send(senz);
-            } else {
-                Toast.makeText(this, "Cannot connect with service", Toast.LENGTH_LONG).show();
-                resetPermission();
-            }
-        } else {
-            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
-            resetPermission();
-        }
-    }
-
-    private void handleDataSenz(Senz senz) {
-        if (senz.getAttributes().containsKey("status")) {
-            if (senz.getAttributes().get("status").equalsIgnoreCase("PERMISSION_SHARED")) {
-                ActivityUtils.cancelProgressDialog();
-
-                updatePermission();
-            } else if (senz.getAttributes().get("status").equalsIgnoreCase("OFFLINE")) {
-                ActivityUtils.cancelProgressDialog();
-                Toast.makeText(this, "User offline", Toast.LENGTH_LONG).show();
-
-                resetPermission();
-            } else if (senz.getAttributes().get("status").equalsIgnoreCase("CAM_BUSY")) {
-                ActivityUtils.cancelProgressDialog();
-
-                // user busy
-                Toast.makeText(this, "User busy", Toast.LENGTH_LONG).show();
-            } else if (senz.getAttributes().get("status").equalsIgnoreCase("CAM_ERROR")) {
-                ActivityUtils.cancelProgressDialog();
-
-                // camera error
-                Toast.makeText(this, "Busy", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
-    private void handleStreamSenz(Senz senz) {
-        if (senz.getSender().getUsername().equalsIgnoreCase(chequeUser.getUsername()) && senz.getAttributes().containsKey("cam")) {
-            ActivityUtils.cancelProgressDialog();
-
-            // save profile picture in db
-            String encodedImage = senz.getAttributes().get("cam");
-            UserSource.updateUser(this, chequeUser.getUsername(), "image", encodedImage);
-
-            // display image
-            userImageView.setImageBitmap(ImageUtils.decodeBitmap(encodedImage));
-        }
-    }
-
-    private void updatePermission() {
-
-    }
-
-    private void resetPermission() {
-    }
-
-    @Override
-    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if (buttonView == cameraSwitch) {
-            if (isChecked) sharePermission("cam", "on");
-            else sharePermission("cam", "off");
-            selectedPermission = "CAM";
-        } else if (buttonView == locationSwitch) {
-            if (isChecked) sharePermission("loc", "on");
-            else sharePermission("loc", "off");
-            selectedPermission = "LOC";
-        }
-    }
-
     @Override
     public void onClick(View v) {
-        if (v == captureSelfie) {
-            getProfilePhoto();
-        } else if (v == backImageView) {
+        if (v == backImageView) {
             finish();
         }
     }

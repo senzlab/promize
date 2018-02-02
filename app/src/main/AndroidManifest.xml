@@ -124,6 +124,10 @@
             android:name=".ui.ChequeListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.UserActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
         <!-- Servicves -->
         <service
             android:name="com.score.cbook.remote.SenzService"
