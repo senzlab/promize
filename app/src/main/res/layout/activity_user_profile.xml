@@ -136,7 +136,7 @@
                     android:id="@+id/writer_message"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="18dp"
                     android:layout_weight="1"
                     android:background="@drawable/rounded_corner_button"
                     android:gravity="center"
@@ -146,5 +146,37 @@
         </FrameLayout>
 
     </android.support.v4.widget.NestedScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/capture_selfie"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/group_write"
+                app:backgroundTint="@color/white" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/capture_selfie1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/capture_selfie"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/group_messages"
+                app:backgroundTint="@color/white" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

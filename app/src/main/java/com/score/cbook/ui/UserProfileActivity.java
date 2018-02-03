@@ -1,29 +1,19 @@
 package com.score.cbook.ui;
 
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.pojo.ChequeUser;
-import com.score.cbook.utils.ActivityUtils;
-import com.score.cbook.utils.ImageUtils;
-import com.score.cbook.utils.NetworkUtil;
 import com.score.cbook.utils.PhoneBookUtil;
-import com.score.cbook.utils.SenzUtils;
-import com.score.senzc.enums.SenzTypeEnum;
-import com.score.senzc.pojos.Senz;
-import com.score.senzc.pojos.User;
-
-import java.util.HashMap;
 
 public class UserProfileActivity extends BaseActivity implements View.OnClickListener {
 
@@ -38,7 +28,6 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     private TextView accountV;
     private Button writeCheque;
     private Button writeMessage;
-    private NestedScrollView scrollView;
 
     private ChequeUser chequeUser;
 
@@ -112,8 +101,11 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         // user values
         phoneV.setText(chequeUser.getPhone());
         accountV.setText(chequeUser.getUsername());
-        if (chequeUser.getImage() != null)
-            userImageView.setImageBitmap(ImageUtils.decodeBitmap(chequeUser.getImage()));
+
+        // contact image
+        Bitmap bmp = PhoneBookUtil.getContactImage(this, chequeUser.getPhone());
+        if (bmp != null)
+            userImageView.setImageBitmap(bmp);
 
         // buttons
         writeCheque = (Button) findViewById(R.id.write_cheque);
@@ -122,10 +114,6 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         writeMessage.setTypeface(typeface, Typeface.BOLD);
         writeCheque.setOnClickListener(this);
         writeMessage.setOnClickListener(this);
-
-        // scroller view
-        //scrollView = (NestedScrollView) findViewById(R.id.nested_scroll);
-        //scrollView.scrollTo(0, 200);
     }
 
     private void initToolbar() {
@@ -142,32 +130,6 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
 
         backImageView = (ImageView) findViewById(R.id.back_btn);
         backImageView.setOnClickListener(this);
-    }
-
-    private void getProfilePhoto() {
-        if (NetworkUtil.isAvailableNetwork(UserProfileActivity.this)) {
-            if (isServiceBound) {
-                // create senz attributes
-                HashMap<String, String> senzAttributes = new HashMap<>();
-                String timestamp = ((Long) (System.currentTimeMillis() / 1000)).toString();
-                senzAttributes.put("time", timestamp);
-                senzAttributes.put("cam", "");
-                senzAttributes.put("uid", SenzUtils.getUid(this, timestamp));
-
-                // new senz
-                String id = "_ID";
-                String signature = "_SIGNATURE";
-                SenzTypeEnum senzType = SenzTypeEnum.GET;
-                Senz senz = new Senz(id, signature, senzType, null, new User(chequeUser.getId(), chequeUser.getUsername()), senzAttributes);
-
-                ActivityUtils.showProgressDialog(this, "Calling selfie...");
-                send(senz);
-            } else {
-                Toast.makeText(this, "Cannot connect with service", Toast.LENGTH_LONG).show();
-            }
-        } else {
-            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override

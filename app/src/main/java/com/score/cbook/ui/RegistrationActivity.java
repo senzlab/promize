@@ -183,7 +183,6 @@ public class RegistrationActivity extends BaseActivity {
         }
     }
 
-
     /**
      * Create register senz
      * Send register senz to senz service via service binder
