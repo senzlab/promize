@@ -26,8 +26,6 @@ import android.widget.Toast;
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.db.ChequeSource;
-import com.score.cbook.enums.ChequeState;
-import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.utils.ActivityUtils;
@@ -198,7 +196,7 @@ public class ChequePreviewActivity extends BaseActivity {
     }
 
     private void sendCheque() {
-        Senz senz = SenzUtils.getShareChequeSenz(this, cheque, cheque.getTimestamp());
+        Senz senz = SenzUtils.shareChequeSenz(this, cheque, cheque.getTimestamp());
         send(senz);
     }
 

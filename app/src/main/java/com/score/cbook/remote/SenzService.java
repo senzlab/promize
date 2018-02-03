@@ -171,12 +171,12 @@ public class SenzService extends Service {
     }
 
     private void ping() {
-        Senz senz = SenzUtils.getRegSenz(SenzService.this);
+        Senz senz = SenzUtils.regSenz(SenzService.this);
         if (senz != null) writeSenz(senz);
     }
 
     private void getPubKey(String username) {
-        Senz senz = SenzUtils.getPubkeySenz(this, username);
+        Senz senz = SenzUtils.pubkeySenz(this, username);
         writeSenz(senz);
     }
 

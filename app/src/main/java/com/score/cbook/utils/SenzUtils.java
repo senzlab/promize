@@ -21,7 +21,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class SenzUtils {
-    public static Senz getRegSenz(Context context) {
+    public static Senz regSenz(Context context) {
         try {
             User user = PreferenceUtils.getUser(context);
 
@@ -48,7 +48,7 @@ public class SenzUtils {
         return null;
     }
 
-    public static Senz getPubkeySenz(Context context, String user) {
+    public static Senz pubkeySenz(Context context, String user) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
 
@@ -67,40 +67,7 @@ public class SenzUtils {
         return senz;
     }
 
-    public static Senz getShareAckSenz(Context context, User user, String statusCode) {
-        // create senz attributes
-        HashMap<String, String> senzAttributes = new HashMap<>();
-        Long timestamp = System.currentTimeMillis() / 1000;
-        senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("uid", getUid(context, timestamp.toString()));
-        senzAttributes.put("status", statusCode);
-
-        // new senz object
-        Senz senz = new Senz();
-        senz.setSenzType(SenzTypeEnum.DATA);
-        senz.setReceiver(user);
-        senz.setAttributes(senzAttributes);
-
-        return senz;
-    }
-
-    public static Senz getAwaSenz(String uid) {
-        // create senz attributes
-        HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put("time", ((Long) (System.currentTimeMillis() / 1000)).toString());
-        senzAttributes.put("uid", uid);
-
-        // new senz object
-        Senz senz = new Senz();
-        senz.setSenzType(SenzTypeEnum.AWA);
-        senz.setReceiver(new User("", SenzService.SWITCH_NAME));
-        senz.setAttributes(senzAttributes);
-
-        return senz;
-    }
-
-
-    public static Senz getShareSenz(Context context, String username, String sessionKey) throws NoSuchAlgorithmException {
+    public static Senz shareAttrSenz(Context context, String username, String sessionKey) throws NoSuchAlgorithmException {
         // create senz attributes
         Long timestamp = (System.currentTimeMillis() / 1000);
         HashMap<String, String> senzAttributes = new HashMap<>();
@@ -121,7 +88,39 @@ public class SenzUtils {
         return senz;
     }
 
-    public static Senz getShareChequeSenz(Context context, Cheque cheque, Long timestamp) {
+    public static Senz statusSenz(Context context, User user, String statusCode) {
+        // create senz attributes
+        HashMap<String, String> senzAttributes = new HashMap<>();
+        Long timestamp = System.currentTimeMillis() / 1000;
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("uid", getUid(context, timestamp.toString()));
+        senzAttributes.put("status", statusCode);
+
+        // new senz object
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.DATA);
+        senz.setReceiver(user);
+        senz.setAttributes(senzAttributes);
+
+        return senz;
+    }
+
+    public static Senz awaSenz(String uid) {
+        // create senz attributes
+        HashMap<String, String> senzAttributes = new HashMap<>();
+        senzAttributes.put("time", ((Long) (System.currentTimeMillis() / 1000)).toString());
+        senzAttributes.put("uid", uid);
+
+        // new senz object
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.AWA);
+        senz.setReceiver(new User("", SenzService.SWITCH_NAME));
+        senz.setAttributes(senzAttributes);
+
+        return senz;
+    }
+
+    public static Senz shareChequeSenz(Context context, Cheque cheque, Long timestamp) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
@@ -141,7 +140,7 @@ public class SenzUtils {
         return senz;
     }
 
-    public static Senz getDepositChequeSenz(Context context, Cheque cheque, Long timestamp) {
+    public static Senz depositChequeSenz(Context context, Cheque cheque, Long timestamp) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
@@ -160,7 +159,7 @@ public class SenzUtils {
         return senz;
     }
 
-    public static Senz getSenzFromCheque(Context context, Cheque cheque) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException, UnsupportedEncodingException {
+    public static Senz senzFromCheque(Context context, Cheque cheque) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException, UnsupportedEncodingException {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
 

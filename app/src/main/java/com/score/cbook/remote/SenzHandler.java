@@ -54,14 +54,14 @@ class SenzHandler {
                     Log.d(TAG, "SHARE received");
                     // first write AWA to switch
                     // then handle
-                    senzService.writeSenz(SenzUtils.getAwaSenz(senz.getAttributes().get("uid")));
+                    senzService.writeSenz(SenzUtils.awaSenz(senz.getAttributes().get("uid")));
                     handleShare(senz, senzService);
                     break;
                 case DATA:
                     Log.d(TAG, "DATA received");
                     // send AWA back
                     // then handle
-                    senzService.writeSenz(SenzUtils.getAwaSenz(senz.getAttributes().get("uid")));
+                    senzService.writeSenz(SenzUtils.awaSenz(senz.getAttributes().get("uid")));
                     handleData(senz, senzService);
                     break;
                 case AWA:
@@ -104,7 +104,7 @@ class SenzHandler {
 
                 // broadcast send status back
                 broadcastSenz(senz, senzService.getApplicationContext());
-                senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "USER_SHARED"));
+                senzService.writeSenz(SenzUtils.statusSenz(senzService.getApplicationContext(), senz.getSender(), "USER_SHARED"));
 
                 // notification
                 String title = PhoneBookUtil.getContactName(senzService, chequeUser.getPhone());
@@ -114,7 +114,7 @@ class SenzHandler {
                 ex.printStackTrace();
 
                 // send error ack
-                senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "USER_SHARE_FAILED"));
+                senzService.writeSenz(SenzUtils.statusSenz(senzService.getApplicationContext(), senz.getSender(), "USER_SHARE_FAILED"));
             }
         } else if (senz.getAttributes().containsKey("$skey")) {
             try {
@@ -124,16 +124,16 @@ class SenzHandler {
                     UserSource.updateUser(senzService.getApplicationContext(), senz.getSender().getUsername(), "session_key", sessionKey);
 
                     broadcastSenz(senz, senzService.getApplicationContext());
-                    senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARED"));
+                    senzService.writeSenz(SenzUtils.statusSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARED"));
                 } else {
                     // means error
-                    senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARE_FAILED"));
+                    senzService.writeSenz(SenzUtils.statusSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARE_FAILED"));
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
 
                 // send error ack
-                senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARE_FAILED"));
+                senzService.writeSenz(SenzUtils.statusSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARE_FAILED"));
             }
         } else if (senz.getAttributes().containsKey("cimg")) {
             // save cheque
@@ -151,7 +151,7 @@ class SenzHandler {
             broadcastSenz(senz, senzService.getApplicationContext());
             ChequeUser secretUser = UserSource.getUser(senzService.getApplicationContext(), user.getUsername());
 
-            senzService.writeSenz(SenzUtils.getShareAckSenz(senzService.getApplicationContext(), senz.getSender(), "CHEQUE_SHARED"));
+            senzService.writeSenz(SenzUtils.statusSenz(senzService.getApplicationContext(), senz.getSender(), "CHEQUE_SHARED"));
 
             // show notification
             String title = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
@@ -234,7 +234,7 @@ class SenzHandler {
                     UserSource.updateUser(senzService.getApplicationContext(), username, "session_key", sessionKey);
 
                     String encryptedSessionKey = CryptoUtils.encryptRSA(CryptoUtils.getPublicKey(pubKey), sessionKey);
-                    senzService.writeSenz(SenzUtils.getShareSenz(senzService.getApplicationContext(), username, encryptedSessionKey));
+                    senzService.writeSenz(SenzUtils.shareAttrSenz(senzService.getApplicationContext(), username, encryptedSessionKey));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
