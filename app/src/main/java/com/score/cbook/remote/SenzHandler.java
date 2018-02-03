@@ -54,14 +54,14 @@ class SenzHandler {
                     Log.d(TAG, "SHARE received");
                     // first write AWA to switch
                     // then handle
-                    senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
+                    senzService.writeSenz(SenzUtils.getAwaSenz(senz.getAttributes().get("uid")));
                     handleShare(senz, senzService);
                     break;
                 case DATA:
                     Log.d(TAG, "DATA received");
                     // send AWA back
                     // then handle
-                    senzService.writeSenz(SenzUtils.getAwaSenz(new User("", "senzswitch"), senz.getAttributes().get("uid")));
+                    senzService.writeSenz(SenzUtils.getAwaSenz(senz.getAttributes().get("uid")));
                     handleData(senz, senzService);
                     break;
                 case AWA:

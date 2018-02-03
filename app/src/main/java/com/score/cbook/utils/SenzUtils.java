@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.pojo.Cheque;
+import com.score.cbook.remote.SenzService;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 import com.score.senzc.pojos.User;
@@ -36,7 +37,7 @@ public class SenzUtils {
             Senz senz = new Senz();
             senz.setSenzType(SenzTypeEnum.SHARE);
             senz.setSender(new User("", user.getUsername()));
-            senz.setReceiver(new User("", "senzswitch"));
+            senz.setReceiver(new User("", SenzService.SWITCH_NAME));
             senz.setAttributes(senzAttributes);
 
             return senz;
@@ -60,7 +61,7 @@ public class SenzUtils {
         // new senz object
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.GET);
-        senz.setReceiver(new User("", "senzswitch"));
+        senz.setReceiver(new User("", SenzService.SWITCH_NAME));
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -83,7 +84,7 @@ public class SenzUtils {
         return senz;
     }
 
-    public static Senz getAwaSenz(User user, String uid) {
+    public static Senz getAwaSenz(String uid) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("time", ((Long) (System.currentTimeMillis() / 1000)).toString());
@@ -92,7 +93,7 @@ public class SenzUtils {
         // new senz object
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.AWA);
-        senz.setReceiver(user);
+        senz.setReceiver(new User("", SenzService.SWITCH_NAME));
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -112,13 +113,50 @@ public class SenzUtils {
         senzAttributes.put("$skey", sessionKey);
 
         // new senz
-        String id = "_ID";
-        String signature = "_SIGNATURE";
-        SenzTypeEnum senzType = SenzTypeEnum.SHARE;
-        User receiver = new User("", username);
-        Senz senz = new Senz(id, signature, senzType, null, receiver, senzAttributes);
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.SHARE);
+        senz.setReceiver(new User("", username));
+        senz.setAttributes(senzAttributes);
 
-        // send to service
+        return senz;
+    }
+
+    public static Senz getShareChequeSenz(Context context, Cheque cheque, Long timestamp) {
+        // create senz attributes
+        HashMap<String, String> senzAttributes = new HashMap<>();
+        senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
+        senzAttributes.put("cdate", cheque.getDate());
+        senzAttributes.put("cbnk", "sampath");
+        senzAttributes.put("cimg", cheque.getBlob());
+        senzAttributes.put("to", cheque.getUser().getUsername());
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("uid", SenzUtils.getUid(context, timestamp.toString()));
+
+        // new senz
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.SHARE);
+        senz.setReceiver(new User("", SenzService.SAMPATH_CHAIN_SENZIE_NAME));
+        senz.setAttributes(senzAttributes);
+
+        return senz;
+    }
+
+    public static Senz getDepositChequeSenz(Context context, Cheque cheque, Long timestamp) {
+        // create senz attributes
+        HashMap<String, String> senzAttributes = new HashMap<>();
+        senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
+        senzAttributes.put("cbnk", "sampath");
+        senzAttributes.put("to", "sampath");
+        senzAttributes.put("cid", cheque.getCid());
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("uid", SenzUtils.getUid(context, timestamp.toString()));
+
+        // new senz
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.SHARE);
+        senz.setReceiver(new User("", SenzService.SAMPATH_CHAIN_SENZIE_NAME));
+        senz.setAttributes(senzAttributes);
+
         return senz;
     }
 
@@ -145,49 +183,6 @@ public class SenzUtils {
         senz.setReceiver(new User("", cheque.getUser().getUsername()));
         senz.setAttributes(senzAttributes);
 
-        return senz;
-    }
-
-    public static Senz getShareChequeSenz(Context context, Cheque cheque, Long timestamp) {
-        // create senz attributes
-        HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
-        senzAttributes.put("cdate", cheque.getDate());
-        senzAttributes.put("cbnk", "sampath");
-        senzAttributes.put("cimg", cheque.getBlob());
-        senzAttributes.put("to", cheque.getUser().getUsername());
-        senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("uid", SenzUtils.getUid(context, timestamp.toString()));
-
-        // new senz
-        String id = "_ID";
-        String signature = "_SIGNATURE";
-        SenzTypeEnum senzType = SenzTypeEnum.SHARE;
-        User receiver = new User("", "sampath");
-        Senz senz = new Senz(id, signature, senzType, null, receiver, senzAttributes);
-
-        // send to service
-        return senz;
-    }
-
-    public static Senz getDepositChequeSenz(Context context, Cheque cheque, Long timestamp) {
-        // create senz attributes
-        HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
-        senzAttributes.put("cbnk", "sampath");
-        senzAttributes.put("to", "sampath");
-        senzAttributes.put("cid", cheque.getCid());
-        senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("uid", SenzUtils.getUid(context, timestamp.toString()));
-
-        // new senz
-        String id = "_ID";
-        String signature = "_SIGNATURE";
-        SenzTypeEnum senzType = SenzTypeEnum.SHARE;
-        User receiver = new User("", "sampath");
-        Senz senz = new Senz(id, signature, senzType, null, receiver, senzAttributes);
-
-        // send to service
         return senz;
     }
 
