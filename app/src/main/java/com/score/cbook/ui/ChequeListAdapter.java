@@ -13,9 +13,9 @@ import android.widget.TextView;
 import com.score.cbook.R;
 import com.score.cbook.enums.ChequeState;
 import com.score.cbook.pojo.Cheque;
-import com.score.cbook.utils.ImageUtils;
-import com.score.cbook.utils.PhoneBookUtil;
-import com.score.cbook.utils.TimeUtils;
+import com.score.cbook.util.ImageUtil;
+import com.score.cbook.util.PhoneBookUtil;
+import com.score.cbook.util.TimeUtil;
 
 import java.util.ArrayList;
 
@@ -95,11 +95,11 @@ class ChequeListAdapter extends BaseAdapter {
         viewHolder.message.setText("Rs " + secret.getAmount() + ".00");
 
         if (secret.getTimestamp() != null) {
-            viewHolder.sentTime.setText(TimeUtils.getTimeInWords(secret.getTimestamp()));
+            viewHolder.sentTime.setText(TimeUtil.getTimeInWords(secret.getTimestamp()));
         }
 
         if (secret.getUser().getImage() != null) {
-            viewHolder.userImage.setImageBitmap(ImageUtils.decodeBitmap(secret.getUser().getImage()));
+            viewHolder.userImage.setImageBitmap(ImageUtil.decodeBitmap(secret.getUser().getImage()));
         } else {
             viewHolder.userImage.setImageResource(R.drawable.df_user);
         }

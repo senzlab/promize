@@ -1,4 +1,4 @@
-package com.score.cbook.utils;
+package com.score.cbook.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,7 +12,7 @@ import com.score.senzc.pojos.User;
  *
  * @author erangaeb@gmail.com (eranga herath)
  */
-public class PreferenceUtils {
+public class PreferenceUtil {
 
     /**
      * Save user credentials in shared preference

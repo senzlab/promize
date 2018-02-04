@@ -12,8 +12,8 @@ import com.score.cbook.R;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.exceptions.PasswordMisMatchException;
-import com.score.cbook.utils.ActivityUtils;
-import com.score.cbook.utils.PreferenceUtils;
+import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.PreferenceUtil;
 
 /**
  * Activity class that handles login
@@ -60,7 +60,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void initCredentials() {
         try {
             // saved credentials
-            String acc = PreferenceUtils.getUser(this).getUsername();
+            String acc = PreferenceUtil.getUser(this).getUsername();
             editTextAccount.setText(acc);
         } catch (NoUserException e) {
             e.printStackTrace();
@@ -81,16 +81,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * login button action,
      */
     private void onClickLogin() {
-        ActivityUtils.hideSoftKeyboard(this);
+        ActivityUtil.hideSoftKeyboard(this);
 
         try {
             // saved credentials
-            String acc = PreferenceUtils.getUser(this).getUsername();
-            String pwd = PreferenceUtils.getPassword(this);
+            String acc = PreferenceUtil.getUser(this).getUsername();
+            String pwd = PreferenceUtil.getPassword(this);
 
             // given credentials
             String password = editTextPassword.getText().toString().trim();
-            ActivityUtils.isValidLoginFields(acc, password, acc, pwd);
+            ActivityUtil.isValidLoginFields(acc, password, acc, pwd);
             navigateToHome();
             Toast.makeText(this, "Login success", Toast.LENGTH_LONG).show();
         } catch (NoUserException e) {

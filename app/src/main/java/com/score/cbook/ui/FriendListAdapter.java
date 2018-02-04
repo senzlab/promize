@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.score.cbook.R;
 import com.score.cbook.pojo.ChequeUser;
-import com.score.cbook.utils.ImageUtils;
-import com.score.cbook.utils.PhoneBookUtil;
+import com.score.cbook.util.ImageUtil;
+import com.score.cbook.util.PhoneBookUtil;
 
 import java.util.ArrayList;
 
@@ -75,7 +75,7 @@ class FriendListAdapter extends ArrayAdapter<ChequeUser> {
 
         // extracting user image
         if (chequeUser.getImage() != null) {
-            viewHolder.userImageView.setImageBitmap(ImageUtils.decodeBitmap(chequeUser.getImage()));
+            viewHolder.userImageView.setImageBitmap(ImageUtil.decodeBitmap(chequeUser.getImage()));
         } else {
             viewHolder.userImageView.setImageResource(R.drawable.df_user);
         }

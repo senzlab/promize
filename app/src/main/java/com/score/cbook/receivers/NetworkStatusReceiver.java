@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.score.cbook.remote.SenzService;
-import com.score.cbook.utils.NetworkUtil;
+import com.score.cbook.util.NetworkUtil;
 
 public class NetworkStatusReceiver extends BroadcastReceiver {
     private static final String TAG = NetworkStatusReceiver.class.getName();

@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 
 import com.score.cbook.interfaces.ICheckImageGeneratorListener;
 import com.score.cbook.pojo.Cheque;
-import com.score.cbook.utils.ImageUtils;
+import com.score.cbook.util.ImageUtil;
 
 public class CheckImageGenerator extends AsyncTask<Cheque, String, String> {
 
@@ -32,13 +32,13 @@ public class CheckImageGenerator extends AsyncTask<Cheque, String, String> {
 
     private String generateImg(Cheque cheque) {
         // add text
-        Bitmap chqImg = ImageUtils.loadImg(context, "echq.jpg");
-        Bitmap stChq = ImageUtils.addText(chqImg, cheque.getAmount(), cheque.getUser().getUsername(), cheque.getDate());
+        Bitmap chqImg = ImageUtil.loadImg(context, "echq.jpg");
+        Bitmap stChq = ImageUtil.addText(chqImg, cheque.getAmount(), cheque.getUser().getUsername(), cheque.getDate());
 
         // compress
-        byte[] bytes = ImageUtils.bmpToBytes(stChq);
-        byte[] compBytes = ImageUtils.compressImage(bytes, true);
+        byte[] bytes = ImageUtil.bmpToBytes(stChq);
+        byte[] compBytes = ImageUtil.compressImage(bytes, true);
 
-        return ImageUtils.encodeBitmap(compBytes);
+        return ImageUtil.encodeBitmap(compBytes);
     }
 }

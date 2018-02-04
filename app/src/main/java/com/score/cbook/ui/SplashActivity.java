@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.score.cbook.R;
 import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.remote.SenzService;
-import com.score.cbook.utils.PreferenceUtils;
+import com.score.cbook.util.PreferenceUtil;
 
 /**
  * Splash activity, send login query from here
@@ -48,7 +48,7 @@ public class SplashActivity extends BaseActivity {
         // determine where to go
         // start service
         try {
-            PreferenceUtils.getUser(this);
+            PreferenceUtil.getUser(this);
 
             // have user, so move to home
             navigateToHome();

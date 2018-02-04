@@ -14,7 +14,7 @@ import com.score.cbook.enums.CustomerActionType;
 import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.pojo.Secret;
-import com.score.cbook.utils.SenzUtils;
+import com.score.cbook.util.SenzUtil;
 
 public class DashBoardActivity extends BaseActivity {
 
@@ -120,7 +120,7 @@ public class DashBoardActivity extends BaseActivity {
                     secret.setUser(chequeUser);
                     Long timestamp = System.currentTimeMillis() / 1000;
                     secret.setTimeStamp(timestamp);
-                    secret.setId(SenzUtils.getUid(DashBoardActivity.this, timestamp.toString()));
+                    secret.setId(SenzUtil.getUid(DashBoardActivity.this, timestamp.toString()));
                     secret.setDeliveryState(DeliveryState.NONE);
 
                     SecretSource.createSecret(DashBoardActivity.this, secret);

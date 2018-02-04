@@ -19,8 +19,8 @@ import com.score.cbook.enums.BlobType;
 import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.pojo.Secret;
-import com.score.cbook.utils.LimitedList;
-import com.score.cbook.utils.TimeUtils;
+import com.score.cbook.util.LimitedList;
+import com.score.cbook.util.TimeUtil;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -201,7 +201,7 @@ class ChatListAdapter extends BaseAdapter {
         }
 
         if (secret.getTimeStamp() != null) {
-            holder.chatTime.setText(TimeUtils.getTimeInWords(secret.getTimeStamp()));
+            holder.chatTime.setText(TimeUtil.getTimeInWords(secret.getTimeStamp()));
         }
 
         // disable status panel if secret time is aligned(in range of 5 mins) with previous secret

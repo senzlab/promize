@@ -28,9 +28,9 @@ import com.score.cbook.application.IntentProvider;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.Cheque;
-import com.score.cbook.utils.ActivityUtils;
-import com.score.cbook.utils.ImageUtils;
-import com.score.cbook.utils.SenzUtils;
+import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.ImageUtil;
+import com.score.cbook.util.SenzUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
@@ -110,7 +110,7 @@ public class ChequePreviewActivity extends BaseActivity {
         this.cheque = getIntent().getParcelableExtra("CHEQUE");
 
         // load cheque on layout
-        Bitmap cChq = ImageUtils.decodeBitmap(cheque.getBlob());
+        Bitmap cChq = ImageUtil.decodeBitmap(cheque.getBlob());
         chqueImg.setImageBitmap(cChq);
     }
 
@@ -127,7 +127,7 @@ public class ChequePreviewActivity extends BaseActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.showProgressDialog(ChequePreviewActivity.this, "Sending...");
+                ActivityUtil.showProgressDialog(ChequePreviewActivity.this, "Sending...");
                 Long timestamp = System.currentTimeMillis() / 1000;
                 cheque.setTimestamp(timestamp);
                 signCheque();
@@ -147,7 +147,7 @@ public class ChequePreviewActivity extends BaseActivity {
         if (senz.getSenzType() == SenzTypeEnum.DATA) {
             if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
                 // share success
-                ActivityUtils.cancelProgressDialog();
+                ActivityUtil.cancelProgressDialog();
 
                 // save cheque
                 saveCheque();
@@ -169,23 +169,23 @@ public class ChequePreviewActivity extends BaseActivity {
         signatureView.draw(canvas);
 
         // add signature to cheque
-        Bitmap chq = ImageUtils.decodeBitmap(cheque.getBlob());
-        Bitmap sChq = ImageUtils.addSign(chq, sig);
+        Bitmap chq = ImageUtil.decodeBitmap(cheque.getBlob());
+        Bitmap sChq = ImageUtil.addSign(chq, sig);
 
         // compress
         // set cheque
-        byte[] bytes = ImageUtils.bmpToBytes(sChq);
-        byte[] compBytes = ImageUtils.compressImage(bytes, false);
+        byte[] bytes = ImageUtil.bmpToBytes(sChq);
+        byte[] compBytes = ImageUtil.compressImage(bytes, false);
         cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
     }
 
     private void saveCheque() {
         try {
-            String uid = SenzUtils.getUid(this, cheque.getTimestamp().toString());
+            String uid = SenzUtil.getUid(this, cheque.getTimestamp().toString());
 
             // save img in sdcard
             String imgName = uid + ".jpg";
-            ImageUtils.saveImg(imgName, cheque.getBlob());
+            ImageUtil.saveImg(imgName, cheque.getBlob());
 
             // create secret
             cheque.setUid(uid);
@@ -196,7 +196,7 @@ public class ChequePreviewActivity extends BaseActivity {
     }
 
     private void sendCheque() {
-        Senz senz = SenzUtils.transferChequeSenz(this, cheque, cheque.getTimestamp());
+        Senz senz = SenzUtil.transferChequeSenz(this, cheque, cheque.getTimestamp());
         send(senz);
     }
 

@@ -1,10 +1,10 @@
-package com.score.cbook.utils;
+package com.score.cbook.util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class TimeUtils {
+public class TimeUtil {
     private static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
     private static SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("hh:mm a");
     private static SimpleDateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyy/MM/dd hh:mm a");

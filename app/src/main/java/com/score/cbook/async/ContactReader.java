@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 
 import com.score.cbook.interfaces.IContactReaderListener;
 import com.score.cbook.pojo.Contact;
-import com.score.cbook.utils.PhoneBookUtil;
+import com.score.cbook.util.PhoneBookUtil;
 
 import java.util.ArrayList;
 

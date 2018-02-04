@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.score.cbook.enums.BlobType;
 import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.Secret;
-import com.score.cbook.utils.TimeUtils;
+import com.score.cbook.util.TimeUtil;
 
 import java.util.ArrayList;
 
@@ -90,7 +90,7 @@ public class SecretSource {
                 String uid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_UNIQUE_ID));
                 long time = cursor.getLong(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_TIMESTAMP));
                 boolean mySecret = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.Secret.COLUMN_NAME_MY_SECRET)) == 1;
-                if ((secret.isMySecret() == mySecret) && TimeUtils.isInOrder(time, secret.getTimeStamp())) {
+                if ((secret.isMySecret() == mySecret) && TimeUtil.isInOrder(time, secret.getTimeStamp())) {
                     // secret is inline, viewed true
                     ContentValues values = new ContentValues();
                     values.put(SenzorsDbContract.Secret.COLUMN_NAME_IN_ORDER, 1);

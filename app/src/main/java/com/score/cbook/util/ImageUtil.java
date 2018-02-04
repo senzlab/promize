@@ -1,4 +1,4 @@
-package com.score.cbook.utils;
+package com.score.cbook.util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,7 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ImageUtils {
+public class ImageUtil {
 
     public static byte[] compressImage(byte[] data, boolean rotate) {
         Bitmap scaledBitmap = null;

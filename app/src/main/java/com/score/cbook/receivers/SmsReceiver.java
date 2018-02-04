@@ -13,7 +13,7 @@ import com.score.cbook.db.UserSource;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.pojo.Notifcationz;
 import com.score.cbook.remote.NotificationzHandler;
-import com.score.cbook.utils.PhoneBookUtil;
+import com.score.cbook.util.PhoneBookUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

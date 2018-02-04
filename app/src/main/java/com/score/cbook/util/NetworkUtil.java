@@ -1,4 +1,4 @@
-package com.score.cbook.utils;
+package com.score.cbook.util;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

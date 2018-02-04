@@ -20,10 +20,10 @@ import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.Cheque;
-import com.score.cbook.utils.ActivityUtils;
-import com.score.cbook.utils.PhoneBookUtil;
-import com.score.cbook.utils.SenzUtils;
-import com.score.cbook.utils.TimeUtils;
+import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.PhoneBookUtil;
+import com.score.cbook.util.SenzUtil;
+import com.score.cbook.util.TimeUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
@@ -128,10 +128,10 @@ public class ViewChequeActivity extends BaseActivity {
         deposit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.showProgressDialog(ViewChequeActivity.this, "Depositing...");
+                ActivityUtil.showProgressDialog(ViewChequeActivity.this, "Depositing...");
 
                 Long timestamp = System.currentTimeMillis() / 1000;
-                Senz senz = SenzUtils.depositChequeSenz(ViewChequeActivity.this, cheque, timestamp);
+                Senz senz = SenzUtil.depositChequeSenz(ViewChequeActivity.this, cheque, timestamp);
                 send(senz);
             }
         });
@@ -148,7 +148,7 @@ public class ViewChequeActivity extends BaseActivity {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.hideSoftKeyboard(ViewChequeActivity.this);
+                ActivityUtil.hideSoftKeyboard(ViewChequeActivity.this);
 
                 // cheque preview
                 Intent intent = new Intent(ViewChequeActivity.this, ChequePActivity.class);
@@ -204,7 +204,7 @@ public class ViewChequeActivity extends BaseActivity {
             titleText.setText("From: " + PhoneBookUtil.getContactName(this, cheque.getUser().getPhone()));
         }
 
-        timeText.setText(TimeUtils.getTimeInWords(cheque.getTimestamp()));
+        timeText.setText(TimeUtil.getTimeInWords(cheque.getTimestamp()));
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);
@@ -227,7 +227,7 @@ public class ViewChequeActivity extends BaseActivity {
         if (senz.getSenzType() == SenzTypeEnum.DATA) {
             if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
                 // share success
-                ActivityUtils.cancelProgressDialog();
+                ActivityUtil.cancelProgressDialog();
                 Toast.makeText(ViewChequeActivity.this, "Deposit success", Toast.LENGTH_LONG).show();
                 ViewChequeActivity.this.finish();
 

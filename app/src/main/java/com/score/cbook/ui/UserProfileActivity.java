@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.score.cbook.R;
 import com.score.cbook.pojo.ChequeUser;
-import com.score.cbook.utils.PhoneBookUtil;
+import com.score.cbook.util.PhoneBookUtil;
 
 public class UserProfileActivity extends BaseActivity implements View.OnClickListener {
 

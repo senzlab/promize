@@ -32,14 +32,14 @@ import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.pojo.Secret;
-import com.score.cbook.utils.ActivityUtils;
-import com.score.cbook.utils.CryptoUtils;
-import com.score.cbook.utils.ImageUtils;
-import com.score.cbook.utils.LimitedList;
-import com.score.cbook.utils.NetworkUtil;
-import com.score.cbook.utils.PhoneBookUtil;
-import com.score.cbook.utils.SenzUtils;
-import com.score.cbook.utils.TimeUtils;
+import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.CryptoUtil;
+import com.score.cbook.util.ImageUtil;
+import com.score.cbook.util.LimitedList;
+import com.score.cbook.util.NetworkUtil;
+import com.score.cbook.util.PhoneBookUtil;
+import com.score.cbook.util.SenzUtil;
+import com.score.cbook.util.TimeUtil;
 import com.score.senz.ISenzService;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
@@ -278,7 +278,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             profileBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_sampath));
         } else {
             if (chequeUser.getImage() != null)
-                profileBtn.setImageBitmap(ImageUtils.decodeBitmap(chequeUser.getImage()));
+                profileBtn.setImageBitmap(ImageUtil.decodeBitmap(chequeUser.getImage()));
         }
     }
 
@@ -314,7 +314,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private void addSecret(Secret secret) {
         // visible/hide previous chat status according to time diff
         Secret preSecret = secretList.getYongest();
-        if (preSecret != null && preSecret.isMySecret() == secret.isMySecret() && TimeUtils.isInOrder(preSecret.getTimeStamp(), secret.getTimeStamp())) {
+        if (preSecret != null && preSecret.isMySecret() == secret.isMySecret() && TimeUtil.isInOrder(preSecret.getTimeStamp(), secret.getTimeStamp())) {
             // time diff less than 1 min, so hide status of previous chat
             preSecret.setInOrder(true);
         }
@@ -347,8 +347,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        if (ActivityUtils.isVisible(id, listView)) {
-            View wantedView = ActivityUtils.getViewByPosition(id, listView);
+        if (ActivityUtil.isVisible(id, listView)) {
+            View wantedView = ActivityUtil.getViewByPosition(id, listView);
             wantedView.startAnimation(animation);
         } else {
             secretList.remove(id);
@@ -361,7 +361,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         // delete from sdcard
         if (secret.getBlobType() == BlobType.IMAGE) {
             String name = secret.getId() + ".jpg";
-            ImageUtils.deleteImg(name);
+            ImageUtil.deleteImg(name);
         }
     }
 
@@ -390,7 +390,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             secret.setMySecret(true);
             Long timestamp = System.currentTimeMillis() / 1000;
             secret.setTimeStamp(timestamp);
-            secret.setId(SenzUtils.getUid(this, timestamp.toString()));
+            secret.setId(SenzUtil.getUid(this, timestamp.toString()));
             secret.setDeliveryState(DeliveryState.PENDING);
 
             // send secret
@@ -410,7 +410,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
             // encrypt msg
             if (chequeUser.getSessionKey() != null && !chequeUser.getSessionKey().isEmpty()) {
-                senzAttributes.put("$msg", CryptoUtils.encryptECB(CryptoUtils.getSecretKey(chequeUser.getSessionKey()), secret.getBlob()));
+                senzAttributes.put("$msg", CryptoUtil.encryptECB(CryptoUtil.getSecretKey(chequeUser.getSessionKey()), secret.getBlob()));
             } else {
                 senzAttributes.put("msg", URLEncoder.encode(secret.getBlob(), "UTF-8"));
             }
@@ -467,13 +467,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 if (isServiceBound) {
                     senzService.send(senz);
                 } else {
-                    ActivityUtils.showCustomToast("Failed to connected to service.", this);
+                    ActivityUtil.showCustomToast("Failed to connected to service.", this);
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         } else {
-            ActivityUtils.showCustomToast(getResources().getString(R.string.no_internet), this);
+            ActivityUtil.showCustomToast(getResources().getString(R.string.no_internet), this);
         }
     }
 

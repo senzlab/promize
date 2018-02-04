@@ -26,9 +26,9 @@ import com.score.cbook.db.UserSource;
 import com.score.cbook.enums.CustomerActionType;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.ChequeUser;
-import com.score.cbook.utils.ActivityUtils;
-import com.score.cbook.utils.NetworkUtil;
-import com.score.cbook.utils.PhoneBookUtil;
+import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.NetworkUtil;
+import com.score.cbook.util.PhoneBookUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
@@ -247,7 +247,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         } else {
             if (chequeUser.isSMSRequester()) {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
-                ActivityUtils.displayConfirmationMessageDialog("Confirm", "Would you like to resend request to " + contactName + "?", CustomerListActivity.this, typeface, new View.OnClickListener() {
+                ActivityUtil.displayConfirmationMessageDialog("Confirm", "Would you like to resend request to " + contactName + "?", CustomerListActivity.this, typeface, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // start sharing again
@@ -256,7 +256,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                         intent.putExtra("USERNAME", chequeUser.getUsername());
                         intent.putExtra("PHONE", chequeUser.getPhone());
                         sendBroadcast(intent);
-                        ActivityUtils.showCustomToast("Request sent", CustomerListActivity.this);
+                        ActivityUtil.showCustomToast("Request sent", CustomerListActivity.this);
                     }
                 });
             } else {
@@ -271,9 +271,9 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                             intent.putExtra("USERNAME", chequeUser.getUsername());
                             intent.putExtra("PHONE", chequeUser.getPhone());
                             sendBroadcast(intent);
-                            ActivityUtils.showCustomToast("Confirmation sent", CustomerListActivity.this);
+                            ActivityUtil.showCustomToast("Confirmation sent", CustomerListActivity.this);
                         } else {
-                            ActivityUtils.showCustomToastShort("No network connection", CustomerListActivity.this);
+                            ActivityUtil.showCustomToastShort("No network connection", CustomerListActivity.this);
                         }
                     }
                 });

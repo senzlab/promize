@@ -1,4 +1,4 @@
-package com.score.cbook.utils;
+package com.score.cbook.util;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -29,7 +29,7 @@ import com.score.cbook.exceptions.PasswordMisMatchException;
  *
  * @author erangaeb@gmail.com (eranga herath)
  */
-public class ActivityUtils {
+public class ActivityUtil {
 
     private static ProgressDialog progressDialog;
 

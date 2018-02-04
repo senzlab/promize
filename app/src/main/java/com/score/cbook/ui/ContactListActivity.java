@@ -22,9 +22,9 @@ import com.score.cbook.db.UserSource;
 import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.interfaces.IContactReaderListener;
 import com.score.cbook.pojo.Contact;
-import com.score.cbook.utils.ActivityUtils;
-import com.score.cbook.utils.NetworkUtil;
-import com.score.cbook.utils.PreferenceUtils;
+import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.NetworkUtil;
+import com.score.cbook.util.PreferenceUtil;
 
 import java.util.ArrayList;
 
@@ -113,7 +113,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
     }
 
     private void fetchContacts() {
-        ActivityUtils.showProgressDialog(this, "Loading...");
+        ActivityUtil.showProgressDialog(this, "Loading...");
 
         ContactReader contactReader = new ContactReader(this, this);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -128,7 +128,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
         if (!UserSource.isExistingUserWithPhoneNo(this, contact.getPhoneNo())) {
             String confirmationMessage = "<font size=10>Are you sure you want to add customer </font> <font color=#F37920>" + "<b>" + contact.getName() + "</b>" + "</font> (" + contact.getPhoneNo() + ")?";
             try {
-                final String username = PreferenceUtils.getUser(this).getUsername();
+                final String username = PreferenceUtil.getUser(this).getUsername();
                 displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -136,9 +136,9 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
                             String message = "#ChequeBook #request\nI'm using sampath bank digital cheque book app, #username " + username + " #code 41r33";
                             sendSMS(contact.getPhoneNo(), message);
 
-                            ActivityUtils.showCustomToastShort("Request sent via SMS", ContactListActivity.this);
+                            ActivityUtil.showCustomToastShort("Request sent via SMS", ContactListActivity.this);
                         } else {
-                            ActivityUtils.showCustomToastShort("No network connection", ContactListActivity.this);
+                            ActivityUtil.showCustomToastShort("No network connection", ContactListActivity.this);
                         }
                     }
                 });
@@ -146,7 +146,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
                 ex.printStackTrace();
             }
         } else {
-            ActivityUtils.showCustomToastShort("This user already added in you secret contact list", this);
+            ActivityUtil.showCustomToastShort("This user already added in you secret contact list", this);
         }
     }
 
@@ -158,7 +158,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
 
     @Override
     public void onPostRead(ArrayList<Contact> contactList) {
-        ActivityUtils.cancelProgressDialog();
+        ActivityUtil.cancelProgressDialog();
         initContactList(contactList);
     }
 }

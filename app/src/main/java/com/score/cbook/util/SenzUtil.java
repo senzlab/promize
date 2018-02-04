@@ -1,4 +1,4 @@
-package com.score.cbook.utils;
+package com.score.cbook.util;
 
 import android.content.Context;
 
@@ -20,7 +20,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-public class SenzUtils {
+public class SenzUtil {
     public static Senz regSenz(Context context, User sender) {
         // create create senz
         HashMap<String, String> senzAttributes = new HashMap<>();
@@ -28,7 +28,7 @@ public class SenzUtils {
         Long timestamp = System.currentTimeMillis() / 1000;
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", getUid(context, timestamp.toString()));
-        senzAttributes.put("pubkey", PreferenceUtils.getRsaKey(context, CryptoUtils.PUBLIC_KEY));
+        senzAttributes.put("pubkey", PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY));
 
         // new senz
         Senz senz = new Senz();
@@ -85,7 +85,7 @@ public class SenzUtils {
         senzAttributes.put("msg", "");
         senzAttributes.put("status", "");
         senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("uid", SenzUtils.getUid(context, timestamp.toString()));
+        senzAttributes.put("uid", SenzUtil.getUid(context, timestamp.toString()));
 
         // put session key
         senzAttributes.put("$skey", sessionKey);
@@ -140,7 +140,7 @@ public class SenzUtils {
         senzAttributes.put("cimg", cheque.getBlob());
         senzAttributes.put("to", cheque.getUser().getUsername());
         senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("uid", SenzUtils.getUid(context, timestamp.toString()));
+        senzAttributes.put("uid", SenzUtil.getUid(context, timestamp.toString()));
 
         // new senz
         Senz senz = new Senz();
@@ -159,7 +159,7 @@ public class SenzUtils {
         senzAttributes.put("to", SenzService.SAMPATH_CHAIN_SENZIE_NAME);
         senzAttributes.put("cid", cheque.getCid());
         senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("uid", SenzUtils.getUid(context, timestamp.toString()));
+        senzAttributes.put("uid", SenzUtil.getUid(context, timestamp.toString()));
 
         // new senz
         Senz senz = new Senz();
@@ -177,12 +177,12 @@ public class SenzUtils {
         // TODO set new timestamp and uid
         // TODO update them in db
         //Long timestamp = (System.currentTimeMillis() / 1000);
-        //String uid = SenzUtils.getUid(context, timestamp.toString());
+        //String uid = SenzUtil.getUid(context, timestamp.toString());
         senzAttributes.put("time", cheque.getTimestamp().toString());
         senzAttributes.put("uid", cheque.getUid());
         senzAttributes.put("user", cheque.getUser().getUsername());
         if (cheque.getUser().getSessionKey() != null && !cheque.getUser().getSessionKey().isEmpty()) {
-            senzAttributes.put("$msg", CryptoUtils.encryptECB(CryptoUtils.getSecretKey(cheque.getUser().getSessionKey()), cheque.getBlob()));
+            senzAttributes.put("$msg", CryptoUtil.encryptECB(CryptoUtil.getSecretKey(cheque.getUser().getSessionKey()), cheque.getBlob()));
         } else {
             senzAttributes.put("msg", cheque.getBlob());
         }
@@ -198,7 +198,7 @@ public class SenzUtils {
 
     public static String getUid(Context context, String timestamp) {
         try {
-            String username = PreferenceUtils.getUser(context).getUsername();
+            String username = PreferenceUtil.getUser(context).getUsername();
             return username + timestamp;
         } catch (NoUserException e) {
             e.printStackTrace();

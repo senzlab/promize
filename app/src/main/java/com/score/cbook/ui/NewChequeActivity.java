@@ -21,8 +21,8 @@ import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.interfaces.ICheckImageGeneratorListener;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
-import com.score.cbook.utils.ActivityUtils;
-import com.score.cbook.utils.PhoneBookUtil;
+import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.PhoneBookUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -113,7 +113,7 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
         sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtils.hideSoftKeyboard(NewChequeActivity.this);
+                ActivityUtil.hideSoftKeyboard(NewChequeActivity.this);
                 onClickPreview();
             }
         });
@@ -158,7 +158,7 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
         if (amount.isEmpty() || date.isEmpty()) {
             Toast.makeText(this, "Empty fields", Toast.LENGTH_LONG).show();
         } else {
-            ActivityUtils.showProgressDialog(this, "Generating cheque...");
+            ActivityUtil.showProgressDialog(this, "Generating cheque...");
 
             // create cheque
             cheque = new Cheque();
@@ -188,7 +188,7 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
 
     @Override
     public void onGenerate(String chequeImg) {
-        ActivityUtils.cancelProgressDialog();
+        ActivityUtil.cancelProgressDialog();
 
         cheque.setBlob(chequeImg);
         Long timestamp = System.currentTimeMillis() / 1000;

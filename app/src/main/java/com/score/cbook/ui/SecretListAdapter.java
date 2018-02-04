@@ -13,9 +13,9 @@ import android.widget.TextView;
 import com.score.cbook.R;
 import com.score.cbook.enums.BlobType;
 import com.score.cbook.pojo.Secret;
-import com.score.cbook.utils.ImageUtils;
-import com.score.cbook.utils.PhoneBookUtil;
-import com.score.cbook.utils.TimeUtils;
+import com.score.cbook.util.ImageUtil;
+import com.score.cbook.util.PhoneBookUtil;
+import com.score.cbook.util.TimeUtil;
 
 import java.util.ArrayList;
 
@@ -106,11 +106,11 @@ class SecretListAdapter extends BaseAdapter {
         }
 
         if (secret.getTimeStamp() != null) {
-            viewHolder.sentTime.setText(TimeUtils.getTimeInWords(secret.getTimeStamp()));
+            viewHolder.sentTime.setText(TimeUtil.getTimeInWords(secret.getTimeStamp()));
         }
 
         if (secret.getUser().getImage() != null) {
-            viewHolder.userImage.setImageBitmap(ImageUtils.decodeBitmap(secret.getUser().getImage()));
+            viewHolder.userImage.setImageBitmap(ImageUtil.decodeBitmap(secret.getUser().getImage()));
         } else {
             viewHolder.userImage.setImageResource(R.drawable.df_user);
         }

@@ -1,4 +1,4 @@
-package com.score.cbook.utils;
+package com.score.cbook.util;
 
 import android.content.Context;
 import android.util.Base64;
@@ -35,7 +35,7 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  * RSR encryption
  */
-public class CryptoUtils {
+public class CryptoUtil {
 
     public static final String PUBLIC_KEY = "PUBLIC_KEY";
     public static final String PRIVATE_KEY = "PRIVATE_KEY";
@@ -64,7 +64,7 @@ public class CryptoUtils {
         String publicKey = Base64.encodeToString(keyContent, Base64.DEFAULT).replaceAll("\n", "").replaceAll("\r", "");
 
         // save public key in shared preference
-        PreferenceUtils.saveRsaKey(context, publicKey, CryptoUtils.PUBLIC_KEY);
+        PreferenceUtil.saveRsaKey(context, publicKey, CryptoUtil.PUBLIC_KEY);
     }
 
     private static void savePrivateKey(Context context, KeyPair keyPair) {
@@ -73,12 +73,12 @@ public class CryptoUtils {
         String privateKey = Base64.encodeToString(keyContent, Base64.DEFAULT).replaceAll("\n", "").replaceAll("\r", "");
 
         // save private key in shared preference
-        PreferenceUtils.saveRsaKey(context, privateKey, CryptoUtils.PRIVATE_KEY);
+        PreferenceUtil.saveRsaKey(context, privateKey, CryptoUtil.PRIVATE_KEY);
     }
 
     public static PublicKey getPublicKey(Context context) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
         // get key string from shared preference
-        String keyString = PreferenceUtils.getRsaKey(context, CryptoUtils.PUBLIC_KEY);
+        String keyString = PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY);
 
         // convert to string key public key
         X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.decode(keyString, Base64.DEFAULT));
@@ -97,7 +97,7 @@ public class CryptoUtils {
 
     public static PrivateKey getPrivateKey(Context context) throws InvalidKeySpecException, NoSuchAlgorithmException {
         // get key string from shared preference
-        String keyString = PreferenceUtils.getRsaKey(context, CryptoUtils.PRIVATE_KEY);
+        String keyString = PreferenceUtil.getRsaKey(context, CryptoUtil.PRIVATE_KEY);
 
         // convert to string key public key
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Base64.decode(keyString, Base64.DEFAULT));
@@ -108,7 +108,7 @@ public class CryptoUtils {
 
     public static String getSenzieAddress(Context context) throws NoSuchAlgorithmException {
         // get public key
-        byte[] key = Base64.decode(PreferenceUtils.getRsaKey(context, CryptoUtils.PUBLIC_KEY), Base64.DEFAULT);
+        byte[] key = Base64.decode(PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY), Base64.DEFAULT);
 
         // generate digest
         byte[] ph = new byte[20];

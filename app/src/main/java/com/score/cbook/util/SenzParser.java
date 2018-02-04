@@ -1,4 +1,4 @@
-package com.score.cbook.utils;
+package com.score.cbook.util;
 
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;

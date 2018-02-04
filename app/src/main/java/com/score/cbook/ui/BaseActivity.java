@@ -21,8 +21,8 @@ import android.widget.TextView;
 
 import com.score.cbook.R;
 import com.score.cbook.interfaces.ISendingComHandler;
-import com.score.cbook.utils.ActivityUtils;
-import com.score.cbook.utils.NetworkUtil;
+import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.NetworkUtil;
 import com.score.senz.ISenzService;
 import com.score.senzc.pojos.Senz;
 
@@ -179,13 +179,13 @@ public class BaseActivity extends AppCompatActivity implements ISendingComHandle
                 if (isServiceBound) {
                     senzService.send(senz);
                 } else {
-                    ActivityUtils.showCustomToast("Failed to connected to service.", this);
+                    ActivityUtil.showCustomToast("Failed to connected to service.", this);
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         } else {
-            ActivityUtils.showCustomToast(this.getResources().getString(R.string.no_internet), this);
+            ActivityUtil.showCustomToast(this.getResources().getString(R.string.no_internet), this);
         }
     }
 
@@ -196,13 +196,13 @@ public class BaseActivity extends AppCompatActivity implements ISendingComHandle
                 if (isServiceBound) {
                     senzService.sendInOrder(senzList);
                 } else {
-                    ActivityUtils.showCustomToast("Failed to connected to service.", this);
+                    ActivityUtil.showCustomToast("Failed to connected to service.", this);
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         } else {
-            ActivityUtils.showCustomToast(this.getResources().getString(R.string.no_internet), this);
+            ActivityUtil.showCustomToast(this.getResources().getString(R.string.no_internet), this);
         }
     }
 
@@ -213,13 +213,13 @@ public class BaseActivity extends AppCompatActivity implements ISendingComHandle
                 if (isServiceBound) {
                     senzService.sendStream(senz);
                 } else {
-                    ActivityUtils.showCustomToast("Failed to connected to service.", this);
+                    ActivityUtil.showCustomToast("Failed to connected to service.", this);
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         } else {
-            ActivityUtils.showCustomToast(this.getResources().getString(R.string.no_internet), this);
+            ActivityUtil.showCustomToast(this.getResources().getString(R.string.no_internet), this);
         }
     }
 }

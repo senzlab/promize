@@ -14,12 +14,12 @@ import android.widget.Toast;
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.NoUserException;
-import com.score.cbook.utils.CryptoUtils;
-import com.score.cbook.utils.ImageUtils;
-import com.score.cbook.utils.NetworkUtil;
-import com.score.cbook.utils.PreferenceUtils;
-import com.score.cbook.utils.SenzParser;
-import com.score.cbook.utils.SenzUtils;
+import com.score.cbook.util.CryptoUtil;
+import com.score.cbook.util.ImageUtil;
+import com.score.cbook.util.NetworkUtil;
+import com.score.cbook.util.PreferenceUtil;
+import com.score.cbook.util.SenzParser;
+import com.score.cbook.util.SenzUtil;
 import com.score.senz.ISenzService;
 import com.score.senzc.pojos.Senz;
 import com.score.senzc.pojos.User;
@@ -82,7 +82,7 @@ public class SenzService extends Service {
                 String phone = intent.getStringExtra("PHONE").trim();
                 String username = intent.getStringExtra("USERNAME").trim();
                 try {
-                    sendSMS(phone, "#ChequeBook #confirm\nI have confirmed your request. #username " + PreferenceUtils.getUser(SenzService.this).getUsername() + " #code 31e3e");
+                    sendSMS(phone, "#ChequeBook #confirm\nI have confirmed your request. #username " + PreferenceUtil.getUser(SenzService.this).getUsername() + " #code 31e3e");
 
                     // get pubkey
                     getPubKey(username);
@@ -172,8 +172,8 @@ public class SenzService extends Service {
 
     private void ping() {
         try {
-            User user = PreferenceUtils.getUser(this);
-            Senz senz = SenzUtils.regSenz(SenzService.this, user);
+            User user = PreferenceUtil.getUser(this);
+            Senz senz = SenzUtil.regSenz(SenzService.this, user);
             writeSenz(senz);
         } catch (NoUserException e) {
             e.printStackTrace();
@@ -181,7 +181,7 @@ public class SenzService extends Service {
     }
 
     private void getPubKey(String username) {
-        Senz senz = SenzUtils.pubkeySenz(this, username);
+        Senz senz = SenzUtil.pubkeySenz(this, username);
         writeSenz(senz);
     }
 
@@ -203,15 +203,15 @@ public class SenzService extends Service {
             public void run() {
                 // sign and write senz
                 try {
-                    PrivateKey privateKey = CryptoUtils.getPrivateKey(SenzService.this);
+                    PrivateKey privateKey = CryptoUtil.getPrivateKey(SenzService.this);
 
                     // if sender not already set find user(sender) and set it to senz first
                     if (senz.getSender() == null || senz.getSender().toString().isEmpty())
-                        senz.setSender(PreferenceUtils.getUser(getBaseContext()));
+                        senz.setSender(PreferenceUtil.getUser(getBaseContext()));
 
                     // get digital signature of the senz
                     String senzPayload = SenzParser.compose(senz);
-                    String signature = CryptoUtils.getDigitalSignature(senzPayload, privateKey);
+                    String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
                     String message = SenzParser.senzMsg(senzPayload, signature);
 
                     //  sends the message to the server
@@ -228,15 +228,15 @@ public class SenzService extends Service {
             @Override
             public void run() {
                 try {
-                    PrivateKey privateKey = CryptoUtils.getPrivateKey(SenzService.this);
-                    User sender = PreferenceUtils.getUser(SenzService.this);
+                    PrivateKey privateKey = CryptoUtil.getPrivateKey(SenzService.this);
+                    User sender = PreferenceUtil.getUser(SenzService.this);
 
                     for (Senz senz : senzList) {
                         senz.setSender(sender);
 
                         // get digital signature of the senz
                         String senzPayload = SenzParser.compose(senz);
-                        String signature = CryptoUtils.getDigitalSignature(senzPayload, privateKey);
+                        String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
 
                         // sends the message to the server
                         String message = SenzParser.senzMsg(senzPayload, signature);
@@ -256,11 +256,11 @@ public class SenzService extends Service {
                 try {
                     // set sender
                     if (senz.getSender() == null || senz.getSender().toString().isEmpty())
-                        senz.setSender(PreferenceUtils.getUser(getBaseContext()));
+                        senz.setSender(PreferenceUtil.getUser(getBaseContext()));
 
                     // send img
                     if (senz.getAttributes().containsKey("img")) {
-                        for (String packet : ImageUtils.splitImg(senz.getAttributes().get("img"), 1024))
+                        for (String packet : ImageUtil.splitImg(senz.getAttributes().get("img"), 1024))
                             write(packet);
                     }
                 } catch (Exception e) {

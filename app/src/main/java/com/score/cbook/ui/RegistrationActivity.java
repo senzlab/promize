@@ -18,11 +18,11 @@ import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.PasswordMisMatchException;
-import com.score.cbook.utils.ActivityUtils;
-import com.score.cbook.utils.CryptoUtils;
-import com.score.cbook.utils.NetworkUtil;
-import com.score.cbook.utils.PreferenceUtils;
-import com.score.cbook.utils.SenzUtils;
+import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.CryptoUtil;
+import com.score.cbook.util.NetworkUtil;
+import com.score.cbook.util.PreferenceUtil;
+import com.score.cbook.util.SenzUtil;
 import com.score.senzc.pojos.Senz;
 import com.score.senzc.pojos.User;
 
@@ -135,24 +135,24 @@ public class RegistrationActivity extends BaseActivity {
      * create user and validate fields from here
      */
     private void onClickRegister() {
-        ActivityUtils.hideSoftKeyboard(this);
+        ActivityUtil.hideSoftKeyboard(this);
 
         // crate user
         String account = editTextAccount.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
         try {
-            ActivityUtils.isValidRegistrationFields(account, password, confirmPassword);
+            ActivityUtil.isValidRegistrationFields(account, password, confirmPassword);
             registeringUser = new User("0", account);
             String confirmationMessage = "<font color=#636363>Are you sure you want to register with account </font> <font color=#F37920>" + "<b>" + registeringUser.getUsername() + "</b>" + "</font>";
             displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(RegistrationActivity.this)) {
-                        ActivityUtils.showProgressDialog(RegistrationActivity.this, "Please wait...");
+                        ActivityUtil.showProgressDialog(RegistrationActivity.this, "Please wait...");
                         doRegistration();
                     } else {
-                        ActivityUtils.showCustomToastShort("No network connection", RegistrationActivity.this);
+                        ActivityUtil.showCustomToastShort("No network connection", RegistrationActivity.this);
                     }
                 }
             });
@@ -176,7 +176,7 @@ public class RegistrationActivity extends BaseActivity {
      */
     private void doPreRegistration() {
         try {
-            CryptoUtils.initKeys(this);
+            CryptoUtil.initKeys(this);
         } catch (NoSuchProviderException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -188,14 +188,14 @@ public class RegistrationActivity extends BaseActivity {
      */
     private void doRegistration() {
         // senz reg senz
-        Senz senz = SenzUtils.regSenz(this, registeringUser);
+        Senz senz = SenzUtil.regSenz(this, registeringUser);
         send(senz);
     }
 
     private void doLogin() {
         // send login senz
         String password = editTextPassword.getText().toString().trim();
-        Senz senz = SenzUtils.loginSenz(this, registeringUser, password);
+        Senz senz = SenzUtil.loginSenz(this, registeringUser, password);
         send(senz);
     }
 
@@ -213,20 +213,20 @@ public class RegistrationActivity extends BaseActivity {
                 // do login
                 doLogin();
             } else if (msg != null && msg.equalsIgnoreCase("LOGIN_SUCCESS")) {
-                ActivityUtils.cancelProgressDialog();
+                ActivityUtil.cancelProgressDialog();
                 Toast.makeText(this, "Login success", Toast.LENGTH_LONG).show();
 
                 // login success
                 // go to home
-                PreferenceUtils.saveUser(this, registeringUser);
-                PreferenceUtils.savePassword(this, editTextPassword.getText().toString().trim());
+                PreferenceUtil.saveUser(this, registeringUser);
+                PreferenceUtil.savePassword(this, editTextPassword.getText().toString().trim());
                 navigateToHome();
             } else if (msg != null && msg.equalsIgnoreCase("REG_FAIL")) {
-                ActivityUtils.cancelProgressDialog();
+                ActivityUtil.cancelProgressDialog();
                 String informationMessage = "Invalid account, please make sure account <font size=10>Seems account no </font> <font color=#F37920>" + "<b>" + registeringUser.getUsername() + "</b>" + "</font> <font> is correct</font>";
                 displayInformationMessageDialog("Registration fail", informationMessage);
             } else if (msg != null && msg.equalsIgnoreCase("LOGIN_FAIL")) {
-                ActivityUtils.cancelProgressDialog();
+                ActivityUtil.cancelProgressDialog();
                 String informationMessage = "Your account no and password are mismatching. Please enter correct account no and password</font>";
                 displayInformationMessageDialog("Login fail", informationMessage);
             }
