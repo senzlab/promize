@@ -57,8 +57,8 @@ public class NotificationzHandler {
     }
 
     public static void cancel(Context context, int notificationId) {
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.cancel(notificationId);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(notificationId);
     }
 
     private static Notification buildNotification(Context context, Intent intent, Notifcationz notifcationz) {
@@ -101,4 +101,5 @@ public class NotificationzHandler {
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         return notification;
     }
+
 }

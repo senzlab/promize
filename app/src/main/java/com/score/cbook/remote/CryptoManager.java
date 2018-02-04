@@ -11,8 +11,6 @@ import javax.crypto.SecretKey;
 
 public class CryptoManager {
 
-    private static final String TAG = SenzNotificationManager.class.getName();
-
     private static CryptoManager instance;
 
     private Cipher cipherEnc;
