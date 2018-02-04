@@ -234,7 +234,7 @@ class SenzHandler {
                     UserSource.updateUser(senzService.getApplicationContext(), username, "session_key", sessionKey);
 
                     String encryptedSessionKey = CryptoUtils.encryptRSA(CryptoUtils.getPublicKey(pubKey), sessionKey);
-                    senzService.writeSenz(SenzUtils.shareAttrSenz(senzService.getApplicationContext(), username, encryptedSessionKey));
+                    senzService.writeSenz(SenzUtils.shareSenz(senzService.getApplicationContext(), username, encryptedSessionKey));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

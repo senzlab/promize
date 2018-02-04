@@ -196,7 +196,7 @@ public class ChequePreviewActivity extends BaseActivity {
     }
 
     private void sendCheque() {
-        Senz senz = SenzUtils.shareChequeSenz(this, cheque, cheque.getTimestamp());
+        Senz senz = SenzUtils.transferChequeSenz(this, cheque, cheque.getTimestamp());
         send(senz);
     }
 

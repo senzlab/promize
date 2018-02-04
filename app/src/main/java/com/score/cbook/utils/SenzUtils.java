@@ -67,7 +67,7 @@ public class SenzUtils {
         return senz;
     }
 
-    public static Senz shareAttrSenz(Context context, String username, String sessionKey) throws NoSuchAlgorithmException {
+    public static Senz shareSenz(Context context, String username, String sessionKey) throws NoSuchAlgorithmException {
         // create senz attributes
         Long timestamp = (System.currentTimeMillis() / 1000);
         HashMap<String, String> senzAttributes = new HashMap<>();
@@ -120,7 +120,7 @@ public class SenzUtils {
         return senz;
     }
 
-    public static Senz shareChequeSenz(Context context, Cheque cheque, Long timestamp) {
+    public static Senz transferChequeSenz(Context context, Cheque cheque, Long timestamp) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));

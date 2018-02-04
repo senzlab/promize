@@ -18,10 +18,12 @@ import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.PasswordMisMatchException;
+import com.score.cbook.remote.SenzService;
 import com.score.cbook.utils.ActivityUtils;
 import com.score.cbook.utils.CryptoUtils;
 import com.score.cbook.utils.NetworkUtil;
 import com.score.cbook.utils.PreferenceUtils;
+import com.score.cbook.utils.SenzUtils;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 import com.score.senzc.pojos.User;
@@ -189,19 +191,37 @@ public class RegistrationActivity extends BaseActivity {
      */
     private void doRegistration() {
         // create create senz
+        Long timestamp = System.currentTimeMillis() / 1000;
         HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put(getResources().getString(R.string.time), ((Long) (System.currentTimeMillis() / 1000)).toString());
-        senzAttributes.put(getResources().getString(R.string.pubkey), PreferenceUtils.getRsaKey(this, CryptoUtils.PUBLIC_KEY));
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("pubkey", PreferenceUtils.getRsaKey(this, CryptoUtils.PUBLIC_KEY));
+        senzAttributes.put("uid", SenzUtils.getUid(this, timestamp.toString()));
 
-        // new senz
-        String id = "_ID";
-        String signature = "";
-        SenzTypeEnum senzType = SenzTypeEnum.SHARE;
-        User sender = new User("", registeringUser.getUsername());
-        User receiver = new User("", getResources().getString(R.string.switch_name));
-        Senz senz = new Senz(id, signature, senzType, sender, receiver, senzAttributes);
+        // reg senz
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.SHARE);
+        senz.setReceiver(new User("", SenzService.SWITCH_NAME));
+        senz.setSender(new User("", registeringUser.getUsername()));
+        senz.setAttributes(senzAttributes);
 
-        // sending senz to service
+        send(senz);
+    }
+
+    private void doLogin() {
+        // create create senz
+        Long timestamp = System.currentTimeMillis() / 1000;
+        HashMap<String, String> senzAttributes = new HashMap<>();
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("password", editTextPassword.getText().toString().trim());
+        senzAttributes.put("uid", SenzUtils.getUid(this, timestamp.toString()));
+
+        // login senz
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.PUT);
+        senz.setReceiver(new User("", SenzService.SAMPATH_AUTH_SENZIE_NAME));
+        senz.setSender(new User("", registeringUser.getUsername()));
+        senz.setAttributes(senzAttributes);
+
         send(senz);
     }
 
@@ -213,19 +233,28 @@ public class RegistrationActivity extends BaseActivity {
      */
     private void handleSenz(Senz senz) {
         if (senz.getAttributes().containsKey("status")) {
-            // msg response received
-            ActivityUtils.cancelProgressDialog();
             String msg = senz.getAttributes().get("status");
             if (msg != null && (msg.equalsIgnoreCase("REG_DONE") || msg.equalsIgnoreCase("REG_ALR"))) {
-                Toast.makeText(this, "Successfully registered", Toast.LENGTH_LONG).show();
-                // save user
-                // navigate home
+                // reg success
+                // do login
+                doLogin();
+            } else if (msg != null && msg.equalsIgnoreCase("LOGIN_SUCCESS")) {
+                ActivityUtils.cancelProgressDialog();
+                Toast.makeText(this, "Login success", Toast.LENGTH_LONG).show();
+
+                // login success
+                // go to home
                 PreferenceUtils.saveUser(this, registeringUser);
                 PreferenceUtils.savePassword(this, editTextPassword.getText().toString().trim());
                 navigateToHome();
             } else if (msg != null && msg.equalsIgnoreCase("REG_FAIL")) {
-                String informationMessage = "<font size=10>Seems username </font> <font color=#F88F8C>" + "<b>" + registeringUser.getUsername() + "</b>" + "</font> <font> already obtained by some other user, try a different username</font>";
+                ActivityUtils.cancelProgressDialog();
+                String informationMessage = "<font size=10>Seems account no </font> <font color=#F88F8C>" + "<b>" + registeringUser.getUsername() + "</b>" + "</font> <font> is incorrect. Please enter correct account no</font>";
                 displayInformationMessageDialog("Registration fail", informationMessage);
+            } else if (msg != null && msg.equalsIgnoreCase("LOGIN_FAIL")) {
+                ActivityUtils.cancelProgressDialog();
+                String informationMessage = "Your account no and password are mismatching. Please enter correct account no and password</font>";
+                displayInformationMessageDialog("Login fail", informationMessage);
             }
         }
     }

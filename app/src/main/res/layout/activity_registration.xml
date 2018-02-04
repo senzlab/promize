@@ -55,7 +55,7 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
                 android:background="@drawable/edit_text_border_bottom"
-                android:hint="Account no"
+                android:hint="Vishwa account"
                 android:inputType="number"
                 android:maxLength="12"
                 android:paddingBottom="10dp"

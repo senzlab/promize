@@ -207,10 +207,7 @@ public class SenzService extends Service {
                     // get digital signature of the senz
                     String senzPayload = SenzParser.getSenzPayload(senz);
                     String signature = CryptoUtils.getDigitalSignature(senzPayload, privateKey);
-                    boolean a = CryptoUtils.verifyDigitalSignature(senzPayload, signature, CryptoUtils.getPublicKey(SenzService.this));
-                    Log.d(TAG, "hooooo " + a);
                     String message = SenzParser.getSenzMessage(senzPayload, signature);
-                    Log.d(TAG, "Senz to be send: " + message);
 
                     //  sends the message to the server
                     write(message);
