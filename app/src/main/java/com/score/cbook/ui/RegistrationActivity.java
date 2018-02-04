@@ -18,19 +18,16 @@ import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.PasswordMisMatchException;
-import com.score.cbook.remote.SenzService;
 import com.score.cbook.utils.ActivityUtils;
 import com.score.cbook.utils.CryptoUtils;
 import com.score.cbook.utils.NetworkUtil;
 import com.score.cbook.utils.PreferenceUtils;
 import com.score.cbook.utils.SenzUtils;
-import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 import com.score.senzc.pojos.User;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.HashMap;
 
 public class RegistrationActivity extends BaseActivity {
 
@@ -190,38 +187,15 @@ public class RegistrationActivity extends BaseActivity {
      * Send register senz to senz service via service binder
      */
     private void doRegistration() {
-        // create create senz
-        Long timestamp = System.currentTimeMillis() / 1000;
-        HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("pubkey", PreferenceUtils.getRsaKey(this, CryptoUtils.PUBLIC_KEY));
-        senzAttributes.put("uid", SenzUtils.getUid(this, timestamp.toString()));
-
-        // reg senz
-        Senz senz = new Senz();
-        senz.setSenzType(SenzTypeEnum.SHARE);
-        senz.setReceiver(new User("", SenzService.SWITCH_NAME));
-        senz.setSender(new User("", registeringUser.getUsername()));
-        senz.setAttributes(senzAttributes);
-
+        // senz reg senz
+        Senz senz = SenzUtils.regSenz(this, registeringUser);
         send(senz);
     }
 
     private void doLogin() {
-        // create create senz
-        Long timestamp = System.currentTimeMillis() / 1000;
-        HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("password", editTextPassword.getText().toString().trim());
-        senzAttributes.put("uid", SenzUtils.getUid(this, timestamp.toString()));
-
-        // login senz
-        Senz senz = new Senz();
-        senz.setSenzType(SenzTypeEnum.PUT);
-        senz.setReceiver(new User("", SenzService.SAMPATH_AUTH_SENZIE_NAME));
-        senz.setSender(new User("", registeringUser.getUsername()));
-        senz.setAttributes(senzAttributes);
-
+        // send login senz
+        String password = editTextPassword.getText().toString().trim();
+        Senz senz = SenzUtils.loginSenz(this, registeringUser, password);
         send(senz);
     }
 
@@ -249,7 +223,7 @@ public class RegistrationActivity extends BaseActivity {
                 navigateToHome();
             } else if (msg != null && msg.equalsIgnoreCase("REG_FAIL")) {
                 ActivityUtils.cancelProgressDialog();
-                String informationMessage = "<font size=10>Seems account no </font> <font color=#F88F8C>" + "<b>" + registeringUser.getUsername() + "</b>" + "</font> <font> is incorrect. Please enter correct account no</font>";
+                String informationMessage = "Invalid account, please make sure account <font size=10>Seems account no </font> <font color=#F37920>" + "<b>" + registeringUser.getUsername() + "</b>" + "</font> <font> is correct</font>";
                 displayInformationMessageDialog("Registration fail", informationMessage);
             } else if (msg != null && msg.equalsIgnoreCase("LOGIN_FAIL")) {
                 ActivityUtils.cancelProgressDialog();

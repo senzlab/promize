@@ -171,8 +171,13 @@ public class SenzService extends Service {
     }
 
     private void ping() {
-        Senz senz = SenzUtils.regSenz(SenzService.this);
-        if (senz != null) writeSenz(senz);
+        try {
+            User user = PreferenceUtils.getUser(this);
+            Senz senz = SenzUtils.regSenz(SenzService.this, user);
+            writeSenz(senz);
+        } catch (NoUserException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getPubKey(String username) {
@@ -205,9 +210,9 @@ public class SenzService extends Service {
                         senz.setSender(PreferenceUtils.getUser(getBaseContext()));
 
                     // get digital signature of the senz
-                    String senzPayload = SenzParser.getSenzPayload(senz);
+                    String senzPayload = SenzParser.compose(senz);
                     String signature = CryptoUtils.getDigitalSignature(senzPayload, privateKey);
-                    String message = SenzParser.getSenzMessage(senzPayload, signature);
+                    String message = SenzParser.senzMsg(senzPayload, signature);
 
                     //  sends the message to the server
                     write(message);
@@ -230,11 +235,11 @@ public class SenzService extends Service {
                         senz.setSender(sender);
 
                         // get digital signature of the senz
-                        String senzPayload = SenzParser.getSenzPayload(senz);
+                        String senzPayload = SenzParser.compose(senz);
                         String signature = CryptoUtils.getDigitalSignature(senzPayload, privateKey);
 
                         // sends the message to the server
-                        String message = SenzParser.getSenzMessage(senzPayload, signature);
+                        String message = SenzParser.senzMsg(senzPayload, signature);
                         write(message);
                     }
                 } catch (Exception e) {

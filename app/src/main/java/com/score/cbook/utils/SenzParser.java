@@ -11,7 +11,6 @@ import java.util.HashMap;
 
 
 public class SenzParser {
-
     static {
         Security.addProvider(new BouncyCastleProvider());
     }
@@ -26,11 +25,8 @@ public class SenzParser {
         for (int i = 0; i < tokens.length; i++) {
             String token = tokens[i];
             if (i == 0) {
-                // query type at first (PING, SHARE, GET, DATA)
+                // query type at first (SHARE, GET, DATA)
                 senz.setSenzType(SenzTypeEnum.valueOf(token.toUpperCase()));
-
-                // if query type is PING we breakup from here :)
-                if (senz.getSenzType() == SenzTypeEnum.PING) return senz;
             } else if (i == tokens.length - 1) {
                 // signature at the end
                 senz.setSignature(token);
@@ -65,7 +61,7 @@ public class SenzParser {
         return senz;
     }
 
-    public static String getSenzPayload(Senz senz) {
+    public static String compose(Senz senz) {
         // add senz type to payload
         String payload = senz.getSenzType().toString();
 
@@ -90,12 +86,8 @@ public class SenzParser {
         return payload;
     }
 
-    public static String getSenzMessage(String payload, String signature) {
+    public static String senzMsg(String payload, String signature) {
         String senzMessage = payload + " " + signature;
-
         return senzMessage.replaceAll("\n", "").replaceAll("\r", "");
-    }
-
-    public static void main(String args[]) {
     }
 }

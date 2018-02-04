@@ -21,31 +21,42 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class SenzUtils {
-    public static Senz regSenz(Context context) {
-        try {
-            User user = PreferenceUtils.getUser(context);
+    public static Senz regSenz(Context context, User sender) {
+        // create create senz
+        HashMap<String, String> senzAttributes = new HashMap<>();
 
-            // create create senz
-            HashMap<String, String> senzAttributes = new HashMap<>();
+        Long timestamp = System.currentTimeMillis() / 1000;
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("uid", getUid(context, timestamp.toString()));
+        senzAttributes.put("pubkey", PreferenceUtils.getRsaKey(context, CryptoUtils.PUBLIC_KEY));
 
-            Long timestamp = System.currentTimeMillis() / 1000;
-            senzAttributes.put("time", timestamp.toString());
-            senzAttributes.put("uid", getUid(context, timestamp.toString()));
-            senzAttributes.put("pubkey", PreferenceUtils.getRsaKey(context, CryptoUtils.PUBLIC_KEY));
+        // new senz
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.SHARE);
+        senz.setSender(sender);
+        senz.setReceiver(new User("", SenzService.SWITCH_NAME));
+        senz.setAttributes(senzAttributes);
 
-            // new senz
-            Senz senz = new Senz();
-            senz.setSenzType(SenzTypeEnum.SHARE);
-            senz.setSender(new User("", user.getUsername()));
-            senz.setReceiver(new User("", SenzService.SWITCH_NAME));
-            senz.setAttributes(senzAttributes);
+        return senz;
+    }
 
-            return senz;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static Senz loginSenz(Context context, User sender, String password) {
+        // create create senz
+        HashMap<String, String> senzAttributes = new HashMap<>();
 
-        return null;
+        Long timestamp = System.currentTimeMillis() / 1000;
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("uid", getUid(context, timestamp.toString()));
+        senzAttributes.put("password", password);
+
+        // new senz
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.PUT);
+        senz.setSender(sender);
+        senz.setReceiver(new User("", SenzService.SAMPATH_AUTH_SENZIE_NAME));
+        senz.setAttributes(senzAttributes);
+
+        return senz;
     }
 
     public static Senz pubkeySenz(Context context, String user) {
@@ -145,7 +156,7 @@ public class SenzUtils {
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
         senzAttributes.put("cbnk", "sampath");
-        senzAttributes.put("to", "sampath");
+        senzAttributes.put("to", SenzService.SAMPATH_CHAIN_SENZIE_NAME);
         senzAttributes.put("cid", cheque.getCid());
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", SenzUtils.getUid(context, timestamp.toString()));
