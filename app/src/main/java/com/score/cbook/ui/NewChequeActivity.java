@@ -191,7 +191,7 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
         ActivityUtil.cancelProgressDialog();
 
         cheque.setBlob(chequeImg);
-        Long timestamp = System.currentTimeMillis() / 1000;
+        Long timestamp = System.currentTimeMillis();
         cheque.setTimestamp(timestamp);
 
         // cheque preview

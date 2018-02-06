@@ -227,7 +227,11 @@ public class RegistrationActivity extends BaseActivity {
                 displayInformationMessageDialog("Registration fail", informationMessage);
             } else if (msg != null && msg.equalsIgnoreCase("LOGIN_FAIL")) {
                 ActivityUtil.cancelProgressDialog();
-                String informationMessage = "Your account no and password are mismatching. Please enter correct account no and password</font>";
+                String informationMessage = "Your account no and password are mismatching. Please enter correct account no and password";
+                displayInformationMessageDialog("Login fail", informationMessage);
+            } else if (msg != null && msg.equalsIgnoreCase("VERIFICATION_FAIL")) {
+                ActivityUtil.cancelProgressDialog();
+                String informationMessage = "Signature verification fail. Please contact sampath support regarding this issue";
                 displayInformationMessageDialog("Login fail", informationMessage);
             }
         }

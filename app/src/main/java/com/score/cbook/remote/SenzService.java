@@ -85,7 +85,7 @@ public class SenzService extends Service {
                     sendSMS(phone, "#ChequeBook #confirm\nI have confirmed your request. #username " + PreferenceUtil.getUser(SenzService.this).getUsername() + " #code 31e3e");
 
                     // get pubkey
-                    getPubKey(username);
+                    getSenzieKey(username);
                 } catch (NoUserException e) {
                     e.printStackTrace();
                 }
@@ -108,7 +108,7 @@ public class SenzService extends Service {
             String username = intent.getStringExtra("USERNAME").trim();
 
             // get pubkey
-            getPubKey(username);
+            getSenzieKey(username);
         }
     };
 
@@ -180,8 +180,8 @@ public class SenzService extends Service {
         }
     }
 
-    private void getPubKey(String username) {
-        Senz senz = SenzUtil.pubkeySenz(this, username);
+    private void getSenzieKey(String username) {
+        Senz senz = SenzUtil.senzieKeySenz(this, username);
         writeSenz(senz);
     }
 

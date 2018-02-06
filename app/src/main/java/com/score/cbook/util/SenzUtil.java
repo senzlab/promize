@@ -24,10 +24,10 @@ public class SenzUtil {
     public static Senz regSenz(Context context, User sender) {
         // create create senz
         HashMap<String, String> senzAttributes = new HashMap<>();
-
-        Long timestamp = System.currentTimeMillis() / 1000;
+        Long timestamp = System.currentTimeMillis();
+        String uid = timestamp.toString() + sender.getUsername();
         senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("uid", getUid(context, timestamp.toString()));
+        senzAttributes.put("uid", uid);
         senzAttributes.put("pubkey", PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY));
 
         // new senz
@@ -43,15 +43,16 @@ public class SenzUtil {
     public static Senz loginSenz(Context context, User sender, String password) {
         // create create senz
         HashMap<String, String> senzAttributes = new HashMap<>();
-
-        Long timestamp = System.currentTimeMillis() / 1000;
+        Long timestamp = System.currentTimeMillis();
+        String uid = timestamp.toString() + sender.getUsername();
         senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("uid", getUid(context, timestamp.toString()));
+        senzAttributes.put("uid", uid);
         senzAttributes.put("password", password);
+        senzAttributes.put("pubkey", PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY));
 
         // new senz
         Senz senz = new Senz();
-        senz.setSenzType(SenzTypeEnum.PUT);
+        senz.setSenzType(SenzTypeEnum.SHARE);
         senz.setSender(sender);
         senz.setReceiver(new User("", SenzService.SAMPATH_AUTH_SENZIE_NAME));
         senz.setAttributes(senzAttributes);
@@ -59,11 +60,10 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz pubkeySenz(Context context, String user) {
+    public static Senz senzieKeySenz(Context context, String user) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
-
-        Long timestamp = System.currentTimeMillis() / 1000;
+        Long timestamp = System.currentTimeMillis();
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", getUid(context, timestamp.toString()));
         senzAttributes.put("pubkey", "");
@@ -80,7 +80,7 @@ public class SenzUtil {
 
     public static Senz shareSenz(Context context, String username, String sessionKey) throws NoSuchAlgorithmException {
         // create senz attributes
-        Long timestamp = (System.currentTimeMillis() / 1000);
+        Long timestamp = System.currentTimeMillis();
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("msg", "");
         senzAttributes.put("status", "");
@@ -102,7 +102,7 @@ public class SenzUtil {
     public static Senz statusSenz(Context context, User user, String statusCode) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
-        Long timestamp = System.currentTimeMillis() / 1000;
+        Long timestamp = System.currentTimeMillis();
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", getUid(context, timestamp.toString()));
         senzAttributes.put("status", statusCode);
@@ -119,7 +119,8 @@ public class SenzUtil {
     public static Senz awaSenz(String uid) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put("time", ((Long) (System.currentTimeMillis() / 1000)).toString());
+        Long timestamp = System.currentTimeMillis();
+        senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", uid);
 
         // new senz object
