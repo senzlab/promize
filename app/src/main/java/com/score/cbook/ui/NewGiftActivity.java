@@ -40,6 +40,7 @@ public class NewGiftActivity extends BaseActivity {
     private FloatingActionButton send;
     private ImageView capturedPhoto;
     private FrameLayout previewFrame;
+    private FrameLayout buttonFrame;
     private RelativeLayout giftInfo;
 
     private PowerManager.WakeLock wakeLock;
@@ -51,7 +52,7 @@ public class NewGiftActivity extends BaseActivity {
 
         // init camera with front
         acquireWakeLock();
-        initCameraPreview();
+        initCameraPreview(Camera.CameraInfo.CAMERA_FACING_FRONT);
 
         // init activity
         initUi();
@@ -101,7 +102,7 @@ public class NewGiftActivity extends BaseActivity {
         capturedPhoto = (ImageView) findViewById(R.id.capture_photo);
 
         capture = (FloatingActionButton) findViewById(R.id.capture);
-        capture.setVisibility(View.GONE);
+        capture.setVisibility(View.VISIBLE);
         capture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,15 +111,14 @@ public class NewGiftActivity extends BaseActivity {
         });
 
         send = (FloatingActionButton) findViewById(R.id.send);
-        send.setVisibility(View.VISIBLE);
+        send.setVisibility(View.GONE);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // send
-                done();
+                send();
             }
         });
-
     }
 
     private void releaseCamera() {
@@ -227,10 +227,22 @@ public class NewGiftActivity extends BaseActivity {
         });
     }
 
-    private void done() {
-        capture.setVisibility(View.VISIBLE);
+    private void send() {
         send.setVisibility(View.GONE);
-        initCameraPreview(Camera.CameraInfo.CAMERA_FACING_FRONT);
+        disbaleEdit();
+        takeScreenshot();
+    }
+
+    private void enableEdit() {
+        from.setEnabled(true);
+        to.setEnabled(true);
+        amount.setEnabled(true);
+    }
+
+    private void disbaleEdit() {
+        from.setEnabled(false);
+        to.setEnabled(false);
+        amount.setEnabled(false);
     }
 
     private void sendSelfieSenz(Long timestamp, String uid, String img) {

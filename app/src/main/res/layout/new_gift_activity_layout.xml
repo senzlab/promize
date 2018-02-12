@@ -38,9 +38,9 @@
             android:id="@+id/gift_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
-            android:layout_weight="0"
-            android:background="@color/colorPrimaryTrans">
+            android:layout_weight="1"
+            android:background="@color/colorPrimaryTrans"
+            android:visibility="visible">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -127,7 +127,7 @@
     </LinearLayout>
 
     <FrameLayout
-        android:id="@+id/call_details_layout"
+        android:id="@+id/button_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -135,8 +135,7 @@
             android:id="@+id/capture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="16dp"
+            android:layout_gravity="bottom|end"
             android:scaleType="center"
             android:src="@drawable/capture_2"
             android:visibility="visible"
@@ -147,8 +146,7 @@
             android:id="@+id/send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="16dp"
+            android:layout_gravity="bottom|end"
             android:scaleType="center"
             android:src="@drawable/send"
             android:visibility="gone"
