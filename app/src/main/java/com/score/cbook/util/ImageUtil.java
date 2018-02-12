@@ -13,7 +13,6 @@ import android.renderscript.Element;
 import android.renderscript.RenderScript;
 import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Base64;
-import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -99,7 +98,8 @@ public class ImageUtil {
             int orientation = Exif.getOrientation(data);
             if (orientation == 0) {
                 // rotate based on camera id(front/back)
-                matrix.postRotate(-90);
+                matrix.preScale(-1.0f, 1.0f);
+                matrix.postRotate(90);
             } else {
                 matrix.postRotate(orientation);
             }
@@ -109,10 +109,7 @@ public class ImageUtil {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 85, out);
 
-        byte[] scaledData = out.toByteArray();
-        Log.d("TAG", scaledData.length / 1024 + "hoooooo");
-
-        return scaledData;
+        return out.toByteArray();
     }
 
     private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
