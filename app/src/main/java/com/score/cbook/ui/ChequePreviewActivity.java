@@ -175,7 +175,7 @@ public class ChequePreviewActivity extends BaseActivity {
         // compress
         // set cheque
         byte[] bytes = ImageUtil.bmpToBytes(sChq);
-        byte[] compBytes = ImageUtil.compressImage(bytes, false);
+        byte[] compBytes = ImageUtil.compressImage(bytes, false, false);
         cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
     }
 

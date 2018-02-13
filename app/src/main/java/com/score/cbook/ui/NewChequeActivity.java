@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -109,7 +110,8 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
         TextView signT = (TextView) findViewById(R.id.sign_t);
         signT.setTypeface(typeface);
 
-        ImageView sign = (ImageView) findViewById(R.id.sign);
+        Button sign = (Button) findViewById(R.id.new_cheque_sign);
+        sign.setTypeface(typeface, Typeface.BOLD);
         sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -40,6 +41,10 @@ public class ViewChequeActivity extends BaseActivity {
     private RelativeLayout depositLayout;
     private RelativeLayout transferLayout;
     private RelativeLayout viewLayout;
+
+    private Button deposit;
+    private Button view;
+    private Button transfer;
 
     private Cheque cheque;
 
@@ -124,7 +129,8 @@ public class ViewChequeActivity extends BaseActivity {
         TextView transferT = (TextView) findViewById(R.id.transfer_t);
         transferT.setTypeface(typeface);
 
-        ImageView deposit = (ImageView) findViewById(R.id.deposit);
+        deposit = (Button) findViewById(R.id.view_cheque_deposit);
+        deposit.setTypeface(typeface, Typeface.BOLD);
         deposit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -136,7 +142,8 @@ public class ViewChequeActivity extends BaseActivity {
             }
         });
 
-        ImageView transfer = (ImageView) findViewById(R.id.transfer);
+        transfer = (Button) findViewById(R.id.view_cheque_transfer);
+        transfer.setTypeface(typeface, Typeface.BOLD);
         transfer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,7 +151,8 @@ public class ViewChequeActivity extends BaseActivity {
             }
         });
 
-        ImageView view = (ImageView) findViewById(R.id.view);
+        view = (Button) findViewById(R.id.view_cheque_preview);
+        view.setTypeface(typeface, Typeface.BOLD);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,13 +184,22 @@ public class ViewChequeActivity extends BaseActivity {
         if (cheque.isMyCheque()) {
             depositLayout.setVisibility(View.GONE);
             transferLayout.setVisibility(View.GONE);
+
+            deposit.setVisibility(View.GONE);
+            transfer.setVisibility(View.GONE);
         } else {
             if (cheque.getChequeState() == ChequeState.TRANSFER) {
                 depositLayout.setVisibility(View.VISIBLE);
                 transferLayout.setVisibility(View.VISIBLE);
+
+                deposit.setVisibility(View.VISIBLE);
+                transfer.setVisibility(View.VISIBLE);
             } else {
                 depositLayout.setVisibility(View.GONE);
                 transferLayout.setVisibility(View.GONE);
+
+                deposit.setVisibility(View.GONE);
+                transfer.setVisibility(View.GONE);
             }
         }
     }

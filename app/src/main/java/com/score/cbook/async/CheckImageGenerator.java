@@ -37,7 +37,7 @@ public class CheckImageGenerator extends AsyncTask<Cheque, String, String> {
 
         // compress
         byte[] bytes = ImageUtil.bmpToBytes(stChq);
-        byte[] compBytes = ImageUtil.compressImage(bytes, true);
+        byte[] compBytes = ImageUtil.compressImage(bytes, true, false);
 
         return ImageUtil.encodeBitmap(compBytes);
     }

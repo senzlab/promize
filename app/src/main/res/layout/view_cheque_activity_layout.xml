@@ -123,10 +123,10 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:visibility="gone">
+                            android:visibility="visible">
 
                             <Button
-                                android:id="@+id/view_cheque_send"
+                                android:id="@+id/view_cheque_preview"
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
                                 android:layout_marginLeft="50dp"
@@ -140,7 +140,7 @@
                                 android:id="@+id/view_cheque_deposit"
                                 android:layout_width="match_parent"
                                 android:layout_height="55dp"
-                                android:layout_below="@+id/view_cheque_send"
+                                android:layout_below="@+id/view_cheque_preview"
                                 android:layout_marginLeft="50dp"
                                 android:layout_marginRight="50dp"
                                 android:layout_marginTop="15dp"
@@ -170,6 +170,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:background="@color/transparent">
 
         <RelativeLayout

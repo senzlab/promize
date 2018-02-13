@@ -22,7 +22,7 @@ import java.io.InputStream;
 
 public class ImageUtil {
 
-    public static byte[] compressImage(byte[] data, boolean rotate) {
+    public static byte[] compressImage(byte[] data, boolean rotate, boolean mirror) {
         Bitmap scaledBitmap = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
 
@@ -97,9 +97,14 @@ public class ImageUtil {
             Matrix matrix = new Matrix();
             int orientation = Exif.getOrientation(data);
             if (orientation == 0) {
-                // rotate based on camera id(front/back)
-                matrix.preScale(-1.0f, 1.0f);
-                matrix.postRotate(90);
+                // mirror
+                if (mirror) {
+                    // rotate based on camera id(front/back)
+                    matrix.preScale(-1.0f, 1.0f);
+                    matrix.postRotate(90);
+                } else {
+                    matrix.postRotate(-90);
+                }
             } else {
                 matrix.postRotate(orientation);
             }
