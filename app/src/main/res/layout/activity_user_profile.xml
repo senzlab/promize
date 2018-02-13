@@ -12,7 +12,8 @@
         android:layout_height="250dp"
         android:background="@color/pressed_sensor"
         android:fitsSystemWindows="true"
-        android:theme="@style/MyMaterialTheme">
+        android:theme="@style/MyMaterialTheme"
+        app:expanded="false">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
@@ -141,6 +142,17 @@
                     android:background="@drawable/rounded_corner_button"
                     android:gravity="center"
                     android:text="Write Message"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/send_gift"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_button"
+                    android:gravity="center"
+                    android:text="Send Gift"
                     android:textColor="@color/white" />
             </LinearLayout>
         </FrameLayout>

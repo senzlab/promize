@@ -1,5 +1,6 @@
 package com.score.cbook.ui;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     private TextView accountV;
     private Button writeCheque;
     private Button writeMessage;
+    private Button sendGift;
 
     private ChequeUser chequeUser;
 
@@ -110,10 +112,13 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         // buttons
         writeCheque = (Button) findViewById(R.id.write_cheque);
         writeMessage = (Button) findViewById(R.id.writer_message);
+        sendGift = (Button) findViewById(R.id.send_gift);
         writeCheque.setTypeface(typeface, Typeface.BOLD);
         writeMessage.setTypeface(typeface, Typeface.BOLD);
+        sendGift.setTypeface(typeface, Typeface.BOLD);
         writeCheque.setOnClickListener(this);
         writeMessage.setOnClickListener(this);
+        sendGift.setOnClickListener(this);
     }
 
     private void initToolbar() {
@@ -136,6 +141,10 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         if (v == backImageView) {
             finish();
+        } else if (v == sendGift) {
+            Intent intent = new Intent(this, NewGiftActivity.class);
+            intent.putExtra("USER", chequeUser);
+            startActivity(intent);
         }
     }
 

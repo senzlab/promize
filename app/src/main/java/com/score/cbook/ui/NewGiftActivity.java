@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.score.cbook.R;
+import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.util.ImageUtil;
 
 import java.io.File;
@@ -43,6 +44,9 @@ public class NewGiftActivity extends BaseActivity {
     private FrameLayout buttonFrame;
     private RelativeLayout giftInfo;
 
+    // user
+    private ChequeUser user;
+
     private PowerManager.WakeLock wakeLock;
 
     @Override
@@ -54,8 +58,9 @@ public class NewGiftActivity extends BaseActivity {
         acquireWakeLock();
         initCameraPreview(Camera.CameraInfo.CAMERA_FACING_FRONT);
 
-        // init activity
+        // init
         initUi();
+        initPrefs();
     }
 
     @Override
@@ -119,6 +124,11 @@ public class NewGiftActivity extends BaseActivity {
                 send();
             }
         });
+    }
+
+    private void initPrefs() {
+        this.user = getIntent().getParcelableExtra("USER");
+        to.setText("To: " + user.getUsername());
     }
 
     private void releaseCamera() {
@@ -214,7 +224,7 @@ public class NewGiftActivity extends BaseActivity {
         camera.takePicture(null, null, new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] bytes, Camera camera) {
-                byte[] resizedImage = ImageUtil.compressImage(bytes, true);
+                byte[] resizedImage = ImageUtil.compressImage(bytes, true, true);
 
                 releaseCameraPreview();
 
