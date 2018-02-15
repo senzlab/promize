@@ -12,8 +12,8 @@ import android.widget.TextView;
 import com.github.siyamed.shapeimageview.CircularImageView;
 import com.score.cbook.R;
 import com.score.cbook.pojo.ChequeUser;
-import com.score.cbook.util.ImageUtil;
 import com.score.cbook.util.PhoneBookUtil;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -73,12 +73,11 @@ class FriendListAdapter extends ArrayAdapter<ChequeUser> {
         viewHolder.usernameView.setTypeface(typeface, Typeface.NORMAL);
         viewHolder.phoneBookNameView.setTypeface(typeface, Typeface.NORMAL);
 
-        // extracting user image
-        if (chequeUser.getImage() != null) {
-            viewHolder.userImageView.setImageBitmap(ImageUtil.decodeBitmap(chequeUser.getImage()));
-        } else {
-            viewHolder.userImageView.setImageResource(R.drawable.df_user);
-        }
+        // load contact image
+        Picasso.with(context)
+                .load(R.drawable.df_user)
+                .placeholder(R.drawable.default_user)
+                .into(viewHolder.userImageView);
 
         // request text
         if (chequeUser.isActive()) {

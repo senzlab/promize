@@ -13,9 +13,9 @@ import android.widget.TextView;
 import com.score.cbook.R;
 import com.score.cbook.enums.ChequeState;
 import com.score.cbook.pojo.Cheque;
-import com.score.cbook.util.ImageUtil;
 import com.score.cbook.util.PhoneBookUtil;
 import com.score.cbook.util.TimeUtil;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -98,11 +98,11 @@ class ChequeListAdapter extends BaseAdapter {
             viewHolder.sentTime.setText(TimeUtil.getTimeInWords(secret.getTimestamp()));
         }
 
-        if (secret.getUser().getImage() != null) {
-            viewHolder.userImage.setImageBitmap(ImageUtil.decodeBitmap(secret.getUser().getImage()));
-        } else {
-            viewHolder.userImage.setImageResource(R.drawable.df_user);
-        }
+        // load contact image
+        Picasso.with(context)
+                .load(R.drawable.df_user)
+                .placeholder(R.drawable.df_user)
+                .into(viewHolder.userImage);
 
         // selected state
         if (secret.isSelected()) {

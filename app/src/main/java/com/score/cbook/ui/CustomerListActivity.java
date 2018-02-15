@@ -232,7 +232,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
 
         if (chequeUser.isActive()) {
             if (actionType == CustomerActionType.NEW_CHEQUE) {
-                Intent intent = new Intent(CustomerListActivity.this, NewChequeActivity.class);
+                Intent intent = new Intent(CustomerListActivity.this, NewGiftActivity.class);
                 intent.putExtra("USER", chequeUser);
                 startActivity(intent);
             } else if (actionType == CustomerActionType.NEW_MESSAGE) {

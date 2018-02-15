@@ -39,7 +39,7 @@
                     android:layout_below="@+id/new_cheque"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="Write Cheque"
+                    android:text="Send Gift"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
