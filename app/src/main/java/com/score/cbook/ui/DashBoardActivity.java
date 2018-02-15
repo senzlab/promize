@@ -116,7 +116,7 @@ public class DashBoardActivity extends BaseActivity {
                     Secret secret = new Secret();
                     secret.setMySecret(false);
                     secret.setBlobType(BlobType.TEXT);
-                    secret.setBlob("How can we help you? We will get back to you as soon as possible");
+                    secret.setBlob("How can we help you? Let us know your problem, we will help to your solve it :) ");
                     secret.setUser(chequeUser);
                     Long timestamp = System.currentTimeMillis() / 1000;
                     secret.setTimeStamp(timestamp);

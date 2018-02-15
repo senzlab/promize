@@ -79,6 +79,29 @@ public class PhoneBookUtil {
         return null;
     }
 
+
+    /**
+     * Get image of the matching contact
+     *
+     * @param context
+     * @param phoneNumber
+     * @return
+     */
+    public static Uri getContactUri(Context context, String phoneNumber) {
+        ContentResolver contentResolver = context.getContentResolver();
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+        Cursor cursor = contentResolver.query(uri, new String[]{Phone.PHOTO_URI}, null, null, null);
+        if (cursor == null) return null;
+
+        if (cursor.moveToFirst()) {
+            String image_uri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
+            if (image_uri != null)
+                return Uri.parse(image_uri);
+        }
+
+        return null;
+    }
+
     /**
      * Read all contacts from contact database, we read
      * 1. name

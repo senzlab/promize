@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.score.cbook.R;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.util.PhoneBookUtil;
+import com.squareup.picasso.Picasso;
 
 public class UserProfileActivity extends BaseActivity implements View.OnClickListener {
 
@@ -105,9 +106,12 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         accountV.setText(chequeUser.getUsername());
 
         // contact image
-        Bitmap bmp = PhoneBookUtil.getContactImage(this, chequeUser.getPhone());
-        if (bmp != null)
-            userImageView.setImageBitmap(bmp);
+        Picasso.with(this)
+                .load(PhoneBookUtil.getContactUri(this, chequeUser.getPhone()))
+                .placeholder(R.drawable.default_user_icon)
+                .centerInside()
+                .error(R.drawable.df_user)
+                .into(userImageView);
 
         // buttons
         writeCheque = (Button) findViewById(R.id.write_cheque);

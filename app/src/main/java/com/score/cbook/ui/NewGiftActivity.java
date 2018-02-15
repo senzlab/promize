@@ -16,9 +16,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.pojo.ChequeUser;
+import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.ImageUtil;
 
 import java.io.File;
@@ -128,7 +130,7 @@ public class NewGiftActivity extends BaseActivity {
 
     private void initPrefs() {
         this.user = getIntent().getParcelableExtra("USER");
-        to.setText("To: " + user.getUsername());
+        //to.setText("To: " + user.getUsername());
     }
 
     private void releaseCamera() {
@@ -238,9 +240,13 @@ public class NewGiftActivity extends BaseActivity {
     }
 
     private void send() {
-        send.setVisibility(View.GONE);
+        //send.setVisibility(View.GONE);
+        ActivityUtil.showProgressDialog(this, "Sending gift...");
         disbaleEdit();
         takeScreenshot();
+        ActivityUtil.cancelProgressDialog();
+        Toast.makeText(this, "Gift sent", Toast.LENGTH_LONG).show();
+        NewGiftActivity.this.finish();
     }
 
     private void enableEdit() {

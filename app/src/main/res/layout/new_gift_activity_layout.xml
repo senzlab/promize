@@ -32,7 +32,33 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryTrans" />
+            android:background="@color/colorPrimaryTrans">
+
+            <LinearLayout
+                android:id="@+id/sampath_gift_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="55dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/sampath_logo"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/sampath_logo_white" />
+
+                <TextView
+                    android:id="@+id/sampath_gift"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Sampath gift card"
+                    android:textColor="@color/white"
+                    android:textSize="22sp" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/gift_info"
@@ -47,38 +73,12 @@
                 android:layout_height="match_parent"
                 android:gravity="center">
 
-                <LinearLayout
-                    android:id="@+id/sampath_gift_info"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="55dp"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:id="@+id/sampath_logo"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/sampath_logo_white" />
-
-                    <TextView
-                        android:id="@+id/sampath_gift"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="10dp"
-                        android:gravity="center_vertical"
-                        android:text="Sampath gift card"
-                        android:textColor="@color/white"
-                        android:textSize="22sp" />
-                </LinearLayout>
-
                 <EditText
                     android:id="@+id/new_cheque_from"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/sampath_gift_info"
                     android:layout_marginLeft="50dp"
                     android:layout_marginRight="50dp"
-                    android:layout_marginTop="15dp"
                     android:background="@drawable/edit_text_border_bottom"
                     android:hint="From"
                     android:inputType="textCapSentences|textNoSuggestions"
@@ -148,7 +148,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:scaleType="center"
-            android:src="@drawable/send"
+            android:src="@drawable/heart1"
             android:visibility="gone"
             app:backgroundTint="@color/white"
             app:fabSize="normal" />
