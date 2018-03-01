@@ -97,7 +97,7 @@
             android:paddingRight="20dp"
             android:paddingTop="10dp"
             android:text="Hi This is a message"
-            android:textColor="@color/white"
+            android:textColor="@color/android_grey"
             android:textSize="20dp" />
     </LinearLayout>
 

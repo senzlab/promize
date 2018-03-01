@@ -54,7 +54,7 @@
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
                     android:gravity="center_vertical"
-                    android:text="Sampath gift card"
+                    android:text="Sampath Promize"
                     android:textColor="@color/white"
                     android:textSize="22sp" />
             </LinearLayout>

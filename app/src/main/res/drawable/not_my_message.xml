@@ -2,7 +2,7 @@
 <!--  res/drawable/rounded_edittext.xml -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle" android:padding="10dp">
-    <solid android:color="@color/not_my_chat_message"/>
+    <solid android:color="#F0F0F0"/>
     <corners
         android:bottomRightRadius="30dp"
         android:bottomLeftRadius="30dp"

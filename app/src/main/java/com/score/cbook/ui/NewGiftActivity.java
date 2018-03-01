@@ -1,13 +1,15 @@
 package com.score.cbook.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -19,13 +21,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
+import com.score.cbook.application.IntentProvider;
+import com.score.cbook.db.ChequeSource;
+import com.score.cbook.enums.ChequeState;
+import com.score.cbook.enums.DeliveryState;
+import com.score.cbook.enums.IntentType;
+import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.ImageUtil;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Date;
+import com.score.cbook.util.SenzUtil;
+import com.score.senzc.enums.SenzTypeEnum;
+import com.score.senzc.pojos.Senz;
 
 public class NewGiftActivity extends BaseActivity {
     protected static final String TAG = NewGiftActivity.class.getName();
@@ -48,8 +55,21 @@ public class NewGiftActivity extends BaseActivity {
 
     // user
     private ChequeUser user;
+    private Cheque cheque;
 
     private PowerManager.WakeLock wakeLock;
+
+    private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "Got message from Senz service");
+            if (intent.hasExtra("SENZ")) {
+                Senz senz = intent.getExtras().getParcelable("SENZ");
+                handleSenz(senz);
+            }
+        }
+    };
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +112,18 @@ public class NewGiftActivity extends BaseActivity {
 
         releaseWakeLock();
         releaseCamera();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (senzReceiver != null) unregisterReceiver(senzReceiver);
     }
 
     private void initUi() {
@@ -192,33 +224,19 @@ public class NewGiftActivity extends BaseActivity {
         }
     }
 
-    private void takeScreenshot() {
-        Date now = new Date();
-        android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+    private byte[] takeScreenshot() {
+        // create bitmap screen capture
+        View v1 = findViewById(R.id.relative_layout);
+        v1.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+        v1.setDrawingCacheEnabled(false);
 
-        try {
-            // image naming and path  to include sd card  appending name you choose for file
-            String mPath = Environment.getExternalStorageDirectory().toString() + "/" + now + ".jpg";
+        // resize and save image
+        Long t = System.currentTimeMillis();
+        byte[] resizedImage = ImageUtil.compressImage(ImageUtil.bmpToBytes(bitmap), false, false);
+        ImageUtil.saveImg(SenzUtil.getUid(this, t.toString() + ".jpg"), resizedImage);
 
-            // create bitmap screen capture
-            View v1 = findViewById(R.id.relative_layout);
-            v1.setDrawingCacheEnabled(true);
-            Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-            v1.setDrawingCacheEnabled(false);
-
-            File imageFile = new File(mPath);
-
-            FileOutputStream outputStream = new FileOutputStream(imageFile);
-            int quality = 100;
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
-            outputStream.flush();
-            outputStream.close();
-
-            //openScreenshot(imageFile);
-        } catch (Throwable e) {
-            // Several error may come out with file handling or DOM
-            e.printStackTrace();
-        }
+        return resizedImage;
     }
 
     private void takePhoto() {
@@ -243,10 +261,10 @@ public class NewGiftActivity extends BaseActivity {
         //send.setVisibility(View.GONE);
         ActivityUtil.showProgressDialog(this, "Sending gift...");
         disbaleEdit();
-        takeScreenshot();
-        ActivityUtil.cancelProgressDialog();
-        Toast.makeText(this, "Gift sent", Toast.LENGTH_LONG).show();
-        NewGiftActivity.this.finish();
+        sendCheque(takeScreenshot());
+        //ActivityUtil.cancelProgressDialog();
+        //Toast.makeText(this, "Gift sent", Toast.LENGTH_LONG).show();
+        //NewGiftActivity.this.finish();
     }
 
     private void enableEdit() {
@@ -259,6 +277,59 @@ public class NewGiftActivity extends BaseActivity {
         from.setEnabled(false);
         to.setEnabled(false);
         amount.setEnabled(false);
+    }
+
+
+    private void saveCheque() {
+        try {
+            String uid = SenzUtil.getUid(this, cheque.getTimestamp().toString());
+
+            // save img in sdcard
+            String imgName = uid + ".jpg";
+            ImageUtil.saveImg(imgName, cheque.getBlob());
+
+            // create secret
+            cheque.setUid(uid);
+            ChequeSource.createCheque(this, cheque);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendCheque(byte[] compBytes) {
+        this.cheque = new Cheque();
+        cheque.setUser(user);
+        cheque.setAmount(3000);
+        cheque.setDate("12/03/2018");
+        cheque.setDeliveryState(DeliveryState.PENDING);
+        cheque.setChequeState(ChequeState.TRANSFER);
+        cheque.setMyCheque(true);
+        cheque.setViewed(true);
+        cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
+
+        Long timestamp = System.currentTimeMillis() / 1000;
+        cheque.setTimestamp(timestamp);
+
+        Senz senz = SenzUtil.transferChequeSenz(this, cheque, cheque.getTimestamp());
+        send(senz);
+    }
+
+
+    private void handleSenz(Senz senz) {
+        if (senz.getSenzType() == SenzTypeEnum.DATA) {
+            if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
+                // share success
+                ActivityUtil.cancelProgressDialog();
+
+                // save cheque
+                saveCheque();
+
+                Toast.makeText(this, "Successfully sent", Toast.LENGTH_LONG).show();
+                this.finish();
+            } else {
+                Toast.makeText(this, "Fail to send", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void sendSelfieSenz(Long timestamp, String uid, String img) {
