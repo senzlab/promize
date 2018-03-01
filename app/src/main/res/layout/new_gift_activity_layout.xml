@@ -32,40 +32,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/colorPrimaryTrans">
+            android:background="@color/colorPrimary">
 
-            <LinearLayout
-                android:id="@+id/sampath_gift_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="55dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:id="@+id/sampath_logo"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/sampath_logo_white" />
-
-                <TextView
-                    android:id="@+id/sampath_gift"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center_vertical"
-                    android:text="Sampath Promize"
-                    android:textColor="@color/white"
-                    android:textSize="22sp" />
-            </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/gift_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorPrimaryTrans"
+            android:layout_weight="0"
+            android:background="@color/colorPrimary"
             android:visibility="visible">
 
             <RelativeLayout
@@ -73,55 +49,130 @@
                 android:layout_height="match_parent"
                 android:gravity="center">
 
-                <EditText
-                    android:id="@+id/new_cheque_from"
+                <LinearLayout
+                    android:id="@+id/sampath_gift_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:background="@drawable/edit_text_border_bottom"
-                    android:hint="From"
-                    android:inputType="textCapSentences|textNoSuggestions"
-                    android:paddingBottom="10dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textCursorDrawable="@drawable/cursor_drawable"
-                    android:textSize="22sp" />
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/new_cheque_username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/new_cheque_from"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/edit_text_border_bottom"
-                    android:hint="To"
-                    android:inputType="textCapSentences|textNoSuggestions"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textCursorDrawable="@drawable/cursor_drawable"
-                    android:textSize="22sp" />
+                    <ImageView
+                        android:id="@+id/sampath_logo"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/sampath_logo_white" />
 
-                <EditText
-                    android:id="@+id/new_cheque_amount"
+                    <TextView
+                        android:id="@+id/sampath_gift"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:text="Sampath Promize"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/from_l"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/new_cheque_username"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="15dp"
-                    android:background="@drawable/edit_text_border_bottom"
-                    android:hint="Amount"
-                    android:inputType="text"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textCursorDrawable="@drawable/cursor_drawable"
-                    android:textSize="22sp" />
+                    android:layout_below="@+id/sampath_gift_info"
+                    android:layout_marginTop="40dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="40dp"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:src="@drawable/user" />
+
+                    <EditText
+                        android:id="@+id/new_cheque_from"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
+                        android:background="@drawable/edit_text_border_bottom"
+                        android:gravity="center"
+                        android:hint="From"
+                        android:inputType="textCapSentences|textNoSuggestions"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:textSize="22sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/to_l"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/from_l"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="40dp"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:src="@drawable/to" />
+
+                    <EditText
+                        android:id="@+id/new_cheque_username"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
+                        android:background="@drawable/edit_text_border_bottom"
+                        android:gravity="center"
+                        android:hint="To"
+                        android:inputType="textCapSentences|textNoSuggestions"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:textSize="22sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/amount_l"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/to_l"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="40dp"
+                        android:paddingBottom="10dp"
+                        android:paddingTop="10dp"
+                        android:src="@drawable/pause" />
+
+                    <EditText
+                        android:id="@+id/new_cheque_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginRight="50dp"
+                        android:background="@drawable/edit_text_border_bottom"
+                        android:gravity="center"
+                        android:hint="Amount"
+                        android:inputType="textCapSentences|textNoSuggestions"
+                        android:textColor="@color/white"
+                        android:textColorHint="@color/white"
+                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:textSize="22sp" />
+                </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
@@ -135,9 +186,9 @@
             android:id="@+id/capture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|center"
             android:scaleType="center"
-            android:src="@drawable/capture_2"
+            android:src="@drawable/heart2"
             android:visibility="visible"
             app:backgroundTint="@color/white"
             app:fabSize="normal" />

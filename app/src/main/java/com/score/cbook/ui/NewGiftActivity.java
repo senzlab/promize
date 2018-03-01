@@ -77,8 +77,8 @@ public class NewGiftActivity extends BaseActivity {
         setContentView(R.layout.new_gift_activity_layout);
 
         // init camera with front
-        acquireWakeLock();
-        initCameraPreview(Camera.CameraInfo.CAMERA_FACING_FRONT);
+        //acquireWakeLock();
+        //initCameraPreview(Camera.CameraInfo.CAMERA_FACING_FRONT);
 
         // init
         initUi();
@@ -110,8 +110,8 @@ public class NewGiftActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        releaseWakeLock();
-        releaseCamera();
+        //releaseWakeLock();
+        //releaseCamera();
     }
 
     @Override
