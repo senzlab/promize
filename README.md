@@ -1,2 +1,2 @@
-# Rahasak
-Share your secrets. (SenZ Org)
+# Promize
+Sampath promize on top of blockchain
