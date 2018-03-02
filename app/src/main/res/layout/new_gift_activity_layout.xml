@@ -103,8 +103,8 @@
                         android:hint="From"
                         android:inputType="textCapSentences|textNoSuggestions"
                         android:textColor="@color/white"
-                        android:textColorHint="@color/white"
-                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:textColorHint="#DADADC"
+                        android:textCursorDrawable="@drawable/cursor_drawable_white"
                         android:textSize="22sp" />
                 </RelativeLayout>
 
@@ -136,8 +136,8 @@
                         android:hint="To"
                         android:inputType="textCapSentences|textNoSuggestions"
                         android:textColor="@color/white"
-                        android:textColorHint="@color/white"
-                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:textColorHint="#DADADC"
+                        android:textCursorDrawable="@drawable/cursor_drawable_white"
                         android:textSize="22sp" />
                 </RelativeLayout>
 
@@ -169,8 +169,8 @@
                         android:hint="Amount"
                         android:inputType="textCapSentences|textNoSuggestions"
                         android:textColor="@color/white"
-                        android:textColorHint="@color/white"
-                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:textColorHint="#DADADC"
+                        android:textCursorDrawable="@drawable/cursor_drawable_white"
                         android:textSize="22sp" />
                 </RelativeLayout>
             </RelativeLayout>
