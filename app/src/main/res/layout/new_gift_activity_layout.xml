@@ -167,7 +167,7 @@
                         android:background="@drawable/edit_text_border_bottom"
                         android:gravity="center"
                         android:hint="Amount"
-                        android:inputType="textCapSentences|textNoSuggestions"
+                        android:inputType="numberDecimal"
                         android:textColor="@color/white"
                         android:textColorHint="#DADADC"
                         android:textCursorDrawable="@drawable/cursor_drawable_white"
