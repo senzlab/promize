@@ -141,7 +141,7 @@ public class NewGiftActivity extends BaseActivity {
         capturedPhoto = (ImageView) findViewById(R.id.capture_photo);
 
         capture = (FloatingActionButton) findViewById(R.id.capture);
-        capture.setVisibility(View.VISIBLE);
+        capture.setVisibility(View.GONE);
         capture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,7 +150,7 @@ public class NewGiftActivity extends BaseActivity {
         });
 
         send = (FloatingActionButton) findViewById(R.id.send);
-        send.setVisibility(View.GONE);
+        send.setVisibility(View.VISIBLE);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

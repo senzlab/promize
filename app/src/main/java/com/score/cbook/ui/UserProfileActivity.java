@@ -1,7 +1,6 @@
 package com.score.cbook.ui;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -108,8 +107,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         // contact image
         Picasso.with(this)
                 .load(PhoneBookUtil.getContactUri(this, chequeUser.getPhone()))
-                .placeholder(R.drawable.default_user_icon)
-                .centerInside()
+                .placeholder(R.drawable.df_user)
                 .error(R.drawable.df_user)
                 .into(userImageView);
 

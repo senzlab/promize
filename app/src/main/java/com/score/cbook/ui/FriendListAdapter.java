@@ -76,7 +76,7 @@ class FriendListAdapter extends ArrayAdapter<ChequeUser> {
         // load contact image
         Picasso.with(context)
                 .load(R.drawable.df_user)
-                .placeholder(R.drawable.default_user)
+                .placeholder(R.drawable.df_user)
                 .into(viewHolder.userImageView);
 
         // request text
