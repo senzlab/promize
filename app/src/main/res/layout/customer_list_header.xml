@@ -30,7 +30,7 @@
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/delete"
@@ -47,6 +47,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0.3dp"
+        android:visibility="gone"
         android:layout_alignParentBottom="true"
         android:background="#d4d4d4" />
 </RelativeLayout>

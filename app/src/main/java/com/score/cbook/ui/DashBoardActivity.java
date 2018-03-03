@@ -58,7 +58,7 @@ public class DashBoardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // navigate to new cheque
-                Intent intent = new Intent(DashBoardActivity.this, ChequeListActivity.class);
+                Intent intent = new Intent(DashBoardActivity.this, ChequeListTabActivity.class);
                 intent.putExtra("SHOW_MY_CHEQUES", false);
                 startActivity(intent);
             }

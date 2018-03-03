@@ -133,6 +133,7 @@
             android:name=".ui.NewGiftActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
+        <activity android:name=".ui.ChequeListTabActivity" />
         <!-- Servicves -->
         <service
             android:name="com.score.cbook.remote.SenzService"
