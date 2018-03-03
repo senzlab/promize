@@ -15,9 +15,6 @@ import android.widget.TextView;
 
 import com.score.cbook.R;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class ChequeListTabActivity extends BaseActivity {
 
     private ViewPager viewPager;
@@ -64,8 +61,6 @@ public class ChequeListTabActivity extends BaseActivity {
     private void initViewPager() {
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new AboutFragment(), "Sent");
-        adapter.addFragment(new AboutFragment(), "Received");
         viewPager.setAdapter(adapter);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -79,31 +74,39 @@ public class ChequeListTabActivity extends BaseActivity {
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+        private int NUM_ITEMS = 2;
 
-        public ViewPagerAdapter(FragmentManager manager) {
+        ViewPagerAdapter(FragmentManager manager) {
             super(manager);
         }
 
         @Override
         public Fragment getItem(int position) {
-            return mFragmentList.get(position);
+            switch (position) {
+                case 0:
+                    return new ReceivedPromizeFragment();
+                case 1:
+                    return new SentPromizeFragment();
+                default:
+                    return null;
+            }
         }
 
         @Override
         public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
+            return NUM_ITEMS;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
+            switch (position) {
+                case 0:
+                    return "Received";
+                case 1:
+                    return "Sent";
+                default:
+                    return null;
+            }
         }
     }
 

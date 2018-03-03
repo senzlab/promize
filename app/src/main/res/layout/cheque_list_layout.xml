@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
+        android:visibility="gone"
         app:contentInsetEnd="0dp"
         app:contentInsetStart="0dp"
         app:popupTheme="@style/MyMaterialTheme" />
@@ -62,8 +63,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="@color/transparent">
+        android:background="@color/transparent"
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="match_parent"
