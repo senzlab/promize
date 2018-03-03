@@ -15,8 +15,8 @@
         android:orientation="horizontal">
 
         <RelativeLayout
-            android:layout_width="match_parent"
             android:id="@+id/write_cheque_layout"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
@@ -39,7 +39,7 @@
                     android:layout_below="@+id/new_cheque"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="Send Gift"
+                    android:text="Send Promize"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
@@ -52,8 +52,8 @@
             android:background="#f9bc91" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
             android:id="@+id/customers_layout"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
@@ -99,9 +99,9 @@
         android:orientation="horizontal">
 
         <RelativeLayout
+            android:id="@+id/inbox_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/inbox_layout"
             android:layout_weight="1">
 
 
@@ -124,7 +124,7 @@
                     android:layout_below="@+id/received_cheques"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="Received Cheques"
+                    android:text="Promizes"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
@@ -136,9 +136,9 @@
             android:background="#f9bc91" />
 
         <RelativeLayout
+            android:id="@+id/messages_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/messages_layout"
             android:layout_weight="1">
 
 
@@ -185,9 +185,9 @@
         android:orientation="horizontal">
 
         <RelativeLayout
+            android:id="@+id/outbox_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/outbox_layout"
             android:layout_weight="1">
 
             <RelativeLayout
@@ -222,9 +222,9 @@
             android:background="#f9bc91" />
 
         <RelativeLayout
+            android:id="@+id/support_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/support_layout"
             android:layout_weight="1">
 
             <RelativeLayout
