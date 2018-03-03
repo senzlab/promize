@@ -129,8 +129,7 @@ public class NewGiftActivity extends BaseActivity {
         to.setTypeface(typeface, Typeface.BOLD);
         amount.setTypeface(typeface, Typeface.BOLD);
 
-        send = (FloatingActionButton) findViewById(R.id.send);
-        send.setVisibility(View.VISIBLE);
+        send = (FloatingActionButton) findViewById(R.id.fab);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,8 +151,6 @@ public class NewGiftActivity extends BaseActivity {
     }
 
     private void prepareView() {
-        send.setVisibility(View.GONE);
-
         from.setEnabled(false);
         to.setEnabled(false);
         amount.setEnabled(false);
@@ -161,7 +158,7 @@ public class NewGiftActivity extends BaseActivity {
 
     private byte[] captureView() {
         // create bitmap screen capture
-        View v1 = findViewById(R.id.relative_layout);
+        View v1 = findViewById(R.id.capture_frame);
         v1.setDrawingCacheEnabled(true);
         Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
         v1.setDrawingCacheEnabled(false);
