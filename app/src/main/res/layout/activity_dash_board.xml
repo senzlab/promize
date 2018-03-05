@@ -200,7 +200,7 @@
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/group_outbox" />
+                    android:src="@drawable/setting_g" />
 
                 <TextView
                     android:id="@+id/outbox_text"
@@ -237,7 +237,7 @@
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/group_support" />
+                    android:src="@drawable/contact_g" />
 
                 <TextView
                     android:id="@+id/support_text"
