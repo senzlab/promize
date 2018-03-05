@@ -209,7 +209,7 @@
                     android:layout_below="@+id/sent_cheques"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="Sent Cheques"
+                    android:text="Settings"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>

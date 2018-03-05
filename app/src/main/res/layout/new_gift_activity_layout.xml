@@ -34,7 +34,36 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.3"
-            android:background="@color/colorPrimary" />
+            android:background="@color/colorPrimary">
+
+            <LinearLayout
+                android:id="@+id/sampath_gift_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/sampath_logo"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/sampath_logo_white" />
+
+                <TextView
+                    android:id="@+id/sampath_gift"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:text="Sampath promize"
+                    android:textColor="@color/white"
+                    android:textSize="22sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/gift_info"
@@ -50,38 +79,11 @@
                 android:layout_height="match_parent"
                 android:gravity="center">
 
-                <LinearLayout
-                    android:id="@+id/sampath_gift_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:id="@+id/sampath_logo"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/sampath_logo_white" />
-
-                    <TextView
-                        android:id="@+id/sampath_gift"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="10dp"
-                        android:text="Sampath Promize"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        android:visibility="gone" />
-                </LinearLayout>
 
                 <RelativeLayout
                     android:id="@+id/from_l"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/sampath_gift_info"
                     android:layout_marginTop="40dp"
                     android:visibility="gone">
 
@@ -171,6 +173,7 @@
                         android:gravity="center"
                         android:hint="Amount"
                         android:inputType="number"
+                        android:text="2500.00"
                         android:textColor="@color/colorPrimary"
                         android:textColorHint="#DADADC"
                         android:textCursorDrawable="@drawable/cursor_drawable"

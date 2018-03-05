@@ -124,7 +124,7 @@
                             android:paddingLeft="12dp"
                             android:paddingRight="12dp"
                             android:paddingTop="3dp"
-                            android:text="Deposit"
+                            android:text="New"
                             android:textSize="12sp" />
                     </LinearLayout>
 

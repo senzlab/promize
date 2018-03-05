@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.enums.ChequeState;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.util.PhoneBookUtil;
 import com.score.cbook.util.TimeUtil;
@@ -126,21 +125,23 @@ class ChequeListAdapter extends BaseAdapter {
         if (!secret.isViewed()) {
             viewHolder.sentTime.setTextColor(context.getResources().getColor(R.color.colorPrimary));
             viewHolder.sentTime.setTypeface(typeface, Typeface.BOLD);
+            viewHolder.depositText.setVisibility(View.VISIBLE);
         } else {
             viewHolder.sentTime.setTextColor(context.getResources().getColor(R.color.android_grey));
             viewHolder.sentTime.setTypeface(typeface, Typeface.NORMAL);
+            viewHolder.depositText.setVisibility(View.GONE);
         }
 
         // set deposit text
-        if (secret.isMyCheque()) {
-            viewHolder.depositText.setVisibility(View.GONE);
-        } else {
-            if (secret.getChequeState() == ChequeState.TRANSFER) {
-                viewHolder.depositText.setVisibility(View.VISIBLE);
-            } else {
-                viewHolder.depositText.setVisibility(View.GONE);
-            }
-        }
+//        if (secret.isMyCheque()) {
+//            viewHolder.depositText.setVisibility(View.GONE);
+//        } else {
+//            if (secret.isViewed()) {
+//                viewHolder.depositText.setVisibility(View.GONE);
+//            } else {
+//                viewHolder.depositText.setVisibility(View.VISIBLE);
+//            }
+//        }
     }
 
     /**

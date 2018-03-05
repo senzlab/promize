@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.db.ChequeSource;
-import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.util.ActivityUtil;
@@ -181,27 +180,27 @@ public class ViewChequeActivity extends BaseActivity {
         dateEditText.setText(cheque.getDate());
 
         // enable/disable deposit based on cheque owner
-        if (cheque.isMyCheque()) {
-            depositLayout.setVisibility(View.GONE);
-            transferLayout.setVisibility(View.GONE);
-
-            deposit.setVisibility(View.GONE);
-            transfer.setVisibility(View.GONE);
-        } else {
-            if (cheque.getChequeState() == ChequeState.TRANSFER) {
-                depositLayout.setVisibility(View.VISIBLE);
-                transferLayout.setVisibility(View.VISIBLE);
-
-                deposit.setVisibility(View.VISIBLE);
-                transfer.setVisibility(View.VISIBLE);
-            } else {
-                depositLayout.setVisibility(View.GONE);
-                transferLayout.setVisibility(View.GONE);
-
-                deposit.setVisibility(View.GONE);
-                transfer.setVisibility(View.GONE);
-            }
-        }
+//        if (cheque.isMyCheque()) {
+//            depositLayout.setVisibility(View.GONE);
+//            transferLayout.setVisibility(View.GONE);
+//
+//            deposit.setVisibility(View.GONE);
+//            transfer.setVisibility(View.GONE);
+//        } else {
+//            if (cheque.getChequeState() == ChequeState.TRANSFER) {
+//                depositLayout.setVisibility(View.VISIBLE);
+//                transferLayout.setVisibility(View.VISIBLE);
+//
+//                deposit.setVisibility(View.VISIBLE);
+//                transfer.setVisibility(View.VISIBLE);
+//            } else {
+//                depositLayout.setVisibility(View.GONE);
+//                transferLayout.setVisibility(View.GONE);
+//
+//                deposit.setVisibility(View.GONE);
+//                transfer.setVisibility(View.GONE);
+//            }
+//        }
     }
 
     private void initActionBar() {

@@ -35,7 +35,7 @@ public class DashBoardActivity extends BaseActivity {
 
         onClickWriteCheque();
         onClickReceivedCheques();
-        onClickSentCheques();
+        //onClickSentCheques();
         onClickCustomers();
         onClickMessages();
         onClickSupport();
