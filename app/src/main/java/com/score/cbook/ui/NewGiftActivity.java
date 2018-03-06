@@ -5,12 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,14 +36,23 @@ import com.score.senzc.pojos.Senz;
 public class NewGiftActivity extends BaseActivity {
     protected static final String TAG = NewGiftActivity.class.getName();
 
+    // camera related variables
+    private Camera camera;
+    private CameraPreview cameraPreview;
+
     // ui
     private TextView sampathGift;
     private EditText amount;
     private FloatingActionButton send;
+    private ImageView capturedPhoto;
+
+    private FrameLayout previewFrame;
 
     // user
     private ChequeUser user;
     private Cheque cheque;
+
+    private PowerManager.WakeLock wakeLock;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
         @Override
@@ -73,6 +87,10 @@ public class NewGiftActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_gift_activity_layout);
 
+        // init camera with front
+        acquireWakeLock();
+        initCameraPreview(Camera.CameraInfo.CAMERA_FACING_FRONT);
+
         // init
         initUi();
         initPrefs();
@@ -102,6 +120,9 @@ public class NewGiftActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        releaseWakeLock();
+        releaseCamera();
     }
 
     @Override
@@ -119,6 +140,7 @@ public class NewGiftActivity extends BaseActivity {
     private void initUi() {
         sampathGift = (TextView) findViewById(R.id.sampath_gift);
         amount = (EditText) findViewById(R.id.new_cheque_amount);
+        capturedPhoto = (ImageView) findViewById(R.id.capture_photo);
 
         sampathGift.setTypeface(typeface, Typeface.BOLD);
         amount.setTypeface(typeface, Typeface.BOLD);
@@ -141,11 +163,87 @@ public class NewGiftActivity extends BaseActivity {
     private void onClickSend() {
         prepareView();
         ActivityUtil.showProgressDialog(this, "Sending ...");
+        takePhoto();
         sendPromize(captureView());
     }
 
     private void prepareView() {
         amount.setEnabled(false);
+    }
+
+    private void releaseCamera() {
+        if (camera != null) {
+            Log.d(TAG, "Stopping preview in SurfaceDestroyed().");
+            camera.release();
+        }
+    }
+
+    private void acquireWakeLock() {
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "senz");
+        wakeLock.acquire();
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+    }
+
+    private void releaseWakeLock() {
+        wakeLock.release();
+
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    private void initCameraPreview(int camFace) {
+        releaseCameraPreview();
+
+        // render new preview
+        try {
+            camera = Camera.open(camFace);
+            cameraPreview = new CameraPreview(this, camera, camFace);
+
+            FrameLayout preview = (FrameLayout) findViewById(R.id.preview_frame);
+            preview.addView(cameraPreview);
+        } catch (Exception e) {
+            // cannot get camera or does not exist
+            e.printStackTrace();
+            Log.e(TAG, "No font cam");
+        }
+    }
+
+    private void releaseCameraPreview() {
+        if (cameraPreview != null) {
+            cameraPreview.surfaceDestroyed(cameraPreview.getHolder());
+            cameraPreview.getHolder().removeCallback(cameraPreview);
+            cameraPreview.destroyDrawingCache();
+
+            FrameLayout preview = (FrameLayout) findViewById(R.id.preview_frame);
+            preview.removeView(cameraPreview);
+
+            camera.stopPreview();
+            camera.release();
+        }
+    }
+
+    private void takePhoto() {
+        // AudioUtil.shootSound(this);
+        camera.takePicture(null, null, new Camera.PictureCallback() {
+            @Override
+            public void onPictureTaken(byte[] bytes, Camera camera) {
+                byte[] resizedImage = ImageUtil.compressImage(bytes, true, true);
+
+                releaseCameraPreview();
+
+                // create bitmap and set to post capture
+                Bitmap bitmap = ImageUtil.bytesToBmp(resizedImage);
+                capturedPhoto.setImageBitmap(bitmap);
+                send.setVisibility(View.GONE);
+            }
+        });
     }
 
     private byte[] captureView() {
