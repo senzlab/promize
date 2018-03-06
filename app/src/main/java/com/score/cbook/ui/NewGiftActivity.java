@@ -33,8 +33,6 @@ public class NewGiftActivity extends BaseActivity {
 
     // ui
     private TextView sampathGift;
-    private EditText from;
-    private EditText to;
     private EditText amount;
     private FloatingActionButton send;
 
@@ -120,13 +118,9 @@ public class NewGiftActivity extends BaseActivity {
 
     private void initUi() {
         sampathGift = (TextView) findViewById(R.id.sampath_gift);
-        from = (EditText) findViewById(R.id.new_cheque_from);
-        to = (EditText) findViewById(R.id.new_cheque_username);
         amount = (EditText) findViewById(R.id.new_cheque_amount);
 
         sampathGift.setTypeface(typeface, Typeface.BOLD);
-        from.setTypeface(typeface, Typeface.BOLD);
-        to.setTypeface(typeface, Typeface.BOLD);
         amount.setTypeface(typeface, Typeface.BOLD);
 
         send = (FloatingActionButton) findViewById(R.id.fab);
@@ -151,8 +145,6 @@ public class NewGiftActivity extends BaseActivity {
     }
 
     private void prepareView() {
-        from.setEnabled(false);
-        to.setEnabled(false);
         amount.setEnabled(false);
     }
 

@@ -11,30 +11,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <FrameLayout
-        android:id="@+id/capture_photo_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/capture_photo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY" />
-    </FrameLayout>
-
     <LinearLayout
         android:id="@+id/capture_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/promizebg"
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.3"
-            android:background="@color/colorPrimary">
+            android:background="@color/colorPrimaryTrans">
 
             <LinearLayout
                 android:id="@+id/sampath_gift_info"
@@ -42,12 +31,12 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/sampath_logo"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/sampath_logo_white" />
 
@@ -57,95 +46,30 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
-                    android:text="Sampath promize"
+                    android:text="Promize"
                     android:textColor="@color/white"
-                    android:textSize="22sp"
-                    android:visibility="gone" />
+                    android:textSize="25sp"
+                    android:visibility="visible" />
             </LinearLayout>
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/gift_info"
+            android:id="@+id/info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.7"
-            android:background="@color/white"
+            android:background="@color/colorPrimaryTrans"
             android:visibility="visible">
 
             <RelativeLayout
                 android:id="@+id/bla"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:background="@color/white_trans"
                 android:gravity="center">
-
-
-                <RelativeLayout
-                    android:id="@+id/from_l"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="45dp"
-                        android:paddingBottom="10dp"
-                        android:paddingTop="10dp"
-                        android:src="@drawable/user" />
-
-                    <EditText
-                        android:id="@+id/new_cheque_from"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="55dp"
-                        android:layout_marginRight="55dp"
-                        android:background="@drawable/edit_text_border_bottom"
-                        android:gravity="center"
-                        android:hint="From"
-                        android:inputType="textCapSentences|textNoSuggestions"
-                        android:textColor="@color/white"
-                        android:textColorHint="#DADADC"
-                        android:textCursorDrawable="@drawable/cursor_drawable_white"
-                        android:textSize="22sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/to_l"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/from_l"
-                    android:layout_marginTop="10dp"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="45dp"
-                        android:paddingBottom="10dp"
-                        android:paddingTop="10dp"
-                        android:src="@drawable/to" />
-
-                    <EditText
-                        android:id="@+id/new_cheque_username"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="55dp"
-                        android:layout_marginRight="55dp"
-                        android:background="@drawable/edit_text_border_bottom"
-                        android:gravity="center"
-                        android:hint="To"
-                        android:inputType="textCapSentences|textNoSuggestions"
-                        android:textColor="@color/white"
-                        android:textColorHint="#DADADC"
-                        android:textCursorDrawable="@drawable/cursor_drawable_white"
-                        android:textSize="22sp" />
-                </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/amount_l"
@@ -158,22 +82,22 @@
                         android:layout_height="40dp"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="47dp"
+                        android:layout_marginLeft="58dp"
                         android:paddingBottom="10dp"
                         android:paddingTop="10dp"
-                        android:src="@drawable/rupee" />
+                        android:src="@drawable/rupee"
+                        android:visibility="visible" />
 
                     <EditText
                         android:id="@+id/new_cheque_amount"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:layout_marginLeft="55dp"
-                        android:layout_marginRight="55dp"
+                        android:layout_marginLeft="65dp"
+                        android:layout_marginRight="65dp"
                         android:background="@drawable/edit_text_border_bottom"
                         android:gravity="center"
                         android:hint="Amount"
                         android:inputType="number"
-                        android:text="2500.00"
                         android:textColor="@color/colorPrimary"
                         android:textColorHint="#DADADC"
                         android:textCursorDrawable="@drawable/cursor_drawable"
@@ -203,8 +127,7 @@
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:clickable="true"
+            android:layout_gravity="end|bottom"
             android:src="@drawable/send_g"
             app:backgroundTint="#FFF"
             app:rippleColor="#FFF" />
