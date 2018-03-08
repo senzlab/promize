@@ -73,13 +73,6 @@ public class NewGiftActivity extends BaseActivity {
     };
 
     private void handleSenz(Senz senz) {
-        ActivityUtil.cancelProgressDialog();
-
-        // save cheque
-        //savePromize();
-
-        Toast.makeText(this, "Successfully sent", Toast.LENGTH_LONG).show();
-
         if (senz.getSenzType() == SenzTypeEnum.DATA) {
             if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
                 // share success
@@ -315,8 +308,6 @@ public class NewGiftActivity extends BaseActivity {
 
         Senz senz = SenzUtil.transferChequeSenz(this, cheque, cheque.getTimestamp());
         send(senz);
-
-        savePromize();
     }
 
     private void savePromize() {

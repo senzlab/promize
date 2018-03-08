@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
+import com.score.cbook.enums.ChequeState;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.util.PhoneBookUtil;
 import com.score.cbook.util.TimeUtil;
@@ -57,7 +58,7 @@ class ChequeListAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         final ViewHolder holder;
-        final Cheque secret = (Cheque) getItem(i);
+        final Cheque cheque = (Cheque) getItem(i);
 
         if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -84,17 +85,17 @@ class ChequeListAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        setUpRow(secret, holder);
+        setUpRow(cheque, holder);
         return view;
     }
 
-    private void setUpRow(Cheque secret, ViewHolder viewHolder) {
+    private void setUpRow(Cheque cheque, ViewHolder viewHolder) {
         // set username/name
-        viewHolder.sender.setText(PhoneBookUtil.getContactName(context, secret.getUser().getPhone()));
-        viewHolder.message.setText("Rs " + secret.getAmount() + ".00");
+        viewHolder.sender.setText(PhoneBookUtil.getContactName(context, cheque.getUser().getPhone()));
+        viewHolder.message.setText("Rs " + cheque.getAmount() + ".00");
 
-        if (secret.getTimestamp() != null) {
-            viewHolder.sentTime.setText(TimeUtil.getTimeInWords(secret.getTimestamp()));
+        if (cheque.getTimestamp() != null) {
+            viewHolder.sentTime.setText(TimeUtil.getTimeInWords(cheque.getTimestamp()));
         }
 
         // load contact image
@@ -104,44 +105,42 @@ class ChequeListAdapter extends BaseAdapter {
                 .into(viewHolder.userImage);
 
         // selected state
-        if (secret.isSelected()) {
+        if (cheque.isSelected()) {
             viewHolder.selected.setVisibility(View.VISIBLE);
         } else {
             viewHolder.selected.setVisibility(View.GONE);
         }
 
         // unread secret count
-        if (secret.getUser().getUnreadSecretCount() > 0) {
+        if (cheque.getUser().getUnreadSecretCount() > 0) {
             viewHolder.sentTime.setTextColor(context.getResources().getColor(R.color.colorPrimary));
             viewHolder.sentTime.setTypeface(typeface, Typeface.BOLD);
             viewHolder.unreadCount.setVisibility(View.VISIBLE);
-            viewHolder.unreadText.setText(secret.getUser().getUnreadSecretCount() + "");
+            viewHolder.unreadText.setText(cheque.getUser().getUnreadSecretCount() + "");
         } else {
             viewHolder.sentTime.setTextColor(context.getResources().getColor(R.color.android_grey));
             viewHolder.sentTime.setTypeface(typeface, Typeface.NORMAL);
             viewHolder.unreadCount.setVisibility(View.GONE);
         }
 
-        if (!secret.isViewed()) {
+        if (!cheque.isViewed()) {
             viewHolder.sentTime.setTextColor(context.getResources().getColor(R.color.colorPrimary));
             viewHolder.sentTime.setTypeface(typeface, Typeface.BOLD);
-            viewHolder.depositText.setVisibility(View.VISIBLE);
         } else {
             viewHolder.sentTime.setTextColor(context.getResources().getColor(R.color.android_grey));
             viewHolder.sentTime.setTypeface(typeface, Typeface.NORMAL);
-            viewHolder.depositText.setVisibility(View.GONE);
         }
 
         // set deposit text
-//        if (secret.isMyCheque()) {
-//            viewHolder.depositText.setVisibility(View.GONE);
-//        } else {
-//            if (secret.isViewed()) {
-//                viewHolder.depositText.setVisibility(View.GONE);
-//            } else {
-//                viewHolder.depositText.setVisibility(View.VISIBLE);
-//            }
-//        }
+        if (cheque.isMyCheque()) {
+            viewHolder.depositText.setVisibility(View.GONE);
+        } else {
+            if (cheque.getChequeState() == ChequeState.TRANSFER) {
+                viewHolder.depositText.setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.depositText.setVisibility(View.GONE);
+            }
+        }
     }
 
     /**

@@ -18,7 +18,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
     private static SenzorsDbHelper senzorsDbHelper;
 
     // If you change the database schema, you must increment the database version
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
     private static final String DATABASE_NAME = "Cheque.db";
 
     // data types, keywords and queries
@@ -129,7 +129,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "OnUpgrade: updating db helper, db version - " + DATABASE_VERSION);
 
-        //db.execSQL("DROP TABLE USER;");
+        db.execSQL("DROP TABLE USER;");
         db.execSQL("DROP TABLE CHEQUE;");
         db.execSQL("DROP TABLE SECRET;");
         onCreate(db);
