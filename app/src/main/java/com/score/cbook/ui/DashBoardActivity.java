@@ -105,6 +105,8 @@ public class DashBoardActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 ChequeUser chequeUser = new ChequeUser("sampath", "sampath");
+                UserSource.deleteUser(DashBoardActivity.this, chequeUser.getUsername());
+                SecretSource.deleteSecretsOfUser(DashBoardActivity.this, chequeUser.getUsername());
 
                 if (!UserSource.isExistingUser(DashBoardActivity.this, "sampath")) {
                     // create admin sampath user and secret if not exists
@@ -116,7 +118,7 @@ public class DashBoardActivity extends BaseActivity {
                     Secret secret = new Secret();
                     secret.setMySecret(false);
                     secret.setBlobType(BlobType.TEXT);
-                    secret.setBlob("How can we help you? Let us know your problem, we will help to your solve it :) ");
+                    secret.setBlob("How can we help you? Let us know your problem, we promiZe you to solve it :) ");
                     secret.setUser(chequeUser);
                     Long timestamp = System.currentTimeMillis() / 1000;
                     secret.setTimeStamp(timestamp);

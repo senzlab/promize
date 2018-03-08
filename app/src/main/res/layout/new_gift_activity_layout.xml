@@ -130,19 +130,17 @@
             android:id="@+id/send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="top|end"
-            android:scaleType="center"
-            android:src="@drawable/sendp"
-            android:visibility="gone"
-            app:backgroundTint="@color/white"
-            app:fabSize="normal" />
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/heart1"
+            app:backgroundTint="#FFF"
+            app:rippleColor="#FFF" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:src="@drawable/send_g"
+            android:src="@drawable/capture_2"
             app:backgroundTint="#FFF"
             app:rippleColor="#FFF" />
 

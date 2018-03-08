@@ -143,8 +143,11 @@ public class ChequeListActivity extends BaseActivity implements AdapterView.OnIt
         final Cheque cheque = chequeList.get(position);
 
         // open cheque
-        Intent intent = new Intent(ChequeListActivity.this, ViewChequeActivity.class);
-        intent.putExtra("CHEQUE", cheque);
+        //Intent intent = new Intent(ChequeListActivity.this, ViewChequeActivity.class);
+
+        // cheque preview
+        Intent intent = new Intent(this, ChequePActivity.class);
+        intent.putExtra("UID", cheque.getUid());
         startActivity(intent);
     }
 

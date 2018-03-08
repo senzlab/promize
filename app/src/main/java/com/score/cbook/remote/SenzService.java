@@ -338,6 +338,7 @@ public class SenzService extends Service {
         }
 
         private void closeCom() {
+            Log.d(TAG, "close comm");
             running = false;
 
             try {

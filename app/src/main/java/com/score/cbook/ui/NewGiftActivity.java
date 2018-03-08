@@ -4,18 +4,26 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
+import android.util.AttributeSet;
 import android.util.Base64;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,10 +51,9 @@ public class NewGiftActivity extends BaseActivity {
     // ui
     private TextView sampathGift;
     private EditText amount;
+    private FloatingActionButton capture;
     private FloatingActionButton send;
     private ImageView capturedPhoto;
-
-    private FrameLayout previewFrame;
 
     // user
     private ChequeUser user;
@@ -66,6 +73,13 @@ public class NewGiftActivity extends BaseActivity {
     };
 
     private void handleSenz(Senz senz) {
+        ActivityUtil.cancelProgressDialog();
+
+        // save cheque
+        //savePromize();
+
+        Toast.makeText(this, "Successfully sent", Toast.LENGTH_LONG).show();
+
         if (senz.getSenzType() == SenzTypeEnum.DATA) {
             if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
                 // share success
@@ -94,6 +108,7 @@ public class NewGiftActivity extends BaseActivity {
         // init
         initUi();
         initPrefs();
+        initSignature();
     }
 
     @Override
@@ -145,7 +160,16 @@ public class NewGiftActivity extends BaseActivity {
         sampathGift.setTypeface(typeface, Typeface.BOLD);
         amount.setTypeface(typeface, Typeface.BOLD);
 
-        send = (FloatingActionButton) findViewById(R.id.fab);
+        capture = (FloatingActionButton) findViewById(R.id.fab);
+        capture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // capture
+                onClickCapture();
+            }
+        });
+
+        send = (FloatingActionButton) findViewById(R.id.send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,6 +177,9 @@ public class NewGiftActivity extends BaseActivity {
                 onClickSend();
             }
         });
+
+        send.setVisibility(View.GONE);
+        capture.setVisibility(View.VISIBLE);
     }
 
     private void initPrefs() {
@@ -160,11 +187,21 @@ public class NewGiftActivity extends BaseActivity {
             this.user = getIntent().getParcelableExtra("USER");
     }
 
-    private void onClickSend() {
-        prepareView();
-        ActivityUtil.showProgressDialog(this, "Sending ...");
+    private void initSignature() {
+        RelativeLayout signatureView = (RelativeLayout) findViewById(R.id.img);
+
+        Signature signature = new Signature(this, null);
+        signatureView.addView(signature);
+    }
+
+    private void onClickCapture() {
         takePhoto();
-        sendPromize(captureView());
+    }
+
+    private void onClickSend() {
+        ActivityUtil.showProgressDialog(this, "Sending ...");
+        byte[] p = captureView();
+        sendPromize(p);
     }
 
     private void prepareView() {
@@ -241,14 +278,15 @@ public class NewGiftActivity extends BaseActivity {
                 // create bitmap and set to post capture
                 Bitmap bitmap = ImageUtil.bytesToBmp(resizedImage);
                 capturedPhoto.setImageBitmap(bitmap);
-                send.setVisibility(View.GONE);
+                send.setVisibility(View.VISIBLE);
+                capture.setVisibility(View.GONE);
             }
         });
     }
 
     private byte[] captureView() {
         // create bitmap screen capture
-        View v1 = findViewById(R.id.capture_frame);
+        View v1 = findViewById(R.id.relative_layout);
         v1.setDrawingCacheEnabled(true);
         Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
         v1.setDrawingCacheEnabled(false);
@@ -264,7 +302,7 @@ public class NewGiftActivity extends BaseActivity {
     private void sendPromize(byte[] compBytes) {
         this.cheque = new Cheque();
         cheque.setUser(user);
-        cheque.setAmount(3000);
+        cheque.setAmount(10000);
         cheque.setDate("12/03/2018");
         cheque.setDeliveryState(DeliveryState.PENDING);
         cheque.setChequeState(ChequeState.TRANSFER);
@@ -277,6 +315,8 @@ public class NewGiftActivity extends BaseActivity {
 
         Senz senz = SenzUtil.transferChequeSenz(this, cheque, cheque.getTimestamp());
         send(senz);
+
+        savePromize();
     }
 
     private void savePromize() {
@@ -294,5 +334,76 @@ public class NewGiftActivity extends BaseActivity {
             e.printStackTrace();
         }
     }
+
+    public class Signature extends View {
+        static final float STROKE_WIDTH = 4f;
+        static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
+        Paint paint = new Paint();
+        Path path = new Path();
+
+        float lastTouchX;
+        float lastTouchY;
+        final RectF dirtyRect = new RectF();
+
+        public Signature(Context context, AttributeSet attrs) {
+            super(context, attrs);
+            paint.setAntiAlias(true);
+            paint.setColor(Color.BLACK);
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeJoin(Paint.Join.ROUND);
+            paint.setStrokeWidth(STROKE_WIDTH);
+        }
+
+        @Override
+        protected void onDraw(Canvas canvas) {
+            canvas.drawPath(path, paint);
+        }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent event) {
+            float eventX = event.getX();
+            float eventY = event.getY();
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    path.moveTo(eventX, eventY);
+                    lastTouchX = eventX;
+                    lastTouchY = eventY;
+                    return true;
+
+                case MotionEvent.ACTION_MOVE:
+
+                case MotionEvent.ACTION_UP:
+
+                    resetDirtyRect(eventX, eventY);
+                    int historySize = event.getHistorySize();
+                    for (int i = 0; i < historySize; i++) {
+                        float historicalX = event.getHistoricalX(i);
+                        float historicalY = event.getHistoricalY(i);
+                        path.lineTo(historicalX, historicalY);
+                    }
+                    path.lineTo(eventX, eventY);
+                    break;
+            }
+
+            invalidate((int) (dirtyRect.left - HALF_STROKE_WIDTH),
+                    (int) (dirtyRect.top - HALF_STROKE_WIDTH),
+                    (int) (dirtyRect.right + HALF_STROKE_WIDTH),
+                    (int) (dirtyRect.bottom + HALF_STROKE_WIDTH));
+
+            lastTouchX = eventX;
+            lastTouchY = eventY;
+
+            return true;
+        }
+
+        private void resetDirtyRect(float eventX, float eventY) {
+            dirtyRect.left = Math.min(lastTouchX, eventX);
+            dirtyRect.right = Math.max(lastTouchX, eventX);
+            dirtyRect.top = Math.min(lastTouchY, eventY);
+            dirtyRect.bottom = Math.max(lastTouchY, eventY);
+        }
+    }
+
 
 }
