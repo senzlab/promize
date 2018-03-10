@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.score.cbook.R;
 import com.score.cbook.exceptions.NoUserException;
+import com.score.cbook.pojo.Account;
 import com.score.senzc.pojos.User;
 
 /**
@@ -13,6 +14,11 @@ import com.score.senzc.pojos.User;
  * @author erangaeb@gmail.com (eranga herath)
  */
 public class PreferenceUtil {
+
+    private static final String SENZIE_ADDRESS = "SENZIE_ADDRESS";
+    private static final String BANK = "BANK";
+    private static final String ACCOUNT_NO = "ACCOUNT";
+    private static final String PASSWORD = "PASSWORD";
 
     /**
      * Save user credentials in shared preference
@@ -23,10 +29,7 @@ public class PreferenceUtil {
     public static void saveUser(Context context, User user) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-
-        //keys should be constants as well, or derived from a constant prefix in a loop.
-        editor.putString("id", user.getId());
-        editor.putString("username", user.getUsername());
+        editor.putString(PreferenceUtil.SENZIE_ADDRESS, user.getUsername());
         editor.commit();
     }
 
@@ -38,27 +41,26 @@ public class PreferenceUtil {
      */
     public static User getUser(Context context) throws NoUserException {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String id = preferences.getString("id", "0");
-        String username = preferences.getString("username", "");
+        String senzieAddress = preferences.getString(PreferenceUtil.SENZIE_ADDRESS, "");
 
-        if (username.isEmpty())
+        if (senzieAddress.isEmpty())
             throw new NoUserException();
 
-        User user = new User(id, username);
-        user.setUsername(username);
-        return user;
+        return new User(senzieAddress, senzieAddress);
     }
 
     /**
      * Save password in shared preference
      *
-     * @param context  application context
-     * @param password
+     * @param context application context
+     * @param account
      */
-    public static void savePassword(Context context, String password) {
+    public static void saveAccount(Context context, Account account) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("PASSWORD", password);
+        editor.putString(PreferenceUtil.BANK, account.getBank());
+        editor.putString(PreferenceUtil.ACCOUNT_NO, account.getAccountNo());
+        editor.putString(PreferenceUtil.PASSWORD, account.getPassword());
         editor.commit();
     }
 
@@ -68,9 +70,14 @@ public class PreferenceUtil {
      * @param context
      * @return
      */
-    public static String getPassword(Context context) {
+    public static Account getAccount(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        return preferences.getString("PASSWORD", "");
+        Account account = new Account();
+        account.setBank(preferences.getString(PreferenceUtil.BANK, ""));
+        account.setAccountNo(preferences.getString(PreferenceUtil.ACCOUNT_NO, ""));
+        account.setPassword(preferences.getString(PreferenceUtil.PASSWORD, ""));
+
+        return account;
     }
 
     /**

@@ -17,78 +17,65 @@ import com.score.cbook.util.PreferenceUtil;
  * @author eranga herath(erangaeb@gmail.com)
  */
 public class SplashActivity extends BaseActivity {
-    private final int SPLASH_DISPLAY_LENGTH = 3000;
-    private static final String TAG = SplashActivity.class.getName();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.splash_layout);
-        startService();
+        initService();
+        initUi();
         initNavigation();
-        setupSplashText();
     }
 
-    private void setupSplashText() {
+    private void initUi() {
         ((TextView) findViewById(R.id.splash_name)).setTypeface(typefaceThin, Typeface.BOLD);
     }
 
-    private void startService() {
+    private void initService() {
         Intent serviceIntent = new Intent(this, SenzService.class);
         startService(serviceIntent);
     }
 
-    /**
-     * Determine where to go from here
-     */
     private void initNavigation() {
         // determine where to go
         // start service
         try {
             PreferenceUtil.getUser(this);
 
-            // have user, so move to home
-            navigateToHome();
+            if (PreferenceUtil.getAccount(this).getAccountNo() == null) {
+                // no registered account yet, go to bank select
+                navigateToSplash();
+            } else {
+                // have user and account, so go to home
+                navigateToHome();
+            }
         } catch (NoUserException e) {
+            // no user, go to bank select
             e.printStackTrace();
             navigateToSplash();
         }
     }
 
-    /**
-     * Switch to home activity
-     * This method will be call after successful login
-     */
     private void navigateToSplash() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                navigateRegistration();
+                navigateToBankSelect();
             }
-        }, SPLASH_DISPLAY_LENGTH);
+        }, 3000);
     }
 
-    private void navigateRegistration() {
-        // no user, so move to registration
-        Intent intent = new Intent(this, RegistrationActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
-        finish();
-    }
-
-    /**
-     * Switch to home activity
-     * This method will be call after successful login
-     */
     public void navigateToHome() {
         Intent intent = new Intent(this, DashBoardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         SplashActivity.this.finish();
+    }
 
+    public void navigateToBankSelect() {
+        Intent intent = new Intent(this, BankTypeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        SplashActivity.this.finish();
     }
 }

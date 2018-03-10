@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
@@ -18,16 +19,13 @@ import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.PasswordMisMatchException;
+import com.score.cbook.pojo.Account;
 import com.score.cbook.util.ActivityUtil;
-import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzUtil;
 import com.score.senzc.pojos.Senz;
 import com.score.senzc.pojos.User;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 
 public class RegistrationActivity extends BaseActivity {
 
@@ -35,11 +33,14 @@ public class RegistrationActivity extends BaseActivity {
 
     // ui controls
     private Button registerBtn;
+    private TextView message;
     private EditText editTextAccount;
     private EditText editTextPassword;
     private EditText editTextConfirmPassword;
     private User registeringUser;
     private Toolbar toolbar;
+
+    private Account account;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
         @Override
@@ -52,13 +53,38 @@ public class RegistrationActivity extends BaseActivity {
         }
     };
 
+    private void handleSenz(Senz senz) {
+        if (senz.getAttributes().containsKey("status")) {
+            String msg = senz.getAttributes().get("status");
+            if (msg != null && msg.equalsIgnoreCase("LOGIN_SUCCESS")) {
+                ActivityUtil.cancelProgressDialog();
+                Toast.makeText(this, "Login success", Toast.LENGTH_LONG).show();
+
+                // login success
+                // save account
+                // go to home
+                PreferenceUtil.saveAccount(this, account);
+                navigateToHome();
+            } else if (msg != null && msg.equalsIgnoreCase("LOGIN_FAIL")) {
+                ActivityUtil.cancelProgressDialog();
+                String informationMessage = "Your account no and password are mismatching. Please enter correct account no and password";
+                displayInformationMessageDialog("Login fail", informationMessage);
+            } else if (msg != null && msg.equalsIgnoreCase("VERIFICATION_FAIL")) {
+                ActivityUtil.cancelProgressDialog();
+                String informationMessage = "Signature verification fail. Please contact sampath support regarding this issue";
+                displayInformationMessageDialog("Login fail", informationMessage);
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
         initUi();
-        doPreRegistration();
+        initToolbar();
+        initActionBar();
     }
 
     @Override
@@ -96,9 +122,14 @@ public class RegistrationActivity extends BaseActivity {
 
     private void initActionBar() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setCustomView(getLayoutInflater().inflate(R.layout.registration_header, null));
+        getSupportActionBar().setCustomView(getLayoutInflater().inflate(R.layout.add_user_header, null));
         getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setDisplayShowCustomEnabled(true);
+
+        // title
+        TextView titleText = (TextView) findViewById(R.id.title);
+        titleText.setTypeface(typeface, Typeface.BOLD);
+        titleText.setText("Login");
     }
 
     private void initToolbar() {
@@ -109,10 +140,12 @@ public class RegistrationActivity extends BaseActivity {
     }
 
     private void initUi() {
+        message = (TextView) findViewById(R.id.welcome_message);
         editTextAccount = (EditText) findViewById(R.id.registering_user_id);
         editTextPassword = (EditText) findViewById(R.id.registering_password);
         editTextConfirmPassword = (EditText) findViewById(R.id.registering_confirm_password);
 
+        message.setTypeface(typeface, Typeface.BOLD);
         editTextAccount.setTypeface(typeface, Typeface.BOLD);
         editTextPassword.setTypeface(typeface, Typeface.BOLD);
         editTextConfirmPassword.setTypeface(typeface, Typeface.BOLD);
@@ -121,11 +154,7 @@ public class RegistrationActivity extends BaseActivity {
         registerBtn.setTypeface(typeface, Typeface.BOLD);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (NetworkUtil.isAvailableNetwork(RegistrationActivity.this)) {
-                    onClickRegister();
-                } else {
-                    Toast.makeText(RegistrationActivity.this, "No network connectivity", Toast.LENGTH_LONG).show();
-                }
+                onClickRegister();
             }
         });
     }
@@ -137,20 +166,24 @@ public class RegistrationActivity extends BaseActivity {
     private void onClickRegister() {
         ActivityUtil.hideSoftKeyboard(this);
 
-        // crate user
-        String account = editTextAccount.getText().toString().trim();
-        String password = editTextPassword.getText().toString().trim();
-        String confirmPassword = editTextConfirmPassword.getText().toString().trim();
+        // crate account
+        final String accountNo = editTextAccount.getText().toString().trim();
+        final String password = editTextPassword.getText().toString().trim();
+        final String confirmPassword = editTextConfirmPassword.getText().toString().trim();
         try {
-            ActivityUtil.isValidRegistrationFields(account, password, confirmPassword);
-            registeringUser = new User("0", account);
+            ActivityUtil.isValidRegistrationFields(accountNo, password, confirmPassword);
+            registeringUser = new User("0", accountNo);
             String confirmationMessage = "<font color=#636363>Are you sure you want to register with account </font> <font color=#F37920>" + "<b>" + registeringUser.getUsername() + "</b>" + "</font>";
             displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(RegistrationActivity.this)) {
                         ActivityUtil.showProgressDialog(RegistrationActivity.this, "Please wait...");
-                        doRegistration();
+                        account = new Account();
+                        account.setBank("sampath");
+                        account.setAccountNo(accountNo);
+                        account.setPassword(password);
+                        doLogin();
                     } else {
                         ActivityUtil.showCustomToastShort("No network connection", RegistrationActivity.this);
                     }
@@ -168,73 +201,10 @@ public class RegistrationActivity extends BaseActivity {
         }
     }
 
-    /**
-     * Create user
-     * First initialize key pair
-     * start service
-     * bind service
-     */
-    private void doPreRegistration() {
-        try {
-            CryptoUtil.initKeys(this);
-        } catch (NoSuchProviderException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Create register senz
-     * Send register senz to senz service via service binder
-     */
-    private void doRegistration() {
-        // senz reg senz
-        Senz senz = SenzUtil.regSenz(this, registeringUser);
-        send(senz);
-    }
-
     private void doLogin() {
         // send login senz
-        String password = editTextPassword.getText().toString().trim();
-        Senz senz = SenzUtil.loginSenz(this, registeringUser, password);
+        Senz senz = SenzUtil.loginSenz(this, registeringUser, account.getPassword());
         send(senz);
-    }
-
-    /**
-     * Handle broadcast message receives
-     * Need to handle registration success failure here
-     *
-     * @param senz intent
-     */
-    private void handleSenz(Senz senz) {
-        if (senz.getAttributes().containsKey("status")) {
-            String msg = senz.getAttributes().get("status");
-            if (msg != null && (msg.equalsIgnoreCase("REG_DONE") || msg.equalsIgnoreCase("REG_ALR"))) {
-                // reg success
-                // do login
-                doLogin();
-            } else if (msg != null && msg.equalsIgnoreCase("LOGIN_SUCCESS")) {
-                ActivityUtil.cancelProgressDialog();
-                Toast.makeText(this, "Login success", Toast.LENGTH_LONG).show();
-
-                // login success
-                // go to home
-                PreferenceUtil.saveUser(this, registeringUser);
-                PreferenceUtil.savePassword(this, editTextPassword.getText().toString().trim());
-                navigateToHome();
-            } else if (msg != null && msg.equalsIgnoreCase("REG_FAIL")) {
-                ActivityUtil.cancelProgressDialog();
-                String informationMessage = "Invalid account, please make sure account <font size=10>Seems account no </font> <font color=#F37920>" + "<b>" + registeringUser.getUsername() + "</b>" + "</font> <font> is correct</font>";
-                displayInformationMessageDialog("Registration fail", informationMessage);
-            } else if (msg != null && msg.equalsIgnoreCase("LOGIN_FAIL")) {
-                ActivityUtil.cancelProgressDialog();
-                String informationMessage = "Your account no and password are mismatching. Please enter correct account no and password";
-                displayInformationMessageDialog("Login fail", informationMessage);
-            } else if (msg != null && msg.equalsIgnoreCase("VERIFICATION_FAIL")) {
-                ActivityUtil.cancelProgressDialog();
-                String informationMessage = "Signature verification fail. Please contact sampath support regarding this issue";
-                displayInformationMessageDialog("Login fail", informationMessage);
-            }
-        }
     }
 
     /**

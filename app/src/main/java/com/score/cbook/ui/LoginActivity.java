@@ -12,6 +12,7 @@ import com.score.cbook.R;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.exceptions.PasswordMisMatchException;
+import com.score.cbook.pojo.Account;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.PreferenceUtil;
 
@@ -85,16 +86,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         try {
             // saved credentials
-            String acc = PreferenceUtil.getUser(this).getUsername();
-            String pwd = PreferenceUtil.getPassword(this);
+            Account account = PreferenceUtil.getAccount(this);
 
             // given credentials
+            String accountNo = editTextAccount.getText().toString().trim();
             String password = editTextPassword.getText().toString().trim();
-            ActivityUtil.isValidLoginFields(acc, password, acc, pwd);
+            ActivityUtil.isValidLoginFields(accountNo, password, account.getAccountNo(), account.getPassword());
             navigateToHome();
             Toast.makeText(this, "Login success", Toast.LENGTH_LONG).show();
-        } catch (NoUserException e) {
-            displayInformationMessageDialog("Error", "You have to register first");
         } catch (PasswordMisMatchException e) {
             e.printStackTrace();
             displayInformationMessageDialog("Error", "Invalid password");

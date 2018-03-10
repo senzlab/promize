@@ -134,6 +134,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity android:name=".ui.ChequeListTabActivity" />
+
+        <activity
+            android:name=".ui.BankTypeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.VishwaActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
         <!-- Servicves -->
         <service
             android:name="com.score.cbook.remote.SenzService"

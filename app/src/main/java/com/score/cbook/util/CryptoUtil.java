@@ -44,7 +44,7 @@ public class CryptoUtil {
     private static final int RSA_KEY_SIZE = 1024;
     private static final int SESSION_KEY_SIZE = 128;
 
-    public static KeyPair initKeys(Context context) throws NoSuchProviderException, NoSuchAlgorithmException {
+    public static void initKeys(Context context) throws NoSuchProviderException, NoSuchAlgorithmException {
         // generate keypair
         KeyPairGenerator keyPairGenerator;
         keyPairGenerator = KeyPairGenerator.getInstance("RSA");
@@ -54,8 +54,6 @@ public class CryptoUtil {
         // save keys in shared preferences
         savePublicKey(context, keyPair);
         savePrivateKey(context, keyPair);
-
-        return keyPair;
     }
 
     private static void savePublicKey(Context context, KeyPair keyPair) {
