@@ -3,9 +3,12 @@ package com.score.cbook.ui;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
@@ -23,10 +26,7 @@ import com.score.cbook.util.PreferenceUtil;
  */
 public class LoginActivity extends BaseActivity implements View.OnClickListener {
 
-    private static final String TAG = LoginActivity.class.getName();
-
     // UI fields
-    private Typeface typeface;
     private EditText editTextAccount;
     private EditText editTextPassword;
     private Button loginButton;
@@ -37,8 +37,39 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.login_layout);
 
         initUi();
-        initCredentials();
+        initToolbar();
+        initActionBar();
+        //initCredentials();
     }
+
+    private void initActionBar() {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setCustomView(getLayoutInflater().inflate(R.layout.add_user_header, null));
+        getSupportActionBar().setDisplayOptions(android.support.v7.app.ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+
+        // title
+        TextView titleText = (TextView) findViewById(R.id.title);
+        titleText.setTypeface(typeface, Typeface.BOLD);
+        titleText.setText("Login");
+
+        // back button
+        ImageView backBtn = (ImageView) findViewById(R.id.back_btn);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    private void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setCollapsible(false);
+        toolbar.setOverScrollMode(Toolbar.OVER_SCROLL_NEVER);
+        setSupportActionBar(toolbar);
+    }
+
 
     /**
      * Initialize UI components,
@@ -46,8 +77,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
      * set custom font for UI fields
      */
     private void initUi() {
-        typeface = Typeface.createFromAsset(getAssets(), "fonts/GeosansLight.ttf");
-
         editTextAccount = (EditText) findViewById(R.id.login_account_no);
         editTextPassword = (EditText) findViewById(R.id.login_password);
         loginButton = (Button) findViewById(R.id.login_btn);
@@ -60,7 +89,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void initCredentials() {
         try {
-            // saved credentials
+            // load saved credentials
             String acc = PreferenceUtil.getUser(this).getUsername();
             editTextAccount.setText(acc);
         } catch (NoUserException e) {

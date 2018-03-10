@@ -129,7 +129,7 @@ public class SplashActivity extends BaseActivity {
                 }, 3000);
             } else {
                 // have user and account, so go to home
-                navigateToHome();
+                navigateToLogin();
             }
         } catch (NoUserException e) {
             // stay to seconds and init senzie
@@ -158,8 +158,8 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
-    public void navigateToHome() {
-        Intent intent = new Intent(this, DashBoardActivity.class);
+    public void navigateToLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         SplashActivity.this.finish();
