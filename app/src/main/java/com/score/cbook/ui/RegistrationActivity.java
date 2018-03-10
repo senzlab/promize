@@ -183,7 +183,7 @@ public class RegistrationActivity extends BaseActivity {
                         account.setBank("sampath");
                         account.setAccountNo(accountNo);
                         account.setPassword(password);
-                        doLogin();
+                        doAuth(account);
                     } else {
                         ActivityUtil.showCustomToastShort("No network connection", RegistrationActivity.this);
                     }
@@ -201,9 +201,9 @@ public class RegistrationActivity extends BaseActivity {
         }
     }
 
-    private void doLogin() {
+    private void doAuth(Account account) {
         // send login senz
-        Senz senz = SenzUtil.loginSenz(this, registeringUser, account.getPassword());
+        Senz senz = SenzUtil.authSenz(this, registeringUser, account, true);
         send(senz);
     }
 

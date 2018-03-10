@@ -15,9 +15,9 @@ import com.score.senzc.pojos.User;
  */
 public class PreferenceUtil {
 
-    private static final String SENZIE_ADDRESS = "SENZIE_ADDRESS";
+    private static final String Z_ADDRESS = "Z_ADDRESS";
     private static final String BANK = "BANK";
-    private static final String ACCOUNT_NO = "ACCOUNT";
+    private static final String ACCOUNT_NO = "ACCOUNT_NO";
     private static final String PASSWORD = "PASSWORD";
 
     /**
@@ -29,7 +29,7 @@ public class PreferenceUtil {
     public static void saveUser(Context context, User user) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(PreferenceUtil.SENZIE_ADDRESS, user.getUsername());
+        editor.putString(PreferenceUtil.Z_ADDRESS, user.getUsername());
         editor.commit();
     }
 
@@ -41,7 +41,7 @@ public class PreferenceUtil {
      */
     public static User getUser(Context context) throws NoUserException {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String senzieAddress = preferences.getString(PreferenceUtil.SENZIE_ADDRESS, "");
+        String senzieAddress = preferences.getString(PreferenceUtil.Z_ADDRESS, "");
 
         if (senzieAddress.isEmpty())
             throw new NoUserException();
