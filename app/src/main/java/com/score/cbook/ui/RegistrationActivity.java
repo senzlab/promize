@@ -129,7 +129,7 @@ public class RegistrationActivity extends BaseActivity {
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
-        titleText.setText("Login");
+        titleText.setText("Register");
     }
 
     private void initToolbar() {

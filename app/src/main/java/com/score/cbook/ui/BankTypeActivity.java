@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.util.ActivityUtil;
 
 /**
  * Activity class that handles login
@@ -18,8 +17,6 @@ import com.score.cbook.util.ActivityUtil;
  * @author erangaeb@gmail.com (eranga herath)
  */
 public class BankTypeActivity extends BaseActivity {
-
-    private static final String TAG = BankTypeActivity.class.getName();
 
     // UI fields
     private TextView hi;
@@ -51,12 +48,8 @@ public class BankTypeActivity extends BaseActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // goto vishwa select
-                Intent intent = new Intent(BankTypeActivity.this, VishwaActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                overridePendingTransition(R.anim.right_in, R.anim.right_out);
-                finish();
+                // goto acc select
+                navigateAccountSelect();
             }
         });
 
@@ -98,22 +91,12 @@ public class BankTypeActivity extends BaseActivity {
         setSupportActionBar(toolbar);
     }
 
-    /**
-     * login button action,
-     */
-    private void onClickLogin() {
-        ActivityUtil.hideSoftKeyboard(this);
-
-    }
-
-    /**
-     * Switch to home activity
-     * This method will be call after successful login
-     */
-    private void navigateToHome() {
-        Intent intent = new Intent(this, DashBoardActivity.class);
+    private void navigateAccountSelect() {
+        Intent intent = new Intent(BankTypeActivity.this, VishwaActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        this.finish();
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        finish();
     }
 
 }
