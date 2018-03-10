@@ -18,6 +18,7 @@ import com.score.cbook.application.IntentProvider;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidPasswordException;
+import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.exceptions.PasswordMisMatchException;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.util.ActivityUtil;
@@ -37,7 +38,6 @@ public class RegistrationActivity extends BaseActivity {
     private EditText editTextAccount;
     private EditText editTextPassword;
     private EditText editTextConfirmPassword;
-    private User registeringUser;
     private Toolbar toolbar;
 
     private Account account;
@@ -172,8 +172,7 @@ public class RegistrationActivity extends BaseActivity {
         final String confirmPassword = editTextConfirmPassword.getText().toString().trim();
         try {
             ActivityUtil.isValidRegistrationFields(accountNo, password, confirmPassword);
-            registeringUser = new User("0", accountNo);
-            String confirmationMessage = "<font color=#636363>Are you sure you want to register with account </font> <font color=#F37920>" + "<b>" + registeringUser.getUsername() + "</b>" + "</font>";
+            String confirmationMessage = "<font color=#636363>Are you sure you want to register with account </font> <font color=#F37920>" + "<b>" + accountNo + "</b>" + "</font>";
             displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -203,8 +202,13 @@ public class RegistrationActivity extends BaseActivity {
 
     private void doAuth(Account account) {
         // send login senz
-        Senz senz = SenzUtil.authSenz(this, registeringUser, account, true);
-        send(senz);
+        try {
+            User user = PreferenceUtil.getUser(this);
+            Senz senz = SenzUtil.authSenz(this, user, account, true);
+            send(senz);
+        } catch (NoUserException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

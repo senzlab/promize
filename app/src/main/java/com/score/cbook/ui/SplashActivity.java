@@ -44,13 +44,15 @@ public class SplashActivity extends BaseActivity {
         if (senz.getAttributes().containsKey("status")) {
             // received reg status
             String msg = senz.getAttributes().get("status");
-            if (msg != null && (msg.equalsIgnoreCase("REG_DONE") || msg.equalsIgnoreCase("REG_ALR"))) {
+            if (msg != null && (msg.equalsIgnoreCase("REG_DONE"))) {
                 // reg success
                 // save user
                 PreferenceUtil.saveUser(this, senzie);
 
                 // request auth.key
                 send(SenzUtil.senzieKeySenz(this, SenzService.SAMPATH_AUTH_SENZIE_NAME));
+            } else if (msg != null && msg.equalsIgnoreCase("REG_ALR")) {
+
             } else if (msg != null && msg.equalsIgnoreCase("REG_FAIL")) {
                 Toast.makeText(this, "Service unavailable", Toast.LENGTH_LONG).show();
             }
@@ -116,8 +118,15 @@ public class SplashActivity extends BaseActivity {
             PreferenceUtil.getUser(this);
 
             if (PreferenceUtil.getAccount(this).getAccountNo().isEmpty()) {
-                // no registered account yet, go to bank select
-                navigateToBankSelect();
+                // no registered account yet
+                // stay three seconds go to bank select
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // go to bank select
+                        navigateToBankSelect();
+                    }
+                }, 3000);
             } else {
                 // have user and account, so go to home
                 navigateToHome();
