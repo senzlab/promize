@@ -114,6 +114,16 @@ public class ActivityUtil {
         return true;
     }
 
+    public static boolean isValidRedeemFileds(String acc, String confirmAcc) throws InvalidInputFieldsException, InvalidAccountException {
+        if (acc.isEmpty() || confirmAcc.isEmpty())
+            throw new InvalidInputFieldsException();
+
+        if (!acc.equals(confirmAcc))
+            throw new InvalidAccountException();
+
+        return true;
+    }
+
     /**
      * Create custom text view for tab view
      * Set custom typeface to the text view as well

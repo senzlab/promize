@@ -143,6 +143,7 @@
             android:name=".ui.VishwaActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
+        <activity android:name=".ui.RedeemActivity" />
         <!-- Servicves -->
         <service
             android:name="com.score.cbook.remote.SenzService"

@@ -1,6 +1,7 @@
 package com.score.cbook.ui;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
@@ -58,7 +59,9 @@ public class ChequePActivity extends BaseActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                Intent intent = new Intent(ChequePActivity.this, RedeemActivity.class);
+                intent.putExtra("CHEQUE", cheque);
+                startActivity(intent);
             }
         });
 

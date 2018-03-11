@@ -135,8 +135,7 @@ public class ViewChequeActivity extends BaseActivity {
             public void onClick(View v) {
                 ActivityUtil.showProgressDialog(ViewChequeActivity.this, "Depositing...");
 
-                Long timestamp = System.currentTimeMillis();
-                Senz senz = SenzUtil.depositChequeSenz(ViewChequeActivity.this, cheque, timestamp);
+                Senz senz = SenzUtil.depositChequeSenz(ViewChequeActivity.this, cheque, "32323");
                 send(senz);
             }
         });

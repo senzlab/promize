@@ -155,16 +155,16 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz depositChequeSenz(Context context, Cheque cheque, Long timestamp) {
+    public static Senz depositChequeSenz(Context context, Cheque cheque, String account) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("amnt", Integer.toString(cheque.getAmount()));
-        senzAttributes.put("bnk", "sampath");
-        senzAttributes.put("acc", "acc");
+        senzAttributes.put("bnk", "sampath.chain");
+        senzAttributes.put("acc", account);
         senzAttributes.put("id", cheque.getCid());
         senzAttributes.put("to", SenzService.SAMPATH_CHAIN_SENZIE_NAME);
-        senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("uid", SenzUtil.getUid(context, timestamp.toString()));
+        senzAttributes.put("time", cheque.getTimestamp().toString());
+        senzAttributes.put("uid", SenzUtil.getUid(context, cheque.getTimestamp().toString()));
 
         // new senz
         Senz senz = new Senz();
