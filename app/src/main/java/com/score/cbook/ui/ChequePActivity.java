@@ -10,6 +10,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.score.cbook.R;
+import com.score.cbook.enums.ChequeState;
+import com.score.cbook.pojo.Cheque;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -20,7 +22,7 @@ public class ChequePActivity extends BaseActivity {
     private FloatingActionButton done;
     private ImageView imageView;
 
-    private String uid;
+    private Cheque cheque;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,12 +39,12 @@ public class ChequePActivity extends BaseActivity {
     }
 
     private void initPrefs() {
-        this.uid = getIntent().getStringExtra("UID");
+        this.cheque = getIntent().getParcelableExtra("CHEQUE");
     }
 
     private void initUi() {
         imageView = (ImageView) findViewById(R.id.cheque_preview);
-        loadBitmap(imageView, uid);
+        loadBitmap(imageView, cheque.getUid());
 
         cancel = (FloatingActionButton) findViewById(R.id.close);
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +55,22 @@ public class ChequePActivity extends BaseActivity {
         });
 
         done = (FloatingActionButton) findViewById(R.id.done);
-        done.setVisibility(View.GONE);
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        if (cheque.isMyCheque()) {
+            done.setVisibility(View.GONE);
+        } else {
+            if (cheque.getChequeState() == ChequeState.DEPOSIT) {
+                done.setVisibility(View.GONE);
+            } else {
+                done.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void loadBitmap(ImageView view, String uid) {

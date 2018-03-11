@@ -1,125 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/relative_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimaryTrans">
+    android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/preview_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <FrameLayout
-        android:id="@+id/capture_photo_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/capture_photo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY" />
-    </FrameLayout>
-
-
-    <LinearLayout
-        android:id="@+id/capture_frame"
+    <RelativeLayout
+        android:id="@+id/relative_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:background="@color/colorPrimaryTrans">
 
-        <RelativeLayout
-            android:id="@+id/img"
+        <FrameLayout
+            android:id="@+id/preview_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.3"
-            android:background="@color/colorPrimaryTrans">
+            android:layout_height="match_parent" />
 
-            <LinearLayout
-                android:id="@+id/sampath_gift_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <ImageView
-                    android:id="@+id/sampath_logo"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/sampath_logo_white"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/sampath_gift"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:text="Promize"
-                    android:textColor="@color/white"
-                    android:textSize="25sp"
-                    android:visibility="gone" />
-            </LinearLayout>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/info"
+        <FrameLayout
+            android:id="@+id/capture_photo_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.7"
-            android:background="@color/colorPrimaryTrans"
-            android:visibility="visible">
+            android:layout_height="match_parent">
 
-            <RelativeLayout
-                android:id="@+id/bla"
+            <ImageView
+                android:id="@+id/capture_photo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:background="@color/white_trans"
-                android:gravity="center">
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY" />
+        </FrameLayout>
 
-                <RelativeLayout
-                    android:id="@+id/amount_l"
+
+        <LinearLayout
+            android:id="@+id/capture_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.3"
+                android:background="@color/colorPrimaryTrans">
+
+                <LinearLayout
+                    android:id="@+id/sampath_gift_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true">
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="58dp"
-                        android:paddingBottom="10dp"
-                        android:paddingTop="10dp"
-                        android:src="@drawable/rupee"
-                        android:visibility="visible" />
+                        android:id="@+id/sampath_logo"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/sampath_logo_white"
+                        android:visibility="gone" />
 
-                    <EditText
-                        android:id="@+id/new_cheque_amount"
+                    <TextView
+                        android:id="@+id/sampath_gift"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:text="Promize"
+                        android:textColor="@color/white"
+                        android:textSize="25sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:background="@color/colorPrimaryTrans"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:id="@+id/bla"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:background="@color/white_trans"
+                    android:gravity="center">
+
+                    <RelativeLayout
+                        android:id="@+id/amount_l"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="65dp"
-                        android:layout_marginRight="65dp"
-                        android:background="@drawable/edit_text_border_bottom_o"
-                        android:gravity="center"
-                        android:hint="Amount"
-                        android:inputType="number"
-                        android:textColor="@color/colorPrimary"
-                        android:textColorHint="#DADADC"
-                        android:textCursorDrawable="@drawable/cursor_drawable"
-                        android:textSize="22sp" />
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="58dp"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:src="@drawable/rupee"
+                            android:visibility="visible" />
+
+                        <EditText
+                            android:id="@+id/new_cheque_amount"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginLeft="65dp"
+                            android:layout_marginRight="65dp"
+                            android:background="@drawable/edit_text_border_bottom_o"
+                            android:gravity="center"
+                            android:hint="Amount"
+                            android:inputType="number"
+                            android:textColor="@color/colorPrimary"
+                            android:textColorHint="#DADADC"
+                            android:textCursorDrawable="@drawable/cursor_drawable"
+                            android:textSize="22sp" />
+                    </RelativeLayout>
                 </RelativeLayout>
             </RelativeLayout>
-        </RelativeLayout>
-    </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/button_frame"
@@ -131,6 +137,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
+            android:layout_margin="10dp"
             android:src="@drawable/heart1"
             app:backgroundTint="#FFF"
             app:rippleColor="#FFF" />
@@ -140,19 +147,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
+            android:layout_margin="10dp"
             android:src="@drawable/capture_2"
             app:backgroundTint="#FFF"
             app:rippleColor="#FFF" />
 
-        <com.github.siyamed.shapeimageview.RoundedImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center|end"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="110dp"
-            android:adjustViewBounds="true"
-            android:src="@drawable/sampath_logo"
-            android:visibility="gone" />
     </FrameLayout>
 
 </RelativeLayout>

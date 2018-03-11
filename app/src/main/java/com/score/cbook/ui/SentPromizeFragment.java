@@ -86,7 +86,7 @@ public class SentPromizeFragment extends Fragment implements AdapterView.OnItemC
 
         // open cheque
         Intent intent = new Intent(getActivity(), ChequePActivity.class);
-        intent.putExtra("UID", cheque.getUid());
+        intent.putExtra("CHEQUE", cheque);
         startActivity(intent);
     }
 

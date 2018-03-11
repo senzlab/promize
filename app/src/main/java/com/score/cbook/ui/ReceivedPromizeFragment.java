@@ -92,7 +92,7 @@ public class ReceivedPromizeFragment extends Fragment implements AdapterView.OnI
         final Cheque cheque = chequeList.get(position);
 
         // open cheque
-        Intent intent = new Intent(getActivity(), ViewChequeActivity.class);
+        Intent intent = new Intent(getActivity(), ChequePActivity.class);
         intent.putExtra("CHEQUE", cheque);
         startActivity(intent);
     }
