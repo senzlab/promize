@@ -135,17 +135,16 @@ class SenzHandler {
                 // send error ack
                 senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARE_FAILED"));
             }
-        } else if (senz.getAttributes().containsKey("cimg")) {
+        } else if (senz.getAttributes().containsKey("blob")) {
             // save cheque
             Long timestamp = (System.currentTimeMillis() / 1000);
             User user = new User("id", senz.getAttributes().get("from"));
-            int amnt = Integer.parseInt(senz.getAttributes().get("camnt"));
-            String date = senz.getAttributes().get("cdate");
-            saveCheque(timestamp, senz.getAttributes().get("uid"), senz.getAttributes().get("cid"), "", amnt, date, user, senzService.getApplicationContext());
+            int amnt = Integer.parseInt(senz.getAttributes().get("amnt"));
+            saveCheque(timestamp, senz.getAttributes().get("uid"), senz.getAttributes().get("id"), amnt, user, senzService.getApplicationContext());
 
             // save img
             String imgName = senz.getAttributes().get("uid") + ".jpg";
-            ImageUtil.saveImg(imgName, senz.getAttributes().get("cimg"));
+            ImageUtil.saveImg(imgName, senz.getAttributes().get("blob"));
 
             // broadcast
             broadcastSenz(senz, senzService.getApplicationContext());
@@ -258,19 +257,18 @@ class SenzHandler {
         }
     }
 
-    private void saveCheque(Long timestamp, String uid, String cid, String blob, int amnt, String date, User user, final Context context) {
+    private void saveCheque(Long timestamp, String uid, String id, int amnt, User user, final Context context) {
         try {
             // create secret
             final Cheque cheque = new Cheque();
             cheque.setUid(uid);
             cheque.setTimestamp(timestamp);
             cheque.setDeliveryState(DeliveryState.NONE);
-            cheque.setBlob(blob);
+            cheque.setBlob("");
             cheque.setMyCheque(false);
-            cheque.setCid(cid);
+            cheque.setCid(id);
             cheque.setChequeState(ChequeState.TRANSFER);
             cheque.setAmount(amnt);
-            cheque.setDate(date);
             cheque.setViewed(false);
 
             ChequeUser chequeUser = new ChequeUser(user.getId(), user.getUsername());

@@ -37,6 +37,7 @@ import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.ImageUtil;
+import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
@@ -306,7 +307,7 @@ public class NewGiftActivity extends BaseActivity {
         Long timestamp = System.currentTimeMillis() / 1000;
         cheque.setTimestamp(timestamp);
 
-        Senz senz = SenzUtil.transferChequeSenz(this, cheque, cheque.getTimestamp());
+        Senz senz = SenzUtil.transferChequeSenz(this, cheque, PreferenceUtil.getAccount(this));
         send(senz);
     }
 

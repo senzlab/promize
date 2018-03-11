@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
-import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.exceptions.PasswordMisMatchException;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.util.ActivityUtil;
@@ -31,15 +30,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private EditText editTextPassword;
     private Button loginButton;
 
+    // account
+    private Account account;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
 
         initUi();
+        initAccount();
         initToolbar();
         initActionBar();
-        //initCredentials();
     }
 
     private void initActionBar() {
@@ -87,14 +89,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         loginButton.setTypeface(typeface, Typeface.BOLD);
     }
 
-    private void initCredentials() {
-        try {
-            // load saved credentials
-            String acc = PreferenceUtil.getUser(this).getUsername();
-            editTextAccount.setText(acc);
-        } catch (NoUserException e) {
-            e.printStackTrace();
-        }
+    private void initAccount() {
+        account = PreferenceUtil.getAccount(this);
+        if (!account.getAccountNo().isEmpty())
+            editTextAccount.setText(account.getAccountNo());
     }
 
     /**

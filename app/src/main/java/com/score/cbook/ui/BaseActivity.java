@@ -86,11 +86,6 @@ public class BaseActivity extends AppCompatActivity implements ISendingComHandle
         typefaceUltraThin = Typeface.createFromAsset(getAssets(), "fonts/GeosansLight.ttf");
     }
 
-    /**
-     * Display message dialog when user request(click) to delete invoice
-     *
-     * @param message message to be display
-     */
     public void displayInformationMessageDialog(String title, String message) {
         final Dialog dialog = new Dialog(this);
 
@@ -123,12 +118,6 @@ public class BaseActivity extends AppCompatActivity implements ISendingComHandle
         dialog.show();
     }
 
-    /**
-     * Generic display confirmation pop up
-     *
-     * @param message   - Message to ask
-     * @param okClicked - instance of View.OnClickListener to handle okbutton clicked
-     */
     public void displayConfirmationMessageDialog(String message, final View.OnClickListener okClicked) {
         final Dialog dialog = new Dialog(this);
 

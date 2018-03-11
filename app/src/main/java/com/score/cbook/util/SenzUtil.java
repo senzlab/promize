@@ -135,16 +135,16 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz transferChequeSenz(Context context, Cheque cheque, Long timestamp) {
+    public static Senz transferChequeSenz(Context context, Cheque cheque, Account account) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
-        senzAttributes.put("cdate", cheque.getDate());
-        senzAttributes.put("cbnk", "sampath");
-        senzAttributes.put("cimg", cheque.getBlob());
+        senzAttributes.put("amnt", Integer.toString(cheque.getAmount()));
+        senzAttributes.put("bnk", account.getBank());
+        senzAttributes.put("acc", account.getAccountNo());
+        senzAttributes.put("blob", cheque.getBlob());
         senzAttributes.put("to", cheque.getUser().getUsername());
-        senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("uid", SenzUtil.getUid(context, timestamp.toString()));
+        senzAttributes.put("time", cheque.getTimestamp().toString());
+        senzAttributes.put("uid", SenzUtil.getUid(context, cheque.getTimestamp().toString()));
 
         // new senz
         Senz senz = new Senz();
@@ -158,10 +158,11 @@ public class SenzUtil {
     public static Senz depositChequeSenz(Context context, Cheque cheque, Long timestamp) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put("camnt", Integer.toString(cheque.getAmount()));
-        senzAttributes.put("cbnk", "sampath");
+        senzAttributes.put("amnt", Integer.toString(cheque.getAmount()));
+        senzAttributes.put("bnk", "sampath");
+        senzAttributes.put("acc", "acc");
+        senzAttributes.put("id", cheque.getCid());
         senzAttributes.put("to", SenzService.SAMPATH_CHAIN_SENZIE_NAME);
-        senzAttributes.put("cid", cheque.getCid());
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", SenzUtil.getUid(context, timestamp.toString()));
 
