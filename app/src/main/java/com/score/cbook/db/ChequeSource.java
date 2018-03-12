@@ -72,14 +72,14 @@ public class ChequeSource {
         }
     }
 
-    public static void updateChequeState(Context context, String state, String uid) {
+    public static void updateChequeState(Context context, String uid, ChequeState chequeState) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
         try {
             db.beginTransaction();
 
             // content values to inset
             ContentValues values = new ContentValues();
-            values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE, state);
+            values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_STATE, chequeState.getState());
 
             // update
             db.update(SenzorsDbContract.Cheque.TABLE_NAME,

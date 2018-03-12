@@ -40,4 +40,14 @@
     <string name="confirmed_notification">Confirmed your request</string>
     <string name="message_notification">New message received</string>
     <string name="cheque_notification">New cheque received</string>
+    <string-array name="banks">
+        <item>Malaysia</item>
+        <item>United States</item>
+        <item>Indonesia</item>
+        <item>France</item>
+        <item>Italy</item>
+        <item>Singapore</item>
+        <item>New Zealand</item>
+        <item>India</item>
+    </string-array>
 </resources>

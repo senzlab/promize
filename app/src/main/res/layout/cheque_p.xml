@@ -24,8 +24,8 @@
             android:layout_height="match_parent">
 
             <RelativeLayout
-                android:layout_width="match_parent"
                 android:id="@+id/signature"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/transparent" />
 
@@ -33,7 +33,7 @@
                 android:id="@+id/close"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:src="@drawable/cancel"
                 app:backgroundTint="@color/white" />
 
@@ -44,7 +44,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_margin="16dp"
+                android:layout_margin="5dp"
                 android:src="@drawable/tick"
                 app:backgroundTint="@color/white" />
         </RelativeLayout>

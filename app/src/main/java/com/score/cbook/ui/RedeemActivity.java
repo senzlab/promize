@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.db.ChequeSource;
+import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
@@ -60,7 +61,7 @@ public class RedeemActivity extends BaseActivity {
                 RedeemActivity.this.finish();
 
                 // update cheque status in db
-                ChequeSource.updateChequeState(this, "DEPOSIT", cheque.getUid());
+                ChequeSource.updateChequeState(this, cheque.getUid(), ChequeState.DEPOSIT);
             }
         }
     }

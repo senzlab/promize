@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.score.cbook.R;
+import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.ChequeState;
 import com.score.cbook.pojo.Cheque;
 import com.squareup.picasso.Picasso;
@@ -41,6 +42,12 @@ public class ChequePActivity extends BaseActivity {
 
     private void initPrefs() {
         this.cheque = getIntent().getParcelableExtra("CHEQUE");
+
+        // update viewed state
+        if (!cheque.isViewed()) {
+            cheque.setViewed(true);
+            ChequeSource.markChequeViewed(this, cheque.getUid());
+        }
     }
 
     private void initUi() {
@@ -62,6 +69,7 @@ public class ChequePActivity extends BaseActivity {
                 Intent intent = new Intent(ChequePActivity.this, RedeemActivity.class);
                 intent.putExtra("CHEQUE", cheque);
                 startActivity(intent);
+                ChequePActivity.this.finish();
             }
         });
 

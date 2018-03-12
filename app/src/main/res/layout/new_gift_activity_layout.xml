@@ -124,7 +124,6 @@
                 </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>
-
     </RelativeLayout>
 
     <FrameLayout
@@ -137,7 +136,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:src="@drawable/heart1"
             app:backgroundTint="#FFF"
             app:rippleColor="#FFF" />
@@ -147,7 +146,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:src="@drawable/capture_2"
             app:backgroundTint="#FFF"
             app:rippleColor="#FFF" />
