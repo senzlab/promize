@@ -111,18 +111,6 @@ class ChequeListAdapter extends BaseAdapter {
             viewHolder.selected.setVisibility(View.GONE);
         }
 
-        // unread secret count
-        if (cheque.getUser().getUnreadSecretCount() > 0) {
-            viewHolder.sentTime.setTextColor(context.getResources().getColor(R.color.colorPrimary));
-            viewHolder.sentTime.setTypeface(typeface, Typeface.BOLD);
-            viewHolder.unreadCount.setVisibility(View.VISIBLE);
-            viewHolder.unreadText.setText(cheque.getUser().getUnreadSecretCount() + "");
-        } else {
-            viewHolder.sentTime.setTextColor(context.getResources().getColor(R.color.android_grey));
-            viewHolder.sentTime.setTypeface(typeface, Typeface.NORMAL);
-            viewHolder.unreadCount.setVisibility(View.GONE);
-        }
-
         if (!cheque.isViewed()) {
             viewHolder.sentTime.setTextColor(context.getResources().getColor(R.color.colorPrimary));
             viewHolder.sentTime.setTypeface(typeface, Typeface.BOLD);

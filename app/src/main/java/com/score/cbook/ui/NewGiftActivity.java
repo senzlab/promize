@@ -84,8 +84,9 @@ public class NewGiftActivity extends BaseActivity {
 
                 Toast.makeText(this, "Successfully sent", Toast.LENGTH_LONG).show();
                 this.finish();
-            } else {
-                Toast.makeText(this, "Fail to send", Toast.LENGTH_LONG).show();
+            } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
+                ActivityUtil.cancelProgressDialog();
+                Toast.makeText(this, "Failed send promize", Toast.LENGTH_LONG).show();
             }
         }
     }

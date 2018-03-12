@@ -62,6 +62,9 @@ public class RedeemActivity extends BaseActivity {
 
                 // update cheque status in db
                 ChequeSource.updateChequeState(this, cheque.getUid(), ChequeState.DEPOSIT);
+            } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
+                ActivityUtil.cancelProgressDialog();
+                Toast.makeText(RedeemActivity.this, "Failed to redeem promize", Toast.LENGTH_LONG).show();
             }
         }
     }
