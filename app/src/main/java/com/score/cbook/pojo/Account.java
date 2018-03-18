@@ -6,6 +6,7 @@ public class Account {
     private String accountNo;
     private String phoneNo;
     private String password;
+    private String state;
 
     public Account() {
 
@@ -41,5 +42,13 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

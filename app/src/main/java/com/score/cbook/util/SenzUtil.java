@@ -77,7 +77,7 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz saltSenz(Context context, String account, String salt) {
+    public static Senz saltSenz(Context context, String salt) {
         // create create senz
         HashMap<String, String> senzAttributes = new HashMap<>();
         Long timestamp = System.currentTimeMillis();

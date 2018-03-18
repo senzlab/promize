@@ -20,6 +20,7 @@ public class PreferenceUtil {
     private static final String ACCOUNT_NO = "ACCOUNT_NO";
     private static final String PHONE_NO = "PHONE_NO";
     private static final String PASSWORD = "PASSWORD";
+    private static final String STATE = "STATE";
 
     /**
      * Save user credentials in shared preference
@@ -73,6 +74,13 @@ public class PreferenceUtil {
         editor.commit();
     }
 
+    public static void saveAccountState(Context context, String state) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(PreferenceUtil.STATE, state);
+        editor.commit();
+    }
+
     /**
      * Get saved password from shared preference
      *
@@ -86,6 +94,7 @@ public class PreferenceUtil {
         account.setAccountNo(preferences.getString(PreferenceUtil.ACCOUNT_NO, ""));
         account.setPhoneNo(preferences.getString(PreferenceUtil.PHONE_NO, ""));
         account.setPassword(preferences.getString(PreferenceUtil.PASSWORD, ""));
+        account.setState(preferences.getString(PreferenceUtil.STATE, ""));
 
         return account;
     }

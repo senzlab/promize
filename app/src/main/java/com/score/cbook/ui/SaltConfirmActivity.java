@@ -72,7 +72,7 @@ public class SaltConfirmActivity extends BaseActivity {
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
-        titleText.setText("Add account");
+        titleText.setText("Confirm account");
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);
@@ -92,7 +92,7 @@ public class SaltConfirmActivity extends BaseActivity {
     }
 
     private void navigateToAddAccount() {
-        Intent intent = new Intent(SaltConfirmActivity.this, AddAccountActivity.class);
+        Intent intent = new Intent(SaltConfirmActivity.this, SaltActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
