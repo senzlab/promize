@@ -91,8 +91,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void initAccount() {
         account = PreferenceUtil.getAccount(this);
-        if (!account.getAccountNo().isEmpty())
-            editTextAccount.setText(account.getAccountNo());
+        if (!account.getPhoneNo().isEmpty())
+            editTextAccount.setText(account.getPhoneNo());
     }
 
     /**

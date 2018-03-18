@@ -140,10 +140,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name=".ui.VishwaActivity"
+            android:name=".ui.AccountVerifyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity android:name=".ui.RedeemActivity" />
+        <activity android:name=".ui.AddAccountActivity" />
+        <activity android:name=".ui.SaltConfirmActivity" />
         <!-- Servicves -->
         <service
             android:name="com.score.cbook.remote.SenzService"

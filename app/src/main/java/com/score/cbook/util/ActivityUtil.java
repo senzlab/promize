@@ -107,7 +107,7 @@ public class ActivityUtil {
             // empty fields
             throw new InvalidInputFieldsException();
 
-        if (!givenAccount.equalsIgnoreCase(account) || !givenPassword.equalsIgnoreCase(password))
+        if (!givenPassword.equalsIgnoreCase(password))
             // invalid username/password
             throw new PasswordMisMatchException();
 

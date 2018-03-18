@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,16 +17,15 @@ import com.score.cbook.R;
  *
  * @author erangaeb@gmail.com (eranga herath)
  */
-public class VishwaActivity extends BaseActivity {
+public class AddAccountActivity extends BaseActivity {
 
-    // UI fields
-    private TextView hi;
-    private TextView message;
+    private EditText account;
+    private EditText confirmAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.vishwa_confirm);
+        setContentView(R.layout.add_account_acctivity);
 
         initUi();
         initToolbar();
@@ -33,26 +33,17 @@ public class VishwaActivity extends BaseActivity {
     }
 
     private void initUi() {
-        hi = (TextView) findViewById(R.id.hi_message);
-        message = (TextView) findViewById(R.id.welcome_message);
-        hi.setTypeface(typeface, Typeface.BOLD);
-        message.setTypeface(typeface, Typeface.BOLD);
+        account = (EditText) findViewById(R.id.account);
+        confirmAccount = (EditText) findViewById(R.id.confirm_account);
+        account.setTypeface(typeface, Typeface.BOLD);
+        confirmAccount.setTypeface(typeface, Typeface.BOLD);
 
-        Button yes = (Button) findViewById(R.id.yes);
+        Button yes = (Button) findViewById(R.id.register_btn);
         yes.setTypeface(typeface, Typeface.BOLD);
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToRegistration();
-            }
-        });
-
-        Button no = (Button) findViewById(R.id.no);
-        no.setTypeface(typeface, Typeface.BOLD);
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // navigate register
+                navigateToVishwaConfirm();
             }
         });
     }
@@ -66,7 +57,7 @@ public class VishwaActivity extends BaseActivity {
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
-        titleText.setText("Account confirm");
+        titleText.setText("Add account");
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);
@@ -85,9 +76,10 @@ public class VishwaActivity extends BaseActivity {
         setSupportActionBar(toolbar);
     }
 
-    private void navigateToRegistration() {
-        Intent intent = new Intent(VishwaActivity.this, RegistrationActivity.class);
+    private void navigateToVishwaConfirm() {
+        Intent intent = new Intent(AddAccountActivity.this, AccountVerifyActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("ACCOUNT", account.getText().toString());
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();

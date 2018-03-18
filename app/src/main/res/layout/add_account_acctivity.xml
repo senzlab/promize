@@ -11,7 +11,6 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
         app:contentInsetEnd="0dp"
         app:contentInsetStart="0dp"
         app:popupTheme="@style/MyMaterialTheme" />
@@ -21,7 +20,6 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/colorPrimary"
         android:fillViewport="true"
         android:orientation="vertical"
         android:paddingBottom="10dp"
@@ -30,22 +28,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/welcome_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/registering_user_id"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:text="First you have to register with your account no  \n\nThis account no will be your username for the bankz application"
+                android:textColor="@color/colorPrimary"
+                android:textSize="28sp"
+                android:visibility="gone" />
+
             <EditText
-                android:id="@+id/login_account_no"
+                android:id="@+id/account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
                 android:background="@drawable/edit_text_border_bottom"
-                android:enabled="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:hint="Phone no"
+                android:hint="Account"
                 android:inputType="number"
                 android:maxLength="12"
                 android:paddingBottom="10dp"
@@ -55,7 +61,7 @@
                 android:textSize="25sp" />
 
             <EditText
-                android:id="@+id/login_password"
+                android:id="@+id/confirm_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -63,9 +69,9 @@
                 android:layout_marginRight="50dp"
                 android:layout_marginTop="35dp"
                 android:background="@drawable/edit_text_border_bottom"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:maxLength="16"
+                android:hint="Confirm Account"
+                android:inputType="number"
+                android:maxLength="12"
                 android:paddingBottom="10dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
@@ -80,7 +86,7 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:id="@+id/login_btn"
+            android:id="@+id/register_btn"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_below="@+id/registering_user_id"
@@ -89,9 +95,8 @@
             android:layout_marginRight="50dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/rounded_corner_button"
-            android:text="Login"
+            android:text="Add"
             android:textColor="@color/white" />
     </FrameLayout>
-
 
 </LinearLayout>

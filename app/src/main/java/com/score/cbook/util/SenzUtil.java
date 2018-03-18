@@ -60,6 +60,40 @@ public class SenzUtil {
         return senz;
     }
 
+    public static Senz accountSenz(Context context, String account) {
+        // create create senz
+        HashMap<String, String> senzAttributes = new HashMap<>();
+        Long timestamp = System.currentTimeMillis();
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("uid", getUid(context, timestamp.toString()));
+        senzAttributes.put("acc", account);
+
+        // new senz
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.SHARE);
+        senz.setReceiver(new User("", SenzService.SAMPATH_CHAIN_SENZIE_NAME));
+        senz.setAttributes(senzAttributes);
+
+        return senz;
+    }
+
+    public static Senz saltSenz(Context context, String account, String salt) {
+        // create create senz
+        HashMap<String, String> senzAttributes = new HashMap<>();
+        Long timestamp = System.currentTimeMillis();
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("uid", getUid(context, timestamp.toString()));
+        senzAttributes.put("salt", salt);
+
+        // new senz
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.SHARE);
+        senz.setReceiver(new User("", SenzService.SAMPATH_CHAIN_SENZIE_NAME));
+        senz.setAttributes(senzAttributes);
+
+        return senz;
+    }
+
     public static Senz senzieKeySenz(Context context, String user) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();

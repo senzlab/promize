@@ -16,7 +16,7 @@ import com.score.cbook.R;
  *
  * @author erangaeb@gmail.com (eranga herath)
  */
-public class BankTypeActivity extends BaseActivity {
+public class SaltConfirmActivity extends BaseActivity {
 
     // UI fields
     private TextView hi;
@@ -25,7 +25,7 @@ public class BankTypeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.bank_confirm);
+        setContentView(R.layout.salt_confirm);
 
         initUi();
         initToolbar();
@@ -92,7 +92,7 @@ public class BankTypeActivity extends BaseActivity {
     }
 
     private void navigateToAddAccount() {
-        Intent intent = new Intent(BankTypeActivity.this, AddAccountActivity.class);
+        Intent intent = new Intent(SaltConfirmActivity.this, AddAccountActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);

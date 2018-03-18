@@ -4,6 +4,7 @@ package com.score.cbook.pojo;
 public class Account {
     private String bank;
     private String accountNo;
+    private String phoneNo;
     private String password;
 
     public Account() {
@@ -24,6 +25,14 @@ public class Account {
 
     public void setAccountNo(String accountNo) {
         this.accountNo = accountNo;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public void setPhoneNo(String phoneNo) {
+        this.phoneNo = phoneNo;
     }
 
     public String getPassword() {

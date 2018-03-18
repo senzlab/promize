@@ -18,6 +18,7 @@ public class PreferenceUtil {
     private static final String Z_ADDRESS = "Z_ADDRESS";
     private static final String BANK = "BANK";
     private static final String ACCOUNT_NO = "ACCOUNT_NO";
+    private static final String PHONE_NO = "PHONE_NO";
     private static final String PASSWORD = "PASSWORD";
 
     /**
@@ -60,7 +61,15 @@ public class PreferenceUtil {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(PreferenceUtil.BANK, account.getBank());
         editor.putString(PreferenceUtil.ACCOUNT_NO, account.getAccountNo());
+        editor.putString(PreferenceUtil.PHONE_NO, account.getPhoneNo());
         editor.putString(PreferenceUtil.PASSWORD, account.getPassword());
+        editor.commit();
+    }
+
+    public static void saveAccountNo(Context context, String accountNo) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(PreferenceUtil.ACCOUNT_NO, accountNo);
         editor.commit();
     }
 
@@ -75,6 +84,7 @@ public class PreferenceUtil {
         Account account = new Account();
         account.setBank(preferences.getString(PreferenceUtil.BANK, ""));
         account.setAccountNo(preferences.getString(PreferenceUtil.ACCOUNT_NO, ""));
+        account.setPhoneNo(preferences.getString(PreferenceUtil.PHONE_NO, ""));
         account.setPassword(preferences.getString(PreferenceUtil.PASSWORD, ""));
 
         return account;

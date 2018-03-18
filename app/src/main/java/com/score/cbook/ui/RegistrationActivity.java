@@ -63,6 +63,7 @@ public class RegistrationActivity extends BaseActivity {
                 // login success
                 // save account
                 // go to home
+                PreferenceUtil.saveAccount(this, account);
                 navigateToHome();
             } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
@@ -186,6 +187,9 @@ public class RegistrationActivity extends BaseActivity {
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(RegistrationActivity.this)) {
                         ActivityUtil.showProgressDialog(RegistrationActivity.this, "Please wait...");
+                        account = new Account();
+                        account.setPhoneNo(accountNo);
+                        account.setPassword(password);
                         doAuth();
                     } else {
                         ActivityUtil.showCustomToastShort("No network connection", RegistrationActivity.this);

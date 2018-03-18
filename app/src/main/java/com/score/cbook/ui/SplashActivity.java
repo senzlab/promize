@@ -116,7 +116,21 @@ public class SplashActivity extends BaseActivity {
         // determine where to go
         try {
             PreferenceUtil.getUser(this);
-            navigateToLogin();
+
+            if (PreferenceUtil.getAccount(this).getPassword().isEmpty()) {
+                // no registered account yet
+                // stay three seconds go to bank select
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // go to bank select
+                        navigateToRegistration();
+                    }
+                }, 3000);
+            } else {
+                // have user and account, so go to home
+                navigateToLogin();
+            }
         } catch (NoUserException e) {
             // stay to seconds and init senzie
             new Handler().postDelayed(new Runnable() {
@@ -145,7 +159,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     public void navigateToLogin() {
-        Intent intent = new Intent(this, RegistrationActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         SplashActivity.this.finish();
