@@ -84,7 +84,7 @@ public class ActivityUtil {
      * @return valid or not
      */
     public static boolean isValidRegistrationFields(String account, String password, String confirmPassword) throws InvalidAccountException, InvalidPasswordException, PasswordMisMatchException {
-        if (account.isEmpty() || account.length() != 12) {
+        if (account.isEmpty()) {
             throw new InvalidAccountException();
         }
 

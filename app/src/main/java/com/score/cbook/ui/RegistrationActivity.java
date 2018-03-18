@@ -39,7 +39,6 @@ public class RegistrationActivity extends BaseActivity {
     private EditText editTextAccount;
     private EditText editTextPassword;
     private EditText editTextConfirmPassword;
-    private EditText editTextPhone;
     private Toolbar toolbar;
 
     private Account account;
@@ -58,23 +57,21 @@ public class RegistrationActivity extends BaseActivity {
     private void handleSenz(Senz senz) {
         if (senz.getAttributes().containsKey("status")) {
             String msg = senz.getAttributes().get("status");
-            if (msg != null && msg.equalsIgnoreCase("LOGIN_SUCCESS")) {
+            if (msg != null && msg.equalsIgnoreCase("SUCCESS")) {
                 ActivityUtil.cancelProgressDialog();
-                Toast.makeText(this, "Login success", Toast.LENGTH_LONG).show();
-
+                Toast.makeText(this, "Registration success", Toast.LENGTH_LONG).show();
                 // login success
                 // save account
                 // go to home
-                PreferenceUtil.saveAccount(this, account);
                 navigateToHome();
-            } else if (msg != null && msg.equalsIgnoreCase("LOGIN_FAIL")) {
+            } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
-                String informationMessage = "Your account no and password are mismatching. Please enter correct account no and password";
-                displayInformationMessageDialog("Login fail", informationMessage);
+                String informationMessage = "Registration fail";
+                displayInformationMessageDialog("ERROR", informationMessage);
             } else if (msg != null && msg.equalsIgnoreCase("VERIFICATION_FAIL")) {
                 ActivityUtil.cancelProgressDialog();
                 String informationMessage = "Signature verification fail. Please contact sampath support regarding this issue";
-                displayInformationMessageDialog("Login fail", informationMessage);
+                displayInformationMessageDialog("ERROR", informationMessage);
             }
         }
     }
@@ -155,13 +152,11 @@ public class RegistrationActivity extends BaseActivity {
         editTextAccount = (EditText) findViewById(R.id.registering_user_id);
         editTextPassword = (EditText) findViewById(R.id.registering_password);
         editTextConfirmPassword = (EditText) findViewById(R.id.registering_confirm_password);
-        editTextPhone = (EditText) findViewById(R.id.registering_phone_no);
 
         message.setTypeface(typeface, Typeface.BOLD);
         editTextAccount.setTypeface(typeface, Typeface.BOLD);
         editTextPassword.setTypeface(typeface, Typeface.BOLD);
         editTextConfirmPassword.setTypeface(typeface, Typeface.BOLD);
-        editTextPhone.setTypeface(typeface, Typeface.BOLD);
 
         registerBtn = (Button) findViewById(R.id.register_btn);
         registerBtn.setTypeface(typeface, Typeface.BOLD);
@@ -191,11 +186,7 @@ public class RegistrationActivity extends BaseActivity {
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(RegistrationActivity.this)) {
                         ActivityUtil.showProgressDialog(RegistrationActivity.this, "Please wait...");
-                        account = new Account();
-                        account.setBank("sampath");
-                        account.setAccountNo(accountNo);
-                        account.setPassword(password);
-                        doAuth(account);
+                        doAuth();
                     } else {
                         ActivityUtil.showCustomToastShort("No network connection", RegistrationActivity.this);
                     }
@@ -213,11 +204,11 @@ public class RegistrationActivity extends BaseActivity {
         }
     }
 
-    private void doAuth(Account account) {
+    private void doAuth() {
         // send login senz
         try {
             User user = PreferenceUtil.getUser(this);
-            Senz senz = SenzUtil.authSenz(this, user, account, true);
+            Senz senz = SenzUtil.authSenz(this, user);
             send(senz);
         } catch (NoUserException e) {
             e.printStackTrace();

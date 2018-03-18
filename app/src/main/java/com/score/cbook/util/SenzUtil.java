@@ -41,23 +41,20 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz authSenz(Context context, User sender, Account account, boolean register) {
+    public static Senz authSenz(Context context, User sender) {
         // create create senz
         HashMap<String, String> senzAttributes = new HashMap<>();
         Long timestamp = System.currentTimeMillis();
         String uid = timestamp.toString() + sender.getUsername();
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", uid);
-        senzAttributes.put("bank", account.getBank());
-        senzAttributes.put("account", account.getAccountNo());
-        senzAttributes.put("password", account.getPassword());
         senzAttributes.put("pubkey", PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY));
 
         // new senz
         Senz senz = new Senz();
-        senz.setSenzType(register ? SenzTypeEnum.SHARE : SenzTypeEnum.DATA);
+        senz.setSenzType(SenzTypeEnum.SHARE);
         senz.setSender(sender);
-        senz.setReceiver(new User("", SenzService.SAMPATH_AUTH_SENZIE_NAME));
+        senz.setReceiver(new User("", SenzService.SAMPATH_CHAIN_SENZIE_NAME));
         senz.setAttributes(senzAttributes);
 
         return senz;

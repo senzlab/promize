@@ -59,7 +59,7 @@ public class SplashActivity extends BaseActivity {
         } else if (senz.getAttributes().containsKey("pubkey")) {
             // received auth key
             // navigate to bank select
-            navigateToBankSelect();
+            navigateToRegistration();
         }
     }
 
@@ -116,21 +116,7 @@ public class SplashActivity extends BaseActivity {
         // determine where to go
         try {
             PreferenceUtil.getUser(this);
-
-            if (PreferenceUtil.getAccount(this).getAccountNo().isEmpty()) {
-                // no registered account yet
-                // stay three seconds go to bank select
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        // go to bank select
-                        navigateToBankSelect();
-                    }
-                }, 3000);
-            } else {
-                // have user and account, so go to home
-                navigateToLogin();
-            }
+            navigateToLogin();
         } catch (NoUserException e) {
             // stay to seconds and init senzie
             new Handler().postDelayed(new Runnable() {
@@ -159,14 +145,14 @@ public class SplashActivity extends BaseActivity {
     }
 
     public void navigateToLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, RegistrationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         SplashActivity.this.finish();
     }
 
-    public void navigateToBankSelect() {
-        Intent intent = new Intent(this, BankTypeActivity.class);
+    public void navigateToRegistration() {
+        Intent intent = new Intent(this, RegistrationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         SplashActivity.this.finish();
