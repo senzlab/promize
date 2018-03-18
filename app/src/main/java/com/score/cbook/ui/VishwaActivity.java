@@ -66,7 +66,7 @@ public class VishwaActivity extends BaseActivity {
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
-        titleText.setText("Account type");
+        titleText.setText("Account confirm");
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);

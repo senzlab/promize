@@ -33,7 +33,6 @@
                 android:id="@+id/close"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:layout_margin="5dp"
                 android:src="@drawable/cancel"
                 app:backgroundTint="@color/white" />
 
@@ -44,7 +43,6 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_margin="5dp"
                 android:src="@drawable/tick"
                 app:backgroundTint="@color/white" />
         </RelativeLayout>

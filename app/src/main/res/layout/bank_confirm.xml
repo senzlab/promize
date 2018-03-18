@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
         app:contentInsetEnd="0dp"
         app:contentInsetStart="0dp"
         app:popupTheme="@style/MyMaterialTheme" />
@@ -20,15 +20,14 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/white"
         android:fillViewport="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <TextView
@@ -39,8 +38,8 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:text="Dear promiZie,"
-                android:textColor="#ABABAB"
+                android:text="You need to setup sampath bank account, in order to to issue promizes.."
+                android:textColor="@color/white"
                 android:textSize="28sp"
                 android:visibility="visible" />
 
@@ -51,8 +50,8 @@
                 android:layout_above="@+id/registering_user_id"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:text="Are you sampath bank account holder?"
-                android:textColor="#ABABAB"
+                android:text="Please note that, if you don't have a sampath bank account, you cannot send promiZes. You can only receive promiZes :)"
+                android:textColor="@color/white"
                 android:textSize="28sp"
                 android:visibility="visible" />
 
@@ -111,44 +110,37 @@
                 android:textCursorDrawable="@drawable/cursor_drawable"
                 android:textSize="25sp"
                 android:visibility="gone" />
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="visible">
-
-                    <Button
-                        android:id="@+id/yes"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:layout_marginLeft="50dp"
-                        android:layout_marginRight="50dp"
-                        android:layout_marginTop="30dp"
-                        android:background="@drawable/rounded_corner_button"
-                        android:text="YES"
-                        android:textColor="@color/white" />
-
-                    <Button
-                        android:id="@+id/no"
-                        android:layout_width="match_parent"
-                        android:layout_height="55dp"
-                        android:layout_below="@+id/yes"
-                        android:layout_marginLeft="50dp"
-                        android:layout_marginRight="50dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@drawable/rounded_corner_button"
-                        android:text="NO"
-                        android:textColor="@color/white" />
-                </RelativeLayout>
-            </FrameLayout>
-
-
         </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/yes"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:background="@drawable/rounded_corner_button"
+            android:text="Ok"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/no"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_below="@+id/yes"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_corner_button"
+            android:text="Cancel"
+            android:textColor="@color/white" />
+    </RelativeLayout>
 
 
 </LinearLayout>

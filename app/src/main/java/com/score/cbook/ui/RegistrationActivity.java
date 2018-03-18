@@ -39,6 +39,7 @@ public class RegistrationActivity extends BaseActivity {
     private EditText editTextAccount;
     private EditText editTextPassword;
     private EditText editTextConfirmPassword;
+    private EditText editTextPhone;
     private Toolbar toolbar;
 
     private Account account;
@@ -154,11 +155,13 @@ public class RegistrationActivity extends BaseActivity {
         editTextAccount = (EditText) findViewById(R.id.registering_user_id);
         editTextPassword = (EditText) findViewById(R.id.registering_password);
         editTextConfirmPassword = (EditText) findViewById(R.id.registering_confirm_password);
+        editTextPhone = (EditText) findViewById(R.id.registering_phone_no);
 
         message.setTypeface(typeface, Typeface.BOLD);
         editTextAccount.setTypeface(typeface, Typeface.BOLD);
         editTextPassword.setTypeface(typeface, Typeface.BOLD);
         editTextConfirmPassword.setTypeface(typeface, Typeface.BOLD);
+        editTextPhone.setTypeface(typeface, Typeface.BOLD);
 
         registerBtn = (Button) findViewById(R.id.register_btn);
         registerBtn.setTypeface(typeface, Typeface.BOLD);

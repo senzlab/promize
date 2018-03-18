@@ -51,6 +51,8 @@ public class NewGiftActivity extends BaseActivity {
 
     // ui
     private TextView sampathGift;
+    private TextView amountHeader;
+    private TextView rsHeader;
     private EditText amount;
     private FloatingActionButton capture;
     private FloatingActionButton send;
@@ -149,10 +151,15 @@ public class NewGiftActivity extends BaseActivity {
 
     private void initUi() {
         sampathGift = (TextView) findViewById(R.id.sampath_gift);
+        amountHeader = (TextView) findViewById(R.id.amount_header);
+        rsHeader = (TextView) findViewById(R.id.rs);
         amount = (EditText) findViewById(R.id.new_cheque_amount);
         capturedPhoto = (ImageView) findViewById(R.id.capture_photo);
 
         sampathGift.setTypeface(typeface, Typeface.BOLD);
+        amountHeader.setTypeface(typeface, Typeface.BOLD);
+        rsHeader.setTypeface(typeface, Typeface.BOLD);
+
         amount.setTypeface(typeface, Typeface.BOLD);
 
         capture = (FloatingActionButton) findViewById(R.id.fab);

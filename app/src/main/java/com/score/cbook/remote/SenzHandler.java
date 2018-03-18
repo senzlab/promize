@@ -150,7 +150,7 @@ class SenzHandler {
             broadcastSenz(senz, senzService.getApplicationContext());
             ChequeUser secretUser = UserSource.getUser(senzService.getApplicationContext(), user.getUsername());
 
-            senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "CHEQUE_SHARED"));
+            //senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "CHEQUE_SHARED"));
 
             // show notification
             String title = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());

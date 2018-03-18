@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/white"
         app:contentInsetEnd="0dp"
         app:contentInsetStart="0dp"
         app:popupTheme="@style/MyMaterialTheme" />
@@ -20,15 +20,14 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@color/white"
         android:fillViewport="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <TextView
@@ -51,12 +50,12 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
                 android:background="@drawable/edit_text_border_bottom"
-                android:hint="Vishwa account"
+                android:hint="Phone no"
                 android:inputType="number"
                 android:maxLength="12"
                 android:paddingBottom="10dp"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="#ABABAB"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textCursorDrawable="@drawable/cursor_drawable"
                 android:textSize="25sp" />
 
@@ -69,12 +68,12 @@
                 android:layout_marginRight="50dp"
                 android:layout_marginTop="35dp"
                 android:background="@drawable/edit_text_border_bottom"
-                android:hint="Vishwa password"
+                android:hint="Password"
                 android:inputType="textPassword"
-                android:maxLength="10"
+                android:maxLength="12"
                 android:paddingBottom="10dp"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="#ABABAB"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textCursorDrawable="@drawable/cursor_drawable"
                 android:textSize="25sp" />
 
@@ -89,32 +88,50 @@
                 android:background="@drawable/edit_text_border_bottom"
                 android:hint="Confirm password"
                 android:inputType="textPassword"
-                android:maxLength="16"
+                android:maxLength="12"
                 android:paddingBottom="10dp"
-                android:textColor="@color/colorPrimary"
-                android:textColorHint="#ABABAB"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 android:textCursorDrawable="@drawable/cursor_drawable"
                 android:textSize="25sp" />
 
-            <FrameLayout
+            <EditText
+                android:id="@+id/registering_phone_no"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Button
-                    android:id="@+id/register_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_below="@+id/registering_user_id"
-                    android:layout_marginLeft="50dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_marginTop="35dp"
-                    android:background="@drawable/rounded_corner_button"
-                    android:text="Register"
-                    android:textColor="@color/white" />
-            </FrameLayout>
-
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="35dp"
+                android:background="@drawable/edit_text_border_bottom"
+                android:hint="Phone no"
+                android:inputType="text"
+                android:maxLength="16"
+                android:paddingBottom="10dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textCursorDrawable="@drawable/cursor_drawable"
+                android:textSize="25sp"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/register_btn"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_below="@+id/registering_user_id"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_corner_button"
+            android:text="Register"
+            android:textColor="@color/white" />
+    </FrameLayout>
 
 </LinearLayout>
