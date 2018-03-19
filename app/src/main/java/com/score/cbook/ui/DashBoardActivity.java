@@ -12,8 +12,10 @@ import com.score.cbook.db.UserSource;
 import com.score.cbook.enums.BlobType;
 import com.score.cbook.enums.CustomerActionType;
 import com.score.cbook.enums.DeliveryState;
+import com.score.cbook.pojo.Account;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.pojo.Secret;
+import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzUtil;
 
 public class DashBoardActivity extends BaseActivity {
@@ -45,10 +47,21 @@ public class DashBoardActivity extends BaseActivity {
         findViewById(R.id.write_cheque_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // navigate to new cheque
-                Intent intent = new Intent(DashBoardActivity.this, BankTypeActivity.class);
-                //intent.putExtra("ACTION", CustomerActionType.NEW_CHEQUE.toString());
-                startActivity(intent);
+                Account account = PreferenceUtil.getAccount(DashBoardActivity.this);
+                if (account.getAccountNo().isEmpty()) {
+                    // account verify
+                    Intent intent = new Intent(DashBoardActivity.this, BankTypeActivity.class);
+                    startActivity(intent);
+                } else if (account.getState().isEmpty()) {
+                    // salt confirm
+                    Intent intent = new Intent(DashBoardActivity.this, SaltConfirmActivity.class);
+                    startActivity(intent);
+                } else {
+                    // navigate to new cheque
+                    Intent intent = new Intent(DashBoardActivity.this, CustomerListActivity.class);
+                    intent.putExtra("ACTION", CustomerActionType.NEW_CHEQUE.toString());
+                    startActivity(intent);
+                }
             }
         });
     }

@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
-import com.score.cbook.exceptions.PasswordMisMatchException;
+import com.score.cbook.exceptions.MisMatchFieldException;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.PreferenceUtil;
@@ -121,7 +121,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             ActivityUtil.isValidLoginFields(accountNo, password, account.getAccountNo(), account.getPassword());
             navigateToHome();
             Toast.makeText(this, "Login success", Toast.LENGTH_LONG).show();
-        } catch (PasswordMisMatchException e) {
+        } catch (MisMatchFieldException e) {
             e.printStackTrace();
             displayInformationMessageDialog("Error", "Invalid password");
         } catch (InvalidInputFieldsException e) {

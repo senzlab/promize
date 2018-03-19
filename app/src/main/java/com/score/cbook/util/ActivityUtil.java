@@ -22,7 +22,7 @@ import com.score.cbook.R;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.InvalidPasswordException;
-import com.score.cbook.exceptions.PasswordMisMatchException;
+import com.score.cbook.exceptions.MisMatchFieldException;
 
 /**
  * Utility class to handle activity related common functions
@@ -83,7 +83,7 @@ public class ActivityUtil {
      *
      * @return valid or not
      */
-    public static boolean isValidRegistrationFields(String account, String password, String confirmPassword) throws InvalidAccountException, InvalidPasswordException, PasswordMisMatchException {
+    public static boolean isValidRegistrationFields(String account, String password, String confirmPassword) throws InvalidAccountException, InvalidPasswordException, MisMatchFieldException {
         if (account.isEmpty()) {
             throw new InvalidAccountException();
         }
@@ -92,7 +92,7 @@ public class ActivityUtil {
             throw new InvalidPasswordException();
 
         if (!password.equals(confirmPassword))
-            throw new PasswordMisMatchException();
+            throw new MisMatchFieldException();
 
         return true;
     }
@@ -102,14 +102,30 @@ public class ActivityUtil {
      *
      * @return valid of not
      */
-    public static boolean isValidLoginFields(String givenAccount, String givenPassword, String account, String password) throws InvalidInputFieldsException, PasswordMisMatchException {
+    public static boolean isValidLoginFields(String givenAccount, String givenPassword, String account, String password) throws InvalidInputFieldsException, MisMatchFieldException {
         if (givenAccount.isEmpty() || givenPassword.isEmpty())
             // empty fields
             throw new InvalidInputFieldsException();
 
         if (!givenPassword.equalsIgnoreCase(password))
             // invalid username/password
-            throw new PasswordMisMatchException();
+            throw new MisMatchFieldException();
+
+        return true;
+    }
+
+    public static boolean isValidAccount(String account, String confirmAccount) throws InvalidInputFieldsException, MisMatchFieldException {
+        if (account.isEmpty() || confirmAccount.isEmpty()) {
+            throw new InvalidInputFieldsException();
+        }
+
+        if (account.length() != 12 || confirmAccount.length() != 12) {
+            throw new InvalidInputFieldsException();
+        }
+
+        if (!account.equalsIgnoreCase(confirmAccount)) {
+            throw new MisMatchFieldException();
+        }
 
         return true;
     }

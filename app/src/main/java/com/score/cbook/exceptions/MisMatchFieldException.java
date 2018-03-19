@@ -1,6 +1,6 @@
 package com.score.cbook.exceptions;
 
-public class PasswordMisMatchException extends Exception {
+public class MisMatchFieldException extends Exception {
 
     @Override
     public String toString() {

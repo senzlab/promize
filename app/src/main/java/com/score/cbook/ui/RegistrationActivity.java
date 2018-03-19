@@ -20,7 +20,7 @@ import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.NoUserException;
-import com.score.cbook.exceptions.PasswordMisMatchException;
+import com.score.cbook.exceptions.MisMatchFieldException;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.NetworkUtil;
@@ -202,7 +202,7 @@ public class RegistrationActivity extends BaseActivity {
         } catch (InvalidPasswordException e) {
             e.printStackTrace();
             displayInformationMessageDialog("Error", "Invalid password. Password should contains more than 4 characters");
-        } catch (PasswordMisMatchException e) {
+        } catch (MisMatchFieldException e) {
             e.printStackTrace();
             displayInformationMessageDialog("Error", "Mismatching password and confirm password");
         }

@@ -11,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
+import com.score.cbook.exceptions.InvalidInputFieldsException;
+import com.score.cbook.exceptions.MisMatchFieldException;
+import com.score.cbook.util.ActivityUtil;
 
 /**
  * Activity class that handles login
@@ -19,8 +22,8 @@ import com.score.cbook.R;
  */
 public class AddAccountActivity extends BaseActivity {
 
-    private EditText account;
-    private EditText confirmAccount;
+    private EditText accountText;
+    private EditText confirmAccountText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,17 +36,28 @@ public class AddAccountActivity extends BaseActivity {
     }
 
     private void initUi() {
-        account = (EditText) findViewById(R.id.account);
-        confirmAccount = (EditText) findViewById(R.id.confirm_account);
-        account.setTypeface(typeface, Typeface.BOLD);
-        confirmAccount.setTypeface(typeface, Typeface.BOLD);
+        accountText = (EditText) findViewById(R.id.account);
+        confirmAccountText = (EditText) findViewById(R.id.confirm_account);
+        accountText.setTypeface(typeface, Typeface.BOLD);
+        confirmAccountText.setTypeface(typeface, Typeface.BOLD);
 
         Button yes = (Button) findViewById(R.id.register_btn);
         yes.setTypeface(typeface, Typeface.BOLD);
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateToVishwaConfirm();
+                String account = accountText.getText().toString().trim();
+                String confirmAccount = confirmAccountText.getText().toString().trim();
+                try {
+                    ActivityUtil.isValidAccount(account, confirmAccount);
+                    navigateToVishwaConfirm();
+                } catch (InvalidInputFieldsException e) {
+                    e.printStackTrace();
+                    displayInformationMessageDialog("ERROR", "Account no should be 12 character length");
+                } catch (MisMatchFieldException e) {
+                    e.printStackTrace();
+                    displayInformationMessageDialog("ERROR", "Mismatching account no");
+                }
             }
         });
     }
@@ -79,7 +93,7 @@ public class AddAccountActivity extends BaseActivity {
     private void navigateToVishwaConfirm() {
         Intent intent = new Intent(AddAccountActivity.this, AccountVerifyActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("ACCOUNT", account.getText().toString());
+        intent.putExtra("ACCOUNT", accountText.getText().toString().trim());
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
