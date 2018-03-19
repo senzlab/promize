@@ -58,7 +58,7 @@ public class DashBoardActivity extends BaseActivity {
                     startActivity(intent);
                 } else {
                     // navigate to new cheque
-                    Intent intent = new Intent(DashBoardActivity.this, BankTypeActivity.class);
+                    Intent intent = new Intent(DashBoardActivity.this, CustomerListActivity.class);
                     intent.putExtra("ACTION", CustomerActionType.NEW_CHEQUE.toString());
                     startActivity(intent);
                 }
