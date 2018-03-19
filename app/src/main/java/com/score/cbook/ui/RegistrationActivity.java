@@ -19,8 +19,8 @@ import com.score.cbook.application.IntentProvider;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidPasswordException;
-import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.exceptions.MisMatchFieldException;
+import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.NetworkUtil;
@@ -155,9 +155,9 @@ public class RegistrationActivity extends BaseActivity {
         editTextConfirmPassword = (EditText) findViewById(R.id.registering_confirm_password);
 
         message.setTypeface(typeface, Typeface.BOLD);
-        editTextAccount.setTypeface(typeface, Typeface.BOLD);
-        editTextPassword.setTypeface(typeface, Typeface.BOLD);
-        editTextConfirmPassword.setTypeface(typeface, Typeface.BOLD);
+        editTextAccount.setTypeface(typeface, Typeface.NORMAL);
+        editTextPassword.setTypeface(typeface, Typeface.NORMAL);
+        editTextConfirmPassword.setTypeface(typeface, Typeface.NORMAL);
 
         registerBtn = (Button) findViewById(R.id.register_btn);
         registerBtn.setTypeface(typeface, Typeface.BOLD);

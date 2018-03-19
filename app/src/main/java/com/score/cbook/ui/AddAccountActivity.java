@@ -38,8 +38,8 @@ public class AddAccountActivity extends BaseActivity {
     private void initUi() {
         accountText = (EditText) findViewById(R.id.account);
         confirmAccountText = (EditText) findViewById(R.id.confirm_account);
-        accountText.setTypeface(typeface, Typeface.BOLD);
-        confirmAccountText.setTypeface(typeface, Typeface.BOLD);
+        accountText.setTypeface(typeface, Typeface.NORMAL);
+        confirmAccountText.setTypeface(typeface, Typeface.NORMAL);
 
         Button yes = (Button) findViewById(R.id.register_btn);
         yes.setTypeface(typeface, Typeface.BOLD);

@@ -84,8 +84,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         loginButton = (Button) findViewById(R.id.login_btn);
         loginButton.setOnClickListener(this);
 
-        editTextAccount.setTypeface(typeface, Typeface.BOLD);
-        editTextPassword.setTypeface(typeface, Typeface.BOLD);
+        editTextAccount.setTypeface(typeface, Typeface.NORMAL);
+        editTextPassword.setTypeface(typeface, Typeface.NORMAL);
         loginButton.setTypeface(typeface, Typeface.BOLD);
     }
 

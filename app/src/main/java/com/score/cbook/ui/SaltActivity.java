@@ -50,7 +50,7 @@ public class SaltActivity extends BaseActivity {
             if (msg != null && msg.equalsIgnoreCase("SUCCESS")) {
                 // set account state as verified
                 PreferenceUtil.saveAccountState(this, "VERIFIED");
-                Toast.makeText(this, "Your account has beedn verified", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Your account has been verified", Toast.LENGTH_LONG).show();
                 SaltActivity.this.finish();
             } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
@@ -108,7 +108,7 @@ public class SaltActivity extends BaseActivity {
 
     private void initUi() {
         amount = (EditText) findViewById(R.id.amount);
-        amount.setTypeface(typeface, Typeface.BOLD);
+        amount.setTypeface(typeface, Typeface.NORMAL);
 
         Button yes = (Button) findViewById(R.id.register_btn);
         yes.setTypeface(typeface, Typeface.BOLD);
