@@ -147,6 +147,7 @@
         <activity android:name=".ui.AddAccountActivity" />
         <activity android:name=".ui.SaltConfirmActivity" />
         <activity android:name=".ui.SaltActivity" />
+        <activity android:name=".ui.SettingsActivity" />
         <!-- Servicves -->
         <service
             android:name="com.score.cbook.remote.SenzService"

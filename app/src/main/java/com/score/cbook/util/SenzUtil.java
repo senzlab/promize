@@ -192,6 +192,7 @@ public class SenzUtil {
         senzAttributes.put("amnt", Integer.toString(cheque.getAmount()));
         senzAttributes.put("bnk", "sampath.chain");
         senzAttributes.put("acc", account);
+        senzAttributes.put("blob", "");
         senzAttributes.put("id", cheque.getCid());
         senzAttributes.put("to", SenzService.SAMPATH_CHAIN_SENZIE_NAME);
         senzAttributes.put("time", cheque.getTimestamp().toString());

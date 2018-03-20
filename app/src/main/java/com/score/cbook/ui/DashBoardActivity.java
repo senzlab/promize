@@ -37,7 +37,7 @@ public class DashBoardActivity extends BaseActivity {
 
         onClickWriteCheque();
         onClickReceivedCheques();
-        //onClickSentCheques();
+        onClickSettings();
         onClickCustomers();
         onClickMessages();
         onClickSupport();
@@ -78,13 +78,12 @@ public class DashBoardActivity extends BaseActivity {
         });
     }
 
-    private void onClickSentCheques() {
+    private void onClickSettings() {
         findViewById(R.id.outbox_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // navigate to new cheque
-                Intent intent = new Intent(DashBoardActivity.this, ChequeListActivity.class);
-                intent.putExtra("SHOW_MY_CHEQUES", true);
+                Intent intent = new Intent(DashBoardActivity.this, SettingsActivity.class);
                 startActivity(intent);
             }
         });
