@@ -11,11 +11,9 @@ import android.os.Parcelable;
  * @author erangaeb@gmail.com (eranga herath)
  */
 public class User implements Parcelable {
-    String id;
-    String username;
+    private String username;
 
-    public User(String id, String username) {
-        this.id = id;
+    public User(String username) {
         this.username = username;
     }
 
@@ -26,7 +24,6 @@ public class User implements Parcelable {
      * @param in a parcel to read this object
      */
     public User(Parcel in) {
-        this.id = in.readString();
         this.username = in.readString();
     }
 
@@ -48,7 +45,6 @@ public class User implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
         dest.writeString(username);
     }
 
@@ -60,7 +56,6 @@ public class User implements Parcelable {
      * Parcelable protocol requires a Parcelable.Creator object called CREATOR
      */
     public static final Creator<User> CREATOR = new Creator<User>() {
-
         public User createFromParcel(Parcel in) {
             return new User(in);
         }
@@ -69,14 +64,6 @@ public class User implements Parcelable {
             return new User[size];
         }
     };
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;

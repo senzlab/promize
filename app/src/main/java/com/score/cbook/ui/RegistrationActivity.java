@@ -27,7 +27,6 @@ import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzUtil;
 import com.score.senzc.pojos.Senz;
-import com.score.senzc.pojos.User;
 
 public class RegistrationActivity extends BaseActivity {
 
@@ -211,7 +210,7 @@ public class RegistrationActivity extends BaseActivity {
     private void doAuth() {
         // send login senz
         try {
-            User user = PreferenceUtil.getUser(this);
+            String user = PreferenceUtil.getSenzieAddress(this);
             Senz senz = SenzUtil.authSenz(this, user);
             send(senz);
         } catch (NoUserException e) {

@@ -128,7 +128,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
         if (!UserSource.isExistingUserWithPhoneNo(this, contact.getPhoneNo())) {
             String confirmationMessage = "<font size=10>Are you sure you want to add customer </font> <font color=#F37920>" + "<b>" + contact.getName() + "</b>" + "</font> (" + contact.getPhoneNo() + ")?";
             try {
-                final String username = PreferenceUtil.getUser(this).getUsername();
+                final String username = PreferenceUtil.getSenzieAddress(this);
                 displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

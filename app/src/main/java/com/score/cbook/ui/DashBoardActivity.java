@@ -116,7 +116,7 @@ public class DashBoardActivity extends BaseActivity {
         findViewById(R.id.support_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChequeUser chequeUser = new ChequeUser("sampath", "sampath");
+                ChequeUser chequeUser = new ChequeUser("sampath");
 
                 if (!UserSource.isExistingUser(DashBoardActivity.this, "sampath")) {
                     // create admin sampath user and secret if not exists

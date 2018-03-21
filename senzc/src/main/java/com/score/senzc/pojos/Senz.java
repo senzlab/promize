@@ -16,14 +16,14 @@ public class Senz implements Parcelable {
     private String id;
     private String signature;
     private SenzTypeEnum senzType;
-    private User sender;
-    private User receiver;
+    private String sender;
+    private String receiver;
     private HashMap<String, String> attributes;
 
     public Senz() {
     }
 
-    public Senz(String id, String signature, SenzTypeEnum senzType, User sender, User receiver, HashMap<String, String> attributes) {
+    public Senz(String id, String signature, SenzTypeEnum senzType, String sender, String receiver, HashMap<String, String> attributes) {
         this.id = id;
         this.signature = signature;
         this.senzType = senzType;
@@ -58,8 +58,8 @@ public class Senz implements Parcelable {
         dest.writeString(id);
         dest.writeString(signature);
         dest.writeString(senzType.name());
-        dest.writeParcelable(sender, flags);
-        dest.writeParcelable(receiver, flags);
+        dest.writeString(sender);
+        dest.writeString(receiver);
 
         // write attribute map to parcel
         dest.writeInt(attributes.size());
@@ -124,19 +124,19 @@ public class Senz implements Parcelable {
         this.attributes = attributes;
     }
 
-    public User getSender() {
+    public String getSender() {
         return sender;
     }
 
-    public void setSender(User sender) {
+    public void setSender(String sender) {
         this.sender = sender;
     }
 
-    public User getReceiver() {
+    public String getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(User receiver) {
+    public void setReceiver(String receiver) {
         this.receiver = receiver;
     }
 

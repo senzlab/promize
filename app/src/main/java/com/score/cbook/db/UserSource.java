@@ -54,13 +54,12 @@ public class UserSource {
             // have matching user
             // so get user data
             // we return id as password since we no storing users password in database
-            String _userID = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User._ID));
             String _username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_USERNAME));
 
             // clear
             cursor.close();
 
-            ChequeUser chequeUser = new ChequeUser(_userID, _username);
+            ChequeUser chequeUser = new ChequeUser(_username);
             chequeUser.setPhone(phoneNo);
 
             return chequeUser;
@@ -201,7 +200,6 @@ public class UserSource {
             // have matching user
             // so get user data
             // we return id as password since we no storing users password in database
-            String userId = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User._ID));
             String phone = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PHONE));
             String pubKey = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY));
             String pubKeyHash = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY_HASH));
@@ -216,7 +214,7 @@ public class UserSource {
             // clear
             cursor.close();
 
-            ChequeUser chequeUser = new ChequeUser(userId, username);
+            ChequeUser chequeUser = new ChequeUser(username);
             chequeUser.setPhone(phone);
             chequeUser.setPubKey(pubKey);
             chequeUser.setPubKeyHash(pubKeyHash);
@@ -248,7 +246,6 @@ public class UserSource {
         ArrayList<ChequeUser> chequeUserList = new ArrayList<>();
 
         while (cursor.moveToNext()) {
-            String userId = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User._ID));
             String username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_USERNAME));
             String phone = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PHONE));
             String pubKey = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY));
@@ -258,7 +255,7 @@ public class UserSource {
             String image = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IMAGE));
             int isSmsRequester = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER));
 
-            ChequeUser chequeUser = new ChequeUser(userId, username);
+            ChequeUser chequeUser = new ChequeUser(username);
             chequeUser.setPhone(phone);
             chequeUser.setPubKey(pubKey);
             chequeUser.setPubKeyHash(pubKeyHash);

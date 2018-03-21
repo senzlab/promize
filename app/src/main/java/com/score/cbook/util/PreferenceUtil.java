@@ -28,7 +28,7 @@ public class PreferenceUtil {
      * @param context application context
      * @param user    logged-in user
      */
-    public static void saveUser(Context context, User user) {
+    public static void saveSenzeisAddress(Context context, User user) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(PreferenceUtil.Z_ADDRESS, user.getUsername());
@@ -41,14 +41,14 @@ public class PreferenceUtil {
      * @param context application context
      * @return user object
      */
-    public static User getUser(Context context) throws NoUserException {
+    public static String getSenzieAddress(Context context) throws NoUserException {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         String senzieAddress = preferences.getString(PreferenceUtil.Z_ADDRESS, "");
 
         if (senzieAddress.isEmpty())
             throw new NoUserException();
 
-        return new User(senzieAddress, senzieAddress);
+        return senzieAddress;
     }
 
     /**
@@ -106,7 +106,7 @@ public class PreferenceUtil {
      * @param key     public/private keys(encoded key string)
      * @param keyType public_key, private_key, server_key
      */
-    public static void saveRsaKey(Context context, String key, String keyType) {
+    static void saveRsaKey(Context context, String key, String keyType) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(keyType, key);
@@ -120,7 +120,7 @@ public class PreferenceUtil {
      * @param keyType public_key, private_key, server_key
      * @return key string
      */
-    public static String getRsaKey(Context context, String keyType) {
+    static String getRsaKey(Context context, String keyType) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         return preferences.getString(keyType, "");
     }

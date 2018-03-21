@@ -22,7 +22,6 @@ import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
 import com.score.senz.ISenzService;
 import com.score.senzc.pojos.Senz;
-import com.score.senzc.pojos.User;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -80,10 +79,11 @@ public class SenzService extends Service {
             NotificationzHandler.cancel(context, NotificationzHandler.CUSTOMER_NOTIFICATION_ID);
 
             if (NetworkUtil.isAvailableNetwork(context)) {
-                String phone = intent.getStringExtra("PHONE").trim();
-                String username = intent.getStringExtra("USERNAME").trim();
                 try {
-                    sendSMS(phone, "#ChequeBook #confirm\nI have confirmed your request. #username " + PreferenceUtil.getUser(SenzService.this).getUsername() + " #code 31e3e");
+                    String phone = intent.getStringExtra("PHONE").trim();
+                    String username = intent.getStringExtra("USERNAME").trim();
+                    String address = PreferenceUtil.getSenzieAddress(SenzService.this);
+                    sendSMS(phone, "#ChequeBook #confirm\nI have confirmed your request. #username " + address + " #code 31e3e");
 
                     // get pubkey
                     getSenzieKey(username);
@@ -173,7 +173,7 @@ public class SenzService extends Service {
 
     private void ping() {
         try {
-            User user = PreferenceUtil.getUser(this);
+            String user = PreferenceUtil.getSenzieAddress(this);
             Senz senz = SenzUtil.regSenz(SenzService.this, user);
             writeSenz(senz);
         } catch (NoUserException e) {
@@ -207,8 +207,8 @@ public class SenzService extends Service {
                     PrivateKey privateKey = CryptoUtil.getPrivateKey(SenzService.this);
 
                     // if sender not already set find user(sender) and set it to senz first
-                    if (senz.getSender() == null || senz.getSender().toString().isEmpty())
-                        senz.setSender(PreferenceUtil.getUser(getBaseContext()));
+                    if (senz.getSender() == null || senz.getSender().isEmpty())
+                        senz.setSender(PreferenceUtil.getSenzieAddress(getBaseContext()));
 
                     // get digital signature of the senz
                     String senzPayload = SenzParser.compose(senz);
@@ -230,7 +230,7 @@ public class SenzService extends Service {
             public void run() {
                 try {
                     PrivateKey privateKey = CryptoUtil.getPrivateKey(SenzService.this);
-                    User sender = PreferenceUtil.getUser(SenzService.this);
+                    String sender = PreferenceUtil.getSenzieAddress(SenzService.this);
 
                     for (Senz senz : senzList) {
                         senz.setSender(sender);
@@ -256,8 +256,8 @@ public class SenzService extends Service {
             public void run() {
                 try {
                     // set sender
-                    if (senz.getSender() == null || senz.getSender().toString().isEmpty())
-                        senz.setSender(PreferenceUtil.getUser(getBaseContext()));
+                    if (senz.getSender() == null || senz.getSender().isEmpty())
+                        senz.setSender(PreferenceUtil.getSenzieAddress(getBaseContext()));
 
                     // send img
                     if (senz.getAttributes().containsKey("img")) {

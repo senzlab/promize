@@ -423,7 +423,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
             String id = "_ID";
             String signature = "_SIGNATURE";
             SenzTypeEnum senzType = SenzTypeEnum.DATA;
-            Senz senz = new Senz(id, signature, senzType, null, new User(chequeUser.getId(), chequeUser.getUsername()), senzAttributes);
+            Senz senz = new Senz(id, signature, senzType, null, chequeUser.getUsername(), senzAttributes);
 
             sendSenz(senz);
         } catch (Exception e) {
@@ -432,7 +432,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void onSenzMsgReceived(Senz senz) {
-        if (senz.getSender().getUsername().equalsIgnoreCase(chequeUser.getUsername())) {
+        if (senz.getSender().equalsIgnoreCase(chequeUser.getUsername())) {
             if (senz.getAttributes().containsKey("msg")) {
                 String msg = senz.getAttributes().get("msg");
 

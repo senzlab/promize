@@ -12,7 +12,6 @@ import com.score.cbook.R;
 import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.util.PreferenceUtil;
-import com.score.senzc.pojos.User;
 
 public class SettingsActivity extends BaseActivity {
 
@@ -24,9 +23,6 @@ public class SettingsActivity extends BaseActivity {
     private TextView accountV;
     private TextView promizeId;
     private TextView promizeIdV;
-
-    private User user;
-    private Account useAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,12 +74,12 @@ public class SettingsActivity extends BaseActivity {
 
     private void initPrefs() {
         try {
-            user = PreferenceUtil.getUser(this);
-            useAccount = PreferenceUtil.getAccount(this);
+            String user = PreferenceUtil.getSenzieAddress(this);
+            Account useAccount = PreferenceUtil.getAccount(this);
 
             accountV.setText(useAccount.getAccountNo());
             phoneV.setText(useAccount.getPhoneNo());
-            promizeIdV.setText(user.getUsername());
+            promizeIdV.setText(user);
         } catch (NoUserException e) {
             e.printStackTrace();
         }

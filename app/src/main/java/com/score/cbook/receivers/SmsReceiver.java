@@ -90,7 +90,7 @@ public class SmsReceiver extends BroadcastReceiver {
         }
 
         // create user
-        ChequeUser chequeUser = new ChequeUser("id", username);
+        ChequeUser chequeUser = new ChequeUser(username);
         chequeUser.setPhone(contactNo);
         chequeUser.setPubKeyHash(pubKeyHash);
         UserSource.createUser(context, chequeUser);
@@ -110,7 +110,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
         try {
             // create user
-            ChequeUser chequeUser = new ChequeUser("id", username);
+            ChequeUser chequeUser = new ChequeUser(username);
             chequeUser.setPhone(contactNo);
             chequeUser.setPubKeyHash(pubKeyHash);
             chequeUser.setSMSRequester(true);

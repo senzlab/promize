@@ -8,7 +8,6 @@ import com.score.cbook.pojo.Cheque;
 import com.score.cbook.remote.SenzService;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
-import com.score.senzc.pojos.User;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
@@ -22,11 +21,11 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class SenzUtil {
-    public static Senz regSenz(Context context, User sender) {
+    public static Senz regSenz(Context context, String sender) {
         // create create senz
         HashMap<String, String> senzAttributes = new HashMap<>();
         Long timestamp = System.currentTimeMillis();
-        String uid = timestamp.toString() + sender.getUsername();
+        String uid = timestamp.toString() + sender;
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", uid);
         senzAttributes.put("pubkey", PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY));
@@ -35,17 +34,17 @@ public class SenzUtil {
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
         senz.setSender(sender);
-        senz.setReceiver(new User("", SenzService.SWITCH_NAME));
+        senz.setReceiver(SenzService.SWITCH_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
     }
 
-    public static Senz authSenz(Context context, User sender) {
+    public static Senz authSenz(Context context, String sender) {
         // create create senz
         HashMap<String, String> senzAttributes = new HashMap<>();
         Long timestamp = System.currentTimeMillis();
-        String uid = timestamp.toString() + sender.getUsername();
+        String uid = timestamp.toString() + sender;
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", uid);
         senzAttributes.put("pubkey", PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY));
@@ -54,7 +53,7 @@ public class SenzUtil {
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
         senz.setSender(sender);
-        senz.setReceiver(new User("", SenzService.SAMPATH_CHAIN_SENZIE_NAME));
+        senz.setReceiver(SenzService.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -71,7 +70,7 @@ public class SenzUtil {
         // new senz
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
-        senz.setReceiver(new User("", SenzService.SAMPATH_CHAIN_SENZIE_NAME));
+        senz.setReceiver(SenzService.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -88,7 +87,7 @@ public class SenzUtil {
         // new senz
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
-        senz.setReceiver(new User("", SenzService.SAMPATH_CHAIN_SENZIE_NAME));
+        senz.setReceiver(SenzService.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -106,13 +105,13 @@ public class SenzUtil {
         // new senz object
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.GET);
-        senz.setReceiver(new User("", SenzService.SWITCH_NAME));
+        senz.setReceiver(SenzService.SWITCH_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
     }
 
-    public static Senz shareSenz(Context context, String username, String sessionKey) throws NoSuchAlgorithmException {
+    public static Senz shareSenz(Context context, String receiver, String sessionKey) throws NoSuchAlgorithmException {
         // create senz attributes
         Long timestamp = System.currentTimeMillis();
         HashMap<String, String> senzAttributes = new HashMap<>();
@@ -127,13 +126,13 @@ public class SenzUtil {
         // new senz
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
-        senz.setReceiver(new User("", username));
+        senz.setReceiver(receiver);
         senz.setAttributes(senzAttributes);
 
         return senz;
     }
 
-    public static Senz statusSenz(Context context, User user, String statusCode) {
+    public static Senz statusSenz(Context context, String receiver, String statusCode) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
         Long timestamp = System.currentTimeMillis();
@@ -144,7 +143,7 @@ public class SenzUtil {
         // new senz object
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.DATA);
-        senz.setReceiver(user);
+        senz.setReceiver(receiver);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -160,7 +159,7 @@ public class SenzUtil {
         // new senz object
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.AWA);
-        senz.setReceiver(new User("", SenzService.SWITCH_NAME));
+        senz.setReceiver(SenzService.SWITCH_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -180,7 +179,7 @@ public class SenzUtil {
         // new senz
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
-        senz.setReceiver(new User("", SenzService.SAMPATH_CHAIN_SENZIE_NAME));
+        senz.setReceiver(SenzService.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -201,7 +200,7 @@ public class SenzUtil {
         // new senz
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
-        senz.setReceiver(new User("", SenzService.SAMPATH_CHAIN_SENZIE_NAME));
+        senz.setReceiver(SenzService.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -227,7 +226,7 @@ public class SenzUtil {
         // new senz object
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.DATA);
-        senz.setReceiver(new User("", cheque.getUser().getUsername()));
+        senz.setReceiver(cheque.getUser().getUsername());
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -235,7 +234,7 @@ public class SenzUtil {
 
     public static String getUid(Context context, String timestamp) {
         try {
-            String username = PreferenceUtil.getUser(context).getUsername();
+            String username = PreferenceUtil.getSenzieAddress(context);
             return username + timestamp;
         } catch (NoUserException e) {
             e.printStackTrace();

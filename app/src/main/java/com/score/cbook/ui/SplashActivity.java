@@ -47,7 +47,7 @@ public class SplashActivity extends BaseActivity {
             if (msg != null && (msg.equalsIgnoreCase("REG_DONE"))) {
                 // reg success
                 // save user
-                PreferenceUtil.saveUser(this, senzie);
+                PreferenceUtil.saveSenzeisAddress(this, senzie);
 
                 // request auth.key
                 send(SenzUtil.senzieKeySenz(this, SenzService.SAMPATH_AUTH_SENZIE_NAME));
@@ -115,7 +115,7 @@ public class SplashActivity extends BaseActivity {
     private void initNavigation() {
         // determine where to go
         try {
-            PreferenceUtil.getUser(this);
+            PreferenceUtil.getSenzieAddress(this);
 
             if (PreferenceUtil.getAccount(this).getPassword().isEmpty()) {
                 // no registered account yet
@@ -151,8 +151,7 @@ public class SplashActivity extends BaseActivity {
             String senzieAddress = CryptoUtil.getSenzieAddress(this);
 
             // send reg
-            senzie = new User(senzieAddress, senzieAddress);
-            send(SenzUtil.regSenz(this, senzie));
+            send(SenzUtil.regSenz(this, senzieAddress));
         } catch (Exception e) {
             e.printStackTrace();
         }

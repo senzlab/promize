@@ -21,8 +21,8 @@ public class ChequeUser extends User implements Parcelable {
     private int unreadSecretCount;
     private int unreadChequeCount;
 
-    public ChequeUser(String id, String username) {
-        super(id, username);
+    public ChequeUser(String username) {
+        super(username);
     }
 
     /**

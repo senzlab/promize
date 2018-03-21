@@ -2,7 +2,6 @@ package com.score.cbook.util;
 
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
-import com.score.senzc.pojos.User;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
@@ -32,10 +31,10 @@ public class SenzParser {
                 senz.setSignature(token);
             } else if (tokens[i].startsWith("@")) {
                 // @0775432012
-                senz.setReceiver(new User("", token.substring(1)));
+                senz.setReceiver(token.substring(1));
             } else if (token.startsWith("^")) {
-                // ^mysensors, ^0775432015
-                senz.setSender(new User("", token.substring(1)));
+                // ^mysensors, ^0775432015j
+                senz.setSender(token.substring(1));
             } else if (token.startsWith("$")) {
                 // $key 5.23
                 senz.getAttributes().put(token, tokens[i + 1]);
@@ -80,8 +79,8 @@ public class SenzParser {
         }
 
         // add sender and receiver
-        payload = payload.concat(" ").concat("@").concat(senz.getReceiver().getUsername());
-        payload = payload.concat(" ").concat("^").concat(senz.getSender().getUsername());
+        payload = payload.concat(" ").concat("@").concat(senz.getReceiver());
+        payload = payload.concat(" ").concat("^").concat(senz.getSender());
 
         return payload;
     }
