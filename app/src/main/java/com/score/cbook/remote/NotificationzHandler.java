@@ -63,8 +63,7 @@ public class NotificationzHandler {
 
     private static Notification buildNotification(Context context, Intent intent, Notifcationz notifcationz) {
         intent.putExtra("SENDER", notifcationz.getSender());
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // build notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
@@ -84,14 +83,12 @@ public class NotificationzHandler {
             acceptIntent.setAction(IntentProvider.ACTION_SMS_REQUEST_ACCEPT);
             acceptIntent.putExtra("PHONE", notifcationz.getSenderPhone());
             acceptIntent.putExtra("USERNAME", notifcationz.getSender());
-            acceptIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent acceptPendingIntent = PendingIntent.getBroadcast(context, 0, acceptIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent acceptPendingIntent = PendingIntent.getBroadcast(context, 0, acceptIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             // cancel/dismiss action
             Intent cancelIntent = new Intent();
             cancelIntent.setAction(IntentProvider.ACTION_SMS_REQUEST_REJECT);
-            cancelIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(context, 0, cancelIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            PendingIntent cancelPendingIntent = PendingIntent.getBroadcast(context, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             builder.addAction(R.drawable.accept, "Accept", acceptPendingIntent);
             builder.addAction(R.drawable.reject, "Reject", cancelPendingIntent);
