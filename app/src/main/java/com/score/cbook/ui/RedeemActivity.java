@@ -178,7 +178,7 @@ public class RedeemActivity extends BaseActivity {
                     if (NetworkUtil.isAvailableNetwork(RedeemActivity.this)) {
                         ActivityUtil.showProgressDialog(RedeemActivity.this, "Please wait...");
                         Senz senz = SenzUtil.depositChequeSenz(RedeemActivity.this, cheque, accountNo);
-                        send(senz);
+                        sendSenz(senz);
                     } else {
                         ActivityUtil.showCustomToastShort("No network connection", RedeemActivity.this);
                     }

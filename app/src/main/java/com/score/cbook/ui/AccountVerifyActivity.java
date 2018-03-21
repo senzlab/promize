@@ -168,7 +168,7 @@ public class AccountVerifyActivity extends BaseActivity {
 
     private void verifyAccount() {
         Senz senz = SenzUtil.accountSenz(this, account);
-        send(senz);
+        sendSenz(senz);
     }
 
     private void navigateToConfirm() {

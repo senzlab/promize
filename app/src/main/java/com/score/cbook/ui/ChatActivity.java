@@ -43,7 +43,6 @@ import com.score.cbook.util.TimeUtil;
 import com.score.senz.ISenzService;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
-import com.score.senzc.pojos.User;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -465,7 +464,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         if (NetworkUtil.isAvailableNetwork(this)) {
             try {
                 if (isServiceBound) {
-                    senzService.send(senz);
+                    senzService.sendSenz(senz);
                 } else {
                     ActivityUtil.showCustomToast("Failed to connected to service.", this);
                 }

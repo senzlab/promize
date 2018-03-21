@@ -316,7 +316,7 @@ public class NewGiftActivity extends BaseActivity {
         cheque.setTimestamp(timestamp);
 
         Senz senz = SenzUtil.transferChequeSenz(this, cheque, PreferenceUtil.getAccount(this));
-        send(senz);
+        sendSenz(senz);
     }
 
     private void savePromize() {

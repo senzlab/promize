@@ -137,7 +137,7 @@ public class ViewChequeActivity extends BaseActivity {
                 ActivityUtil.showProgressDialog(ViewChequeActivity.this, "Depositing...");
 
                 Senz senz = SenzUtil.depositChequeSenz(ViewChequeActivity.this, cheque, "32323");
-                send(senz);
+                sendSenz(senz);
             }
         });
 

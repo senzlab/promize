@@ -15,7 +15,6 @@ import com.score.cbook.application.IntentProvider;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.util.CryptoUtil;
-import com.score.cbook.util.ImageUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzParser;
@@ -59,18 +58,13 @@ public class SenzService extends Service {
     // stubs that service expose(defines in ISenzService.aidl)
     private final ISenzService.Stub stubs = new ISenzService.Stub() {
         @Override
-        public void send(Senz senz) throws RemoteException {
+        public void sendSenz(Senz senz) throws RemoteException {
             writeSenz(senz);
         }
 
         @Override
-        public void sendInOrder(List<Senz> senzList) throws RemoteException {
+        public void sendSenzes(List<Senz> senzList) throws RemoteException {
             writeSenzes(senzList);
-        }
-
-        @Override
-        public void sendStream(Senz senz) throws RemoteException {
-            writeStream(senz);
         }
     };
 
@@ -239,31 +233,10 @@ public class SenzService extends Service {
                         // get digital signature of the senz
                         String senzPayload = SenzParser.compose(senz);
                         String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
+                        String message = SenzParser.senzMsg(senzPayload, signature);
 
                         // sends the message to the server
-                        String message = SenzParser.senzMsg(senzPayload, signature);
                         write(message);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-    void writeStream(final Senz senz) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // set sender
-                    if (senz.getSender() == null || senz.getSender().isEmpty())
-                        senz.setSender(PreferenceUtil.getSenzieAddress(getBaseContext()));
-
-                    // send img
-                    if (senz.getAttributes().containsKey("img")) {
-                        for (String packet : ImageUtil.splitImg(senz.getAttributes().get("img"), 1024))
-                            write(packet);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

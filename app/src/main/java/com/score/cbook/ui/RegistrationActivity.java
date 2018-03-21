@@ -212,7 +212,7 @@ public class RegistrationActivity extends BaseActivity {
         try {
             String user = PreferenceUtil.getSenzieAddress(this);
             Senz senz = SenzUtil.authSenz(this, user);
-            send(senz);
+            sendSenz(senz);
         } catch (NoUserException e) {
             e.printStackTrace();
         }

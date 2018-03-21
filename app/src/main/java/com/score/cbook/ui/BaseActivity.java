@@ -20,7 +20,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.interfaces.ISendingComHandler;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.senz.ISenzService;
@@ -28,28 +27,15 @@ import com.score.senzc.pojos.Senz;
 
 import java.util.List;
 
-/**
- * This the mother of all activities.. its contains things that are reusable by all activities.. things such as
- * 1.  popups,
- * 2.  fonts,
- * 3.  communications,
- * 4.  Common messages,
- * 5.  Initiating background service, etc...
- * <p>
- * Created by lakmal.caldera on 9/11/2016.
- */
-public class BaseActivity extends AppCompatActivity implements ISendingComHandler {
+public class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = BaseActivity.class.getName();
-
-    // Font types used in app
-    protected Typeface typeface;
-    protected Typeface typefaceThin;
-    protected Typeface typefaceUltraThin;
 
     // service interface
     protected ISenzService senzService = null;
     protected boolean isServiceBound = false;
+
+    protected Typeface typeface;
 
     // service connection
     protected ServiceConnection senzServiceConnection = new ServiceConnection() {
@@ -69,9 +55,7 @@ public class BaseActivity extends AppCompatActivity implements ISendingComHandle
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //Setup Fonts!!!
-        setupFonts();
+        typeface = Typeface.createFromAsset(getAssets(), "fonts/GeosansLight.ttf");
     }
 
     protected void bindToService() {
@@ -80,10 +64,14 @@ public class BaseActivity extends AppCompatActivity implements ISendingComHandle
         bindService(intent, senzServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    private void setupFonts() {
-        typeface = Typeface.createFromAsset(getAssets(), "fonts/GeosansLight.ttf");
-        typefaceThin = Typeface.createFromAsset(getAssets(), "fonts/GeosansLight.ttf");
-        typefaceUltraThin = Typeface.createFromAsset(getAssets(), "fonts/GeosansLight.ttf");
+    protected void unbindService() {
+        // unbind from service
+        if (isServiceBound) {
+            Log.d(TAG, "Unbind to senz service");
+            unbindService(senzServiceConnection);
+
+            isServiceBound = false;
+        }
     }
 
     public void displayInformationMessageDialog(String title, String message) {
@@ -121,7 +109,7 @@ public class BaseActivity extends AppCompatActivity implements ISendingComHandle
     public void displayConfirmationMessageDialog(String message, final View.OnClickListener okClicked) {
         final Dialog dialog = new Dialog(this);
 
-        //set layout for dialog
+        // set layout for dialog
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.share_confirm_message_dialog);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -161,12 +149,11 @@ public class BaseActivity extends AppCompatActivity implements ISendingComHandle
         dialog.show();
     }
 
-    @Override
-    public void send(Senz senz) {
+    public void sendSenz(Senz senz) {
         if (NetworkUtil.isAvailableNetwork(this)) {
             try {
                 if (isServiceBound) {
-                    senzService.send(senz);
+                    senzService.sendSenz(senz);
                 } else {
                     ActivityUtil.showCustomToast("Failed to connected to service.", this);
                 }
@@ -178,29 +165,11 @@ public class BaseActivity extends AppCompatActivity implements ISendingComHandle
         }
     }
 
-    @Override
-    public void sendInOrder(List<Senz> senzList) {
+    public void sendSenzes(List<Senz> senzList) {
         if (NetworkUtil.isAvailableNetwork(this)) {
             try {
                 if (isServiceBound) {
-                    senzService.sendInOrder(senzList);
-                } else {
-                    ActivityUtil.showCustomToast("Failed to connected to service.", this);
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        } else {
-            ActivityUtil.showCustomToast(this.getResources().getString(R.string.no_internet), this);
-        }
-    }
-
-    @Override
-    public void sendStream(Senz senz) {
-        if (NetworkUtil.isAvailableNetwork(this)) {
-            try {
-                if (isServiceBound) {
-                    senzService.sendStream(senz);
+                    senzService.sendSenzes(senzList);
                 } else {
                     ActivityUtil.showCustomToast("Failed to connected to service.", this);
                 }

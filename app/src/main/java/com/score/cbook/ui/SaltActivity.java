@@ -151,7 +151,7 @@ public class SaltActivity extends BaseActivity {
     private void confirmSalt() {
         String salt = amount.getText().toString().trim();
         Senz senz = SenzUtil.saltSenz(this, salt);
-        send(senz);
+        sendSenz(senz);
     }
 
 }

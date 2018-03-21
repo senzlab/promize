@@ -9,5 +9,4 @@ public interface ISendingComHandler {
 
     void sendInOrder(List<Senz> senzList);
 
-    void sendStream(Senz senz);
 }

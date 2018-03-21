@@ -101,7 +101,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void initUi() {
-        ((TextView) findViewById(R.id.splash_name)).setTypeface(typefaceThin, Typeface.BOLD);
+        ((TextView) findViewById(R.id.splash_name)).setTypeface(typeface, Typeface.BOLD);
     }
 
     private void initService() {
@@ -148,7 +148,7 @@ public class SplashActivity extends BaseActivity {
             String senzieAddress = CryptoUtil.getSenzieAddress(this);
 
             // send reg
-            send(SenzUtil.regSenz(this, senzieAddress));
+            sendSenz(SenzUtil.regSenz(this, senzieAddress));
         } catch (Exception e) {
             e.printStackTrace();
         }
