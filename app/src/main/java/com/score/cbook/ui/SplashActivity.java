@@ -48,9 +48,6 @@ public class SplashActivity extends BaseActivity {
                 // reg success
                 // save user
                 PreferenceUtil.saveSenzeisAddress(this, senzie);
-
-                // request auth.key
-                send(SenzUtil.senzieKeySenz(this, SenzService.SAMPATH_AUTH_SENZIE_NAME));
             } else if (msg != null && msg.equalsIgnoreCase("REG_ALR")) {
 
             } else if (msg != null && msg.equalsIgnoreCase("REG_FAIL")) {

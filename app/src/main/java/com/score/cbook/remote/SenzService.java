@@ -42,6 +42,7 @@ public class SenzService extends Service {
     public static final String SWITCH_NAME = "senzswitch";
     public static final String SAMPATH_AUTH_SENZIE_NAME = "sampath.auth";
     public static final String SAMPATH_CHAIN_SENZIE_NAME = "sampath.chain";
+    public static final String SAMPATH_SUPPORT_SENZIE_NAME = "sampath.support";
 
     // wake lock to keep
     private PowerManager powerManager;
