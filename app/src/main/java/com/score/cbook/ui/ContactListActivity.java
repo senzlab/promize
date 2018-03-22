@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -142,7 +141,6 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
 
     private void sendSMS(String phoneNumber, String message) {
         SmsManager sms = SmsManager.getDefault();
-        Log.i(TAG, "SMS Body -> " + message);
         sms.sendTextMessage(phoneNumber, null, message, null, null);
     }
 

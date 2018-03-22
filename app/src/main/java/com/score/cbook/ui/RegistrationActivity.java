@@ -180,7 +180,11 @@ public class RegistrationActivity extends BaseActivity {
                         account = new Account();
                         account.setPhoneNo(phone);
                         account.setPassword(password);
-                        doReg();
+                        if (PreferenceUtil.getSenzieAddress(RegistrationActivity.this).isEmpty())
+                            doReg();
+                        else {
+                            doAuth();
+                        }
                     } else {
                         ActivityUtil.showCustomToastShort("No network connection", RegistrationActivity.this);
                     }
@@ -202,10 +206,8 @@ public class RegistrationActivity extends BaseActivity {
         try {
             // generate keypair
             // generate senzie address
-            if (PreferenceUtil.getSenzieAddress(this).isEmpty()) {
-                CryptoUtil.initKeys(this);
-                senzieAddress = CryptoUtil.getSenzieAddress(this);
-            }
+            CryptoUtil.initKeys(this);
+            senzieAddress = CryptoUtil.getSenzieAddress(this);
 
             // share keys with zwitch
             sendSenz(SenzUtil.regSenz(this, senzieAddress));

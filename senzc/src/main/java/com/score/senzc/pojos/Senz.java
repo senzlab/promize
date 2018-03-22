@@ -42,8 +42,8 @@ public class Senz implements Parcelable {
         this.id = in.readString();
         this.signature = in.readString();
         this.senzType = SenzTypeEnum.valueOf(in.readString());
-        this.sender = in.readParcelable(User.class.getClassLoader());
-        this.receiver = in.readParcelable(User.class.getClassLoader());
+        this.sender = in.readString();
+        this.receiver = in.readString();
 
         // read attribute map from parcel
         this.attributes = new HashMap<>();

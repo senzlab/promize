@@ -34,7 +34,7 @@ public class SenzService extends Service {
     private static final String TAG = SenzService.class.getName();
 
     //public static final String SENZ_HOST = "www.rahasak.com";
-    public static final String SENZ_HOST = "222.165.167.19";
+    public static final String SENZ_HOST = "10.2.2.4";
     public static final int SENZ_PORT = 7171;
 
     public static final String SWITCH_NAME = "senzswitch";
@@ -42,8 +42,6 @@ public class SenzService extends Service {
     public static final String SAMPATH_CHAIN_SENZIE_NAME = "sampath.chain";
     public static final String SAMPATH_SUPPORT_SENZIE_NAME = "sampath.support";
 
-    // wake lock to keep
-    private PowerManager powerManager;
     private PowerManager.WakeLock senzWakeLock;
 
     // senz socket
@@ -73,13 +71,15 @@ public class SenzService extends Service {
             NotificationzHandler.cancel(context, NotificationzHandler.CUSTOMER_NOTIFICATION_ID);
 
             if (NetworkUtil.isAvailableNetwork(context)) {
+                // send sms
                 String phone = intent.getStringExtra("PHONE").trim();
                 String username = intent.getStringExtra("USERNAME").trim();
                 String address = PreferenceUtil.getSenzieAddress(SenzService.this);
-                sendSMS(phone, "#ChequeBook #confirm\nI have confirmed your request. #username " + address + " #code 31e3e");
+                String msg = "#ChequeBook #confirm\nI have confirmed your request. #username " + address + " #code 31e3e";
+                SmsManager.getDefault().sendTextMessage(phone, null, msg, null, null);
 
                 // get pubkey
-                getSenzieKey(username);
+                writeSenz(SenzUtil.senzieKeySenz(SenzService.this, username));
             } else {
                 Toast.makeText(context, "No network connection", Toast.LENGTH_LONG).show();
             }
@@ -97,9 +97,7 @@ public class SenzService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             String username = intent.getStringExtra("USERNAME").trim();
-
-            // get pubkey
-            getSenzieKey(username);
+            writeSenz(SenzUtil.senzieKeySenz(SenzService.this, username));
         }
     };
 
@@ -157,26 +155,16 @@ public class SenzService extends Service {
     }
 
     private void initWakeLock() {
-        powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
         senzWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SenzWakeLock");
     }
 
-    private void doReg() {
+    private void reg() {
         String address = PreferenceUtil.getSenzieAddress(this);
         if (!address.isEmpty()) {
             Senz senz = SenzUtil.regSenz(SenzService.this, address);
             writeSenz(senz);
         }
-    }
-
-    private void getSenzieKey(String username) {
-        Senz senz = SenzUtil.senzieKeySenz(this, username);
-        writeSenz(senz);
-    }
-
-    private void sendSMS(String phoneNumber, String message) {
-        SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(phoneNumber, null, message, null, null);
     }
 
     void tuk() {
@@ -251,14 +239,13 @@ public class SenzService extends Service {
     }
 
     private class SenzCom extends Thread {
-
         @Override
         public void run() {
             running = true;
 
             try {
                 initCom();
-                doReg();
+                reg();
                 readCom();
             } catch (IOException e) {
                 e.printStackTrace();
