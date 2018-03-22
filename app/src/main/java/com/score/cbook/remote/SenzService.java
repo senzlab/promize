@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.enums.IntentType;
-import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PreferenceUtil;
@@ -74,17 +73,13 @@ public class SenzService extends Service {
             NotificationzHandler.cancel(context, NotificationzHandler.CUSTOMER_NOTIFICATION_ID);
 
             if (NetworkUtil.isAvailableNetwork(context)) {
-                try {
-                    String phone = intent.getStringExtra("PHONE").trim();
-                    String username = intent.getStringExtra("USERNAME").trim();
-                    String address = PreferenceUtil.getSenzieAddress(SenzService.this);
-                    sendSMS(phone, "#ChequeBook #confirm\nI have confirmed your request. #username " + address + " #code 31e3e");
+                String phone = intent.getStringExtra("PHONE").trim();
+                String username = intent.getStringExtra("USERNAME").trim();
+                String address = PreferenceUtil.getSenzieAddress(SenzService.this);
+                sendSMS(phone, "#ChequeBook #confirm\nI have confirmed your request. #username " + address + " #code 31e3e");
 
-                    // get pubkey
-                    getSenzieKey(username);
-                } catch (NoUserException e) {
-                    e.printStackTrace();
-                }
+                // get pubkey
+                getSenzieKey(username);
             } else {
                 Toast.makeText(context, "No network connection", Toast.LENGTH_LONG).show();
             }
@@ -166,13 +161,11 @@ public class SenzService extends Service {
         senzWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SenzWakeLock");
     }
 
-    private void ping() {
-        try {
-            String user = PreferenceUtil.getSenzieAddress(this);
-            Senz senz = SenzUtil.regSenz(SenzService.this, user);
+    private void doReg() {
+        String address = PreferenceUtil.getSenzieAddress(this);
+        if (!address.isEmpty()) {
+            Senz senz = SenzUtil.regSenz(SenzService.this, address);
             writeSenz(senz);
-        } catch (NoUserException e) {
-            e.printStackTrace();
         }
     }
 
@@ -199,13 +192,12 @@ public class SenzService extends Service {
             public void run() {
                 // sign and write senz
                 try {
-                    PrivateKey privateKey = CryptoUtil.getPrivateKey(SenzService.this);
-
                     // if sender not already set find user(sender) and set it to senz first
                     if (senz.getSender() == null || senz.getSender().isEmpty())
                         senz.setSender(PreferenceUtil.getSenzieAddress(getBaseContext()));
 
                     // get digital signature of the senz
+                    PrivateKey privateKey = CryptoUtil.getPrivateKey(SenzService.this);
                     String senzPayload = SenzParser.compose(senz);
                     String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
                     String message = SenzParser.senzMsg(senzPayload, signature);
@@ -224,13 +216,12 @@ public class SenzService extends Service {
             @Override
             public void run() {
                 try {
-                    PrivateKey privateKey = CryptoUtil.getPrivateKey(SenzService.this);
-                    String sender = PreferenceUtil.getSenzieAddress(SenzService.this);
-
                     for (Senz senz : senzList) {
-                        senz.setSender(sender);
+                        if (senz.getSender() == null || senz.getSender().isEmpty())
+                            senz.setSender(PreferenceUtil.getSenzieAddress(getBaseContext()));
 
                         // get digital signature of the senz
+                        PrivateKey privateKey = CryptoUtil.getPrivateKey(SenzService.this);
                         String senzPayload = SenzParser.compose(senz);
                         String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
                         String message = SenzParser.senzMsg(senzPayload, signature);
@@ -267,7 +258,7 @@ public class SenzService extends Service {
 
             try {
                 initCom();
-                ping();
+                doReg();
                 readCom();
             } catch (IOException e) {
                 e.printStackTrace();

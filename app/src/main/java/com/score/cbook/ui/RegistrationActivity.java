@@ -20,7 +20,6 @@ import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.MisMatchFieldException;
-import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
@@ -216,13 +215,9 @@ public class RegistrationActivity extends BaseActivity {
     }
 
     private void doAuth() {
-        try {
-            // share keys with auth
-            String user = PreferenceUtil.getSenzieAddress(this);
-            sendSenz(SenzUtil.authSenz(this, user));
-        } catch (NoUserException e) {
-            e.printStackTrace();
-        }
+        // share keys with auth
+        String user = PreferenceUtil.getSenzieAddress(this);
+        sendSenz(SenzUtil.authSenz(this, user));
     }
 
     private void navigateToHome() {

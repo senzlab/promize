@@ -2,7 +2,6 @@ package com.score.cbook.util;
 
 import android.content.Context;
 
-import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.remote.SenzService;
@@ -206,7 +205,7 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz senzFromCheque(Context context, Cheque cheque) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException, UnsupportedEncodingException {
+    public static Senz senzFromPromize(Context context, Cheque cheque) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException, UnsupportedEncodingException {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
 
@@ -233,14 +232,8 @@ public class SenzUtil {
     }
 
     public static String getUid(Context context, String timestamp) {
-        try {
-            String username = PreferenceUtil.getSenzieAddress(context);
-            return username + timestamp;
-        } catch (NoUserException e) {
-            e.printStackTrace();
-        }
-
-        return timestamp;
+        String username = PreferenceUtil.getSenzieAddress(context);
+        return username + timestamp;
     }
 
 }

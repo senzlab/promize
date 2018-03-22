@@ -2,7 +2,6 @@ package com.score.cbook.ui;
 
 import android.graphics.Typeface;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.telephony.SmsManager;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import com.score.cbook.R;
 import com.score.cbook.async.ContactReader;
 import com.score.cbook.db.UserSource;
-import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.interfaces.IContactReaderListener;
 import com.score.cbook.pojo.Contact;
 import com.score.cbook.util.ActivityUtil;
@@ -123,24 +121,20 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
         // check existing secret user with given phone no
         if (!UserSource.isExistingUserWithPhoneNo(this, contact.getPhoneNo())) {
             String confirmationMessage = "<font size=10>Are you sure you want to add customer </font> <font color=#F37920>" + "<b>" + contact.getName() + "</b>" + "</font> (" + contact.getPhoneNo() + ")?";
-            try {
-                final String username = PreferenceUtil.getSenzieAddress(this);
-                displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (NetworkUtil.isAvailableNetwork(ContactListActivity.this)) {
-                            String message = "#ChequeBook #request\nI'm using sampath bank digital cheque book app, #username " + username + " #code 41r33";
-                            sendSMS(contact.getPhoneNo(), message);
+            final String username = PreferenceUtil.getSenzieAddress(this);
+            displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (NetworkUtil.isAvailableNetwork(ContactListActivity.this)) {
+                        String message = "#ChequeBook #request\nI'm using sampath bank digital cheque book app, #username " + username + " #code 41r33";
+                        sendSMS(contact.getPhoneNo(), message);
 
-                            ActivityUtil.showCustomToastShort("Request sent via SMS", ContactListActivity.this);
-                        } else {
-                            ActivityUtil.showCustomToastShort("No network connection", ContactListActivity.this);
-                        }
+                        ActivityUtil.showCustomToastShort("Request sent via SMS", ContactListActivity.this);
+                    } else {
+                        ActivityUtil.showCustomToastShort("No network connection", ContactListActivity.this);
                     }
-                });
-            } catch (NoUserException ex) {
-                ex.printStackTrace();
-            }
+                }
+            });
         } else {
             ActivityUtil.showCustomToastShort("This user already added in you secret contact list", this);
         }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.score.cbook.R;
-import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.pojo.Account;
 
 /**
@@ -39,14 +38,9 @@ public class PreferenceUtil {
      * @param context application context
      * @return user object
      */
-    public static String getSenzieAddress(Context context) throws NoUserException {
+    public static String getSenzieAddress(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String senzieAddress = preferences.getString(PreferenceUtil.Z_ADDRESS, "");
-
-        if (senzieAddress.isEmpty())
-            throw new NoUserException();
-
-        return senzieAddress;
+        return preferences.getString(PreferenceUtil.Z_ADDRESS, "");
     }
 
     /**

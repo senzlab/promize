@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.util.PreferenceUtil;
 
@@ -73,16 +72,12 @@ public class SettingsActivity extends BaseActivity {
     }
 
     private void initPrefs() {
-        try {
-            String user = PreferenceUtil.getSenzieAddress(this);
-            Account useAccount = PreferenceUtil.getAccount(this);
+        String user = PreferenceUtil.getSenzieAddress(this);
+        Account useAccount = PreferenceUtil.getAccount(this);
 
-            accountV.setText(useAccount.getAccountNo());
-            phoneV.setText(useAccount.getPhoneNo());
-            promizeIdV.setText(user);
-        } catch (NoUserException e) {
-            e.printStackTrace();
-        }
+        accountV.setText(useAccount.getAccountNo());
+        phoneV.setText(useAccount.getPhoneNo());
+        promizeIdV.setText(user);
     }
 
     private void initActionBar() {
