@@ -1,26 +1,16 @@
 package com.score.cbook.ui;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.RemoteException;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
@@ -32,15 +22,12 @@ import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.pojo.Secret;
-import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.ImageUtil;
 import com.score.cbook.util.LimitedList;
-import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PhoneBookUtil;
 import com.score.cbook.util.SenzUtil;
 import com.score.cbook.util.TimeUtil;
-import com.score.senz.ISenzService;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
@@ -48,19 +35,12 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ChatActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private static final String TAG = ChatActivity.class.getName();
+public class ChatActivity extends BaseActivity {
 
     // UI components
     private EditText txtSecret;
     private TextView btnSend;
-    private ImageButton btnLocation;
-    private ImageButton btnPhoto;
-    private ImageButton btnMic;
     private Toolbar toolbar;
-
-    private Typeface typeface;
 
     // secret list
     private ListView listView;
@@ -68,25 +48,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     private ChequeUser chequeUser;
     private LimitedList<Secret> secretList;
-
-    // service interface
-    private ISenzService senzService = null;
-    private boolean isServiceBound = false;
-
-    // service connection
-    protected ServiceConnection senzServiceConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            Log.d(TAG, "Connected with senz service");
-            senzService = ISenzService.Stub.asInterface(service);
-            isServiceBound = true;
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-            Log.d(TAG, "Disconnected from senz service");
-            senzService = null;
-            isServiceBound = false;
-        }
-    };
 
     // senz received
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
@@ -96,7 +57,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                 Senz senz = intent.getExtras().getParcelable("SENZ");
                 switch (senz.getSenzType()) {
                     case DATA:
-                        if (senz.getAttributes().containsKey("msg")) onSenzMsgReceived(senz);
+                        if (senz.getAttributes().containsKey("msg")) onSenzMsg(senz);
                         break;
                     case AWA:
                         updateStatus(senz.getAttributes().get("uid"), "RECEIVED");
@@ -135,22 +96,13 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-
-        Log.d(TAG, "Bind to senz service");
         bindToService();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
-        // unbind from service
-        if (isServiceBound) {
-            Log.d(TAG, "Unbind to senz service");
-            unbindService(senzServiceConnection);
-
-            isServiceBound = false;
-        }
+        unbindFromService();
     }
 
     @Override
@@ -161,7 +113,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         SenzApplication.setOnChat(true);
         SenzApplication.setChatUser(chequeUser.getUsername());
 
-        // bind to senz service
         registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
 
         refreshSecretList();
@@ -178,44 +129,18 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         unregisterReceiver(senzReceiver);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        //SecretSource.deleteSecretsOfUserExceptLast(this, chequeUser.getUsername());
-    }
-
-    protected void bindToService() {
-        Intent intent = new Intent("com.score.cbook.remote.SenzService");
-        intent.setPackage(this.getPackageName());
-        bindService(intent, senzServiceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == btnSend) {
-            onClickSend();
-        }
-    }
-
     private void initUi() {
-        typeface = Typeface.createFromAsset(getAssets(), "fonts/GeosansLight.ttf");
-
-        // init
         txtSecret = (EditText) findViewById(R.id.text_message);
         txtSecret.setTypeface(typeface, Typeface.NORMAL);
 
         btnSend = (TextView) findViewById(R.id.sendBtn);
         btnSend.setTypeface(typeface, Typeface.BOLD);
-
-        btnLocation = (ImageButton) findViewById(R.id.getLocBtn);
-        btnPhoto = (ImageButton) findViewById(R.id.getCamBtn);
-        btnMic = (ImageButton) findViewById(R.id.getMicBtn);
-
-        // set click listeners
-        btnSend.setOnClickListener(this);
-        btnLocation.setOnClickListener(this);
-        btnPhoto.setOnClickListener(this);
-        btnMic.setOnClickListener(this);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickSend();
+            }
+        });
 
         listView = (ListView) findViewById(R.id.messages_list_view);
         listView.setDivider(null);
@@ -328,54 +253,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    private void deleteSecret(final int id, Secret secret) {
-        final Animation animation = AnimationUtils.loadAnimation(ChatActivity.this, android.R.anim.fade_out);
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                secretList.remove(id);
-                secretAdapter.notifyDataSetChanged();
-            }
-        });
-
-        if (ActivityUtil.isVisible(id, listView)) {
-            View wantedView = ActivityUtil.getViewByPosition(id, listView);
-            wantedView.startAnimation(animation);
-        } else {
-            secretList.remove(id);
-            secretAdapter.notifyDataSetChanged();
-        }
-
-        // delete from db
-        SecretSource.deleteSecret(this, secret);
-
-        // delete from sdcard
-        if (secret.getBlobType() == BlobType.IMAGE) {
-            String name = secret.getId() + ".jpg";
-            ImageUtil.deleteImg(name);
-        }
-    }
-
-    private void navigateToProfile() {
-        Intent intent = new Intent(this, UserProfileActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra("SECRET_USER", chequeUser);
-        startActivity(intent);
-    }
-
     private void onClickSend() {
-        if (!NetworkUtil.isAvailableNetwork(this)) {
-            Toast.makeText(this, getResources().getString(R.string.no_internet), Toast.LENGTH_LONG).show();
-        }
-
         String secretMsg = txtSecret.getText().toString().trim();
         if (!secretMsg.isEmpty()) {
             // clear text
@@ -430,7 +308,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void onSenzMsgReceived(Senz senz) {
+    private void onSenzMsg(Senz senz) {
         if (senz.getSender().equalsIgnoreCase(chequeUser.getUsername())) {
             if (senz.getAttributes().containsKey("msg")) {
                 String msg = senz.getAttributes().get("msg");
@@ -457,22 +335,6 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
                     secretAdapter.notifyDataSetChanged();
                 }
             }
-        }
-    }
-
-    private void sendSenz(Senz senz) {
-        if (NetworkUtil.isAvailableNetwork(this)) {
-            try {
-                if (isServiceBound) {
-                    senzService.sendSenz(senz);
-                } else {
-                    ActivityUtil.showCustomToast("Failed to connected to service.", this);
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        } else {
-            ActivityUtil.showCustomToast(getResources().getString(R.string.no_internet), this);
         }
     }
 

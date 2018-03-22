@@ -64,7 +64,7 @@ public class BaseActivity extends AppCompatActivity {
         bindService(intent, senzServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
-    protected void unbindService() {
+    protected void unbindFromService() {
         // unbind from service
         if (isServiceBound) {
             Log.d(TAG, "Unbind to senz service");

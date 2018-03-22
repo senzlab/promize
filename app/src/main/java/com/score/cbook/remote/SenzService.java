@@ -35,7 +35,7 @@ public class SenzService extends Service {
     private static final String TAG = SenzService.class.getName();
 
     //public static final String SENZ_HOST = "www.rahasak.com";
-    public static final String SENZ_HOST = "192.125.125.33";
+    public static final String SENZ_HOST = "222.165.167.19";
     public static final int SENZ_PORT = 7171;
 
     public static final String SWITCH_NAME = "senzswitch";
