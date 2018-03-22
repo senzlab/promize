@@ -165,7 +165,7 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz transferChequeSenz(Context context, Cheque cheque, Account account) {
+    public static Senz transferSenz(Context context, Cheque cheque, Account account) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("amnt", Integer.toString(cheque.getAmount()));
@@ -185,7 +185,7 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz depositChequeSenz(Context context, Cheque cheque, String account) {
+    public static Senz redeemSenz(Context context, Cheque cheque, String account) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("amnt", Integer.toString(cheque.getAmount()));

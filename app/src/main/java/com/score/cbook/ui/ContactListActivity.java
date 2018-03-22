@@ -116,11 +116,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
         ActivityUtil.showProgressDialog(this, "Loading...");
 
         ContactReader contactReader = new ContactReader(this, this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            contactReader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        } else {
-            contactReader.execute("PLAY");
-        }
+        contactReader.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void onContactItemClick(final Contact contact) {

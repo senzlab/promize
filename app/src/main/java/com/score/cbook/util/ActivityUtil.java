@@ -83,8 +83,8 @@ public class ActivityUtil {
      *
      * @return valid or not
      */
-    public static boolean isValidRegistrationFields(String account, String password, String confirmPassword) throws InvalidAccountException, InvalidPasswordException, MisMatchFieldException {
-        if (account.isEmpty()) {
+    public static void isValidRegistrationFields(String phone, String password, String confirmPassword) throws InvalidAccountException, InvalidPasswordException, MisMatchFieldException {
+        if (phone.isEmpty()) {
             throw new InvalidAccountException();
         }
 
@@ -94,7 +94,6 @@ public class ActivityUtil {
         if (!password.equals(confirmPassword))
             throw new MisMatchFieldException();
 
-        return true;
     }
 
     /**
@@ -102,7 +101,7 @@ public class ActivityUtil {
      *
      * @return valid of not
      */
-    public static boolean isValidLoginFields(String givenAccount, String givenPassword, String account, String password) throws InvalidInputFieldsException, MisMatchFieldException {
+    public static void isValidLoginFields(String givenAccount, String givenPassword, String account, String password) throws InvalidInputFieldsException, MisMatchFieldException {
         if (givenAccount.isEmpty() || givenPassword.isEmpty())
             // empty fields
             throw new InvalidInputFieldsException();
@@ -111,10 +110,9 @@ public class ActivityUtil {
             // invalid username/password
             throw new MisMatchFieldException();
 
-        return true;
     }
 
-    public static boolean isValidAccount(String account, String confirmAccount) throws InvalidInputFieldsException, MisMatchFieldException {
+    public static void isValidAccount(String account, String confirmAccount) throws InvalidInputFieldsException, MisMatchFieldException {
         if (account.isEmpty() || confirmAccount.isEmpty()) {
             throw new InvalidInputFieldsException();
         }
@@ -127,17 +125,15 @@ public class ActivityUtil {
             throw new MisMatchFieldException();
         }
 
-        return true;
     }
 
-    public static boolean isValidRedeemFileds(String acc, String confirmAcc) throws InvalidInputFieldsException, InvalidAccountException {
+    public static void isValidRedeemFileds(String acc, String confirmAcc) throws InvalidInputFieldsException, InvalidAccountException {
         if (acc.isEmpty() || confirmAcc.isEmpty())
             throw new InvalidInputFieldsException();
 
         if (!acc.equals(confirmAcc))
             throw new InvalidAccountException();
 
-        return true;
     }
 
     /**

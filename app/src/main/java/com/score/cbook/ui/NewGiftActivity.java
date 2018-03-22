@@ -315,7 +315,7 @@ public class NewGiftActivity extends BaseActivity {
         Long timestamp = System.currentTimeMillis() / 1000;
         cheque.setTimestamp(timestamp);
 
-        Senz senz = SenzUtil.transferChequeSenz(this, cheque, PreferenceUtil.getAccount(this));
+        Senz senz = SenzUtil.transferSenz(this, cheque, PreferenceUtil.getAccount(this));
         sendSenz(senz);
     }
 

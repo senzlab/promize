@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import com.score.cbook.R;
 import com.score.cbook.exceptions.NoUserException;
 import com.score.cbook.pojo.Account;
-import com.score.senzc.pojos.User;
 
 /**
  * Utility class to deal with Share Preferences
@@ -26,12 +25,11 @@ public class PreferenceUtil {
      * Save user credentials in shared preference
      *
      * @param context application context
-     * @param user    logged-in user
      */
-    public static void saveSenzeisAddress(Context context, User user) {
+    public static void saveSenzeisAddress(Context context, String address) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(PreferenceUtil.Z_ADDRESS, user.getUsername());
+        editor.putString(PreferenceUtil.Z_ADDRESS, address);
         editor.commit();
     }
 
