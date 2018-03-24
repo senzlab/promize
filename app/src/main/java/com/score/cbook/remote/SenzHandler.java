@@ -217,40 +217,23 @@ class SenzHandler {
             }
         } else if (senz.getAttributes().containsKey("pubkey")) {
             // pubkey from switch
+            // update pubkey
             String username = senz.getAttributes().get("name");
             String pubKey = senz.getAttributes().get("pubkey");
+            UserSource.updateUser(senzService.getApplicationContext(), username, "pubkey", pubKey);
 
-            // check user exists
+            // Check if this user is the requester
             ChequeUser user = UserSource.getUser(senzService.getApplicationContext(), username);
-            if (user == null) {
-                // this means
-                // 1. sampath.auth
-                // 2. sampath.chain
-                // 3. sampath.support
-                // create admin user
-                ChequeUser chequeUser = new ChequeUser(username);
-                chequeUser.setActive(true);
-                chequeUser.setAdmin(true);
-                chequeUser.setPubKey(pubKey);
-                UserSource.createUser(senzService.getApplicationContext(), chequeUser);
-                broadcastSenz(senz, senzService.getApplicationContext());
-            } else {
-                // existing user
-                // update pubkey on db
-                UserSource.updateUser(senzService.getApplicationContext(), username, "pubkey", pubKey);
+            if (user != null && user.isSMSRequester()) {
+                try {
+                    // create session key for this user
+                    String sessionKey = CryptoUtil.getSessionKey();
+                    UserSource.updateUser(senzService.getApplicationContext(), username, "session_key", sessionKey);
 
-                // Check if this user is the requester
-                if (user.isSMSRequester()) {
-                    try {
-                        // create session key for this user
-                        String sessionKey = CryptoUtil.getSessionKey();
-                        UserSource.updateUser(senzService.getApplicationContext(), username, "session_key", sessionKey);
-
-                        String encryptedSessionKey = CryptoUtil.encryptRSA(CryptoUtil.getPublicKey(pubKey), sessionKey);
-                        senzService.writeSenz(SenzUtil.shareSenz(senzService.getApplicationContext(), username, encryptedSessionKey));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    String encryptedSessionKey = CryptoUtil.encryptRSA(CryptoUtil.getPublicKey(pubKey), sessionKey);
+                    senzService.writeSenz(SenzUtil.shareSenz(senzService.getApplicationContext(), username, encryptedSessionKey));
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
         }

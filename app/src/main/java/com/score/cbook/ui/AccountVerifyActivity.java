@@ -119,6 +119,7 @@ public class AccountVerifyActivity extends BaseActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ActivityUtil.showProgressDialog(AccountVerifyActivity.this, "Please wait...");
                 verifyAccount();
             }
         });

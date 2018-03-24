@@ -37,8 +37,15 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class CryptoUtil {
 
-    public static final String PUBLIC_KEY = "PUBLIC_KEY";
-    public static final String PRIVATE_KEY = "PRIVATE_KEY";
+    // key name
+    public static final String PUBLIC_KEY_NAME = "PUBLIC_KEY";
+    public static final String PRIVATE_KEY_NAME = "PRIVATE_KEY";
+    public static final String ZWITCH_KEY_NAME = "ZWITCH_KEY";
+    public static final String CHAINZ_KEY_NAME = "CHAINZ_KEY";
+
+    // keys
+    private static final String ZWITCH_KEY = "44323232";
+    private static final String CHAINZ_KEY = "232ewewe";
 
     // size of RSA keys
     private static final int RSA_KEY_SIZE = 1024;
@@ -51,9 +58,13 @@ public class CryptoUtil {
         keyPairGenerator.initialize(RSA_KEY_SIZE, new SecureRandom());
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
 
-        // save keys in shared preferences
+        // save keypair keys in shared preferences
         savePublicKey(context, keyPair);
         savePrivateKey(context, keyPair);
+
+        // save zwitch/chainz key
+        PreferenceUtil.saveRsaKey(context, CryptoUtil.ZWITCH_KEY, CryptoUtil.ZWITCH_KEY_NAME);
+        PreferenceUtil.saveRsaKey(context, CryptoUtil.CHAINZ_KEY, CryptoUtil.CHAINZ_KEY_NAME);
     }
 
     private static void savePublicKey(Context context, KeyPair keyPair) {
@@ -62,7 +73,7 @@ public class CryptoUtil {
         String publicKey = Base64.encodeToString(keyContent, Base64.DEFAULT).replaceAll("\n", "").replaceAll("\r", "");
 
         // save public key in shared preference
-        PreferenceUtil.saveRsaKey(context, publicKey, CryptoUtil.PUBLIC_KEY);
+        PreferenceUtil.saveRsaKey(context, publicKey, CryptoUtil.PUBLIC_KEY_NAME);
     }
 
     private static void savePrivateKey(Context context, KeyPair keyPair) {
@@ -71,12 +82,12 @@ public class CryptoUtil {
         String privateKey = Base64.encodeToString(keyContent, Base64.DEFAULT).replaceAll("\n", "").replaceAll("\r", "");
 
         // save private key in shared preference
-        PreferenceUtil.saveRsaKey(context, privateKey, CryptoUtil.PRIVATE_KEY);
+        PreferenceUtil.saveRsaKey(context, privateKey, CryptoUtil.PRIVATE_KEY_NAME);
     }
 
     public static PublicKey getPublicKey(Context context) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
         // get key string from shared preference
-        String keyString = PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY);
+        String keyString = PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY_NAME);
 
         // convert to string key public key
         X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.decode(keyString, Base64.DEFAULT));
@@ -95,7 +106,7 @@ public class CryptoUtil {
 
     public static PrivateKey getPrivateKey(Context context) throws InvalidKeySpecException, NoSuchAlgorithmException {
         // get key string from shared preference
-        String keyString = PreferenceUtil.getRsaKey(context, CryptoUtil.PRIVATE_KEY);
+        String keyString = PreferenceUtil.getRsaKey(context, CryptoUtil.PRIVATE_KEY_NAME);
 
         // convert to string key public key
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Base64.decode(keyString, Base64.DEFAULT));
@@ -106,7 +117,7 @@ public class CryptoUtil {
 
     public static String getSenzieAddress(Context context) throws NoSuchAlgorithmException {
         // get public key
-        byte[] key = Base64.decode(PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY), Base64.DEFAULT);
+        byte[] key = Base64.decode(PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY_NAME), Base64.DEFAULT);
 
         // generate digest
         byte[] ph = new byte[20];

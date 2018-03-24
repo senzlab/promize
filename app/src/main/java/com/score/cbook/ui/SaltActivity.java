@@ -48,6 +48,8 @@ public class SaltActivity extends BaseActivity {
         if (senz.getAttributes().containsKey("status")) {
             String msg = senz.getAttributes().get("status");
             if (msg != null && msg.equalsIgnoreCase("SUCCESS")) {
+                ActivityUtil.cancelProgressDialog();
+
                 // set account state as verified
                 PreferenceUtil.saveAccountState(this, "VERIFIED");
                 Toast.makeText(this, "Your account has been verified", Toast.LENGTH_LONG).show();
@@ -115,6 +117,7 @@ public class SaltActivity extends BaseActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ActivityUtil.showProgressDialog(SaltActivity.this, "Please wait...");
                 confirmSalt();
             }
         });

@@ -27,7 +27,7 @@ public class SenzUtil {
         String uid = timestamp.toString() + sender;
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", uid);
-        senzAttributes.put("pubkey", PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY));
+        senzAttributes.put("pubkey", PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY_NAME));
 
         // new senz
         Senz senz = new Senz();
@@ -46,7 +46,7 @@ public class SenzUtil {
         String uid = timestamp.toString() + sender;
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", uid);
-        senzAttributes.put("pubkey", PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY));
+        senzAttributes.put("pubkey", PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY_NAME));
 
         // new senz
         Senz senz = new Senz();
