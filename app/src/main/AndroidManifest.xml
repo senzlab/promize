@@ -74,13 +74,12 @@
         <activity
             android:name="com.score.cbook.ui.RegistrationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme"
-            android:windowSoftInputMode="stateHidden" />
+            android:theme="@style/MyMaterialTheme" />
         <activity
             android:name="com.score.cbook.ui.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme"
-            android:windowSoftInputMode="stateHidden" />
+            android:theme="@style/MyMaterialTheme" />
+
         <activity
             android:name="com.score.cbook.ui.NewChequeActivity"
             android:screenOrientation="portrait"
