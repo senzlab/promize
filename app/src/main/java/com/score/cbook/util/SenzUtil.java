@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.score.cbook.pojo.Account;
 import com.score.cbook.pojo.Cheque;
-import com.score.cbook.remote.SenzService;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
@@ -20,6 +19,12 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class SenzUtil {
+
+    public static final String SWITCH_NAME = "senzswitch";
+    public static final String SAMPATH_CHAIN_SENZIE_NAME = "sampath.chain";
+    public static final String SAMPATH_SUPPORT_SENZIE_NAME = "sampath.support";
+
+
     public static Senz regSenz(Context context, String sender) {
         // create create senz
         HashMap<String, String> senzAttributes = new HashMap<>();
@@ -33,7 +38,7 @@ public class SenzUtil {
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
         senz.setSender(sender);
-        senz.setReceiver(SenzService.SWITCH_NAME);
+        senz.setReceiver(SenzUtil.SWITCH_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -52,7 +57,7 @@ public class SenzUtil {
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
         senz.setSender(sender);
-        senz.setReceiver(SenzService.SAMPATH_CHAIN_SENZIE_NAME);
+        senz.setReceiver(SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -69,7 +74,7 @@ public class SenzUtil {
         // new senz
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
-        senz.setReceiver(SenzService.SAMPATH_CHAIN_SENZIE_NAME);
+        senz.setReceiver(SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -86,7 +91,7 @@ public class SenzUtil {
         // new senz
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
-        senz.setReceiver(SenzService.SAMPATH_CHAIN_SENZIE_NAME);
+        senz.setReceiver(SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -104,7 +109,7 @@ public class SenzUtil {
         // new senz object
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.GET);
-        senz.setReceiver(SenzService.SWITCH_NAME);
+        senz.setReceiver(SenzUtil.SWITCH_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -158,7 +163,7 @@ public class SenzUtil {
         // new senz object
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.AWA);
-        senz.setReceiver(SenzService.SWITCH_NAME);
+        senz.setReceiver(SenzUtil.SWITCH_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -178,7 +183,7 @@ public class SenzUtil {
         // new senz
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
-        senz.setReceiver(SenzService.SAMPATH_CHAIN_SENZIE_NAME);
+        senz.setReceiver(SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;
@@ -192,14 +197,14 @@ public class SenzUtil {
         senzAttributes.put("acc", account);
         senzAttributes.put("blob", "");
         senzAttributes.put("id", cheque.getCid());
-        senzAttributes.put("to", SenzService.SAMPATH_CHAIN_SENZIE_NAME);
+        senzAttributes.put("to", SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
         senzAttributes.put("time", cheque.getTimestamp().toString());
         senzAttributes.put("uid", SenzUtil.getUid(context, cheque.getTimestamp().toString()));
 
         // new senz
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
-        senz.setReceiver(SenzService.SAMPATH_CHAIN_SENZIE_NAME);
+        senz.setReceiver(SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
 
         return senz;

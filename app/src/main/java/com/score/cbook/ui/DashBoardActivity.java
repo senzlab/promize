@@ -15,7 +15,6 @@ import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.pojo.Secret;
-import com.score.cbook.remote.SenzService;
 import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzUtil;
 
@@ -117,9 +116,9 @@ public class DashBoardActivity extends BaseActivity {
         findViewById(R.id.support_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChequeUser chequeUser = new ChequeUser(SenzService.SAMPATH_SUPPORT_SENZIE_NAME);
+                ChequeUser chequeUser = new ChequeUser(SenzUtil.SAMPATH_SUPPORT_SENZIE_NAME);
 
-                if (!UserSource.isExistingUser(DashBoardActivity.this, SenzService.SAMPATH_SUPPORT_SENZIE_NAME)) {
+                if (!UserSource.isExistingUser(DashBoardActivity.this, SenzUtil.SAMPATH_SUPPORT_SENZIE_NAME)) {
                     // create admin sampath user and secret if not exists
                     chequeUser.setActive(true);
                     chequeUser.setAdmin(true);

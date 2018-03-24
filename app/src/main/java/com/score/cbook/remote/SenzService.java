@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
-import android.telephony.SmsManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.score.cbook.application.IntentProvider;
@@ -18,6 +16,7 @@ import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
+import com.score.cbook.util.SmsUtil;
 import com.score.senz.ISenzService;
 import com.score.senzc.pojos.Senz;
 
@@ -31,18 +30,8 @@ import java.util.List;
 
 public class SenzService extends Service {
 
-    private static final String TAG = SenzService.class.getName();
-
-    //public static final String SENZ_HOST = "www.rahasak.com";
     public static final String SENZ_HOST = "10.2.2.4";
     public static final int SENZ_PORT = 7171;
-
-    public static final String SWITCH_NAME = "senzswitch";
-    public static final String SAMPATH_AUTH_SENZIE_NAME = "sampath.auth";
-    public static final String SAMPATH_CHAIN_SENZIE_NAME = "sampath.chain";
-    public static final String SAMPATH_SUPPORT_SENZIE_NAME = "sampath.support";
-
-    private PowerManager.WakeLock senzWakeLock;
 
     // senz socket
     private Socket socket;
@@ -51,6 +40,9 @@ public class SenzService extends Service {
 
     // comm running
     private boolean running;
+
+    // to wake up deep sleep mode
+    private PowerManager.WakeLock senzWakeLock;
 
     // stubs that service expose(defines in ISenzService.aidl)
     private final ISenzService.Stub stubs = new ISenzService.Stub() {
@@ -73,12 +65,10 @@ public class SenzService extends Service {
             if (NetworkUtil.isAvailableNetwork(context)) {
                 // send sms
                 String phone = intent.getStringExtra("PHONE").trim();
-                String username = intent.getStringExtra("USERNAME").trim();
-                String address = PreferenceUtil.getSenzieAddress(SenzService.this);
-                String msg = "#ChequeBook #confirm\nI have confirmed your request. #username " + address + " #code 31e3e";
-                SmsManager.getDefault().sendTextMessage(phone, null, msg, null, null);
+                SmsUtil.sendAccept(SenzService.this, phone);
 
                 // get pubkey
+                String username = intent.getStringExtra("USERNAME").trim();
                 writeSenz(SenzUtil.senzieKeySenz(SenzService.this, username));
             } else {
                 Toast.makeText(context, "No network connection", Toast.LENGTH_LONG).show();
@@ -110,8 +100,31 @@ public class SenzService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        registerReceivers();
-        initWakeLock();
+        // register receivers
+        registerReceiver(smsRequestAcceptReceiver, IntentProvider.getIntentFilter(IntentType.SMS_REQUEST_ACCEPT));
+        registerReceiver(smsRequestRejectReceiver, IntentProvider.getIntentFilter(IntentType.SMS_REQUEST_REJECT));
+        registerReceiver(smsRequestConfirmReceiver, IntentProvider.getIntentFilter(IntentType.SMS_REQUEST_CONFIRM));
+
+        // weak lock
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        senzWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SenzWakeLock");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // un register receivers
+        unregisterReceiver(smsRequestAcceptReceiver);
+        unregisterReceiver(smsRequestRejectReceiver);
+        unregisterReceiver(smsRequestConfirmReceiver);
+
+        // release wake lock
+        if (senzWakeLock != null && senzWakeLock.isHeld()) senzWakeLock.release();
+
+        // restart service again via broadcast receiver
+        Intent intent = new Intent(IntentProvider.ACTION_RESTART);
+        sendBroadcast(intent);
     }
 
     @Override
@@ -119,55 +132,15 @@ public class SenzService extends Service {
         super.onStartCommand(intent, flags, startId);
 
         if (running) {
-            // tuk
-            tuk();
+            tukSenz();
         } else {
-            // reg
             new SenzCom().start();
         }
 
         return START_STICKY;
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        unregisterReceivers();
-
-        // restart service again
-        // its done via broadcast receiver
-        Intent intent = new Intent(IntentProvider.ACTION_RESTART);
-        sendBroadcast(intent);
-    }
-
-    private void registerReceivers() {
-        registerReceiver(smsRequestAcceptReceiver, IntentProvider.getIntentFilter(IntentType.SMS_REQUEST_ACCEPT));
-        registerReceiver(smsRequestRejectReceiver, IntentProvider.getIntentFilter(IntentType.SMS_REQUEST_REJECT));
-        registerReceiver(smsRequestConfirmReceiver, IntentProvider.getIntentFilter(IntentType.SMS_REQUEST_CONFIRM));
-    }
-
-    private void unregisterReceivers() {
-        // un register receivers
-        unregisterReceiver(smsRequestAcceptReceiver);
-        unregisterReceiver(smsRequestRejectReceiver);
-        unregisterReceiver(smsRequestConfirmReceiver);
-    }
-
-    private void initWakeLock() {
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
-        senzWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SenzWakeLock");
-    }
-
-    private void reg() {
-        String address = PreferenceUtil.getSenzieAddress(this);
-        if (!address.isEmpty()) {
-            Senz senz = SenzUtil.regSenz(SenzService.this, address);
-            writeSenz(senz);
-        }
-    }
-
-    void tuk() {
+    void tukSenz() {
         new Thread(new Runnable() {
             public void run() {
                 write("TUK");
@@ -230,8 +203,6 @@ public class SenzService extends Service {
             if (socket != null) {
                 outStream.writeBytes(msg + ";");
                 outStream.flush();
-            } else {
-                Log.e(TAG, "Socket disconnected");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -255,16 +226,17 @@ public class SenzService extends Service {
         }
 
         private void initCom() throws IOException {
-            Log.d(TAG, "init socket");
-
             socket = new Socket(InetAddress.getByName(SENZ_HOST), SENZ_PORT);
             inStream = new DataInputStream(socket.getInputStream());
             outStream = new DataOutputStream(socket.getOutputStream());
         }
 
-        private void readCom() throws IOException {
-            Log.d(TAG, "read socket");
+        private void reg() {
+            String address = PreferenceUtil.getSenzieAddress(SenzService.this);
+            if (!address.isEmpty()) writeSenz(SenzUtil.regSenz(SenzService.this, address));
+        }
 
+        private void readCom() throws IOException {
             StringBuilder builder = new StringBuilder();
             int z;
             char c;
@@ -276,8 +248,6 @@ public class SenzService extends Service {
                 if (c == ';') {
                     String senz = builder.toString();
                     if (!senz.isEmpty()) {
-                        Log.d(TAG, "Senz received " + senz);
-
                         builder = new StringBuilder();
                         SenzHandler.getInstance().handle(senz, SenzService.this);
 
@@ -291,7 +261,6 @@ public class SenzService extends Service {
         }
 
         private void closeCom() {
-            Log.d(TAG, "close comm");
             running = false;
 
             try {

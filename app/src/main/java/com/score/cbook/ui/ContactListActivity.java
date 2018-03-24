@@ -4,7 +4,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.telephony.SmsManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -21,7 +20,7 @@ import com.score.cbook.interfaces.IContactReaderListener;
 import com.score.cbook.pojo.Contact;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.NetworkUtil;
-import com.score.cbook.util.PreferenceUtil;
+import com.score.cbook.util.SmsUtil;
 
 import java.util.ArrayList;
 
@@ -120,14 +119,11 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
         // check existing secret user with given phone no
         if (!UserSource.isExistingUserWithPhoneNo(this, contact.getPhoneNo())) {
             String confirmationMessage = "<font size=10>Are you sure you want to add customer </font> <font color=#F37920>" + "<b>" + contact.getName() + "</b>" + "</font> (" + contact.getPhoneNo() + ")?";
-            final String username = PreferenceUtil.getSenzieAddress(this);
             displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(ContactListActivity.this)) {
-                        String message = "#ChequeBook #request\nI'm using sampath bank digital cheque book app, #username " + username + " #code 41r33";
-                        sendSMS(contact.getPhoneNo(), message);
-
+                        SmsUtil.sendRequest(ContactListActivity.this, contact.getPhoneNo());
                         ActivityUtil.showCustomToastShort("Request sent via SMS", ContactListActivity.this);
                     } else {
                         ActivityUtil.showCustomToastShort("No network connection", ContactListActivity.this);
@@ -137,11 +133,6 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
         } else {
             ActivityUtil.showCustomToastShort("This user already added in you secret contact list", this);
         }
-    }
-
-    private void sendSMS(String phoneNumber, String message) {
-        SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(phoneNumber, null, message, null, null);
     }
 
     @Override
