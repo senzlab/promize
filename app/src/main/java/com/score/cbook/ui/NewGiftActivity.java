@@ -98,10 +98,6 @@ public class NewGiftActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_gift_activity_layout);
 
-        // init camera with front
-        acquireWakeLock();
-        initCameraPreview(Camera.CameraInfo.CAMERA_FACING_FRONT);
-
         // init
         initUi();
         initPrefs();
@@ -112,7 +108,6 @@ public class NewGiftActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-        Log.d(TAG, "Bind to senz service");
         bindToService();
     }
 
@@ -122,7 +117,6 @@ public class NewGiftActivity extends BaseActivity {
 
         // unbind from service
         if (isServiceBound) {
-            Log.d(TAG, "Unbind to senz service");
             unbindService(senzServiceConnection);
 
             isServiceBound = false;
@@ -132,21 +126,25 @@ public class NewGiftActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        releaseWakeLock();
-        releaseCamera();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
+
+        // init camera with front
+        acquireWakeLock();
+        initCameraPreview(Camera.CameraInfo.CAMERA_FACING_FRONT);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         if (senzReceiver != null) unregisterReceiver(senzReceiver);
+
+        releaseWakeLock();
+        releaseCamera();
     }
 
     private void initUi() {
@@ -159,7 +157,6 @@ public class NewGiftActivity extends BaseActivity {
         sampathGift.setTypeface(typeface, Typeface.BOLD);
         amountHeader.setTypeface(typeface, Typeface.BOLD);
         rsHeader.setTypeface(typeface, Typeface.BOLD);
-
         amount.setTypeface(typeface, Typeface.BOLD);
 
         capture = (FloatingActionButton) findViewById(R.id.fab);
@@ -167,7 +164,7 @@ public class NewGiftActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // capture
-                onClickCapture();
+                takePhoto();
             }
         });
 
@@ -176,7 +173,8 @@ public class NewGiftActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // send
-                onClickSend();
+                ActivityUtil.showProgressDialog(NewGiftActivity.this, "Sending ...");
+                sendPromize(captureView());
             }
         });
 
@@ -196,30 +194,15 @@ public class NewGiftActivity extends BaseActivity {
         signatureView.addView(signature);
     }
 
-    private void onClickCapture() {
-        takePhoto();
-    }
-
-    private void onClickSend() {
-        ActivityUtil.showProgressDialog(this, "Sending ...");
-        byte[] p = captureView();
-        sendPromize(p);
-    }
-
-    private void prepareView() {
-        amount.setEnabled(false);
-    }
-
     private void releaseCamera() {
         if (camera != null) {
-            Log.d(TAG, "Stopping preview in SurfaceDestroyed().");
             camera.release();
         }
     }
 
     private void acquireWakeLock() {
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "senz");
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SenzWakeLock");
         wakeLock.acquire();
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
@@ -250,7 +233,6 @@ public class NewGiftActivity extends BaseActivity {
         } catch (Exception e) {
             // cannot get camera or does not exist
             e.printStackTrace();
-            Log.e(TAG, "No font cam");
         }
     }
 
@@ -305,7 +287,6 @@ public class NewGiftActivity extends BaseActivity {
         this.cheque = new Cheque();
         cheque.setUser(user);
         cheque.setAmount(10000);
-        cheque.setDate("12/03/2018");
         cheque.setDeliveryState(DeliveryState.PENDING);
         cheque.setChequeState(ChequeState.TRANSFER);
         cheque.setMyCheque(true);
@@ -404,6 +385,5 @@ public class NewGiftActivity extends BaseActivity {
             dirtyRect.bottom = Math.max(lastTouchY, eventY);
         }
     }
-
 
 }
