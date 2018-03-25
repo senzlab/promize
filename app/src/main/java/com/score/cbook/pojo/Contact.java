@@ -1,8 +1,5 @@
 package com.score.cbook.pojo;
 
-/**
- * Created by eranga on 12/10/16.
- */
 public class Contact {
     private String id;
     private String name;

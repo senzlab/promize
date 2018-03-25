@@ -14,9 +14,7 @@ import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.pojo.Notifcationz;
 import com.score.cbook.remote.NotificationzHandler;
 import com.score.cbook.util.PhoneBookUtil;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.score.cbook.util.SmsUtil;
 
 
 public class SmsReceiver extends BroadcastReceiver {
@@ -37,10 +35,10 @@ public class SmsReceiver extends BroadcastReceiver {
                         smsMessage = SmsMessage.createFromPdu((byte[]) pdus[0]);
                     }
 
-                    if (isMessageFromSenz(smsMessage.getMessageBody())) {
-                        if (isRequestConfirm(smsMessage.getMessageBody())) {
+                    if (SmsUtil.isPromize(smsMessage.getMessageBody())) {
+                        if (SmsUtil.isConfirm(smsMessage.getMessageBody())) {
                             initFriendConfirmation(smsMessage, context);
-                        } else if (isRequest(smsMessage.getMessageBody())) {
+                        } else if (SmsUtil.isRequest(smsMessage.getMessageBody())) {
                             initFriendRequest(smsMessage, context);
                         }
                     }
@@ -51,37 +49,11 @@ public class SmsReceiver extends BroadcastReceiver {
         }
     }
 
-    private boolean isMessageFromSenz(String smsMessage) {
-        return smsMessage.toLowerCase().contains("#chequebook");
-    }
-
-    private boolean isRequestConfirm(String smsMessage) {
-        return smsMessage.toLowerCase().contains("#confirm");
-    }
-
-    private boolean isRequest(String smsMessage) {
-        return smsMessage.toLowerCase().contains("#request");
-    }
-
-    private String getUsernameFromSms(String smsMessage) {
-        final Pattern pattern = Pattern.compile("#username\\s(\\S*)\\s");
-        final Matcher matcher = pattern.matcher(smsMessage);
-        matcher.find();
-        return matcher.group(1);
-    }
-
-    private String getKeyHashFromSms(String smsMessage) {
-        final Pattern pattern = Pattern.compile("#code\\s(.*)$");
-        final Matcher matcher = pattern.matcher(smsMessage);
-        matcher.find();
-        return matcher.group(1);
-    }
-
     private void initFriendRequest(SmsMessage smsMessage, Context context) {
         String contactNo = smsMessage.getOriginatingAddress();
         String contactName = PhoneBookUtil.getContactName(context, contactNo);
-        String username = getUsernameFromSms(smsMessage.getMessageBody());
-        String pubKeyHash = getKeyHashFromSms(smsMessage.getMessageBody());
+        String username = SmsUtil.getUsernameFromSms(smsMessage.getMessageBody());
+        String pubKeyHash = SmsUtil.getKeyHashFromSms(smsMessage.getMessageBody());
 
         // delete existing user
         ChequeUser existingUser = UserSource.getExistingUserWithPhoneNo(context, contactNo);
@@ -96,7 +68,7 @@ public class SmsReceiver extends BroadcastReceiver {
         UserSource.createUser(context, chequeUser);
 
         // notify
-        String msg = "Would you to add " + contactName + " as cheque book customer?";
+        String msg = "Would you like to add " + contactName + " as promiZe customer?";
         Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, contactName, msg, username);
         notifcationz.setSenderPhone(contactNo);
         notifcationz.setAddActions(true);
@@ -105,8 +77,8 @@ public class SmsReceiver extends BroadcastReceiver {
 
     private void initFriendConfirmation(SmsMessage smsMessage, Context context) {
         String contactNo = smsMessage.getOriginatingAddress();
-        String username = getUsernameFromSms(smsMessage.getMessageBody());
-        String pubKeyHash = getKeyHashFromSms(smsMessage.getMessageBody());
+        String username = SmsUtil.getUsernameFromSms(smsMessage.getMessageBody());
+        String pubKeyHash = SmsUtil.getKeyHashFromSms(smsMessage.getMessageBody());
 
         try {
             // create user

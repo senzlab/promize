@@ -43,7 +43,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/redeem3"
+                android:src="@drawable/redeem2"
                 app:backgroundTint="@color/white" />
         </RelativeLayout>
     </FrameLayout>

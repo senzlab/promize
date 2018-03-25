@@ -36,7 +36,7 @@
     <string name="sound_request">Incoming mic request from :</string>
     <string name="rahasak">Rahasak</string>
     <string name="connecting_with_server_error">Connection with server...</string>
-    <string name="customer_notification">You have been added as a cheque book customer</string>
+    <string name="customer_notification">You have been added as a promiZe customer</string>
     <string name="confirmed_notification">Confirmed your request</string>
     <string name="message_notification">New message received</string>
     <string name="cheque_notification">New cheque received</string>
