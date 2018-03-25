@@ -14,6 +14,7 @@ import com.score.cbook.application.IntentProvider;
 import com.score.cbook.pojo.Notifcationz;
 import com.score.cbook.ui.ChatActivity;
 import com.score.cbook.ui.ChequeListActivity;
+import com.score.cbook.ui.ChequeListTabActivity;
 import com.score.cbook.ui.CustomerListActivity;
 
 
@@ -33,7 +34,7 @@ public class NotificationzHandler {
     }
 
     static void notifyCheque(Context context, Notifcationz notifcationz) {
-        Intent intent = new Intent(context, ChequeListActivity.class);
+        Intent intent = new Intent(context, ChequeListTabActivity.class);
 
         Notification notification = buildNotification(context, intent, notifcationz);
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);

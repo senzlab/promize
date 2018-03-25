@@ -144,7 +144,7 @@ public class NewGiftActivity extends BaseActivity {
         if (senzReceiver != null) unregisterReceiver(senzReceiver);
 
         releaseWakeLock();
-        releaseCamera();
+        releaseCameraPreview();
     }
 
     private void initUi() {
@@ -174,7 +174,7 @@ public class NewGiftActivity extends BaseActivity {
             public void onClick(View v) {
                 // send
                 ActivityUtil.showProgressDialog(NewGiftActivity.this, "Sending ...");
-                sendPromize(captureView());
+                sendPromize(captureView(), amount.getText().toString());
             }
         });
 
@@ -221,8 +221,6 @@ public class NewGiftActivity extends BaseActivity {
     }
 
     private void initCameraPreview(int camFace) {
-        releaseCameraPreview();
-
         // render new preview
         try {
             camera = Camera.open(camFace);
@@ -237,16 +235,22 @@ public class NewGiftActivity extends BaseActivity {
     }
 
     private void releaseCameraPreview() {
-        if (cameraPreview != null) {
-            cameraPreview.surfaceDestroyed(cameraPreview.getHolder());
-            cameraPreview.getHolder().removeCallback(cameraPreview);
-            cameraPreview.destroyDrawingCache();
+        try {
+            if (camera != null) {
+                cameraPreview.surfaceDestroyed(cameraPreview.getHolder());
+                cameraPreview.getHolder().removeCallback(cameraPreview);
+                cameraPreview.destroyDrawingCache();
 
-            FrameLayout preview = (FrameLayout) findViewById(R.id.preview_frame);
-            preview.removeView(cameraPreview);
+                FrameLayout preview = (FrameLayout) findViewById(R.id.preview_frame);
+                preview.removeView(cameraPreview);
 
-            camera.stopPreview();
-            camera.release();
+                camera.stopPreview();
+                camera.release();
+                camera = null;
+            }
+        } catch (Exception e) {
+            // cannot get camera or does not exist
+            e.printStackTrace();
         }
     }
 
@@ -283,10 +287,10 @@ public class NewGiftActivity extends BaseActivity {
         return resizedImage;
     }
 
-    private void sendPromize(byte[] compBytes) {
+    private void sendPromize(byte[] compBytes, String amount) {
         this.cheque = new Cheque();
         cheque.setUser(user);
-        cheque.setAmount(10000);
+        cheque.setAmount(amount);
         cheque.setDeliveryState(DeliveryState.PENDING);
         cheque.setChequeState(ChequeState.TRANSFER);
         cheque.setMyCheque(true);

@@ -165,7 +165,7 @@ public class NewChequeActivity extends BaseActivity implements ICheckImageGenera
             // create cheque
             cheque = new Cheque();
             cheque.setUser(chequeUser);
-            cheque.setAmount(Integer.parseInt(amount));
+            cheque.setAmount(amount);
             cheque.setDate(date);
             cheque.setDeliveryState(DeliveryState.PENDING);
             cheque.setChequeState(ChequeState.TRANSFER);

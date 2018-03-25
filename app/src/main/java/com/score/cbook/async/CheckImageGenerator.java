@@ -33,7 +33,7 @@ public class CheckImageGenerator extends AsyncTask<Cheque, String, String> {
     private String generateImg(Cheque cheque) {
         // add text
         Bitmap chqImg = ImageUtil.loadImg(context, "echq.jpg");
-        Bitmap stChq = ImageUtil.addText(chqImg, cheque.getAmount(), cheque.getUser().getUsername(), cheque.getDate());
+        Bitmap stChq = ImageUtil.addText(chqImg, Integer.parseInt(cheque.getAmount()), cheque.getUser().getUsername(), cheque.getDate());
 
         // compress
         byte[] bytes = ImageUtil.bmpToBytes(stChq);

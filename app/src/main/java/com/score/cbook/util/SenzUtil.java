@@ -172,7 +172,7 @@ public class SenzUtil {
     public static Senz transferSenz(Context context, Cheque cheque, Account account) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put("amnt", Integer.toString(cheque.getAmount()));
+        senzAttributes.put("amnt", cheque.getAmount());
         senzAttributes.put("bnk", account.getBank());
         senzAttributes.put("acc", account.getAccountNo());
         senzAttributes.put("blob", cheque.getBlob());
@@ -192,7 +192,7 @@ public class SenzUtil {
     public static Senz redeemSenz(Context context, Cheque cheque, String account) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put("amnt", Integer.toString(cheque.getAmount()));
+        senzAttributes.put("amnt", cheque.getAmount());
         senzAttributes.put("bnk", "sampath.chain");
         senzAttributes.put("acc", account);
         senzAttributes.put("blob", "");
