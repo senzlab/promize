@@ -129,7 +129,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name=".ui.NewGiftActivity"
+            android:name=".ui.NewPromizeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity android:name=".ui.ChequeListTabActivity" />

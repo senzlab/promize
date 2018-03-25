@@ -43,7 +43,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/tick"
+                android:src="@drawable/redeem3"
                 app:backgroundTint="@color/white" />
         </RelativeLayout>
     </FrameLayout>

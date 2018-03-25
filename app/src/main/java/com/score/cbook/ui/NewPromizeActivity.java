@@ -42,8 +42,8 @@ import com.score.cbook.util.SenzUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
-public class NewGiftActivity extends BaseActivity {
-    protected static final String TAG = NewGiftActivity.class.getName();
+public class NewPromizeActivity extends BaseActivity {
+    protected static final String TAG = NewPromizeActivity.class.getName();
 
     // camera related variables
     private Camera camera;
@@ -96,7 +96,7 @@ public class NewGiftActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.new_gift_activity_layout);
+        setContentView(R.layout.new_promize_activity_layout);
 
         // init
         initUi();
@@ -173,7 +173,7 @@ public class NewGiftActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // send
-                ActivityUtil.showProgressDialog(NewGiftActivity.this, "Sending ...");
+                ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
                 sendPromize(captureView(), amount.getText().toString());
             }
         });
@@ -192,12 +192,6 @@ public class NewGiftActivity extends BaseActivity {
 
         Signature signature = new Signature(this, null);
         signatureView.addView(signature);
-    }
-
-    private void releaseCamera() {
-        if (camera != null) {
-            camera.release();
-        }
     }
 
     private void acquireWakeLock() {

@@ -144,7 +144,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         if (v == backImageView) {
             finish();
         } else if (v == sendGift) {
-            Intent intent = new Intent(this, NewGiftActivity.class);
+            Intent intent = new Intent(this, NewPromizeActivity.class);
             intent.putExtra("USER", chequeUser);
             startActivity(intent);
         }
