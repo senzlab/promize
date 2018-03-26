@@ -3,6 +3,7 @@ package com.score.cbook.ui;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
@@ -32,6 +35,7 @@ public class SentPromizeFragment extends Fragment implements AdapterView.OnItemC
             if (intent.hasExtra("SENZ")) {
                 Senz senz = intent.getExtras().getParcelable("SENZ");
                 if (needToRefreshList(senz)) {
+
                     refreshList();
                 }
             }
@@ -41,6 +45,7 @@ public class SentPromizeFragment extends Fragment implements AdapterView.OnItemC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.cheque_list_layout, container, false);
+        initEmptyView(view);
         initListView(view);
 
         return view;
@@ -59,12 +64,28 @@ public class SentPromizeFragment extends Fragment implements AdapterView.OnItemC
         if (senzReceiver != null) getActivity().unregisterReceiver(senzReceiver);
     }
 
+    private void initEmptyView(View view) {
+        Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GeosansLight.ttf");
+        TextView emptyText = (TextView) view.findViewById(R.id.empty_view_text);
+        emptyText.setTypeface(typeface, Typeface.NORMAL);
+        emptyText.setText("There aren't any sent promizes yet");
+    }
+
     private void initListView(View view) {
         ListView listView = (ListView) view.findViewById(R.id.cheque_list_view);
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
 
         chequeList = ChequeSource.getCheques(getActivity(), true);
+
+        RelativeLayout emptyView = (RelativeLayout) view.findViewById(R.id.empty_view);
+        if (chequeList.size() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+            listView.setEmptyView(emptyView);
+        } else {
+            emptyView.setVisibility(View.GONE);
+        }
+
         chequeListAdapter = new ChequeListAdapter(getActivity(), chequeList);
         chequeListAdapter.notifyDataSetChanged();
         listView.setAdapter(chequeListAdapter);
