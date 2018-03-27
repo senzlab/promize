@@ -35,7 +35,7 @@ public class SmsReceiver extends BroadcastReceiver {
                         smsMessage = SmsMessage.createFromPdu((byte[]) pdus[0]);
                     }
 
-                    if (SmsUtil.isPromize(smsMessage.getMessageBody())) {
+                    if (SmsUtil.isIgift(smsMessage.getMessageBody())) {
                         if (SmsUtil.isConfirm(smsMessage.getMessageBody())) {
                             initFriendConfirmation(smsMessage, context);
                         } else if (SmsUtil.isRequest(smsMessage.getMessageBody())) {
