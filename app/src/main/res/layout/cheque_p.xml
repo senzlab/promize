@@ -34,6 +34,7 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:src="@drawable/cancel"
+                android:visibility="gone"
                 app:backgroundTint="@color/white" />
 
             <android.support.design.widget.FloatingActionButton
@@ -43,8 +44,9 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/redeem2"
-                app:backgroundTint="@color/white" />
+                android:src="@drawable/redeem_white"
+                app:backgroundTint="@color/colorPrimary"
+                app:rippleColor="@color/colorPrimary" />
         </RelativeLayout>
     </FrameLayout>
 </RelativeLayout>

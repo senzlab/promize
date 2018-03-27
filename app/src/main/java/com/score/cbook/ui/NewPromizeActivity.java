@@ -20,9 +20,13 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +54,8 @@ public class NewPromizeActivity extends BaseActivity {
     private CameraPreview cameraPreview;
 
     // ui
+    private RelativeLayout infoLayout;
+    private LinearLayout amountContainer;
     private TextView sampathGift;
     private TextView amountHeader;
     private TextView rsHeader;
@@ -148,6 +154,7 @@ public class NewPromizeActivity extends BaseActivity {
     }
 
     private void initUi() {
+        infoLayout = (RelativeLayout) findViewById(R.id.amount_l);
         sampathGift = (TextView) findViewById(R.id.sampath_gift);
         amountHeader = (TextView) findViewById(R.id.amount_header);
         rsHeader = (TextView) findViewById(R.id.rs);
@@ -158,6 +165,16 @@ public class NewPromizeActivity extends BaseActivity {
         amountHeader.setTypeface(typeface, Typeface.BOLD);
         rsHeader.setTypeface(typeface, Typeface.BOLD);
         amount.setTypeface(typeface, Typeface.BOLD);
+
+        amountContainer = (LinearLayout) findViewById(R.id.amount_container);
+        amountContainer.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                return false;
+            }
+        });
 
         capture = (FloatingActionButton) findViewById(R.id.fab);
         capture.setOnClickListener(new View.OnClickListener() {
@@ -180,6 +197,7 @@ public class NewPromizeActivity extends BaseActivity {
 
         send.setVisibility(View.GONE);
         capture.setVisibility(View.VISIBLE);
+        infoLayout.setVisibility(View.GONE);
     }
 
     private void initPrefs() {
@@ -262,6 +280,7 @@ public class NewPromizeActivity extends BaseActivity {
                 capturedPhoto.setImageBitmap(bitmap);
                 send.setVisibility(View.VISIBLE);
                 capture.setVisibility(View.GONE);
+                animateView(infoLayout);
             }
         });
     }
@@ -279,6 +298,19 @@ public class NewPromizeActivity extends BaseActivity {
         ImageUtil.saveImg(SenzUtil.getUid(this, t.toString() + ".jpg"), resizedImage);
 
         return resizedImage;
+    }
+
+    public void animateView(View view) {
+        //TranslateAnimation animate = new TranslateAnimation(0, 0, view.getHeight(), 0);
+        //animate.setDuration(2000);
+        //view.startAnimation(animate);
+        //animate.setFillAfter(true);
+
+        view.setVisibility(View.VISIBLE);
+
+        Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_in);
+        //a.setDuration(500);
+        view.startAnimation(a);
     }
 
     private void sendPromize(byte[] compBytes, String amount) {

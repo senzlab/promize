@@ -93,7 +93,8 @@
                         android:id="@+id/amount_l"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true">
+                        android:layout_centerInParent="true"
+                        android:visibility="visible">
 
                         <RelativeLayout
                             android:id="@+id/amount_holder"
@@ -103,6 +104,7 @@
 
                             <LinearLayout
                                 android:layout_width="match_parent"
+                                android:id="@+id/amount_container"
                                 android:layout_height="match_parent"
                                 android:layout_marginBottom="5dp"
                                 android:gravity="center|bottom">
@@ -147,35 +149,18 @@
                             android:text="Amount"
                             android:textColor="@color/clouds"
                             android:textSize="20sp" />
-
-                        <ImageView
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_alignParentLeft="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="58dp"
-                            android:paddingBottom="10dp"
-                            android:paddingTop="10dp"
-                            android:src="@drawable/rupee"
-                            android:visibility="gone" />
-
-                        <EditText
-                            android:id="@+id/new_cheque_amount1"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginLeft="65dp"
-                            android:layout_marginRight="65dp"
-                            android:background="@drawable/edit_text_border_bottom_o"
-                            android:gravity="center"
-                            android:hint="Amount"
-                            android:inputType="number"
-                            android:textColor="@color/colorPrimary"
-                            android:textColorHint="#DADADC"
-                            android:textCursorDrawable="@drawable/cursor_drawable"
-                            android:textSize="22sp"
-                            android:visibility="gone" />
                     </RelativeLayout>
+
                 </RelativeLayout>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/capture_cam"
+                    app:backgroundTint="@color/colorPrimary"
+                    app:rippleColor="@color/colorPrimary" />
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>
@@ -187,29 +172,22 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/close"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:src="@drawable/cancel"
-            app:backgroundTint="@color/white" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/cancel_24"
+            android:visibility="gone"
+            app:backgroundTint="@color/white"
+            app:fabSize="mini" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/send"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
-            android:src="@drawable/send_g"
+            android:src="@drawable/send_white"
             android:visibility="gone"
-            app:backgroundTint="#FFF"
-            app:rippleColor="#FFF" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:src="@drawable/capture_2"
-            app:backgroundTint="#FFF"
-            app:rippleColor="#FFF" />
+            app:backgroundTint="@color/colorPrimary"
+            app:rippleColor="@color/colorPrimary" />
 
     </FrameLayout>
 
