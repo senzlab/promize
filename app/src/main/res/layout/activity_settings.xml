@@ -27,67 +27,44 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="65dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/light_bottom_border"
                 android:orientation="horizontal">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/account"
                     android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
+                    android:gravity="center_vertical"
+                    android:text="Account"
+                    android:textColor="@color/android_grey"
+                    android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/account"
-                        android:layout_width="wrap_content"
-                        android:layout_height="60dp"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:text="Account "
-                        android:textColor="@color/android_grey"
-                        android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/accountv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="112233445566"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:visibility="gone" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/gray_back" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_height="60dp">
-                        <TextView
-                            android:id="@+id/accountv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center_vertical"
-                            android:text="112233445566"
-                            android:layout_marginBottom="5dp"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="20sp"
-                            android:visibility="visible" />
-
-                        <Button
-                            android:id="@+id/login_btn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_below="@+id/registering_user_id"
-                            android:background="@drawable/text_bg3"
-                            android:paddingLeft="25dp"
-                            android:paddingRight="25dp"
-                            android:text="Add"
-                            android:textColor="@color/colorPrimary" />
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-
+                <Button
+                    android:id="@+id/acc_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:layout_below="@+id/registering_user_id"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/text_bg3"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="25dp"
+                    android:text="Add"
+                    android:textColor="@color/colorPrimary" />
 
             </LinearLayout>
 
@@ -98,152 +75,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/light_bottom_border"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/phn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="60dp"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:text="Phone "
-                        android:textColor="@color/android_grey"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/gray_back" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_height="60dp">
-                        <TextView
-                            android:id="@+id/phnv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center_vertical"
-                            android:text="0775432015"
-                            android:layout_marginBottom="5dp"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="20sp"
-                            android:visibility="visible" />
-
-                        <Button
-                            android:id="@+id/chn_b"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_below="@+id/registering_user_id"
-                            android:background="@drawable/text_bg3"
-                            android:paddingLeft="25dp"
-                            android:paddingRight="25dp"
-                            android:text="CHANGE"
-                            android:textColor="@color/colorPrimary" />
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray_back" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/light_bottom_border"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/phn1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="60dp"
-                        android:gravity="center_vertical"
-                        android:layout_gravity="center_vertical"
-                        android:text="Password "
-                        android:textColor="@color/android_grey"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/gray_back" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_height="60dp">
-                        <TextView
-                            android:id="@+id/phnv1"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_gravity="center_vertical"
-                            android:text="****"
-                            android:layout_marginBottom="5dp"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="20sp"
-                            android:visibility="visible" />
-
-                        <Button
-                            android:id="@+id/chn_b1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_below="@+id/registering_user_id"
-                            android:background="@drawable/text_bg3"
-                            android:paddingLeft="25dp"
-                            android:paddingRight="25dp"
-                            android:text="CHANGE"
-                            android:textColor="@color/colorPrimary" />
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray_back" />
-
-
-
-            <LinearLayout
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="65dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/light_bottom_border"
@@ -264,38 +96,37 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:visibility="gone"
                     android:text="+94775432015"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:visibility="gone" />
+
                 <Button
-                    android:id="@+id/chage_acc"
+                    android:id="@+id/phn_btn"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="37dp"
                     android:layout_below="@+id/registering_user_id"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_vertical"
                     android:background="@drawable/text_bg3"
                     android:paddingLeft="25dp"
                     android:paddingRight="25dp"
-                    android:text="Change"
+                    android:text="CHANGE"
                     android:textColor="@color/colorPrimary" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:visibility="gone"
                 android:background="@color/gray_back" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
+                android:layout_height="65dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:background="@drawable/light_bottom_border"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/promizeId"
@@ -308,12 +139,11 @@
                     android:textSize="20sp" />
 
                 <Button
-                    android:id="@+id/chage_pass"
+                    android:id="@+id/pass_btn"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="37dp"
                     android:layout_below="@+id/registering_user_id"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_vertical"
                     android:background="@drawable/text_bg3"
                     android:paddingLeft="25dp"
                     android:paddingRight="25dp"
@@ -324,22 +154,47 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:visibility="gone"
                 android:background="@color/gray_back" />
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/send_gift"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginTop="18dp"
-            android:layout_weight="1"
-            android:background="@drawable/rounded_corner_button"
-            android:gravity="center"
-            android:text="Send Gift"
-            android:textColor="@color/white"
-            android:visibility="gone" />
+            android:layout_height="65dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/light_bottom_border"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/terms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="Terms of use"
+                android:textColor="@color/android_grey"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/terms_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:layout_below="@+id/registering_user_id"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/text_bg3"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:text="View"
+                android:textColor="@color/colorPrimary" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray_back" />
+
     </LinearLayout>
 </LinearLayout>
 

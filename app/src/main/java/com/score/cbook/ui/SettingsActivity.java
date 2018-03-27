@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,11 +18,13 @@ public class SettingsActivity extends BaseActivity {
     private static final String TAG = SettingsActivity.class.getName();
 
     private TextView phone;
-    private TextView phoneV;
     private TextView account;
-    private TextView accountV;
-    private TextView promizeId;
-    private TextView promizeIdV;
+    private TextView password;
+    private TextView terms;
+    private Button accBtn;
+    private Button phnBtn;
+    private Button passBtn;
+    private Button termsBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,26 +61,36 @@ public class SettingsActivity extends BaseActivity {
     private void initUi() {
         // text views
         phone = (TextView) findViewById(R.id.phone);
-        phoneV = (TextView) findViewById(R.id.phonev);
         account = (TextView) findViewById(R.id.account);
-        accountV = (TextView) findViewById(R.id.accountv);
-        promizeId = (TextView) findViewById(R.id.promizeId);
-        //promizeIdV = (TextView) findViewById(R.id.promizeidV);
+        password = (TextView) findViewById(R.id.promizeId);
+        terms = (TextView) findViewById(R.id.terms);
         phone.setTypeface(typeface, Typeface.NORMAL);
-        phoneV.setTypeface(typeface, Typeface.NORMAL);
         account.setTypeface(typeface, Typeface.NORMAL);
-        accountV.setTypeface(typeface, Typeface.NORMAL);
-        promizeId.setTypeface(typeface, Typeface.NORMAL);
-        //promizeIdV.setTypeface(typeface, Typeface.NORMAL);
+        password.setTypeface(typeface, Typeface.NORMAL);
+        terms.setTypeface(typeface, Typeface.NORMAL);
+
+        // buttons
+        accBtn = (Button) findViewById(R.id.acc_btn);
+        phnBtn = (Button) findViewById(R.id.phn_btn);
+        passBtn = (Button) findViewById(R.id.pass_btn);
+        termsBtn = (Button) findViewById(R.id.terms_btn);
+        accBtn.setTypeface(typeface, Typeface.BOLD);
+        phnBtn.setTypeface(typeface, Typeface.BOLD);
+        passBtn.setTypeface(typeface, Typeface.BOLD);
+        termsBtn.setTypeface(typeface, Typeface.BOLD);
     }
 
     private void initPrefs() {
-        String user = PreferenceUtil.getSenzieAddress(this);
         Account useAccount = PreferenceUtil.getAccount(this);
 
-        accountV.setText(useAccount.getAccountNo());
-        phoneV.setText(useAccount.getPhoneNo());
-        //promizeIdV.setText(user);
+        if (useAccount.getAccountNo().isEmpty()) {
+            account.setText("Account");
+            accBtn.setText("Add");
+        } else {
+            account.setText("Account -  " + useAccount.getAccountNo());
+            accBtn.setText("CHANGE");
+        }
+        phone.setText("Phone - " + useAccount.getPhoneNo());
     }
 
     private void initActionBar() {
