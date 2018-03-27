@@ -74,7 +74,7 @@ public class ReceivedPromizeFragment extends Fragment implements AdapterView.OnI
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GeosansLight.ttf");
         TextView emptyText = (TextView) view.findViewById(R.id.empty_view_text);
         emptyText.setTypeface(typeface, Typeface.NORMAL);
-        emptyText.setText("There aren't any received promizes yet");
+        emptyText.setText("There aren't any received iGifts yet");
     }
 
     private void initListView(View view) {

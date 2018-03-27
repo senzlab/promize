@@ -68,7 +68,7 @@ public class SmsReceiver extends BroadcastReceiver {
         UserSource.createUser(context, chequeUser);
 
         // notify
-        String msg = "Would you like to add " + contactName + " as promiZe customer?";
+        String msg = "Would you like to add " + contactName + " as iGift customer?";
         Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, contactName, msg, username);
         notifcationz.setSenderPhone(contactNo);
         notifcationz.setAddActions(true);

@@ -39,7 +39,7 @@
                     android:layout_below="@+id/new_cheque"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="Send Promize"
+                    android:text="Send iGift"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>
@@ -124,7 +124,7 @@
                     android:layout_below="@+id/received_cheques"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="Promizes"
+                    android:text="iGifts"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class SmsUtil {
     public static void sendRequest(Context context, String phone) {
         String address = PreferenceUtil.getSenzieAddress(context);
-        String msg = "#promiZe #request\nI'm using sampath bank promiZe app, #username " + address + " #code 41r33";
+        String msg = "#promiZe #request\nI'm using sampath bank iGift app, #username " + address + " #code 41r33";
         SmsManager.getDefault().sendTextMessage(phone, null, msg, null, null);
     }
 

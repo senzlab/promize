@@ -26,7 +26,7 @@
             android:layout_below="@+id/logo"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="promiZe"
+            android:text="iGift"
             android:textColor="@color/white"
             android:textSize="25sp" />
     </LinearLayout>

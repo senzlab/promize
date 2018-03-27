@@ -94,7 +94,7 @@ public class NewPromizeActivity extends BaseActivity {
                 this.finish();
             } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
-                Toast.makeText(this, "Failed send promize", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Failed to send iGift", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -274,6 +274,8 @@ public class NewPromizeActivity extends BaseActivity {
                 byte[] resizedImage = ImageUtil.compressImage(bytes, true, true);
 
                 releaseCameraPreview();
+
+                amount.requestFocus();
 
                 // create bitmap and set to post capture
                 Bitmap bitmap = ImageUtil.bytesToBmp(resizedImage);

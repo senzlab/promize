@@ -53,7 +53,7 @@
                 android:layout_marginRight="40dp"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="There aren't any received promiZes yet"
+                android:text="There aren't any received iGifts yet"
                 android:textColor="@color/android_grey"
                 android:textSize="24sp" />
         </LinearLayout>

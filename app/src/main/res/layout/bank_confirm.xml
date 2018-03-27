@@ -38,7 +38,7 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:text="You need to setup sampath bank account, in order to to issue promizes.."
+                android:text="You need to setup sampath bank account, in order to to send iGift.."
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:visibility="visible" />
@@ -50,7 +50,7 @@
                 android:layout_above="@+id/registering_user_id"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:text="Please note that, if you don't have a sampath bank account, you cannot send promiZes. You can only receive promiZes :)"
+                android:text="Please note that, if you don't have a sampath bank account, you cannot send iGifts. You can only receive iGifts :)"
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:visibility="visible" />

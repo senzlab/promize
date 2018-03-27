@@ -57,14 +57,14 @@ public class RedeemActivity extends BaseActivity {
             if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
                 // share success
                 ActivityUtil.cancelProgressDialog();
-                Toast.makeText(RedeemActivity.this, "Successfully redeemed the promize", Toast.LENGTH_LONG).show();
+                Toast.makeText(RedeemActivity.this, "Successfully redeemed the iGift", Toast.LENGTH_LONG).show();
                 RedeemActivity.this.finish();
 
                 // update cheque status in db
                 ChequeSource.updateChequeState(this, cheque.getUid(), ChequeState.DEPOSIT);
             } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
-                Toast.makeText(RedeemActivity.this, "Failed to redeem promize", Toast.LENGTH_LONG).show();
+                Toast.makeText(RedeemActivity.this, "Failed to redeem iGift", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -122,7 +122,7 @@ public class RedeemActivity extends BaseActivity {
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
-        titleText.setText("Redeem promize");
+        titleText.setText("Redeem iGift");
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);
@@ -171,7 +171,7 @@ public class RedeemActivity extends BaseActivity {
         final String confirmAccountNo = editTextConfirmAccount.getText().toString().trim();
         try {
             ActivityUtil.isValidRedeemFileds(accountNo, confirmAccountNo);
-            String confirmationMessage = "<font color=#636363>Are you sure you want to redeem the promize for account </font> <font color=#F37920>" + "<b>" + accountNo + "</b>" + "</font>";
+            String confirmationMessage = "<font color=#636363>Are you sure you want to redeem the iGift for account </font> <font color=#F37920>" + "<b>" + accountNo + "</b>" + "</font>";
             displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
