@@ -61,14 +61,14 @@ public class SettingsActivity extends BaseActivity {
         phoneV = (TextView) findViewById(R.id.phonev);
         account = (TextView) findViewById(R.id.account);
         accountV = (TextView) findViewById(R.id.accountv);
-        promizeId = (TextView) findViewById(R.id.promizeid);
-        promizeIdV = (TextView) findViewById(R.id.promizeidV);
+        promizeId = (TextView) findViewById(R.id.promizeId);
+        //promizeIdV = (TextView) findViewById(R.id.promizeidV);
         phone.setTypeface(typeface, Typeface.NORMAL);
         phoneV.setTypeface(typeface, Typeface.NORMAL);
         account.setTypeface(typeface, Typeface.NORMAL);
         accountV.setTypeface(typeface, Typeface.NORMAL);
         promizeId.setTypeface(typeface, Typeface.NORMAL);
-        promizeIdV.setTypeface(typeface, Typeface.NORMAL);
+        //promizeIdV.setTypeface(typeface, Typeface.NORMAL);
     }
 
     private void initPrefs() {
@@ -77,7 +77,7 @@ public class SettingsActivity extends BaseActivity {
 
         accountV.setText(useAccount.getAccountNo());
         phoneV.setText(useAccount.getPhoneNo());
-        promizeIdV.setText(user);
+        //promizeIdV.setText(user);
     }
 
     private void initActionBar() {
