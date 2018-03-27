@@ -86,7 +86,7 @@ public class ChequePActivity extends BaseActivity {
 
     private void loadBitmap(ImageView view, String uid) {
         // load image via picasso
-        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/ChequeBook/" + uid + ".jpg");
+        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/iGift/" + uid + ".jpg");
         Picasso.with(this)
                 .load(file)
                 .error(R.drawable.rahaslogo_3)

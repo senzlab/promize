@@ -169,7 +169,7 @@ public class ImageUtil {
 
     public static String saveImg(String name, byte[] image) {
         // create root
-        File rahasakRootDir = new File(Environment.getExternalStorageDirectory().getPath() + "/ChequeBook");
+        File rahasakRootDir = new File(Environment.getExternalStorageDirectory().getPath() + "/iGift");
         if (!rahasakRootDir.exists()) {
             rahasakRootDir.mkdirs();
         }
@@ -189,7 +189,7 @@ public class ImageUtil {
     }
 
     public static void deleteImg(String name) {
-        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/ChequeBook/" + name);
+        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/iGift/" + name);
         if (file.exists()) {
             file.delete();
         }
