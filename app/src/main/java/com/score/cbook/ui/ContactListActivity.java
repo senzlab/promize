@@ -118,7 +118,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
     private void onContactItemClick(final Contact contact) {
         // check existing secret user with given phone no
         if (!UserSource.isExistingUserWithPhoneNo(this, contact.getPhoneNo())) {
-            String confirmationMessage = "<font size=10>Are you sure you want to add customer </font> <font color=#F37920>" + "<b>" + contact.getName() + "</b>" + "</font> (" + contact.getPhoneNo() + ")?";
+            String confirmationMessage = "<font size=10>Are you sure you want to add </font> <font color=#F37920>" + "<b>" + contact.getName() + "</b>" + "</font> (" + contact.getPhoneNo() + ") as iGift contact?";
             displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -131,7 +131,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
                 }
             });
         } else {
-            ActivityUtil.showCustomToastShort("This user already added in you secret contact list", this);
+            ActivityUtil.showCustomToastShort("This user already added in your iGift contact list", this);
         }
     }
 

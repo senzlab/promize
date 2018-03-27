@@ -116,11 +116,11 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
         if (UserSource.getAllUsers(this).size() == 0) {
-            titleText.setText("Add customers");
+            titleText.setText("Add contact");
         } else if (actionType == CustomerActionType.NEW_CHEQUE || actionType == CustomerActionType.NEW_MESSAGE) {
-            titleText.setText("Choose customer");
+            titleText.setText("Choose contact");
         } else {
-            titleText.setText("Customers");
+            titleText.setText("iGift contacts");
         }
 
         // back button

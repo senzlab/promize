@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:layout_weight="5"
             android:gravity="center"
-            android:text="Customers"
+            android:text="Contacts"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="@color/white"

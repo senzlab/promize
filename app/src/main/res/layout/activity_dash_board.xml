@@ -76,7 +76,7 @@
                     android:layout_below="@+id/customers"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
-                    android:text="Customers"
+                    android:text="Contacts"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
             </RelativeLayout>

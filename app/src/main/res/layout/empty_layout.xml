@@ -33,7 +33,7 @@
                 android:layout_marginRight="40dp"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="There aren't any customers. Click on plus(+) sign to add customers"
+                android:text="There aren't any contacts yet. Click on plus(+) sign to add contact"
                 android:textColor="@color/android_grey"
                 android:textSize="24sp"
                 android:visibility="visible" />
