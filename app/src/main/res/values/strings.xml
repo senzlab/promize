@@ -39,7 +39,7 @@
     <string name="customer_notification">You have been added as a iGift contact</string>
     <string name="confirmed_notification">Confirmed your request</string>
     <string name="message_notification">New message received</string>
-    <string name="cheque_notification">New cheque received</string>
+    <string name="cheque_notification">New iGift received</string>
     <string-array name="banks">
         <item>Malaysia</item>
         <item>United States</item>

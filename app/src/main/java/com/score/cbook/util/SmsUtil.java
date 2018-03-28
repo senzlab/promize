@@ -35,7 +35,7 @@ public class SmsUtil {
     }
 
     public static boolean isIgift(String smsMessage) {
-        return smsMessage.toLowerCase().contains("#iGift");
+        return smsMessage.toLowerCase().contains("#igift");
     }
 
     public static boolean isConfirm(String smsMessage) {

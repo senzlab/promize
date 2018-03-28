@@ -87,7 +87,7 @@ public class SettingsActivity extends BaseActivity {
             account.setText("Account");
             accBtn.setText("Add");
         } else {
-            account.setText("Account -  " + useAccount.getAccountNo());
+            account.setText("Account - " + useAccount.getAccountNo());
             accBtn.setText("CHANGE");
         }
         phone.setText("Phone - " + useAccount.getPhoneNo());
