@@ -60,7 +60,10 @@ class SenzHandler {
                     Log.d(TAG, "DATA received");
                     // send AWA back
                     // then handle
-                    senzService.writeSenz(SenzUtil.awaSenz(senz.getAttributes().get("uid")));
+                    if (!senz.getAttributes().containsValue("REG_DONE") && !senz.getAttributes().containsValue("REG_ALR")) {
+                        senzService.writeSenz(SenzUtil.awaSenz(senz.getAttributes().get("uid")));
+                    }
+
                     handleData(senz, senzService);
                     break;
                 case AWA:
