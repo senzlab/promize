@@ -66,7 +66,7 @@ public class ChequePActivity extends BaseActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChequePActivity.this, RedeemActivity.class);
+                Intent intent = new Intent(ChequePActivity.this, BankListActivity.class);
                 intent.putExtra("CHEQUE", cheque);
                 startActivity(intent);
                 ChequePActivity.this.finish();
