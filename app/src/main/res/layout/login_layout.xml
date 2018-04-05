@@ -71,7 +71,6 @@
                 android:textColorHint="@color/white"
                 android:textCursorDrawable="@drawable/cursor_drawable"
                 android:textSize="25sp" />
-
         </LinearLayout>
     </ScrollView>
 
