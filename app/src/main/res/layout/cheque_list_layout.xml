@@ -75,9 +75,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/neww"
+                android:src="@drawable/new_icon"
                 android:visibility="visible"
-                app:backgroundTint="@color/white"
+                app:backgroundTint="@color/colorPrimary"
                 app:fabSize="normal" />
         </RelativeLayout>
     </FrameLayout>

@@ -103,8 +103,8 @@
                             android:layout_centerHorizontal="true">
 
                             <LinearLayout
-                                android:layout_width="match_parent"
                                 android:id="@+id/amount_container"
+                                android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginBottom="5dp"
                                 android:gravity="center|bottom">
@@ -123,6 +123,7 @@
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/edit_text_no_border"
                                     android:inputType="number"
+                                    android:maxLength="6"
                                     android:minWidth="50dp"
                                     android:paddingLeft="10dp"
                                     android:paddingRight="10dp"
