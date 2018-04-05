@@ -142,7 +142,9 @@
             android:name=".ui.AccountVerifyActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
-        <activity android:name=".ui.RedeemActivity" />
+        <activity
+            android:name=".ui.RedeemActivity"
+            android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ui.AddAccountActivity" />
         <activity android:name=".ui.SaltConfirmActivity" />
         <activity android:name=".ui.SaltActivity" />

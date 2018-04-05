@@ -21,6 +21,7 @@ import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
+import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.NetworkUtil;
@@ -34,11 +35,12 @@ public class RedeemActivity extends BaseActivity {
 
     // ui controls
     private Button done;
-    private TextView message;
+    private EditText editTextBank;
     private EditText editTextAccount;
     private EditText editTextConfirmAccount;
     private Toolbar toolbar;
 
+    private Bank bank;
     private Cheque cheque;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
@@ -142,11 +144,11 @@ public class RedeemActivity extends BaseActivity {
     }
 
     private void initUi() {
-        message = (TextView) findViewById(R.id.welcome_message);
+        editTextBank = (EditText) findViewById(R.id.bank);
         editTextAccount = (EditText) findViewById(R.id.account);
         editTextConfirmAccount = (EditText) findViewById(R.id.confirm_account);
 
-        message.setTypeface(typeface, Typeface.BOLD);
+        editTextBank.setTypeface(typeface, Typeface.BOLD);
         editTextAccount.setTypeface(typeface, Typeface.BOLD);
         editTextConfirmAccount.setTypeface(typeface, Typeface.BOLD);
 
@@ -160,7 +162,10 @@ public class RedeemActivity extends BaseActivity {
     }
 
     private void initPrefs() {
+        this.bank = getIntent().getParcelableExtra("BANK");
         this.cheque = getIntent().getParcelableExtra("CHEQUE");
+
+        editTextBank.setText(this.bank.getBankName());
     }
 
     private void onClickDone() {

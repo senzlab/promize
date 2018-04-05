@@ -1,5 +1,6 @@
 package com.score.cbook.ui;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -25,6 +26,19 @@ public class BankListActivity extends BaseActivity {
     private ListView bankListView;
     private BankListAdapter adapter;
     private Cheque cheque;
+    private static ArrayList<Bank> bankList;
+
+    static {
+        bankList = new ArrayList<>();
+        bankList.add(new Bank("3232", "Sampath bank"));
+        bankList.add(new Bank("3232", "Commercial bank"));
+        bankList.add(new Bank("3232", "Hatton national bank"));
+        bankList.add(new Bank("3232", "BOC"));
+        bankList.add(new Bank("3232", "Peoples bank"));
+        bankList.add(new Bank("3232", "HSBC"));
+        bankList.add(new Bank("3232", "ICIC"));
+        bankList.add(new Bank("3232", "DFCC"));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,11 +108,6 @@ public class BankListActivity extends BaseActivity {
     private void initList() {
         bankListView = (ListView) findViewById(R.id.contacts_list);
         bankListView.setTextFilterEnabled(true);
-
-        ArrayList<Bank> bankList = new ArrayList<>();
-        bankList.add(new Bank("3232", "Sampath"));
-        bankList.add(new Bank("3232", "Commercial"));
-        bankList.add(new Bank("3232", "HNB"));
         adapter = new BankListAdapter(this, bankList);
         bankListView.setAdapter(adapter);
 
@@ -107,8 +116,11 @@ public class BankListActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Bank bank = (Bank) adapter.getItem(position);
-
-                // todo move to redeem activity
+                Intent intent = new Intent(BankListActivity.this, RedeemActivity.class);
+                intent.putExtra("BANK", bank);
+                intent.putExtra("CHEQUE", cheque);
+                startActivity(intent);
+                BankListActivity.this.finish();
             }
         });
     }
