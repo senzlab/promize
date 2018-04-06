@@ -64,7 +64,7 @@ public class RedeemActivity extends BaseActivity {
 
                 // update cheque status and account
                 ChequeSource.updateChequeState(this, cheque.getUid(), ChequeState.DEPOSIT);
-                //ChequeSource.updateChequeAccount(this, cheque.getUid(), cheque.getAccount());
+                ChequeSource.updateChequeAccount(this, cheque.getUid(), cheque.getAccount());
             } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
                 Toast.makeText(RedeemActivity.this, "Failed to redeem iGift", Toast.LENGTH_LONG).show();
