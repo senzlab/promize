@@ -196,7 +196,7 @@ public class RedeemActivity extends BaseActivity {
             displayInformationMessageDialog("Error", "Mismatching account");
         } catch (InvalidInputFieldsException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("Error", "Empty input fields");
+            displayInformationMessageDialog("Error", "Account no should be 12 character length and start with 0 or 1");
         }
     }
 

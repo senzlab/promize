@@ -91,7 +91,7 @@ public class ActivityUtil {
         if (password.isEmpty() || password.length() < 8)
             throw new InvalidPasswordException();
 
-        else if (password.length() <= 8) {
+        else if (password.length() >= 8) {
             String pattern = "^(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
             if (!password.matches(pattern)) {
                 throw new InvalidPasswordException();
@@ -126,6 +126,11 @@ public class ActivityUtil {
 
         if (account.length() != 12 || confirmAccount.length() != 12) {
             throw new InvalidInputFieldsException();
+        } else if (account.length() == 12) {
+            String pattern = "^(0|1)[0-9]*$";
+            if (!account.matches(pattern)) {
+                throw new InvalidInputFieldsException();
+            }
         }
 
         if (!account.equalsIgnoreCase(confirmAccount)) {
@@ -137,6 +142,15 @@ public class ActivityUtil {
     public static void isValidRedeemFileds(String acc, String confirmAcc) throws InvalidInputFieldsException, InvalidAccountException {
         if (acc.isEmpty() || confirmAcc.isEmpty())
             throw new InvalidInputFieldsException();
+
+        if (acc.length() != 12 || confirmAcc.length() != 12) {
+            throw new InvalidInputFieldsException();
+        } else if (acc.length() == 12) {
+            String pattern = "^(0|1)[0-9]*$";
+            if (!acc.matches(pattern)) {
+                throw new InvalidInputFieldsException();
+            }
+        }
 
         if (!acc.equals(confirmAcc))
             throw new InvalidAccountException();
