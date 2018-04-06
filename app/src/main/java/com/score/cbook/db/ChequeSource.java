@@ -30,7 +30,7 @@ public class ChequeSource {
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT, cheque.getAmount());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE, cheque.getDate());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB, cheque.getBlob());
-        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ACCOUNT, cheque.getAccount());
+        //values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ACCOUNT, cheque.getAccount());
 
         // insert the new row, if fails throw an error
         db.insertOrThrow(SenzorsDbContract.Cheque.TABLE_NAME, null, values);

@@ -91,11 +91,9 @@ public class ActivityUtil {
         if (password.isEmpty() || password.length() < 8)
             throw new InvalidPasswordException();
 
-        else if(password.length() <= 8)
-        {
+        else if (password.length() <= 8) {
             String pattern = "^(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
-           if(!password.matches(pattern))
-            {
+            if (!password.matches(pattern)) {
                 throw new InvalidPasswordException();
             }
         }
