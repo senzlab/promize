@@ -38,7 +38,7 @@ import java.util.ArrayList;
 public class CustomerListActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
     private ArrayList<ChequeUser> customerList;
-    private FriendListAdapter customerListAdapter;
+    private CustomerListAdapter customerListAdapter;
 
     private CustomerActionType actionType = CustomerActionType.CUSTOMER_LIST;
 
@@ -206,11 +206,11 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
 
         customerList = UserSource.getAllUsers(this);
         if (customerList.size() > 0) {
-            customerListAdapter = new FriendListAdapter(this, customerList);
+            customerListAdapter = new CustomerListAdapter(this, customerList);
             customerListAdapter.notifyDataSetChanged();
             friendListView.setAdapter(customerListAdapter);
         } else {
-            customerListAdapter = new FriendListAdapter(this, customerList);
+            customerListAdapter = new CustomerListAdapter(this, customerList);
             friendListView.setAdapter(customerListAdapter);
         }
     }

@@ -13,7 +13,6 @@ import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.pojo.Notifcationz;
 import com.score.cbook.ui.ChatActivity;
-import com.score.cbook.ui.ChequeListActivity;
 import com.score.cbook.ui.ChequeListTabActivity;
 import com.score.cbook.ui.CustomerListActivity;
 

@@ -81,19 +81,7 @@
             android:theme="@style/MyMaterialTheme" />
 
         <activity
-            android:name="com.score.cbook.ui.NewChequeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
-            android:name="com.score.cbook.ui.ViewChequeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
-            android:name="com.score.cbook.ui.ChequePreviewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
-            android:name="com.score.cbook.ui.ChequePActivity"
+            android:name="com.score.cbook.ui.PromizePreviewActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
@@ -118,14 +106,6 @@
             android:theme="@style/MyMaterialTheme" />
         <activity
             android:name=".ui.SecretListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
-            android:name=".ui.ChequeListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
-            android:name=".ui.UserActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity

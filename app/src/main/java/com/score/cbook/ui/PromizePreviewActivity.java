@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
-public class ChequePActivity extends BaseActivity {
+public class PromizePreviewActivity extends BaseActivity {
 
     private FloatingActionButton cancel;
     private FloatingActionButton done;
@@ -66,10 +66,10 @@ public class ChequePActivity extends BaseActivity {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ChequePActivity.this, BankListActivity.class);
+                Intent intent = new Intent(PromizePreviewActivity.this, BankListActivity.class);
                 intent.putExtra("CHEQUE", cheque);
                 startActivity(intent);
-                ChequePActivity.this.finish();
+                PromizePreviewActivity.this.finish();
             }
         });
 
