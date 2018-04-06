@@ -73,12 +73,14 @@ class ChequeListAdapter extends BaseAdapter {
             holder.unreadCount = (FrameLayout) view.findViewById(R.id.unread_msg_count);
             holder.unreadText = (TextView) view.findViewById(R.id.unread_msg_text);
             holder.depositText = (TextView) view.findViewById(R.id.deposit);
+            holder.accountText = (TextView) view.findViewById(R.id.account);
 
             holder.sender.setTypeface(typeface, Typeface.NORMAL);
             holder.message.setTypeface(typeface, Typeface.NORMAL);
             holder.sentTime.setTypeface(typeface, Typeface.NORMAL);
             holder.unreadText.setTypeface(typeface, Typeface.BOLD);
             holder.depositText.setTypeface(typeface);
+            holder.accountText.setTypeface(typeface);
 
             view.setTag(holder);
         } else {
@@ -122,11 +124,14 @@ class ChequeListAdapter extends BaseAdapter {
         // set deposit text
         if (cheque.isMyCheque()) {
             viewHolder.depositText.setVisibility(View.GONE);
+            //viewHolder.accountText.setVisibility(View.VISIBLE);
         } else {
             if (cheque.getChequeState() == ChequeState.TRANSFER) {
                 viewHolder.depositText.setVisibility(View.VISIBLE);
+                //viewHolder.accountText.setVisibility(View.GONE);
             } else {
                 viewHolder.depositText.setVisibility(View.GONE);
+                //viewHolder.accountText.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -143,5 +148,6 @@ class ChequeListAdapter extends BaseAdapter {
         FrameLayout unreadCount;
         TextView unreadText;
         TextView depositText;
+        TextView accountText;
     }
 }

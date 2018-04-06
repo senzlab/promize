@@ -131,7 +131,7 @@ public class ChequeSource {
                         "amount, " +
                         "date, " +
                         "blob " +
-                        "account " +
+                        //"account " +
                         "FROM cheque " +
                         "WHERE my_cheque = ? " +
                         "ORDER BY _id DESC";
@@ -155,7 +155,7 @@ public class ChequeSource {
                         "amount, " +
                         "date, " +
                         "blob " +
-                        "account " +
+                        //"account " +
                         "FROM cheque " +
                         "WHERE user = ? AND timestamp > ? " +
                         "ORDER BY _id ASC";
@@ -179,7 +179,7 @@ public class ChequeSource {
                         "amount, " +
                         "date, " +
                         "blob " +
-                        "account " +
+                        //"account " +
                         "FROM cheque " +
                         "WHERE delivery_state = ? " +
                         "ORDER BY _id ASC";
@@ -238,7 +238,7 @@ public class ChequeSource {
             amount = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
             date = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE));
             blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
-            account = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ACCOUNT));
+            //account = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ACCOUNT));
 
             // create cheque
             Cheque cheque = new Cheque();
@@ -254,7 +254,7 @@ public class ChequeSource {
             cheque.setAmount(amount);
             cheque.setDate(date);
             cheque.setBlob(blob);
-            cheque.setAccount(account);
+            //cheque.setAccount(account);
 
             cheques.add(cheque);
         }
