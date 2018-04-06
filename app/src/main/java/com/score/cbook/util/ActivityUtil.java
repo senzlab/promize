@@ -88,8 +88,17 @@ public class ActivityUtil {
             throw new InvalidAccountException();
         }
 
-        if (password.isEmpty() || password.length() < 4)
+        if (password.isEmpty() || password.length() < 8)
             throw new InvalidPasswordException();
+
+        else if(password.length() <= 8)
+        {
+            String pattern = "^(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+           if(!password.matches(pattern))
+            {
+                throw new InvalidPasswordException();
+            }
+        }
 
         if (!password.equals(confirmPassword))
             throw new MisMatchFieldException();
