@@ -33,11 +33,12 @@ import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class CustomerListActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
-    private ArrayList<ChequeUser> customerList;
+    private LinkedList<ChequeUser> customerList;
     private CustomerListAdapter customerListAdapter;
 
     private CustomerActionType actionType = CustomerActionType.CUSTOMER_LIST;

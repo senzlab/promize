@@ -15,14 +15,14 @@ import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.util.PhoneBookUtil;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 class CustomerListAdapter extends ArrayAdapter<ChequeUser> {
     Context context;
     private Typeface typeface;
 
-    CustomerListAdapter(Context _context, ArrayList<ChequeUser> userList) {
+    CustomerListAdapter(Context _context, LinkedList<ChequeUser> userList) {
         super(_context, R.layout.friend_list_row_layout, R.id.user_name, userList);
         context = _context;
         typeface = Typeface.createFromAsset(context.getAssets(), "fonts/GeosansLight.ttf");

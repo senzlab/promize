@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.score.cbook.pojo.ChequeUser;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class UserSource {
 
@@ -232,7 +232,7 @@ public class UserSource {
         return null;
     }
 
-    public static ArrayList<ChequeUser> getAllUsers(Context context) {
+    public static LinkedList<ChequeUser> getAllUsers(Context context) {
         // get all non admin users
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         Cursor cursor = db.query(SenzorsDbContract.User.TABLE_NAME, // table
@@ -243,7 +243,7 @@ public class UserSource {
                 null, // group by
                 null); // join
 
-        ArrayList<ChequeUser> chequeUserList = new ArrayList<>();
+        LinkedList<ChequeUser> chequeUserList = new LinkedList<>();
 
         while (cursor.moveToNext()) {
             String username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_USERNAME));
@@ -264,7 +264,8 @@ public class UserSource {
             chequeUser.setAdmin(isAdmin == 1);
             chequeUser.setSMSRequester(isSmsRequester == 1);
 
-            chequeUserList.add(chequeUser);
+            if (chequeUser.isActive()) chequeUserList.addLast(chequeUser);
+            else chequeUserList.addFirst(chequeUser);
         }
 
         cursor.close();
