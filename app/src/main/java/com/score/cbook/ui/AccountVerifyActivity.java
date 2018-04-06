@@ -59,7 +59,7 @@ public class AccountVerifyActivity extends BaseActivity {
                 displayInformationMessageDialog("ERROR", "Fail to verify account");
             } else if (msg != null && msg.equalsIgnoreCase("VERIFICATION_FAIL")) {
                 ActivityUtil.cancelProgressDialog();
-                String informationMessage = "Signature verification fail. Please contact sampath support regarding this issue";
+                String informationMessage = "Verification fail. Please contact sampath support regarding this issue";
                 displayInformationMessageDialog("ERROR", informationMessage);
             }
         }
