@@ -195,7 +195,7 @@ public class RegistrationActivity extends BaseActivity {
             displayInformationMessageDialog("Error", "Invalid phone no");
         } catch (InvalidPasswordException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("Error", "Invalid password. Password should contains more than 4 characters");
+            displayInformationMessageDialog("Error", "Invalid password. Password should contains more than 7 characters with special character");
         } catch (MisMatchFieldException e) {
             e.printStackTrace();
             displayInformationMessageDialog("Error", "Mismatching password and confirm password");
