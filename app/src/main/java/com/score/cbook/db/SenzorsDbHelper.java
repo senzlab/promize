@@ -55,6 +55,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
                     SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID + TEXT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT + TEXT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE + TEXT_TYPE + ", " +
+                    SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ACCOUNT + TEXT_TYPE + ", " +
                     SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB + TEXT_TYPE +
                     " )";
 

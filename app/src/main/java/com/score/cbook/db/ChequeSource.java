@@ -30,6 +30,7 @@ public class ChequeSource {
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT, cheque.getAmount());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE, cheque.getDate());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB, cheque.getBlob());
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ACCOUNT, cheque.getAccount());
 
         // insert the new row, if fails throw an error
         db.insertOrThrow(SenzorsDbContract.Cheque.TABLE_NAME, null, values);
@@ -49,6 +50,27 @@ public class ChequeSource {
                 values,
                 SenzorsDbContract.Cheque.COLUMN_NAME_UID + " = ?",
                 new String[]{uid});
+    }
+
+    public static void updateChequeAccount(Context context, String uid, String account) {
+        SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getWritableDatabase();
+        try {
+            db.beginTransaction();
+
+            // content values to inset
+            ContentValues values = new ContentValues();
+            values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ACCOUNT, account);
+
+            // update
+            db.update(SenzorsDbContract.Cheque.TABLE_NAME,
+                    values,
+                    SenzorsDbContract.Cheque.COLUMN_NAME_UID + " = ?",
+                    new String[]{uid});
+
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
     }
 
     public static void updateChequeDeliveryState(Context context, String uid, DeliveryState deliveryState) {
@@ -109,6 +131,7 @@ public class ChequeSource {
                         "amount, " +
                         "date, " +
                         "blob " +
+                        "account " +
                         "FROM cheque " +
                         "WHERE my_cheque = ? " +
                         "ORDER BY _id DESC";
@@ -132,6 +155,7 @@ public class ChequeSource {
                         "amount, " +
                         "date, " +
                         "blob " +
+                        "account " +
                         "FROM cheque " +
                         "WHERE user = ? AND timestamp > ? " +
                         "ORDER BY _id ASC";
@@ -155,6 +179,7 @@ public class ChequeSource {
                         "amount, " +
                         "date, " +
                         "blob " +
+                        "account " +
                         "FROM cheque " +
                         "WHERE delivery_state = ? " +
                         "ORDER BY _id ASC";
@@ -196,6 +221,7 @@ public class ChequeSource {
         String amount;
         String date;
         String blob;
+        String account;
 
         // extract attributes
         while (cursor.moveToNext()) {
@@ -212,6 +238,7 @@ public class ChequeSource {
             amount = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
             date = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE));
             blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
+            account = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ACCOUNT));
 
             // create cheque
             Cheque cheque = new Cheque();
@@ -227,6 +254,7 @@ public class ChequeSource {
             cheque.setAmount(amount);
             cheque.setDate(date);
             cheque.setBlob(blob);
+            cheque.setAccount(account);
 
             cheques.add(cheque);
         }

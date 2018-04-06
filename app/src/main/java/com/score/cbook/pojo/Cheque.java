@@ -20,6 +20,7 @@ public class Cheque implements Parcelable {
     private String amount;
     private String date;
     private String blob;
+    private String account;
 
     public Cheque() {
     }
@@ -37,6 +38,7 @@ public class Cheque implements Parcelable {
         amount = in.readString();
         date = in.readString();
         blob = in.readString();
+        account = in.readString();
     }
 
     public static final Creator<Cheque> CREATOR = new Creator<Cheque>() {
@@ -155,6 +157,14 @@ public class Cheque implements Parcelable {
         this.blob = blob;
     }
 
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -174,5 +184,6 @@ public class Cheque implements Parcelable {
         dest.writeString(amount);
         dest.writeString(date);
         dest.writeString(blob);
+        dest.writeString(account);
     }
 }

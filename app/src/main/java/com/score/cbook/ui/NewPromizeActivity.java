@@ -324,6 +324,7 @@ public class NewPromizeActivity extends BaseActivity {
         cheque.setMyCheque(true);
         cheque.setViewed(true);
         cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
+        cheque.setAccount(PreferenceUtil.getAccount(this).getAccountNo());
 
         Long timestamp = System.currentTimeMillis() / 1000;
         cheque.setTimestamp(timestamp);

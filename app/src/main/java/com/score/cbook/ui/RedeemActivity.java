@@ -62,8 +62,9 @@ public class RedeemActivity extends BaseActivity {
                 Toast.makeText(RedeemActivity.this, "Successfully redeemed the iGift", Toast.LENGTH_LONG).show();
                 RedeemActivity.this.finish();
 
-                // update cheque status in db
+                // update cheque status and account
                 ChequeSource.updateChequeState(this, cheque.getUid(), ChequeState.DEPOSIT);
+                ChequeSource.updateChequeAccount(this, cheque.getUid(), cheque.getAccount());
             } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
                 Toast.makeText(RedeemActivity.this, "Failed to redeem iGift", Toast.LENGTH_LONG).show();
@@ -182,6 +183,7 @@ public class RedeemActivity extends BaseActivity {
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(RedeemActivity.this)) {
                         ActivityUtil.showProgressDialog(RedeemActivity.this, "Please wait...");
+                        cheque.setAccount(accountNo);
                         Senz senz = SenzUtil.redeemSenz(RedeemActivity.this, cheque, accountNo);
                         sendSenz(senz);
                     } else {
