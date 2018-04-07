@@ -127,7 +127,7 @@ public class ActivityUtil {
         if (account.length() != 12 || confirmAccount.length() != 12) {
             throw new InvalidInputFieldsException();
         } else if (account.length() == 12) {
-            String pattern = "^(0|1)[0-9]*$";
+            String pattern = "^(1)[0-9]*$";
             if (!account.matches(pattern)) {
                 throw new InvalidInputFieldsException();
             }
