@@ -100,6 +100,15 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 
+        Button accBtn = (Button) findViewById(R.id.acc_btn);
+        accBtn.setTypeface(typeface, Typeface.BOLD);
+        accBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToAddAccount();
+            }
+        });
+
     }
 
     private void initPrefs() {
@@ -158,5 +167,17 @@ public class SettingsActivity extends BaseActivity {
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
+
+
+    private void navigateToAddAccount() {
+        Intent intent = new Intent(SettingsActivity.this, AddAccountActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        finish();
+    }
+
+
+
 
 }
