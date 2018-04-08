@@ -58,7 +58,7 @@ public class BankTypeActivity extends BaseActivity {
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                navigateToHome();
             }
         });
     }
@@ -97,6 +97,12 @@ public class BankTypeActivity extends BaseActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
+    }
+
+    private void navigateToHome() {
+        Intent intent = new Intent(this, DashBoardActivity.class);
+        startActivity(intent);
+        this.finish();
     }
 
 }

@@ -53,7 +53,7 @@ public class AddAccountActivity extends BaseActivity {
                     navigateToVishwaConfirm();
                 } catch (InvalidInputFieldsException e) {
                     e.printStackTrace();
-                    displayInformationMessageDialog("ERROR", "Account number should be 12 character length and start with 0 or 1");
+                    displayInformationMessageDialog("ERROR", "Account number should be 12 character length and start with 1");
                 } catch (MisMatchFieldException e) {
                     e.printStackTrace();
                     displayInformationMessageDialog("ERROR", "Mismatching account number");
