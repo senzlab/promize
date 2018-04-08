@@ -104,6 +104,35 @@ public class ActivityUtil {
     }
 
     /**
+     * Validate input fields of registration form,
+     * Need to have
+     * 1. non empty valid phone no
+     * 2. non empty username
+     * 3. non empty passwords
+     * 4. two passwords should be match
+     *
+     * @return valid or not
+     */
+    public static void isValidPasswordFields(String currentPassword ,String newPassword, String newConfirmPassword) throws  InvalidPasswordException, MisMatchFieldException {
+        if (currentPassword.isEmpty())
+            throw new InvalidPasswordException();
+
+        if (newPassword.isEmpty() || newPassword.length() < 8)
+            throw new InvalidPasswordException();
+
+        else if (newPassword.length() >= 8) {
+            String pattern = "^(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+            if (!newPassword.matches(pattern)) {
+                throw new InvalidPasswordException();
+            }
+        }
+
+        if (!newPassword.equals(newConfirmPassword))
+            throw new MisMatchFieldException();
+
+    }
+
+    /**
      * validate input fields of login form
      *
      * @return valid of not

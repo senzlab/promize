@@ -1,5 +1,6 @@
 package com.score.cbook.ui;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -78,6 +79,18 @@ public class SettingsActivity extends BaseActivity {
         phnBtn.setTypeface(typeface, Typeface.BOLD);
         passBtn.setTypeface(typeface, Typeface.BOLD);
         termsBtn.setTypeface(typeface, Typeface.BOLD);
+
+
+
+        Button passBtn = (Button) findViewById(R.id.pass_btn);
+        passBtn.setTypeface(typeface, Typeface.BOLD);
+        passBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateTopasswordChange();
+            }
+        });
+
     }
 
     private void initPrefs() {
@@ -119,6 +132,14 @@ public class SettingsActivity extends BaseActivity {
         toolbar.setCollapsible(false);
         toolbar.setOverScrollMode(Toolbar.OVER_SCROLL_NEVER);
         setSupportActionBar(toolbar);
+    }
+
+    private void navigateTopasswordChange() {
+        Intent intent = new Intent(SettingsActivity.this, PasswordChangeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        finish();
     }
 
 }
