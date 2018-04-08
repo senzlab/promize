@@ -106,14 +106,13 @@ public class ActivityUtil {
     /**
      * Validate input fields of registration form,
      * Need to have
-     * 1. non empty valid phone no
-     * 2. non empty username
-     * 3. non empty passwords
-     * 4. two passwords should be match
+     * 1. non empty valid passwords
+     * 2. non empty passwords
+     * 3. two passwords should be match
      *
      * @return valid or not
      */
-    public static void isValidPasswordFields(String currentPassword ,String newPassword, String newConfirmPassword) throws  InvalidPasswordException, MisMatchFieldException {
+    public static void isValidPasswordFields(String currentPassword, String newPassword, String newConfirmPassword) throws InvalidPasswordException, MisMatchFieldException {
         if (currentPassword.isEmpty())
             throw new InvalidPasswordException();
 
@@ -168,6 +167,17 @@ public class ActivityUtil {
 
     }
 
+    public static void isValidUsername(String currUsername, String newUsername) throws InvalidInputFieldsException {
+        if (currUsername.isEmpty() || newUsername.isEmpty()) {
+            throw new InvalidInputFieldsException();
+        }
+
+        if (currUsername.length() < 5 || newUsername.length()< 5) {
+            throw new InvalidInputFieldsException();
+        }
+
+    }
+
     public static void isValidRedeemFileds(String acc, String confirmAcc) throws InvalidInputFieldsException, InvalidAccountException {
         if (acc.isEmpty() || confirmAcc.isEmpty())
             throw new InvalidInputFieldsException();
@@ -185,6 +195,7 @@ public class ActivityUtil {
             throw new InvalidAccountException();
 
     }
+
 
     /**
      * Create custom text view for tab view

@@ -91,6 +91,24 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 
+        Button phnBtn = (Button) findViewById(R.id.phn_btn);
+        phnBtn.setTypeface(typeface, Typeface.BOLD);
+        phnBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToUsernameChange();
+            }
+        });
+
+        Button accBtn = (Button) findViewById(R.id.acc_btn);
+        accBtn.setTypeface(typeface, Typeface.BOLD);
+        accBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToAddAccount();
+            }
+        });
+
     }
 
     private void initPrefs() {
@@ -103,7 +121,7 @@ public class SettingsActivity extends BaseActivity {
             account.setText("Account - " + useAccount.getAccountNo());
             accBtn.setText("CHANGE");
         }
-        phone.setText("Phone - " + useAccount.getPhoneNo());
+        phone.setText("Username - " + useAccount.getPhoneNo());
     }
 
     private void initActionBar() {
@@ -141,5 +159,25 @@ public class SettingsActivity extends BaseActivity {
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
+
+    private void navigateToUsernameChange() {
+        Intent intent = new Intent(SettingsActivity.this, UsernameChangeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        finish();
+    }
+
+
+    private void navigateToAddAccount() {
+        Intent intent = new Intent(SettingsActivity.this, AddAccountActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        finish();
+    }
+
+
+
 
 }

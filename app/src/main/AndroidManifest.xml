@@ -131,6 +131,7 @@
         <activity android:name=".ui.SettingsActivity" />
         <activity android:name=".ui.BankListActivity" />
         <activity android:name=".ui.PasswordChangeActivity" />
+        <activity android:name=".ui.UsernameChangeActivity" />
         <!-- Servicves -->
         <service
             android:name="com.score.cbook.remote.SenzService"
