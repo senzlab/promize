@@ -125,6 +125,7 @@ class ChequeListAdapter extends BaseAdapter {
         if (cheque.isMyCheque()) {
             viewHolder.depositText.setVisibility(View.GONE);
             viewHolder.accountText.setVisibility(View.VISIBLE);
+            viewHolder.accountText.setText(cheque.getAccount());
         } else {
             if (cheque.getChequeState() == ChequeState.TRANSFER) {
                 viewHolder.depositText.setVisibility(View.VISIBLE);
@@ -132,6 +133,7 @@ class ChequeListAdapter extends BaseAdapter {
             } else {
                 viewHolder.depositText.setVisibility(View.GONE);
                 viewHolder.accountText.setVisibility(View.VISIBLE);
+                viewHolder.accountText.setText(cheque.getAccount());
             }
         }
     }

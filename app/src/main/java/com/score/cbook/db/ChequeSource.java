@@ -29,8 +29,8 @@ public class ChequeSource {
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID, cheque.getCid());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT, cheque.getAmount());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE, cheque.getDate());
-        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB, cheque.getBlob());
         values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ACCOUNT, cheque.getAccount());
+        values.put(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB, cheque.getBlob());
 
         // insert the new row, if fails throw an error
         db.insertOrThrow(SenzorsDbContract.Cheque.TABLE_NAME, null, values);
@@ -130,7 +130,7 @@ public class ChequeSource {
                         "cid, " +
                         "amount, " +
                         "date, " +
-                        "blob " +
+                        "blob, " +
                         "account " +
                         "FROM cheque " +
                         "WHERE my_cheque = ? " +
@@ -154,7 +154,7 @@ public class ChequeSource {
                         "cid, " +
                         "amount, " +
                         "date, " +
-                        "blob " +
+                        "blob, " +
                         "account " +
                         "FROM cheque " +
                         "WHERE user = ? AND timestamp > ? " +
@@ -178,7 +178,7 @@ public class ChequeSource {
                         "cid, " +
                         "amount, " +
                         "date, " +
-                        "blob " +
+                        "blob, " +
                         "account " +
                         "FROM cheque " +
                         "WHERE delivery_state = ? " +
@@ -237,8 +237,8 @@ public class ChequeSource {
             cid = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ID));
             amount = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_AMOUNT));
             date = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_DATE));
-            blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
             account = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_ACCOUNT));
+            blob = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.Cheque.COLUMN_NAME_CHEQUE_BLOB));
 
             // create cheque
             Cheque cheque = new Cheque();

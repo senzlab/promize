@@ -44,8 +44,8 @@ class SenzorsDbContract {
         static final String COLUMN_NAME_CHEQUE_ID = "cid";
         static final String COLUMN_NAME_CHEQUE_AMOUNT = "amount";
         static final String COLUMN_NAME_CHEQUE_DATE = "date";
-        static final String COLUMN_NAME_CHEQUE_BLOB = "blob";
         static final String COLUMN_NAME_CHEQUE_ACCOUNT = "account";
+        static final String COLUMN_NAME_CHEQUE_BLOB = "blob";
     }
 
     /* Inner class that defines secret table */
