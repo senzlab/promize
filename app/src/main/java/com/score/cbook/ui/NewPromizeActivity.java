@@ -1,5 +1,7 @@
 package com.score.cbook.ui;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +20,7 @@ import android.util.AttributeSet;
 import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -45,7 +48,7 @@ import com.score.cbook.util.SenzUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
-public class NewPromizeActivity extends BaseActivity {
+public class NewPromizeActivity extends BaseActivity implements View.OnTouchListener {
     protected static final String TAG = NewPromizeActivity.class.getName();
 
     // camera related variables
@@ -55,13 +58,17 @@ public class NewPromizeActivity extends BaseActivity {
     // ui
     private RelativeLayout infoLayout;
     private LinearLayout amountContainer;
-    private TextView sampathGift;
     private TextView amountHeader;
     private TextView rsHeader;
     private EditText amount;
     private FloatingActionButton capture;
     private FloatingActionButton send;
     private ImageView capturedPhoto;
+
+    private ViewGroup rootLayout;
+    private ImageView addSticker;
+    private int _xDelta;
+    private int _yDelta;
 
     // user
     private ChequeUser user;
@@ -102,7 +109,7 @@ public class NewPromizeActivity extends BaseActivity {
         // init
         initUi();
         initPrefs();
-        initSignature();
+        //initSignature();
     }
 
     @Override
@@ -148,18 +155,29 @@ public class NewPromizeActivity extends BaseActivity {
         releaseCameraPreview();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initUi() {
         infoLayout = (RelativeLayout) findViewById(R.id.amount_l);
-        sampathGift = (TextView) findViewById(R.id.sampath_gift);
         amountHeader = (TextView) findViewById(R.id.amount_header);
         rsHeader = (TextView) findViewById(R.id.rs);
         amount = (EditText) findViewById(R.id.new_cheque_amount);
         capturedPhoto = (ImageView) findViewById(R.id.capture_photo);
 
-        sampathGift.setTypeface(typeface, Typeface.BOLD);
         amountHeader.setTypeface(typeface, Typeface.BOLD);
         rsHeader.setTypeface(typeface, Typeface.BOLD);
         amount.setTypeface(typeface, Typeface.BOLD);
+
+        rootLayout = (ViewGroup) findViewById(R.id.root_view);
+        addSticker = (ImageView) findViewById(R.id.add_sticker);
+        addSticker.setVisibility(View.GONE);
+        addSticker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NewPromizeActivity.this, StickerListActivity.class);
+                startActivityForResult(intent, 1);
+                //overridePendingTransition(R.anim.right_in, R.anim.stay_in);
+            }
+        });
 
         amountContainer = (LinearLayout) findViewById(R.id.amount_container);
         amountContainer.setOnTouchListener(new View.OnTouchListener() {
@@ -201,10 +219,19 @@ public class NewPromizeActivity extends BaseActivity {
     }
 
     private void initSignature() {
-        RelativeLayout signatureView = (RelativeLayout) findViewById(R.id.img);
+        RelativeLayout signatureView = (RelativeLayout) findViewById(R.id.signature);
 
         Signature signature = new Signature(this, null);
         signatureView.addView(signature);
+    }
+
+    private void addSticker(int resourceId) {
+        ImageView mImageView = new ImageView(this);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(150, 150);
+        mImageView.setLayoutParams(layoutParams);
+        mImageView.setImageResource(resourceId);
+        rootLayout.addView(mImageView);
+        mImageView.setOnTouchListener(this);
     }
 
     private void acquireWakeLock() {
@@ -273,8 +300,10 @@ public class NewPromizeActivity extends BaseActivity {
                 // create bitmap and set to post capture
                 Bitmap bitmap = ImageUtil.bytesToBmp(resizedImage);
                 capturedPhoto.setImageBitmap(bitmap);
+
                 send.setVisibility(View.VISIBLE);
                 capture.setVisibility(View.GONE);
+                addSticker.setVisibility(View.VISIBLE);
                 animateView(infoLayout);
             }
         });
@@ -337,6 +366,51 @@ public class NewPromizeActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                Bundle b = data.getExtras();
+                if (b != null) {
+                    addSticker(b.getInt("STICKER"));
+                }
+            } else if (resultCode == 0) {
+                System.out.println("RESULT CANCELLED");
+            }
+        }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        final int X = (int) event.getRawX();
+        final int Y = (int) event.getRawY();
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
+                _xDelta = X - lParams.leftMargin;
+                _yDelta = Y - lParams.topMargin;
+                break;
+            case MotionEvent.ACTION_UP:
+                break;
+            case MotionEvent.ACTION_POINTER_DOWN:
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                break;
+            case MotionEvent.ACTION_MOVE:
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view
+                        .getLayoutParams();
+                layoutParams.leftMargin = X - _xDelta;
+                layoutParams.topMargin = Y - _yDelta;
+                layoutParams.rightMargin = 0;
+                layoutParams.bottomMargin = 0;
+                view.setLayoutParams(layoutParams);
+                break;
+        }
+        rootLayout.invalidate();
+        return true;
+    }
+
     public class Signature extends View {
         static final float STROKE_WIDTH = 4f;
         static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
@@ -372,11 +446,8 @@ public class NewPromizeActivity extends BaseActivity {
                     lastTouchX = eventX;
                     lastTouchY = eventY;
                     return true;
-
                 case MotionEvent.ACTION_MOVE:
-
                 case MotionEvent.ACTION_UP:
-
                     resetDirtyRect(eventX, eventY);
                     int historySize = event.getHistorySize();
                     for (int i = 0; i < historySize; i++) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,7 +28,6 @@
                 android:scaleType="fitXY" />
         </FrameLayout>
 
-
         <LinearLayout
             android:id="@+id/capture_frame"
             android:layout_width="match_parent"
@@ -35,40 +35,11 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/img"
+                android:id="@+id/signature"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.3"
                 android:background="@color/colorPrimaryTrans">
-
-                <LinearLayout
-                    android:id="@+id/sampath_gift_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <ImageView
-                        android:id="@+id/sampath_logo"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:layout_gravity="center_horizontal"
-                        android:src="@drawable/sampath_logo_white"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/sampath_gift"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="10dp"
-                        android:text="iGift"
-                        android:textColor="@color/white"
-                        android:textSize="25sp"
-                        android:visibility="gone" />
-                </LinearLayout>
-
             </RelativeLayout>
 
             <RelativeLayout
@@ -150,7 +121,6 @@
                             android:textColor="@color/clouds"
                             android:textSize="20sp" />
                     </RelativeLayout>
-
                 </RelativeLayout>
 
                 <android.support.design.widget.FloatingActionButton
@@ -170,24 +140,52 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/cancel_24"
-            android:visibility="gone"
-            app:backgroundTint="@color/white"
-            app:fabSize="mini" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:src="@drawable/send_white"
-            android:visibility="gone"
-            app:backgroundTint="@color/colorPrimary"
-            app:rippleColor="@color/colorPrimary" />
+            <ImageView
+                android:id="@+id/text"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/type"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/add_sticker"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/text"
+                android:layout_gravity="right"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/paint" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/cancel_24"
+                android:visibility="gone"
+                app:backgroundTint="@color/white"
+                app:fabSize="mini" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/send_white"
+                android:visibility="gone"
+                app:backgroundTint="@color/colorPrimary"
+                app:rippleColor="@color/colorPrimary" />
+
+        </RelativeLayout>
 
     </FrameLayout>
 

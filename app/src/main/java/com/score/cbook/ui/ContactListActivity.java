@@ -31,8 +31,6 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
     private ListView contactListView;
     private ContactListAdapter adapter;
 
-    private static final String TAG = ContactListActivity.class.getName();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
