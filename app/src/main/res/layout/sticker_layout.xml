@@ -64,8 +64,7 @@
                     android:id="@+id/customers"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/group_customer" />
+                    android:layout_centerHorizontal="true" />
             </RelativeLayout>
         </RelativeLayout>
 
@@ -124,8 +123,7 @@
                 <ImageView
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/group_inbox" />
+                    android:layout_centerHorizontal="true" />
 
             </RelativeLayout>
         </RelativeLayout>
@@ -175,8 +173,7 @@
                 <ImageView
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/group_messages" />
+                    android:layout_centerHorizontal="true" />
 
             </RelativeLayout>
         </RelativeLayout>
@@ -234,14 +231,16 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true">
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginEnd="56dp"
+                android:layout_marginTop="64dp">
 
                 <ImageView
                     android:id="@+id/messages"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/group_messages" />
+                    android:layout_centerHorizontal="true" />
 
             </RelativeLayout>
         </RelativeLayout>
@@ -303,8 +302,7 @@
                     android:id="@+id/sent_cheques"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/setting_g" />
+                    android:layout_centerHorizontal="true" />
 
             </RelativeLayout>
         </RelativeLayout>
@@ -355,8 +353,7 @@
                     android:id="@+id/heart3"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/contact_g" />
+                    android:layout_centerHorizontal="true" />
             </RelativeLayout>
         </RelativeLayout>
 
