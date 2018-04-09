@@ -18,8 +18,10 @@ public class SettingsActivity extends BaseActivity {
 
     private static final String TAG = SettingsActivity.class.getName();
 
-    private TextView phone;
     private TextView account;
+    private TextView accountv;
+    private TextView phone;
+    private TextView phonev;
     private TextView password;
     private TextView terms;
     private Button accBtn;
@@ -61,11 +63,15 @@ public class SettingsActivity extends BaseActivity {
 
     private void initUi() {
         // text views
-        phone = (TextView) findViewById(R.id.phone);
         account = (TextView) findViewById(R.id.account);
+        accountv = (TextView) findViewById(R.id.accountv);
+        phone = (TextView) findViewById(R.id.phone);
+        phonev = (TextView) findViewById(R.id.phonev);
         password = (TextView) findViewById(R.id.promizeId);
         terms = (TextView) findViewById(R.id.terms);
         phone.setTypeface(typeface, Typeface.NORMAL);
+        phonev.setTypeface(typeface, Typeface.NORMAL);
+        accountv.setTypeface(typeface, Typeface.NORMAL);
         account.setTypeface(typeface, Typeface.NORMAL);
         password.setTypeface(typeface, Typeface.NORMAL);
         terms.setTypeface(typeface, Typeface.NORMAL);
@@ -79,8 +85,6 @@ public class SettingsActivity extends BaseActivity {
         phnBtn.setTypeface(typeface, Typeface.BOLD);
         passBtn.setTypeface(typeface, Typeface.BOLD);
         termsBtn.setTypeface(typeface, Typeface.BOLD);
-
-
 
         Button passBtn = (Button) findViewById(R.id.pass_btn);
         passBtn.setTypeface(typeface, Typeface.BOLD);
@@ -115,13 +119,18 @@ public class SettingsActivity extends BaseActivity {
         Account useAccount = PreferenceUtil.getAccount(this);
 
         if (useAccount.getAccountNo().isEmpty()) {
-            account.setText("Account");
-            accBtn.setText("Add");
+            accBtn.setVisibility(View.VISIBLE);
+            accountv.setVisibility(View.GONE);
+            //account.setText("Account");
+            //accBtn.setText("Add");
         } else {
-            account.setText("Account - " + useAccount.getAccountNo());
-            accBtn.setText("CHANGE");
+            accBtn.setVisibility(View.GONE);
+            accountv.setVisibility(View.VISIBLE);
+            accountv.setText(useAccount.getAccountNo());
+            //account.setText("Account - " + useAccount.getAccountNo());
+            //accBtn.setText("CHANGE");
         }
-        phone.setText("Username - " + useAccount.getPhoneNo());
+        phonev.setText(useAccount.getPhoneNo());
     }
 
     private void initActionBar() {
@@ -168,16 +177,13 @@ public class SettingsActivity extends BaseActivity {
         finish();
     }
 
-
     private void navigateToAddAccount() {
-        Intent intent = new Intent(SettingsActivity.this, AddAccountActivity.class);
+        Intent intent = new Intent(SettingsActivity.this, BankTypeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
         finish();
     }
-
-
 
 
 }
