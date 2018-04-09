@@ -87,7 +87,8 @@ public class PasswordChangeActivity extends BaseActivity {
                     try {
                         ActivityUtil.isValidPasswordFields(currentPassword, newPassword, newConfirmPassword);
                         useAccount.setPassword(newPassword);
-                        navigateToSettings();
+
+                        navigateToSettings(useAccount);
                     } catch (InvalidPasswordException e) {
                         e.printStackTrace();
                         displayInformationMessageDialog("Error", "Invalid password. Password should contains more than 7 characters with special character");
@@ -130,9 +131,10 @@ public class PasswordChangeActivity extends BaseActivity {
         setSupportActionBar(toolbar);
     }
 
-    private void navigateToSettings() {
+    private void navigateToSettings(Account useAccount) {
         Intent intent = new Intent(PasswordChangeActivity.this, SettingsActivity.class);
         startActivity(intent);
+        PreferenceUtil.updatePasswordAccount(this, useAccount);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();

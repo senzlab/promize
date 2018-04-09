@@ -82,7 +82,7 @@ public class UsernameChangeActivity extends BaseActivity {
                     try {
                         ActivityUtil.isValidUsername(currentUsername, newUsername);
                         useAccount.setPhoneNo(newUsername);
-                        navigateToSettings();
+                        navigateToSettings(useAccount);
                     } catch (InvalidInputFieldsException e) {
                         e.printStackTrace();
                         displayInformationMessageDialog("Error", "Invalid new username");
@@ -122,9 +122,10 @@ public class UsernameChangeActivity extends BaseActivity {
         setSupportActionBar(toolbar);
     }
 
-    private void navigateToSettings() {
+    private void navigateToSettings(Account useAccount) {
         Intent intent = new Intent(UsernameChangeActivity.this, SettingsActivity.class);
         startActivity(intent);
+        PreferenceUtil.updateUsernameAccount(this, useAccount);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();

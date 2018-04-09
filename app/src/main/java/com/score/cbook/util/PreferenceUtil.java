@@ -117,4 +117,31 @@ public class PreferenceUtil {
         return preferences.getString(keyType, "");
     }
 
+
+    /**
+     * update password in shared preference
+     *
+     * @param context application context
+     * @param account
+     */
+    public static void updatePasswordAccount(Context context, Account account) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+          editor.putString(PreferenceUtil.PASSWORD, account.getPassword());
+        editor.commit();
+    }
+
+    /**
+     * update password in shared preference
+     *
+     * @param context application context
+     * @param account
+     */
+    public static void updateUsernameAccount(Context context, Account account) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(PreferenceUtil.PHONE_NO, account.getPhoneNo());
+        editor.commit();
+    }
+
 }

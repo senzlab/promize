@@ -171,7 +171,7 @@ public class RegistrationActivity extends BaseActivity {
         final String confirmPassword = editTextConfirmPassword.getText().toString().trim();
         try {
             ActivityUtil.isValidRegistrationFields(phone, password, confirmPassword);
-            String confirmationMessage = "<font color=#636363>Are you sure you want to register with phone no </font> <font color=#F37920>" + "<b>" + phone + "</b>" + "</font>";
+            String confirmationMessage = "<font color=#636363>Are you sure you want to register with username </font> <font color=#F37920>" + "<b>" + phone + "</b>" + "</font>";
             displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
