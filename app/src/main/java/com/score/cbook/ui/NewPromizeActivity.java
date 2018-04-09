@@ -16,7 +16,6 @@ import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.util.Base64;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -73,7 +72,6 @@ public class NewPromizeActivity extends BaseActivity {
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "Got message from Senz service");
             if (intent.hasExtra("SENZ")) {
                 Senz senz = intent.getExtras().getParcelable("SENZ");
                 handleSenz(senz);
@@ -84,13 +82,10 @@ public class NewPromizeActivity extends BaseActivity {
     private void handleSenz(Senz senz) {
         if (senz.getSenzType() == SenzTypeEnum.DATA) {
             if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
-                // share success
                 ActivityUtil.cancelProgressDialog();
-
-                // save cheque
-                savePromize();
-
                 Toast.makeText(this, "Successfully sent", Toast.LENGTH_LONG).show();
+
+                savePromize();
                 this.finish();
             } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
@@ -180,7 +175,6 @@ public class NewPromizeActivity extends BaseActivity {
         capture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // capture
                 takePhoto();
             }
         });
@@ -189,7 +183,6 @@ public class NewPromizeActivity extends BaseActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // send
                 ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
                 sendPromize(captureView(), amount.getText().toString());
             }
@@ -235,15 +228,14 @@ public class NewPromizeActivity extends BaseActivity {
     }
 
     private void initCameraPreview(int camFace) {
-        // render new preview
         try {
+            // render new preview
             camera = Camera.open(camFace);
             cameraPreview = new CameraPreview(this, camera, camFace);
 
             FrameLayout preview = (FrameLayout) findViewById(R.id.preview_frame);
             preview.addView(cameraPreview);
         } catch (Exception e) {
-            // cannot get camera or does not exist
             e.printStackTrace();
         }
     }
@@ -263,7 +255,6 @@ public class NewPromizeActivity extends BaseActivity {
                 camera = null;
             }
         } catch (Exception e) {
-            // cannot get camera or does not exist
             e.printStackTrace();
         }
     }
@@ -305,11 +296,6 @@ public class NewPromizeActivity extends BaseActivity {
     }
 
     public void animateView(View view) {
-        //TranslateAnimation animate = new TranslateAnimation(0, 0, view.getHeight(), 0);
-        //animate.setDuration(2000);
-        //view.startAnimation(animate);
-        //animate.setFillAfter(true);
-
         view.setVisibility(View.VISIBLE);
 
         Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_in);
