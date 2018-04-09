@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.exceptions.InvalidAccountException;
+import com.score.cbook.exceptions.InvalidAmountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.MisMatchFieldException;
@@ -196,6 +197,23 @@ public class ActivityUtil {
 
     }
 
+    /**
+     * Validate input fields of registration form,
+     * Need to have
+     * 1. non empty valid passwords
+     * 2. non empty passwords
+     * 3. two passwords should be match
+     *
+     * @return valid or not
+     */
+    public static void isValidAmount(String amount) throws InvalidAmountException {
+        if (amount.isEmpty())
+            throw new InvalidAmountException();
+        if (Integer.parseInt(amount)>100000) {
+            throw new InvalidAmountException();
+        }
+
+    }
 
     /**
      * Create custom text view for tab view
