@@ -203,6 +203,8 @@ public class NewPromizeActivity extends BaseActivity {
     private void initPrefs() {
         if (getIntent().hasExtra("USER"))
             this.user = getIntent().getParcelableExtra("USER");
+        else
+            this.user = new ChequeUser("eragabe");
     }
 
     private void initSignature() {
