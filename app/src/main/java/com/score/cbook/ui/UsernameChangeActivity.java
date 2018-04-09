@@ -63,6 +63,8 @@ public class UsernameChangeActivity extends BaseActivity {
         // text views
         current_username = (EditText) findViewById(R.id.current_username);
         new_username = (EditText) findViewById(R.id.new_username);
+        current_username.setTypeface(typeface, Typeface.NORMAL);
+        new_username.setTypeface(typeface, Typeface.NORMAL);
 
         // buttons
         update_btn = (Button) findViewById(R.id.update_btn);
@@ -101,7 +103,7 @@ public class UsernameChangeActivity extends BaseActivity {
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
-        titleText.setText("Settings");
+        titleText.setText("Change Username");
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);

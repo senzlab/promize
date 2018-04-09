@@ -111,7 +111,7 @@ public class PasswordChangeActivity extends BaseActivity {
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
-        titleText.setText("Settings");
+        titleText.setText("Change Password");
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);
