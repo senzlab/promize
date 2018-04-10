@@ -226,8 +226,15 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     private void addSticker(int resourceId) {
+        final float scale = getResources().getDisplayMetrics().density;
+        int dpWidthInPx  = (int) (90 * scale);
+        int dpHeightInPx = (int) (90 * scale);
+
+        int w = (int) getResources().getDimension(R.dimen.imageview_width);
+        int h = (int) getResources().getDimension(R.dimen.imageview_height);
+
         ImageView mImageView = new ImageView(this);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(150, 150);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(w, h);
         mImageView.setLayoutParams(layoutParams);
         mImageView.setImageResource(resourceId);
         rootLayout.addView(mImageView);
