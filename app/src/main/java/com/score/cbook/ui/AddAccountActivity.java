@@ -95,7 +95,7 @@ public class AddAccountActivity extends BaseActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("ACCOUNT", accountText.getText().toString().trim());
         startActivity(intent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
         finish();
     }
 

@@ -86,7 +86,7 @@ public class PreferenceUtil {
         account.setAccountNo(preferences.getString(PreferenceUtil.ACCOUNT_NO, ""));
         account.setPhoneNo(preferences.getString(PreferenceUtil.PHONE_NO, ""));
         account.setPassword(preferences.getString(PreferenceUtil.PASSWORD, ""));
-        account.setState(preferences.getString(PreferenceUtil.STATE, ""));
+        account.setState(preferences.getString(PreferenceUtil.STATE, "PENDING"));
 
         return account;
     }

@@ -52,7 +52,7 @@ public class DashBoardActivity extends BaseActivity {
                     // account verify
                     Intent intent = new Intent(DashBoardActivity.this, BankTypeActivity.class);
                     startActivity(intent);
-                } else if (account.getState().isEmpty()) {
+                } else if (account.getState().equalsIgnoreCase("PENDING")) {
                     // salt confirm
                     Intent intent = new Intent(DashBoardActivity.this, SaltConfirmActivity.class);
                     startActivity(intent);

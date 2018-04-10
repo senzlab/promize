@@ -95,7 +95,7 @@ public class BankTypeActivity extends BaseActivity {
         Intent intent = new Intent(BankTypeActivity.this, AddAccountActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
         finish();
     }
 

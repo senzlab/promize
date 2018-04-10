@@ -119,18 +119,18 @@ public class SettingsActivity extends BaseActivity {
         Account useAccount = PreferenceUtil.getAccount(this);
 
         if (useAccount.getAccountNo().isEmpty()) {
-            accBtn.setVisibility(View.VISIBLE);
-            accountv.setVisibility(View.GONE);
-            //account.setText("Account");
-            //accBtn.setText("Add");
+            //accBtn.setVisibility(View.VISIBLE);
+            //accountv.setVisibility(View.GONE);
+            account.setText("Account");
+            accBtn.setText("Add");
         } else {
-            accBtn.setVisibility(View.GONE);
-            accountv.setVisibility(View.VISIBLE);
-            accountv.setText(useAccount.getAccountNo());
-            //account.setText("Account - " + useAccount.getAccountNo());
-            //accBtn.setText("CHANGE");
+            //accBtn.setVisibility(View.GONE);
+            //accountv.setVisibility(View.VISIBLE);
+            //accountv.setText(useAccount.getAccountNo());
+            account.setText("Account - " + useAccount.getAccountNo());
+            accBtn.setText("CHANGE");
         }
-        phonev.setText(useAccount.getPhoneNo());
+        phone.setText("Username - " + useAccount.getPhoneNo());
     }
 
     private void initActionBar() {
@@ -165,7 +165,7 @@ public class SettingsActivity extends BaseActivity {
         Intent intent = new Intent(SettingsActivity.this, PasswordChangeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
         finish();
     }
 
@@ -173,7 +173,7 @@ public class SettingsActivity extends BaseActivity {
         Intent intent = new Intent(SettingsActivity.this, UsernameChangeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
         finish();
     }
 
@@ -181,7 +181,7 @@ public class SettingsActivity extends BaseActivity {
         Intent intent = new Intent(SettingsActivity.this, BankTypeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
         finish();
     }
 

@@ -52,7 +52,7 @@
                     android:text="112233445566"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/acc_btn"
@@ -64,8 +64,8 @@
                     android:paddingLeft="25dp"
                     android:paddingRight="25dp"
                     android:text="Add"
-                    android:visibility="gone"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorPrimary"
+                    android:visibility="visible" />
 
             </LinearLayout>
 
@@ -100,20 +100,20 @@
                     android:text="erangaeb"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/phn_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="37dp"
-                    android:visibility="gone"
                     android:layout_below="@+id/registering_user_id"
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/text_bg3"
                     android:paddingLeft="25dp"
                     android:paddingRight="25dp"
                     android:text="CHANGE"
-                    android:textColor="@color/colorPrimary" />
+                    android:textColor="@color/colorPrimary"
+                    android:visibility="visible" />
             </LinearLayout>
 
             <TextView

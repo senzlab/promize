@@ -95,7 +95,7 @@ public class SaltConfirmActivity extends BaseActivity {
         Intent intent = new Intent(SaltConfirmActivity.this, SaltActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        overridePendingTransition(R.anim.right_in, R.anim.right_out);
+        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
         finish();
     }
 

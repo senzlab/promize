@@ -167,7 +167,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         rsHeader.setTypeface(typeface, Typeface.BOLD);
         amount.setTypeface(typeface, Typeface.BOLD);
 
-        rootLayout = (ViewGroup) findViewById(R.id.root_view);
+        rootLayout = (ViewGroup) findViewById(R.id.relative_layout);
         addSticker = (ImageView) findViewById(R.id.add_sticker);
         addSticker.setVisibility(View.GONE);
         addSticker.setOnClickListener(new View.OnClickListener() {
