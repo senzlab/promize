@@ -13,10 +13,14 @@ import com.score.cbook.R;
 
 public class StickerListActivity extends BaseActivity implements View.OnClickListener {
     private ImageView flower;
-    private ImageView heart;
+    private ImageView heartj;
+    private ImageView hearti;
     private ImageView baloon;
+    private ImageView stars;
     private ImageView cheers;
+    private ImageView newyear;
     private ImageView gift;
+    private ImageView eyes;
     private ImageView rose;
 
     @Override
@@ -59,17 +63,25 @@ public class StickerListActivity extends BaseActivity implements View.OnClickLis
 
     private void initStickers() {
         flower = (ImageView) findViewById(R.id.flowers);
-        heart = (ImageView) findViewById(R.id.heart);
+        heartj = (ImageView) findViewById(R.id.heartsj);
+        hearti = (ImageView) findViewById(R.id.heart);
         baloon = (ImageView) findViewById(R.id.baloons);
+        stars = (ImageView) findViewById(R.id.stars);
         cheers = (ImageView) findViewById(R.id.cheers);
+        newyear = (ImageView) findViewById(R.id.newyear);
         gift = (ImageView) findViewById(R.id.gift);
+        eyes = (ImageView) findViewById(R.id.eyes);
         rose = (ImageView) findViewById(R.id.rose);
 
         flower.setOnClickListener(this);
-        heart.setOnClickListener(this);
+        heartj.setOnClickListener(this);
+        hearti.setOnClickListener(this);
         baloon.setOnClickListener(this);
+        stars.setOnClickListener(this);
         cheers.setOnClickListener(this);
+        newyear.setOnClickListener(this);
         gift.setOnClickListener(this);
+        eyes.setOnClickListener(this);
         rose.setOnClickListener(this);
     }
 
@@ -77,14 +89,22 @@ public class StickerListActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         if (v == flower) {
             selectSticker(R.drawable.flowers);
-        } else if (v == heart) {
-            selectSticker(R.drawable.heartw);
+        } else if (v == heartj) {
+            selectSticker(R.drawable.heartsj);
+        } else if (v == hearti) {
+            selectSticker(R.drawable.heartsi);
         } else if (v == baloon) {
             selectSticker(R.drawable.balloons);
+        } else if (v == stars) {
+            selectSticker(R.drawable.stars);
         } else if (v == cheers) {
             selectSticker(R.drawable.cheers);
+        } else if (v == newyear) {
+            selectSticker(R.drawable.newyear);
         } else if (v == gift) {
             selectSticker(R.drawable.gifti);
+        } else if (v == eyes) {
+            selectSticker(R.drawable.heartw);
         } else if (v == rose) {
             selectSticker(R.drawable.rose);
         }

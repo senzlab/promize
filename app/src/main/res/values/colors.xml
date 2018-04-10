@@ -30,7 +30,7 @@
     <color name="gray_back">#e5e5e5</color>
 
     <color name="colorPrimary">#f5944e</color>
-    <color name="colorPrimaryTrans">#B3f5944e</color>
+    <color name="colorPrimaryTrans">#66f5944e</color>
     <color name="colorPrimaryMoreTrans">#40f5944e</color>
     <color name="colorWhiteTrans">#B3ffffff</color>
     <color name="colorPrimaryLight">#FCD6C7</color>
