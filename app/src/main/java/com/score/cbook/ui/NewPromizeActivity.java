@@ -71,10 +71,16 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     private FloatingActionButton send;
     private ImageView capturedPhoto;
 
+    private RelativeLayout signatureView;
     private ViewGroup rootLayout;
+    private ImageView addText;
     private ImageView addSticker;
     private int _xDelta;
     private int _yDelta;
+
+    private RelativeLayout msgBubble;
+    private EditText msg;
+    float dX, dY;
 
     // user
     private ChequeUser user;
@@ -174,6 +180,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         amount.setTypeface(typeface, Typeface.BOLD);
 
         rootLayout = (ViewGroup) findViewById(R.id.relative_layout);
+        signatureView = (RelativeLayout) findViewById(R.id.signature);
+
         addSticker = (ImageView) findViewById(R.id.add_sticker);
         addSticker.setVisibility(View.GONE);
         addSticker.setOnClickListener(new View.OnClickListener() {
@@ -181,6 +189,15 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             public void onClick(View v) {
                 Intent intent = new Intent(NewPromizeActivity.this, StickerListActivity.class);
                 startActivityForResult(intent, 1);
+            }
+        });
+
+        addText = (ImageView) findViewById(R.id.add_text);
+        addText.setVisibility(View.GONE);
+        addText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addText();
             }
         });
 
@@ -210,16 +227,26 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             }
         });
 
+        msgBubble = (RelativeLayout) findViewById(R.id.msg_bubble);
+        msg = (EditText) findViewById(R.id.message_text);
+        msg.setTypeface(typeface);
+
         send.setVisibility(View.GONE);
         capture.setVisibility(View.VISIBLE);
         infoLayout.setVisibility(View.GONE);
     }
 
     private void initSignature() {
-        RelativeLayout signatureView = (RelativeLayout) findViewById(R.id.signature);
+        signatureView = (RelativeLayout) findViewById(R.id.signature);
 
         Signature signature = new Signature(this, null);
         signatureView.addView(signature);
+    }
+
+    private void addText() {
+        if (msgBubble.getVisibility() == View.VISIBLE) msgBubble.setVisibility(View.GONE);
+        else msgBubble.setVisibility(View.VISIBLE);
+        msgBubble.setOnTouchListener(this);
     }
 
     private void addSticker(int resourceId) {
@@ -303,6 +330,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
                 send.setVisibility(View.VISIBLE);
                 capture.setVisibility(View.GONE);
+                addText.setVisibility(View.VISIBLE);
                 addSticker.setVisibility(View.VISIBLE);
                 animateView(infoLayout);
             }
