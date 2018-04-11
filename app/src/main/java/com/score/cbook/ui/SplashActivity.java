@@ -61,12 +61,12 @@ public class SplashActivity extends BaseActivity {
             }, 3000);
         } else {
             // have account, goto login
-            navigateToLogin();
+            navigateToHome();
         }
     }
 
-    public void navigateToLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
+    public void navigateToHome() {
+        Intent intent = new Intent(this, DashBoardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         SplashActivity.this.finish();

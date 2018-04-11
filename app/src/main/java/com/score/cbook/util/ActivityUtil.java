@@ -173,13 +173,13 @@ public class ActivityUtil {
             throw new InvalidInputFieldsException();
         }
 
-        if (currUsername.length() < 5 || newUsername.length()< 5) {
+        if (currUsername.length() < 5 || newUsername.length() < 5) {
             throw new InvalidInputFieldsException();
         }
 
     }
 
-    public static void isValidRedeemFileds(String acc, String confirmAcc) throws InvalidInputFieldsException, InvalidAccountException {
+    public static void isValidRedeem(String acc, String confirmAcc) throws InvalidInputFieldsException, InvalidAccountException {
         if (acc.isEmpty() || confirmAcc.isEmpty())
             throw new InvalidInputFieldsException();
 
@@ -194,7 +194,16 @@ public class ActivityUtil {
 
         if (!acc.equals(confirmAcc))
             throw new InvalidAccountException();
+    }
 
+    public static void isValidGift(String amount, String msg) throws InvalidInputFieldsException, InvalidAmountException {
+        if (amount.isEmpty()) {
+            throw new InvalidInputFieldsException();
+        }
+
+        if (Integer.parseInt(amount) > 100000) {
+            throw new InvalidAmountException();
+        }
     }
 
     /**
@@ -209,7 +218,7 @@ public class ActivityUtil {
     public static void isValidAmount(String amount) throws InvalidAmountException {
         if (amount.isEmpty())
             throw new InvalidAmountException();
-        if (Integer.parseInt(amount)>100000) {
+        if (Integer.parseInt(amount) > 100000) {
             throw new InvalidAmountException();
         }
 

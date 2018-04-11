@@ -185,5 +185,4 @@ public class SettingsActivity extends BaseActivity {
         finish();
     }
 
-
 }

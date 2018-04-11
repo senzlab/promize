@@ -1,5 +1,6 @@
 package com.score.cbook.ui;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -25,6 +28,7 @@ import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.NetworkUtil;
+import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
@@ -176,16 +180,15 @@ public class RedeemActivity extends BaseActivity {
         final String accountNo = editTextAccount.getText().toString().trim();
         final String confirmAccountNo = editTextConfirmAccount.getText().toString().trim();
         try {
-            ActivityUtil.isValidRedeemFileds(accountNo, confirmAccountNo);
+            ActivityUtil.isValidRedeem(accountNo, confirmAccountNo);
+
             String confirmationMessage = "<font color=#636363>Are you sure you want to redeem the iGift for account </font> <font color=#F37920>" + "<b>" + accountNo + "</b>" + "</font>";
             displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(RedeemActivity.this)) {
-                        ActivityUtil.showProgressDialog(RedeemActivity.this, "Please wait...");
                         cheque.setAccount(accountNo);
-                        Senz senz = SenzUtil.redeemSenz(RedeemActivity.this, cheque, accountNo);
-                        sendSenz(senz);
+                        confirmPassword();
                     } else {
                         ActivityUtil.showCustomToastShort("No network connection", RedeemActivity.this);
                     }
@@ -199,5 +202,51 @@ public class RedeemActivity extends BaseActivity {
             displayInformationMessageDialog("Error", "Account number should be 12 character length and start with 0 or 1");
         }
     }
+
+    public void confirmPassword() {
+        final Dialog dialog = new Dialog(this);
+
+        // set layout for dialog
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.input_password_dialog_layout);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(true);
+
+        // texts
+        TextView title = (TextView) dialog.findViewById(R.id.title);
+        final EditText password = (EditText) dialog.findViewById(R.id.password);
+        title.setTypeface(typeface, Typeface.BOLD);
+        password.setTypeface(typeface, Typeface.NORMAL);
+
+        // set ok button
+        Button done = (Button) dialog.findViewById(R.id.done);
+        done.setTypeface(typeface, Typeface.BOLD);
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (password.getText().toString().trim().equalsIgnoreCase(PreferenceUtil.getAccount(RedeemActivity.this).getPassword())) {
+                    ActivityUtil.showProgressDialog(RedeemActivity.this, "Please wait...");
+                    Senz senz = SenzUtil.redeemSenz(RedeemActivity.this, cheque, cheque.getAccount());
+                    sendSenz(senz);
+                    dialog.cancel();
+                } else {
+                    Toast.makeText(RedeemActivity.this, "Invalid password", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        // cancel button
+        Button cancel = (Button) dialog.findViewById(R.id.cancel);
+        cancel.setTypeface(typeface, Typeface.BOLD);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
+    }
+
 
 }

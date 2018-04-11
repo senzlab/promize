@@ -2,6 +2,7 @@ package com.score.cbook.ui;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,10 +22,12 @@ import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -39,10 +42,13 @@ import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.enums.IntentType;
+import com.score.cbook.exceptions.InvalidAmountException;
+import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.ImageUtil;
+import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzUtil;
 import com.score.senzc.enums.SenzTypeEnum;
@@ -108,8 +114,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
         // init
         initUi();
-        initPrefs();
         //initSignature();
+        if (getIntent().hasExtra("USER")) this.user = getIntent().getParcelableExtra("USER");
     }
 
     @Override
@@ -175,7 +181,6 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             public void onClick(View v) {
                 Intent intent = new Intent(NewPromizeActivity.this, StickerListActivity.class);
                 startActivityForResult(intent, 1);
-                //overridePendingTransition(R.anim.right_in, R.anim.stay_in);
             }
         });
 
@@ -201,21 +206,13 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
-                sendPromize(captureView(), amount.getText().toString());
+                onClickDone();
             }
         });
 
         send.setVisibility(View.GONE);
         capture.setVisibility(View.VISIBLE);
         infoLayout.setVisibility(View.GONE);
-    }
-
-    private void initPrefs() {
-        if (getIntent().hasExtra("USER"))
-            this.user = getIntent().getParcelableExtra("USER");
-        else
-            this.user = new ChequeUser("eragabe");
     }
 
     private void initSignature() {
@@ -226,10 +223,6 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     private void addSticker(int resourceId) {
-        final float scale = getResources().getDisplayMetrics().density;
-        int dpWidthInPx  = (int) (90 * scale);
-        int dpHeightInPx = (int) (90 * scale);
-
         int w = (int) getResources().getDimension(R.dimen.imageview_width);
         int h = (int) getResources().getDimension(R.dimen.imageview_height);
 
@@ -335,8 +328,69 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         view.setVisibility(View.VISIBLE);
 
         Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_in);
-        //a.setDuration(500);
         view.startAnimation(a);
+    }
+
+    private void onClickDone() {
+        try {
+            ActivityUtil.isValidGift(amount.getText().toString().trim(), "");
+            if (NetworkUtil.isAvailableNetwork(this)) {
+                confirmPassword();
+            } else {
+                Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
+            }
+        } catch (InvalidInputFieldsException e) {
+            displayInformationMessageDialog("Error", "Empty iGift amount");
+            e.printStackTrace();
+        } catch (InvalidAmountException e) {
+            displayInformationMessageDialog("Error", "iGift amount should not exceed 100000 rupees");
+            e.printStackTrace();
+        }
+    }
+
+    private void confirmPassword() {
+        final Dialog dialog = new Dialog(this);
+
+        // set layout for dialog
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.input_password_dialog_layout);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(true);
+
+        // texts
+        TextView title = (TextView) dialog.findViewById(R.id.title);
+        final EditText password = (EditText) dialog.findViewById(R.id.password);
+        title.setTypeface(typeface, Typeface.BOLD);
+        password.setTypeface(typeface, Typeface.NORMAL);
+
+        // set ok button
+        Button done = (Button) dialog.findViewById(R.id.done);
+        done.setTypeface(typeface, Typeface.BOLD);
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (password.getText().toString().trim().equalsIgnoreCase(PreferenceUtil.getAccount(NewPromizeActivity.this).getPassword())) {
+                    ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
+                    ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
+                    sendPromize(captureView(), amount.getText().toString());
+                    dialog.cancel();
+                } else {
+                    Toast.makeText(NewPromizeActivity.this, "Invalid password", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        // cancel button
+        Button cancel = (Button) dialog.findViewById(R.id.cancel);
+        cancel.setTypeface(typeface, Typeface.BOLD);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
     }
 
     private void sendPromize(byte[] compBytes, String amount) {
