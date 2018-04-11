@@ -399,8 +399,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             @Override
             public void onClick(View v) {
                 if (password.getText().toString().trim().equalsIgnoreCase(PreferenceUtil.getAccount(NewPromizeActivity.this).getPassword())) {
-                    ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
                     ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
+                    ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
                     sendPromize(captureView(), amount.getText().toString());
                     dialog.cancel();
                 } else {

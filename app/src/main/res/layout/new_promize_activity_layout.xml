@@ -45,7 +45,7 @@
                     android:id="@+id/msg_bubble"
                     android:layout_width="185dp"
                     android:layout_height="125dp"
-                    android:background="@drawable/bubble1"
+                    android:background="@drawable/bubble2"
                     android:visibility="gone">
 
                     <EditText
@@ -58,7 +58,7 @@
                         android:background="@drawable/edit_text_no_border"
                         android:gravity="center"
                         android:hint="write something here"
-                        android:inputType="textMultiLine"
+                        android:inputType="textMultiLine|textNoSuggestions|textCapSentences"
                         android:textColor="@color/white"
                         android:textColorHint="@color/white"
                         android:textSize="18sp"
@@ -214,8 +214,8 @@
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/add_text"
+                android:layout_marginTop="25dp"
+                android:src="@drawable/msgg"
                 android:visibility="visible" />
 
             <ImageView
@@ -226,8 +226,8 @@
                 android:layout_below="@id/add_text"
                 android:layout_gravity="right"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/paint" />
+                android:layout_marginTop="25dp"
+                android:src="@drawable/art" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/close"
