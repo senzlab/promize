@@ -85,45 +85,6 @@
                     android:gravity="center">
 
                     <RelativeLayout
-                        android:id="@+id/amount_l1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone">
-
-                        <EditText
-                            android:id="@+id/amountn"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="50dp"
-                            android:layout_marginRight="50dp"
-                            android:background="@drawable/edit_text_border_bottom_g"
-                            android:gravity="center"
-                            android:hint="iGift Amount"
-                            android:inputType="number"
-                            android:maxLength="6"
-                            android:singleLine="true"
-                            android:textColor="@color/android_grey"
-                            android:textColorHint="@color/clouds"
-                            android:textSize="24sp" />
-
-                        <EditText
-                            android:id="@+id/messagen"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/amountn"
-                            android:layout_marginLeft="50dp"
-                            android:layout_marginRight="50dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/edit_text_border_bottom_g"
-                            android:gravity="center"
-                            android:hint="Write a Message"
-                            android:minLines="2"
-                            android:textColor="@color/android_grey"
-                            android:textColorHint="@color/clouds"
-                            android:textSize="24sp" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
                         android:id="@+id/amount_l"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -248,7 +209,6 @@
                 android:visibility="gone"
                 app:backgroundTint="@color/colorPrimary"
                 app:rippleColor="@color/colorPrimary" />
-
         </RelativeLayout>
 
     </FrameLayout>

@@ -1,23 +1,16 @@
 package com.score.cbook.ui;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
-import android.util.AttributeSet;
 import android.util.Base64;
 import android.view.MotionEvent;
 import android.view.View;
@@ -57,30 +50,35 @@ import com.score.senzc.pojos.Senz;
 public class NewPromizeActivity extends BaseActivity implements View.OnTouchListener {
     protected static final String TAG = NewPromizeActivity.class.getName();
 
-    // camera related variables
+    // camera
     private Camera camera;
     private CameraPreview cameraPreview;
 
-    // ui
-    private RelativeLayout infoLayout;
+    // root layouts
+    private ViewGroup rootLayout;
+    private FrameLayout previewLayout;
+    private ImageView capturedPhoto;
+
+    // amount panel
+    private RelativeLayout infoPanel;
     private LinearLayout amountContainer;
     private TextView amountHeader;
     private TextView rsHeader;
     private EditText amount;
+
+    // message panel
+    private RelativeLayout messageContainer;
+    private EditText message;
+
+    // buttons
     private FloatingActionButton capture;
     private FloatingActionButton send;
-    private ImageView capturedPhoto;
-
-    private RelativeLayout signatureView;
-    private ViewGroup rootLayout;
     private ImageView addText;
     private ImageView addSticker;
-    private int _xDelta;
-    private int _yDelta;
 
-    private RelativeLayout msgBubble;
-    private EditText msg;
-    float dX, dY;
+    // stickers
+    private int xDelta;
+    private int yDelta;
 
     // user
     private ChequeUser user;
@@ -120,8 +118,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
         // init
         initUi();
-        //initSignature();
         if (getIntent().hasExtra("USER")) this.user = getIntent().getParcelableExtra("USER");
+        else this.user = new ChequeUser("eranga");
     }
 
     @Override
@@ -135,10 +133,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     protected void onStop() {
         super.onStop();
 
-        // unbind from service
         if (isServiceBound) {
             unbindService(senzServiceConnection);
-
             isServiceBound = false;
         }
     }
@@ -167,23 +163,42 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         releaseCameraPreview();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private void initUi() {
-        infoLayout = (RelativeLayout) findViewById(R.id.amount_l);
-        amountHeader = (TextView) findViewById(R.id.amount_header);
-        rsHeader = (TextView) findViewById(R.id.rs);
-        amount = (EditText) findViewById(R.id.new_cheque_amount);
+        rootLayout = (ViewGroup) findViewById(R.id.relative_layout);
+        previewLayout = (FrameLayout) findViewById(R.id.preview_frame);
         capturedPhoto = (ImageView) findViewById(R.id.capture_photo);
 
+        infoPanel = (RelativeLayout) findViewById(R.id.amount_l);
+        amountContainer = (LinearLayout) findViewById(R.id.amount_container);
+        amountContainer.setOnTouchListener(this);
+        amountHeader = (TextView) findViewById(R.id.amount_header);
         amountHeader.setTypeface(typeface, Typeface.BOLD);
+        rsHeader = (TextView) findViewById(R.id.rs);
         rsHeader.setTypeface(typeface, Typeface.BOLD);
+        amount = (EditText) findViewById(R.id.new_cheque_amount);
         amount.setTypeface(typeface, Typeface.BOLD);
 
-        rootLayout = (ViewGroup) findViewById(R.id.relative_layout);
-        signatureView = (RelativeLayout) findViewById(R.id.signature);
+        messageContainer = (RelativeLayout) findViewById(R.id.msg_bubble);
+        message = (EditText) findViewById(R.id.message_text);
+        message.setTypeface(typeface);
+
+        capture = (FloatingActionButton) findViewById(R.id.fab);
+        capture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                capture();
+            }
+        });
+
+        send = (FloatingActionButton) findViewById(R.id.send);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                send();
+            }
+        });
 
         addSticker = (ImageView) findViewById(R.id.add_sticker);
-        addSticker.setVisibility(View.GONE);
         addSticker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,7 +208,6 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         });
 
         addText = (ImageView) findViewById(R.id.add_text);
-        addText.setVisibility(View.GONE);
         addText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,64 +215,30 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             }
         });
 
-        amountContainer = (LinearLayout) findViewById(R.id.amount_container);
-        amountContainer.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                return false;
-            }
-        });
-
-        capture = (FloatingActionButton) findViewById(R.id.fab);
-        capture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                takePhoto();
-            }
-        });
-
-        send = (FloatingActionButton) findViewById(R.id.send);
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickDone();
-            }
-        });
-
-        msgBubble = (RelativeLayout) findViewById(R.id.msg_bubble);
-        msg = (EditText) findViewById(R.id.message_text);
-        msg.setTypeface(typeface);
-
-        send.setVisibility(View.GONE);
+        infoPanel.setVisibility(View.GONE);
         capture.setVisibility(View.VISIBLE);
-        infoLayout.setVisibility(View.GONE);
-    }
-
-    private void initSignature() {
-        signatureView = (RelativeLayout) findViewById(R.id.signature);
-
-        Signature signature = new Signature(this, null);
-        signatureView.addView(signature);
+        send.setVisibility(View.GONE);
+        addSticker.setVisibility(View.GONE);
+        addText.setVisibility(View.GONE);
     }
 
     private void addText() {
-        if (msgBubble.getVisibility() == View.VISIBLE) msgBubble.setVisibility(View.GONE);
-        else msgBubble.setVisibility(View.VISIBLE);
-        msgBubble.setOnTouchListener(this);
+        if (messageContainer.getVisibility() == View.VISIBLE)
+            messageContainer.setVisibility(View.GONE);
+        else messageContainer.setVisibility(View.VISIBLE);
+        messageContainer.setOnTouchListener(this);
     }
 
     private void addSticker(int resourceId) {
         int w = (int) getResources().getDimension(R.dimen.imageview_width);
         int h = (int) getResources().getDimension(R.dimen.imageview_height);
 
-        ImageView mImageView = new ImageView(this);
+        ImageView imageView = new ImageView(this);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(w, h);
-        mImageView.setLayoutParams(layoutParams);
-        mImageView.setImageResource(resourceId);
-        rootLayout.addView(mImageView);
-        mImageView.setOnTouchListener(this);
+        imageView.setLayoutParams(layoutParams);
+        imageView.setImageResource(resourceId);
+        rootLayout.addView(imageView);
+        imageView.setOnTouchListener(this);
     }
 
     private void acquireWakeLock() {
@@ -283,12 +263,9 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
     private void initCameraPreview(int camFace) {
         try {
-            // render new preview
             camera = Camera.open(camFace);
             cameraPreview = new CameraPreview(this, camera, camFace);
-
-            FrameLayout preview = (FrameLayout) findViewById(R.id.preview_frame);
-            preview.addView(cameraPreview);
+            previewLayout.addView(cameraPreview);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -300,9 +277,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                 cameraPreview.surfaceDestroyed(cameraPreview.getHolder());
                 cameraPreview.getHolder().removeCallback(cameraPreview);
                 cameraPreview.destroyDrawingCache();
-
-                FrameLayout preview = (FrameLayout) findViewById(R.id.preview_frame);
-                preview.removeView(cameraPreview);
+                previewLayout.removeView(cameraPreview);
 
                 camera.stopPreview();
                 camera.release();
@@ -313,18 +288,14 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         }
     }
 
-    private void takePhoto() {
+    private void capture() {
         // AudioUtil.shootSound(this);
         camera.takePicture(null, null, new Camera.PictureCallback() {
             @Override
             public void onPictureTaken(byte[] bytes, Camera camera) {
-                byte[] resizedImage = ImageUtil.compressImage(bytes, true, true);
-
                 releaseCameraPreview();
 
-                amount.requestFocus();
-
-                // create bitmap and set to post capture
+                byte[] resizedImage = ImageUtil.compressImage(bytes, true, true);
                 Bitmap bitmap = ImageUtil.bytesToBmp(resizedImage);
                 capturedPhoto.setImageBitmap(bitmap);
 
@@ -332,41 +303,22 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                 capture.setVisibility(View.GONE);
                 addText.setVisibility(View.VISIBLE);
                 addSticker.setVisibility(View.VISIBLE);
-                animateView(infoLayout);
+
+                infoPanel.setVisibility(View.VISIBLE);
+                Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_in);
+                infoPanel.startAnimation(a);
+
+                amount.requestFocus();
             }
         });
     }
 
-    private byte[] captureView() {
-        // create bitmap screen capture
-        View v1 = findViewById(R.id.relative_layout);
-        v1.setDrawingCacheEnabled(true);
-        Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
-        v1.setDrawingCacheEnabled(false);
-
-        // resize and save image
-        Long t = System.currentTimeMillis();
-        byte[] resizedImage = ImageUtil.compressImage(ImageUtil.bmpToBytes(bitmap), false, false);
-        ImageUtil.saveImg(SenzUtil.getUid(this, t.toString() + ".jpg"), resizedImage);
-
-        return resizedImage;
-    }
-
-    public void animateView(View view) {
-        view.setVisibility(View.VISIBLE);
-
-        Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_in);
-        view.startAnimation(a);
-    }
-
-    private void onClickDone() {
+    private void send() {
         try {
             ActivityUtil.isValidGift(amount.getText().toString().trim(), "");
-            if (NetworkUtil.isAvailableNetwork(this)) {
-                confirmPassword();
-            } else {
-                Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
-            }
+            if (NetworkUtil.isAvailableNetwork(this)) askPassword();
+            else Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
+
         } catch (InvalidInputFieldsException e) {
             displayInformationMessageDialog("Error", "Empty iGift amount");
             e.printStackTrace();
@@ -376,7 +328,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         }
     }
 
-    private void confirmPassword() {
+    private void askPassword() {
         final Dialog dialog = new Dialog(this);
 
         // set layout for dialog
@@ -392,17 +344,17 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         title.setTypeface(typeface, Typeface.BOLD);
         password.setTypeface(typeface, Typeface.NORMAL);
 
-        // set ok button
+        // ok button
         Button done = (Button) dialog.findViewById(R.id.done);
         done.setTypeface(typeface, Typeface.BOLD);
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (password.getText().toString().trim().equalsIgnoreCase(PreferenceUtil.getAccount(NewPromizeActivity.this).getPassword())) {
+                    dialog.cancel();
                     ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
                     ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
-                    sendPromize(captureView(), amount.getText().toString());
-                    dialog.cancel();
+                    sendPromize(captureScreen(), amount.getText().toString());
                 } else {
                     Toast.makeText(NewPromizeActivity.this, "Invalid password", Toast.LENGTH_LONG).show();
                 }
@@ -419,6 +371,21 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         });
 
         dialog.show();
+    }
+
+    private byte[] captureScreen() {
+        // create bitmap screen capture
+        View v1 = findViewById(R.id.relative_layout);
+        v1.setDrawingCacheEnabled(true);
+        Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
+        v1.setDrawingCacheEnabled(false);
+
+        // resize and save image
+        Long t = System.currentTimeMillis();
+        byte[] resizedImage = ImageUtil.compressImage(ImageUtil.bmpToBytes(bitmap), false, false);
+        ImageUtil.saveImg(SenzUtil.getUid(this, t.toString() + ".jpg"), resizedImage);
+
+        return resizedImage;
     }
 
     private void sendPromize(byte[] compBytes, String amount) {
@@ -441,9 +408,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
     private void savePromize() {
         try {
-            String uid = SenzUtil.getUid(this, cheque.getTimestamp().toString());
-
             // save img in sdcard
+            String uid = SenzUtil.getUid(this, cheque.getTimestamp().toString());
             String imgName = uid + ".jpg";
             ImageUtil.saveImg(imgName, cheque.getBlob());
 
@@ -472,98 +438,37 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-        final int X = (int) event.getRawX();
-        final int Y = (int) event.getRawY();
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
-                _xDelta = X - lParams.leftMargin;
-                _yDelta = Y - lParams.topMargin;
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                break;
-            case MotionEvent.ACTION_MOVE:
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view
-                        .getLayoutParams();
-                layoutParams.leftMargin = X - _xDelta;
-                layoutParams.topMargin = Y - _yDelta;
-                layoutParams.rightMargin = 0;
-                layoutParams.bottomMargin = 0;
-                view.setLayoutParams(layoutParams);
-                break;
-        }
-        rootLayout.invalidate();
-        return true;
-    }
-
-    public class Signature extends View {
-        static final float STROKE_WIDTH = 4f;
-        static final float HALF_STROKE_WIDTH = STROKE_WIDTH / 2;
-        Paint paint = new Paint();
-        Path path = new Path();
-
-        float lastTouchX;
-        float lastTouchY;
-        final RectF dirtyRect = new RectF();
-
-        public Signature(Context context, AttributeSet attrs) {
-            super(context, attrs);
-            paint.setAntiAlias(true);
-            paint.setColor(Color.BLACK);
-            paint.setStyle(Paint.Style.STROKE);
-            paint.setStrokeJoin(Paint.Join.ROUND);
-            paint.setStrokeWidth(STROKE_WIDTH);
-        }
-
-        @Override
-        protected void onDraw(Canvas canvas) {
-            canvas.drawPath(path, paint);
-        }
-
-        @Override
-        public boolean onTouchEvent(MotionEvent event) {
-            float eventX = event.getX();
-            float eventY = event.getY();
-
-            switch (event.getAction()) {
+        if (view == amountContainer) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            return false;
+        } else {
+            final int x = (int) event.getRawX();
+            final int y = (int) event.getRawY();
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
-                    path.moveTo(eventX, eventY);
-                    lastTouchX = eventX;
-                    lastTouchY = eventY;
-                    return true;
-                case MotionEvent.ACTION_MOVE:
+                    RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
+                    xDelta = x - lParams.leftMargin;
+                    yDelta = y - lParams.topMargin;
+                    break;
                 case MotionEvent.ACTION_UP:
-                    resetDirtyRect(eventX, eventY);
-                    int historySize = event.getHistorySize();
-                    for (int i = 0; i < historySize; i++) {
-                        float historicalX = event.getHistoricalX(i);
-                        float historicalY = event.getHistoricalY(i);
-                        path.lineTo(historicalX, historicalY);
-                    }
-                    path.lineTo(eventX, eventY);
+                    break;
+                case MotionEvent.ACTION_POINTER_DOWN:
+                    break;
+                case MotionEvent.ACTION_POINTER_UP:
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) view
+                            .getLayoutParams();
+                    layoutParams.leftMargin = x - xDelta;
+                    layoutParams.topMargin = y - yDelta;
+                    layoutParams.rightMargin = 0;
+                    layoutParams.bottomMargin = 0;
+                    view.setLayoutParams(layoutParams);
                     break;
             }
-
-            invalidate((int) (dirtyRect.left - HALF_STROKE_WIDTH),
-                    (int) (dirtyRect.top - HALF_STROKE_WIDTH),
-                    (int) (dirtyRect.right + HALF_STROKE_WIDTH),
-                    (int) (dirtyRect.bottom + HALF_STROKE_WIDTH));
-
-            lastTouchX = eventX;
-            lastTouchY = eventY;
-
+            rootLayout.invalidate();
             return true;
-        }
-
-        private void resetDirtyRect(float eventX, float eventY) {
-            dirtyRect.left = Math.min(lastTouchX, eventX);
-            dirtyRect.right = Math.max(lastTouchX, eventX);
-            dirtyRect.top = Math.min(lastTouchY, eventY);
-            dirtyRect.bottom = Math.max(lastTouchY, eventY);
         }
     }
 
