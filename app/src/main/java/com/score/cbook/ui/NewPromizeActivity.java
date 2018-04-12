@@ -6,19 +6,21 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Typeface;
 import android.hardware.Camera;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Base64;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +48,13 @@ import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
+import com.squareup.picasso.Picasso;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+
+import id.zelory.compressor.Compressor;
 
 public class NewPromizeActivity extends BaseActivity implements View.OnTouchListener {
     protected static final String TAG = NewPromizeActivity.class.getName();
@@ -295,20 +304,22 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             public void onPictureTaken(byte[] bytes, Camera camera) {
                 releaseCameraPreview();
 
-                byte[] resizedImage = ImageUtil.compressImage(bytes, true, true);
-                Bitmap bitmap = ImageUtil.bytesToBmp(resizedImage);
-                capturedPhoto.setImageBitmap(bitmap);
+                //byte[] resizedImage = ImageUtil.compressImage(bytes, true, true);
+                //Bitmap bitmap = ImageUtil.bytesToBmp(bytes);
+                compress(bytes);
 
-                send.setVisibility(View.VISIBLE);
-                capture.setVisibility(View.GONE);
-                addText.setVisibility(View.VISIBLE);
-                addSticker.setVisibility(View.VISIBLE);
-
-                infoPanel.setVisibility(View.VISIBLE);
-                Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_in);
-                infoPanel.startAnimation(a);
-
-                amount.requestFocus();
+//                capturedPhoto.setImageBitmap(bitmap);
+//
+//                send.setVisibility(View.VISIBLE);
+//                capture.setVisibility(View.GONE);
+//                addText.setVisibility(View.VISIBLE);
+//                addSticker.setVisibility(View.VISIBLE);
+//
+//                infoPanel.setVisibility(View.VISIBLE);
+//                Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_in);
+//                infoPanel.startAnimation(a);
+//
+//                amount.requestFocus();
             }
         });
     }
@@ -470,6 +481,57 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             captureLayout.invalidate();
             return true;
         }
+    }
+
+    private void compress(byte[] img) {
+        File actualImage = ImageUtil.saveImg("senz", img);
+
+        try {
+            File compressedImage = new Compressor(this)
+                    .setMaxWidth(640)
+                    .setMaxHeight(480)
+                    .setQuality(25)
+                    .setCompressFormat(Bitmap.CompressFormat.WEBP)
+                    .setDestinationDirectoryPath(Environment.getExternalStorageDirectory().getPath() + "/iGift/")
+                    .compressToFile(actualImage, "blob.jpg ");
+
+            Bitmap compressedBitmap = new Compressor(this)
+                    .setMaxWidth(640)
+                    .setMaxHeight(480)
+                    .setQuality(25)
+                    .setCompressFormat(Bitmap.CompressFormat.WEBP)
+                    .compressToBitmap(actualImage);
+
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            Bitmap bitmapf = BitmapFactory.decodeFile(compressedImage.getAbsolutePath(), options);
+
+            // rotate
+            Matrix matrix = new Matrix();
+            matrix.preScale(-1.0f, 1.0f);
+            matrix.postRotate(90);
+            Bitmap bitmap = Bitmap.createBitmap(compressedBitmap, 0, 0, compressedBitmap.getWidth(), compressedBitmap.getHeight(), matrix, true);
+            capturedPhoto.setImageBitmap(bitmapf);
+
+            size(compressedBitmap);
+            size(bitmap);
+            size(bitmapf);
+
+            //ImageUtil.saveImg("blob.jpg", ImageUtil.bmpToBytes(compressedImage));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void size(Bitmap bmp) {
+        ByteArrayOutputStream bao = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.WEBP, 100, bao);
+        byte[] ba = bao.toByteArray();
+        int size = ba.length;
+
+        Log.d("TAG", "------" + size);
+        Log.d("TAG", "------" + size / 1024);
     }
 
 }

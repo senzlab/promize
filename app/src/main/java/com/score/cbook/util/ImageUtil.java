@@ -167,7 +167,7 @@ public class ImageUtil {
         saveImg(name, data);
     }
 
-    public static String saveImg(String name, byte[] image) {
+    public static File saveImg(String name, byte[] image) {
         // create root
         File rahasakRootDir = new File(Environment.getExternalStorageDirectory().getPath() + "/iGift");
         if (!rahasakRootDir.exists()) {
@@ -185,7 +185,7 @@ public class ImageUtil {
             e.printStackTrace();
         }
 
-        return selfi.getAbsolutePath();
+        return selfi;
     }
 
     public static void deleteImg(String name) {
