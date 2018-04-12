@@ -55,7 +55,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     private CameraPreview cameraPreview;
 
     // root layouts
-    private ViewGroup rootLayout;
+    private ViewGroup captureLayout;
     private FrameLayout previewLayout;
     private ImageView capturedPhoto;
 
@@ -164,7 +164,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     private void initUi() {
-        rootLayout = (ViewGroup) findViewById(R.id.relative_layout);
+        captureLayout = (ViewGroup) findViewById(R.id.capture_frame);
         previewLayout = (FrameLayout) findViewById(R.id.preview_frame);
         capturedPhoto = (ImageView) findViewById(R.id.capture_photo);
 
@@ -237,7 +237,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(w, h);
         imageView.setLayoutParams(layoutParams);
         imageView.setImageResource(resourceId);
-        rootLayout.addView(imageView);
+        captureLayout.addView(imageView);
         imageView.setOnTouchListener(this);
     }
 
@@ -375,7 +375,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
     private byte[] captureScreen() {
         // create bitmap screen capture
-        View v1 = findViewById(R.id.relative_layout);
+        View v1 = findViewById(R.id.capture_frame);
         v1.setDrawingCacheEnabled(true);
         Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
         v1.setDrawingCacheEnabled(false);
@@ -467,7 +467,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                     view.setLayoutParams(layoutParams);
                     break;
             }
-            rootLayout.invalidate();
+            captureLayout.invalidate();
             return true;
         }
     }

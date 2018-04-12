@@ -35,16 +35,12 @@ dependencies {
     compile project(':senzc')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
-    compile 'com.google.android.gms:play-services-maps:9.4.0'
-    compile 'com.google.android.gms:play-services-location:9.4.0'
-    compile 'com.google.maps.android:android-maps-utils:0.4.4'
     compile 'com.github.siyamed:android-shape-imageview:0.9.3@aar'
-    compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.googlecode.libphonenumber:libphonenumber:7.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'io.kvh:amr:1.1.1'
     compile 'com.madgag.spongycastle:pkix:1.54.0.0'
     compile 'com.madgag.spongycastle:pg:1.54.0.0'
     compile 'com.madgag.spongycastle:core:1.54.0.0'
     compile 'com.madgag.spongycastle:prov:1.54.0.0'
+    compile 'id.zelory:compressor:2.1.0'
 }
