@@ -42,5 +42,4 @@ dependencies {
     compile 'com.madgag.spongycastle:pg:1.54.0.0'
     compile 'com.madgag.spongycastle:core:1.54.0.0'
     compile 'com.madgag.spongycastle:prov:1.54.0.0'
-    compile 'id.zelory:compressor:2.1.0'
 }
