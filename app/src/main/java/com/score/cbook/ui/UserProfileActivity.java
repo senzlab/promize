@@ -1,13 +1,11 @@
 package com.score.cbook.ui;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -27,9 +25,6 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     private TextView phoneV;
     private TextView account;
     private TextView accountV;
-    private Button writeCheque;
-    private Button writeMessage;
-    private Button sendGift;
 
     private ChequeUser chequeUser;
 
@@ -110,17 +105,6 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 .placeholder(R.drawable.df_user)
                 .error(R.drawable.df_user)
                 .into(userImageView);
-
-        // buttons
-        writeCheque = (Button) findViewById(R.id.write_cheque);
-        writeMessage = (Button) findViewById(R.id.writer_message);
-        sendGift = (Button) findViewById(R.id.send_gift);
-        writeCheque.setTypeface(typeface, Typeface.BOLD);
-        writeMessage.setTypeface(typeface, Typeface.BOLD);
-        sendGift.setTypeface(typeface, Typeface.BOLD);
-        writeCheque.setOnClickListener(this);
-        writeMessage.setOnClickListener(this);
-        sendGift.setOnClickListener(this);
     }
 
     private void initToolbar() {
@@ -143,10 +127,6 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         if (v == backImageView) {
             finish();
-        } else if (v == sendGift) {
-            Intent intent = new Intent(this, NewPromizeActivity.class);
-            intent.putExtra("USER", chequeUser);
-            startActivity(intent);
         }
     }
 

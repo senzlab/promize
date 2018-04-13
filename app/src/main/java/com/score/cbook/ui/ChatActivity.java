@@ -202,7 +202,7 @@ public class ChatActivity extends BaseActivity {
             profileBtn.setImageDrawable(getResources().getDrawable(R.drawable.ic_sampath));
         } else {
             if (chequeUser.getImage() != null)
-                profileBtn.setImageBitmap(ImageUtil.decodeBitmap(chequeUser.getImage()));
+                profileBtn.setImageBitmap(ImageUtil.decodeBmp(chequeUser.getImage()));
         }
     }
 

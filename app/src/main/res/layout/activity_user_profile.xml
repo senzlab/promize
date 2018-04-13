@@ -9,7 +9,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="340dp"
+        android:layout_height="400dp"
         android:background="@color/pressed_sensor"
         android:fitsSystemWindows="true"
         android:theme="@style/MyMaterialTheme"
@@ -103,10 +103,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="65dp"
                         android:layout_marginLeft="15dp"
-                        android:visibility="gone"
                         android:layout_marginRight="15dp"
                         android:background="@drawable/light_bottom_border"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/account"
@@ -134,7 +134,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:background="@color/gray_back" />
+                        android:background="@color/gray_back"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -147,30 +148,6 @@
                     android:background="@drawable/rounded_corner_button"
                     android:gravity="center"
                     android:text="Write Cheque"
-                    android:textColor="@color/white"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/writer_message"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="18dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rounded_corner_button"
-                    android:gravity="center"
-                    android:text="Write Message"
-                    android:textColor="@color/white"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/send_gift"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="18dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/rounded_corner_button"
-                    android:gravity="center"
-                    android:text="Send Gift"
                     android:textColor="@color/white"
                     android:visibility="gone" />
             </LinearLayout>

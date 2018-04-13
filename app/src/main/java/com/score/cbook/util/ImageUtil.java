@@ -1,28 +1,22 @@
 package com.score.cbook.util;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Environment;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.util.Base64;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class ImageUtil {
 
-    public static byte[] compressImage(byte[] data, boolean rotate, boolean mirror) {
+    public static byte[] compressImg(byte[] data, boolean rotate, boolean mirror) {
         Bitmap scaledBitmap = null;
         BitmapFactory.Options options = new BitmapFactory.Options();
 
@@ -36,8 +30,8 @@ public class ImageUtil {
         int actualWidth = options.outWidth;
 
         // max Height and width values of the compressed image is taken as 816x612
-        float maxHeight = 1155.0f;
-        float maxWidth = 866.0f;
+        float maxHeight = 816.0f;
+        float maxWidth = 612.0f;
         float imgRatio = actualWidth / actualHeight;
         float maxRatio = maxWidth / maxHeight;
 
@@ -58,7 +52,7 @@ public class ImageUtil {
         }
 
         // setting inSampleSize value allows to load a scaled down version of the original image
-        options.inSampleSize = calculateInSampleSize(options, actualWidth, actualHeight);
+        options.inSampleSize = inSampleSize(options, actualWidth, actualHeight);
 
         // inJustDecodeBounds set to false to load the actual bitmap
         options.inJustDecodeBounds = false;
@@ -112,12 +106,65 @@ public class ImageUtil {
         }
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 85, out);
+        scaledBitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+
+        byte[] scaledData = out.toByteArray();
+        Log.d("TAG", scaledData.length / 1024 + "-------");
 
         return out.toByteArray();
     }
 
-    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    public static void saveImg(String name, String image) {
+        byte data[] = Base64.decode(image, Base64.DEFAULT);
+        saveImg(name, data);
+    }
+
+    public static void saveImg(String name, byte[] image) {
+        // create root
+        File rahasakRootDir = new File(Environment.getExternalStorageDirectory().getPath() + "/iGift");
+        if (!rahasakRootDir.exists()) {
+            rahasakRootDir.mkdirs();
+        }
+
+        // save
+        try {
+            File selfi = new File(rahasakRootDir, name);
+            FileOutputStream fos = new FileOutputStream(selfi, false);
+            fos.write(image);
+            fos.flush();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteImg(String name) {
+        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/iGift/" + name);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
+    public static String encodeBmp(byte[] bitmapData) {
+        return Base64.encodeToString(bitmapData, Base64.DEFAULT);
+    }
+
+    public static Bitmap decodeBmp(String encodedImage) {
+        byte data[] = Base64.decode(encodedImage, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(data, 0, data.length);
+    }
+
+    public static Bitmap bytesToBmp(byte[] bytes) {
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+    }
+
+    public static byte[] bmpToBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    private static int inSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         final int height = options.outHeight;
         final int width = options.outWidth;
         int inSampleSize = 1;
@@ -134,121 +181,6 @@ public class ImageUtil {
         }
 
         return inSampleSize;
-    }
-
-    public static String encodeBitmap(byte[] bitmapData) {
-        return Base64.encodeToString(bitmapData, Base64.DEFAULT);
-    }
-
-    public static Bitmap decodeBitmap(String encodedImage) {
-        byte data[] = Base64.decode(encodedImage, Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(data, 0, data.length);
-    }
-
-    public static Bitmap blur(Bitmap image, float blurRadius, Context con) {
-        if (null == image) return null;
-
-        Bitmap outputBitmap = Bitmap.createBitmap(image);
-        final RenderScript renderScript = RenderScript.create(con);
-        Allocation tmpIn = Allocation.createFromBitmap(renderScript, image);
-        Allocation tmpOut = Allocation.createFromBitmap(renderScript, outputBitmap);
-
-        //Intrinsic Gausian blur filter
-        ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
-        theIntrinsic.setRadius(blurRadius);
-        theIntrinsic.setInput(tmpIn);
-        theIntrinsic.forEach(tmpOut);
-        tmpOut.copyTo(outputBitmap);
-        return outputBitmap;
-    }
-
-    public static void saveImg(String name, String image) {
-        byte data[] = Base64.decode(image, Base64.DEFAULT);
-        saveImg(name, data);
-    }
-
-    public static File saveImg(String name, byte[] image) {
-        // create root
-        File rahasakRootDir = new File(Environment.getExternalStorageDirectory().getPath() + "/iGift");
-        if (!rahasakRootDir.exists()) {
-            rahasakRootDir.mkdirs();
-        }
-
-        // save selfi
-        File selfi = new File(rahasakRootDir, name);
-        try {
-            FileOutputStream fos = new FileOutputStream(selfi, false);
-            fos.write(image);
-            fos.flush();
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return selfi;
-    }
-
-    public static void deleteImg(String name) {
-        File file = new File(Environment.getExternalStorageDirectory().getPath() + "/iGift/" + name);
-        if (file.exists()) {
-            file.delete();
-        }
-    }
-
-    public static String[] splitImg(String src, int len) {
-        String[] result = new String[(int) Math.ceil((double) src.length() / (double) len)];
-        for (int i = 0; i < result.length; i++)
-            result[i] = src.substring(i * len, Math.min(src.length(), (i + 1) * len));
-        return result;
-    }
-
-    public static byte[] bmpToBytes(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
-    }
-
-    public static Bitmap bytesToBmp(byte[] bytes) {
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-    }
-
-    public static Bitmap loadImg(Context context, String imgName) {
-        Bitmap bit = null;
-        try {
-            InputStream bitmap = context.getAssets().open(imgName);
-            bit = BitmapFactory.decodeStream(bitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return bit;
-    }
-
-    public static Bitmap addSign(Bitmap chq, Bitmap sig) {
-        Bitmap rSig = Bitmap.createScaledBitmap(sig, chq.getWidth(), chq.getHeight(), false);
-
-        Bitmap sChq = Bitmap.createBitmap(chq.getWidth(), chq.getHeight(), chq.getConfig());
-        Canvas canvas = new Canvas(sChq);
-        canvas.drawBitmap(chq, 0, 0, null);
-        canvas.drawBitmap(rSig, 0, 0, null);
-
-        return sChq;
-    }
-
-    public static Bitmap addText(Bitmap chqImg, int amount, String account, String date) {
-        Bitmap sChq = Bitmap.createBitmap(chqImg.getWidth(), chqImg.getHeight(), chqImg.getConfig());
-        Canvas canvas = new Canvas(sChq);
-        canvas.drawBitmap(chqImg, 0, 0, null);
-
-        Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
-        paint.setTextSize(32);
-        canvas.drawText(account, 130, 450, paint);
-        canvas.drawText(date, 1010, 150, paint);
-        canvas.drawText(amount + ".00", 1000, 250, paint);
-        canvas.drawText(NumberUtil.convert(amount), 160, 250, paint);
-
-        return sChq;
     }
 
 }
