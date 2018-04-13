@@ -16,7 +16,7 @@ import com.score.cbook.R;
  *
  * @author erangaeb@gmail.com (eranga herath)
  */
-public class AccountSetupInfoActivity extends BaseActivity {
+public class AddAccountInfoActivity extends BaseActivity {
 
     // UI fields
     private TextView hi;
@@ -25,7 +25,7 @@ public class AccountSetupInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.acc_setup_info_activity);
+        setContentView(R.layout.add_acc_info_activity);
 
         initUi();
         initToolbar();
@@ -92,7 +92,7 @@ public class AccountSetupInfoActivity extends BaseActivity {
     }
 
     private void navigateToAddAccount() {
-        Intent intent = new Intent(AccountSetupInfoActivity.this, AddAccountActivity.class);
+        Intent intent = new Intent(AddAccountInfoActivity.this, AddAccountActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.stay_in);

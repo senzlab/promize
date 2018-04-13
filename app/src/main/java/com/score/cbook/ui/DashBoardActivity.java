@@ -50,7 +50,7 @@ public class DashBoardActivity extends BaseActivity {
                 Account account = PreferenceUtil.getAccount(DashBoardActivity.this);
                 if (account.getAccountNo().isEmpty()) {
                     // account verify
-                    Intent intent = new Intent(DashBoardActivity.this, AccountSetupInfoActivity.class);
+                    Intent intent = new Intent(DashBoardActivity.this, AddAccountInfoActivity.class);
                     startActivity(intent);
                 } else if (account.getState().equalsIgnoreCase("PENDING")) {
                     // salt confirm

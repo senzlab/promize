@@ -116,7 +116,7 @@
         <activity android:name=".ui.ChequeListTabActivity" />
 
         <activity
-            android:name=".ui.AccountSetupInfoActivity"
+            android:name=".ui.AddAccountInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity

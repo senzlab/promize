@@ -29,6 +29,8 @@ public class SettingsActivity extends BaseActivity {
     private Button passBtn;
     private Button termsBtn;
 
+    private Account userAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,21 +118,19 @@ public class SettingsActivity extends BaseActivity {
     }
 
     private void initPrefs() {
-        Account useAccount = PreferenceUtil.getAccount(this);
+        userAccount = PreferenceUtil.getAccount(this);
 
-        if (useAccount.getAccountNo().isEmpty()) {
-            //accBtn.setVisibility(View.VISIBLE);
-            //accountv.setVisibility(View.GONE);
+        if (userAccount.getAccountNo().isEmpty()) {
             account.setText("Account");
             accBtn.setText("Add");
+        } else if (userAccount.getState().equalsIgnoreCase("PENDING")) {
+            account.setText("Account - " + userAccount.getAccountNo());
+            accBtn.setText("VERIFY");
         } else {
-            //accBtn.setVisibility(View.GONE);
-            //accountv.setVisibility(View.VISIBLE);
-            //accountv.setText(useAccount.getAccountNo());
-            account.setText("Account - " + useAccount.getAccountNo());
+            account.setText("Account - " + userAccount.getAccountNo());
             accBtn.setText("CHANGE");
         }
-        phone.setText("Username - " + useAccount.getPhoneNo());
+        phone.setText("Username - " + userAccount.getPhoneNo());
     }
 
     private void initActionBar() {
@@ -178,11 +178,27 @@ public class SettingsActivity extends BaseActivity {
     }
 
     private void navigateToAddAccount() {
-        Intent intent = new Intent(SettingsActivity.this, AccountSetupInfoActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
-        finish();
+        if (userAccount.getAccountNo().isEmpty()) {
+            // account verify
+            Intent intent = new Intent(this, AddAccountInfoActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            overridePendingTransition(R.anim.right_in, R.anim.stay_in);
+            finish();
+        } else if (userAccount.getState().equalsIgnoreCase("PENDING")) {
+            // salt confirm
+            Intent intent = new Intent(this, SaltConfirmInfoActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            overridePendingTransition(R.anim.right_in, R.anim.stay_in);
+            finish();
+        } else {
+            Intent intent = new Intent(SettingsActivity.this, AddAccountActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            overridePendingTransition(R.anim.right_in, R.anim.stay_in);
+            finish();
+        }
     }
 
 }
