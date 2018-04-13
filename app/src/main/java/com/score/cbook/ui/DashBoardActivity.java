@@ -50,11 +50,11 @@ public class DashBoardActivity extends BaseActivity {
                 Account account = PreferenceUtil.getAccount(DashBoardActivity.this);
                 if (account.getAccountNo().isEmpty()) {
                     // account verify
-                    Intent intent = new Intent(DashBoardActivity.this, BankTypeActivity.class);
+                    Intent intent = new Intent(DashBoardActivity.this, AccountSetupInfoActivity.class);
                     startActivity(intent);
                 } else if (account.getState().equalsIgnoreCase("PENDING")) {
                     // salt confirm
-                    Intent intent = new Intent(DashBoardActivity.this, SaltConfirmActivity.class);
+                    Intent intent = new Intent(DashBoardActivity.this, SaltConfirmInfoActivity.class);
                     startActivity(intent);
                 } else {
                     // navigate to new cheque

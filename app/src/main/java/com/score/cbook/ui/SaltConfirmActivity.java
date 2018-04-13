@@ -1,15 +1,26 @@
 package com.score.cbook.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.score.cbook.R;
+import com.score.cbook.application.IntentProvider;
+import com.score.cbook.enums.IntentType;
+import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.PreferenceUtil;
+import com.score.cbook.util.SenzUtil;
+import com.score.senzc.pojos.Senz;
 
 /**
  * Activity class that handles login
@@ -18,47 +29,96 @@ import com.score.cbook.R;
  */
 public class SaltConfirmActivity extends BaseActivity {
 
-    // UI fields
-    private TextView hi;
-    private TextView message;
+    private static final String TAG = SaltConfirmActivity.class.getName();
+
+    private EditText amount;
+
+    private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(TAG, "Got message from Senz service");
+            if (intent.hasExtra("SENZ")) {
+                Senz senz = intent.getExtras().getParcelable("SENZ");
+                handleSenz(senz);
+            }
+        }
+    };
+
+    private void handleSenz(Senz senz) {
+        if (senz.getAttributes().containsKey("status")) {
+            String msg = senz.getAttributes().get("status");
+            if (msg != null && msg.equalsIgnoreCase("SUCCESS")) {
+                ActivityUtil.cancelProgressDialog();
+
+                // set account state as verified
+                PreferenceUtil.saveAccountState(this, "VERIFIED");
+                Toast.makeText(this, "Your account has been verified", Toast.LENGTH_LONG).show();
+                SaltConfirmActivity.this.finish();
+            } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {
+                ActivityUtil.cancelProgressDialog();
+                displayInformationMessageDialog("ERROR", "Fail to verify account");
+            } else if (msg != null && msg.equalsIgnoreCase("VERIFICATION_FAIL")) {
+                ActivityUtil.cancelProgressDialog();
+                String informationMessage = "Verification fail. Please contact sampath support regarding this issue";
+                displayInformationMessageDialog("ERROR", informationMessage);
+            }
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.salt_confirm);
+        setContentView(R.layout.salt_confirm_activity);
 
         initUi();
         initToolbar();
         initActionBar();
     }
 
-    /**
-     * Initialize UI components,
-     * Set country code text
-     * set custom font for UI fields
-     */
-    private void initUi() {
-        hi = (TextView) findViewById(R.id.hi_message);
-        message = (TextView) findViewById(R.id.welcome_message);
-        hi.setTypeface(typeface, Typeface.NORMAL);
-        message.setTypeface(typeface, Typeface.NORMAL);
+    protected void onStart() {
+        super.onStart();
 
-        Button yes = (Button) findViewById(R.id.yes);
+        Log.d(TAG, "Bind to senz service");
+        bindToService();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // unbind from service
+        if (isServiceBound) {
+            Log.d(TAG, "Unbind to senz service");
+            unbindService(senzServiceConnection);
+
+            isServiceBound = false;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (senzReceiver != null) unregisterReceiver(senzReceiver);
+    }
+
+    private void initUi() {
+        amount = (EditText) findViewById(R.id.amount);
+        amount.setTypeface(typeface, Typeface.NORMAL);
+
+        Button yes = (Button) findViewById(R.id.register_btn);
         yes.setTypeface(typeface, Typeface.BOLD);
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // goto acc select
-                navigateToAddAccount();
-            }
-        });
-
-        Button no = (Button) findViewById(R.id.no);
-        no.setTypeface(typeface, Typeface.BOLD);
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
+                ActivityUtil.showProgressDialog(SaltConfirmActivity.this, "Please wait...");
+                confirmSalt();
             }
         });
     }
@@ -91,12 +151,10 @@ public class SaltConfirmActivity extends BaseActivity {
         setSupportActionBar(toolbar);
     }
 
-    private void navigateToAddAccount() {
-        Intent intent = new Intent(SaltConfirmActivity.this, SaltActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
-        finish();
+    private void confirmSalt() {
+        String salt = amount.getText().toString().trim();
+        Senz senz = SenzUtil.saltSenz(this, salt);
+        sendSenz(senz);
     }
 
 }

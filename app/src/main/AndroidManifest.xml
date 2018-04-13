@@ -116,19 +116,19 @@
         <activity android:name=".ui.ChequeListTabActivity" />
 
         <activity
-            android:name=".ui.BankTypeActivity"
+            android:name=".ui.AccountSetupInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
-            android:name=".ui.AccountVerifyActivity"
+            android:name=".ui.AccountVerifyInfoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity
             android:name=".ui.RedeemActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".ui.AddAccountActivity" />
+        <activity android:name=".ui.SaltConfirmInfoActivity" />
         <activity android:name=".ui.SaltConfirmActivity" />
-        <activity android:name=".ui.SaltActivity" />
         <activity android:name=".ui.SettingsActivity" />
         <activity android:name=".ui.BankListActivity" />
         <activity android:name=".ui.PasswordChangeActivity" />

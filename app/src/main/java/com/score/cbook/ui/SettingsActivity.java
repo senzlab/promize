@@ -178,7 +178,7 @@ public class SettingsActivity extends BaseActivity {
     }
 
     private void navigateToAddAccount() {
-        Intent intent = new Intent(SettingsActivity.this, BankTypeActivity.class);
+        Intent intent = new Intent(SettingsActivity.this, AccountSetupInfoActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.stay_in);

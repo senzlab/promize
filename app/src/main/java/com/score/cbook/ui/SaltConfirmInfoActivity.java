@@ -6,58 +6,59 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.exceptions.InvalidInputFieldsException;
-import com.score.cbook.exceptions.MisMatchFieldException;
-import com.score.cbook.util.ActivityUtil;
 
 /**
  * Activity class that handles login
  *
  * @author erangaeb@gmail.com (eranga herath)
  */
-public class AddAccountActivity extends BaseActivity {
+public class SaltConfirmInfoActivity extends BaseActivity {
 
-    private EditText accountText;
-    private EditText confirmAccountText;
+    // UI fields
+    private TextView hi;
+    private TextView message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_account_acctivity);
+        setContentView(R.layout.salt_confirm_info_activity);
 
         initUi();
         initToolbar();
         initActionBar();
     }
 
+    /**
+     * Initialize UI components,
+     * Set country code text
+     * set custom font for UI fields
+     */
     private void initUi() {
-        accountText = (EditText) findViewById(R.id.account);
-        confirmAccountText = (EditText) findViewById(R.id.confirm_account);
-        accountText.setTypeface(typeface, Typeface.NORMAL);
-        confirmAccountText.setTypeface(typeface, Typeface.NORMAL);
+        hi = (TextView) findViewById(R.id.hi_message);
+        message = (TextView) findViewById(R.id.welcome_message);
+        hi.setTypeface(typeface, Typeface.NORMAL);
+        message.setTypeface(typeface, Typeface.NORMAL);
 
-        Button yes = (Button) findViewById(R.id.register_btn);
+        Button yes = (Button) findViewById(R.id.yes);
         yes.setTypeface(typeface, Typeface.BOLD);
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String account = accountText.getText().toString().trim();
-                String confirmAccount = confirmAccountText.getText().toString().trim();
-                try {
-                    ActivityUtil.isValidAccount(account, confirmAccount);
-                    navigateToVishwaConfirm();
-                } catch (InvalidInputFieldsException e) {
-                    e.printStackTrace();
-                    displayInformationMessageDialog("ERROR", "Account number should be 12 character length and start with 1");
-                } catch (MisMatchFieldException e) {
-                    e.printStackTrace();
-                    displayInformationMessageDialog("ERROR", "Mismatching account number");
-                }
+                // goto acc select
+                navigateToAddAccount();
+            }
+        });
+
+        Button no = (Button) findViewById(R.id.no);
+        no.setTypeface(typeface, Typeface.BOLD);
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
@@ -71,7 +72,7 @@ public class AddAccountActivity extends BaseActivity {
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
-        titleText.setText("Add account");
+        titleText.setText("Confirm account");
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);
@@ -90,10 +91,9 @@ public class AddAccountActivity extends BaseActivity {
         setSupportActionBar(toolbar);
     }
 
-    private void navigateToVishwaConfirm() {
-        Intent intent = new Intent(AddAccountActivity.this, AccountVerifyInfoActivity.class);
+    private void navigateToAddAccount() {
+        Intent intent = new Intent(SaltConfirmInfoActivity.this, SaltConfirmActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("ACCOUNT", accountText.getText().toString().trim());
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.stay_in);
         finish();
