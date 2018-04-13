@@ -155,40 +155,6 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <RelativeLayout
-                    android:id="@+id/msg_bubble1"
-                    android:layout_width="185dp"
-                    android:layout_height="125dp"
-                    android:background="@drawable/bubble2"
-                    android:visibility="gone">
-
-                    <EditText
-                        android:id="@+id/message_text1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@drawable/edit_text_no_border"
-                        android:gravity="center"
-                        android:hint="write something here"
-                        android:inputType="textMultiLine|textNoSuggestions|textCapSentences"
-                        android:textColor="@color/white"
-                        android:textColorHint="@color/white"
-                        android:textSize="18sp"
-                        android:visibility="visible" />
-                </RelativeLayout>
-            </RelativeLayout>
-        </FrameLayout>
-
     </RelativeLayout>
 
     <FrameLayout
