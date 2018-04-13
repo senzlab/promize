@@ -186,7 +186,7 @@ public class RegistrationActivity extends BaseActivity {
                             doAuth();
                         }
                     } else {
-                        ActivityUtil.showCustomToastShort("No network connection", RegistrationActivity.this);
+                        Toast.makeText(RegistrationActivity.this, "No network connection", Toast.LENGTH_LONG).show();
                     }
                 }
             });

@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
@@ -32,7 +33,6 @@ import com.score.cbook.util.PhoneBookUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 
@@ -248,7 +248,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         } else {
             if (chequeUser.isSMSRequester()) {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
-                ActivityUtil.displayConfirmationMessageDialog("Confirm", "Would you like to resend request to " + contactName + "?", CustomerListActivity.this, typeface, new View.OnClickListener() {
+                displayConfirmationMessageDialog("Would you like to resend request to " + contactName + "?", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // start sharing again
@@ -257,7 +257,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                         intent.putExtra("USERNAME", chequeUser.getUsername());
                         intent.putExtra("PHONE", chequeUser.getPhone());
                         sendBroadcast(intent);
-                        ActivityUtil.showCustomToast("Request sent", CustomerListActivity.this);
+                        Toast.makeText(CustomerListActivity.this, "Request sent", Toast.LENGTH_LONG).show();
                     }
                 });
             } else {
@@ -272,9 +272,9 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                             intent.putExtra("USERNAME", chequeUser.getUsername());
                             intent.putExtra("PHONE", chequeUser.getPhone());
                             sendBroadcast(intent);
-                            ActivityUtil.showCustomToast("Confirmation sent", CustomerListActivity.this);
+                            Toast.makeText(CustomerListActivity.this, "Confirmation sent", Toast.LENGTH_LONG).show();
                         } else {
-                            ActivityUtil.showCustomToastShort("No network connection", CustomerListActivity.this);
+                            Toast.makeText(CustomerListActivity.this, "No network connection", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

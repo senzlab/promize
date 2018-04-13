@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.async.ContactReader;
@@ -35,7 +36,6 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts_list);
-        typeface = Typeface.createFromAsset(getAssets(), "fonts/GeosansLight.ttf");
 
         setupToolbar();
         setupActionBar();
@@ -122,14 +122,14 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(ContactListActivity.this)) {
                         SmsUtil.sendRequest(ContactListActivity.this, contact.getPhoneNo());
-                        ActivityUtil.showCustomToastShort("Request sent via SMS", ContactListActivity.this);
+                        Toast.makeText(ContactListActivity.this, "Request sent via SMS", Toast.LENGTH_LONG).show();
                     } else {
-                        ActivityUtil.showCustomToastShort("No network connection", ContactListActivity.this);
+                        Toast.makeText(ContactListActivity.this, "No network connection", Toast.LENGTH_LONG).show();
                     }
                 }
             });
         } else {
-            ActivityUtil.showCustomToastShort("This user already added in your iGift contact list", this);
+            Toast.makeText(ContactListActivity.this, "This user already added in your iGift contact list", Toast.LENGTH_LONG).show();
         }
     }
 

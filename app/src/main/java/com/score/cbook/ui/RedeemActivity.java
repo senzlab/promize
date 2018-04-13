@@ -190,7 +190,7 @@ public class RedeemActivity extends BaseActivity {
                         cheque.setAccount(accountNo);
                         confirmPassword();
                     } else {
-                        ActivityUtil.showCustomToastShort("No network connection", RedeemActivity.this);
+                        Toast.makeText(RedeemActivity.this, "No network connection", Toast.LENGTH_LONG).show();
                     }
                 }
             });

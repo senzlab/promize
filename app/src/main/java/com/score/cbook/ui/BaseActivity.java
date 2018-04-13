@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.util.ActivityUtil;
@@ -155,29 +156,13 @@ public class BaseActivity extends AppCompatActivity {
                 if (isServiceBound) {
                     senzService.sendSenz(senz);
                 } else {
-                    ActivityUtil.showCustomToast("Failed to connected to service.", this);
+                    Toast.makeText(this, "Failed to connected to service.", Toast.LENGTH_LONG).show();
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
         } else {
-            ActivityUtil.showCustomToast(this.getResources().getString(R.string.no_internet), this);
-        }
-    }
-
-    public void sendSenzes(List<Senz> senzList) {
-        if (NetworkUtil.isAvailableNetwork(this)) {
-            try {
-                if (isServiceBound) {
-                    senzService.sendSenzes(senzList);
-                } else {
-                    ActivityUtil.showCustomToast("Failed to connected to service.", this);
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        } else {
-            ActivityUtil.showCustomToast(this.getResources().getString(R.string.no_internet), this);
+            Toast.makeText(this, this.getResources().getString(R.string.no_internet), Toast.LENGTH_LONG).show();
         }
     }
 }
