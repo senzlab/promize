@@ -140,11 +140,6 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
@@ -180,7 +175,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
         messageContainer = (RelativeLayout) findViewById(R.id.msg_bubble);
         message = (EditText) findViewById(R.id.message_text);
-        message.setTypeface(typeface);
+        message.setTypeface(typeface, Typeface.NORMAL);
 
         capture = (FloatingActionButton) findViewById(R.id.fab);
         capture.setOnClickListener(new View.OnClickListener() {
@@ -354,8 +349,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                     dialog.cancel();
                     ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
                     ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
-                    sendPromize(captureScreen(), amount.getText().toString());
-                    //captureScreen();
+                    //sendPromize(captureScreen(), amount.getText().toString());
+                    captureScreen();
                 } else {
                     Toast.makeText(NewPromizeActivity.this, "Invalid password", Toast.LENGTH_LONG).show();
                 }

@@ -60,10 +60,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="stateHidden">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name="com.score.cbook.ui.ChatActivity"
@@ -112,6 +108,10 @@
             android:name=".ui.NewPromizeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".ui.ChequeListTabActivity" />
 
@@ -134,6 +134,7 @@
         <activity android:name=".ui.PasswordChangeActivity" />
         <activity android:name=".ui.UsernameChangeActivity" />
         <activity android:name=".ui.StickerListActivity" />
+
         <!-- Servicves -->
         <service
             android:name="com.score.cbook.remote.SenzService"

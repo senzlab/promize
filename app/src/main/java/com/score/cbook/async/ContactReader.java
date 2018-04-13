@@ -9,9 +9,7 @@ import com.score.cbook.util.PhoneBookUtil;
 
 import java.util.ArrayList;
 
-/**
- * Created by eranga on 12/10/16.
- */
+
 public class ContactReader extends AsyncTask<String, String, ArrayList<Contact>> {
 
     private Context context;
