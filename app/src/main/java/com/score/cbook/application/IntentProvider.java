@@ -49,7 +49,7 @@ public class IntentProvider {
      * @param intentType intent type
      * @return
      */
-    public static String getIntentAction(IntentType intentType) throws InvalidIntentType {
+    private static String getIntentAction(IntentType intentType) throws InvalidIntentType {
         switch (intentType) {
             case SENZ:
                 return ACTION_SENZ;

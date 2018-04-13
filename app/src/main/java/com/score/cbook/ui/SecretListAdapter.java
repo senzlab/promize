@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.enums.BlobType;
 import com.score.cbook.pojo.Secret;
 import com.score.cbook.util.PhoneBookUtil;
 import com.score.cbook.util.TimeUtil;
@@ -88,22 +87,12 @@ class SecretListAdapter extends BaseAdapter {
     }
 
     private void setUpRow(Secret secret, ViewHolder viewHolder) {
-        // set username/name
         if (secret.getUser().getPhone() != null && !secret.getUser().getPhone().isEmpty()) {
             viewHolder.sender.setText(PhoneBookUtil.getContactName(context, secret.getUser().getPhone()));
         } else {
             viewHolder.sender.setText("@" + secret.getUser().getUsername());
         }
-
-        if (secret.getBlobType() == BlobType.TEXT) {
-            viewHolder.message.setText("Message");
-        } else if (secret.getBlobType() == BlobType.IMAGE) {
-            viewHolder.message.setText("Selfie");
-        } else if (secret.getBlobType() == BlobType.MISSED_SELFIE) {
-            viewHolder.message.setText("Missed selfie");
-        } else if (secret.getBlobType() == BlobType.MISSED_CALL) {
-            viewHolder.message.setText("Missed call");
-        }
+        viewHolder.message.setText("Message");
 
         if (secret.getTimeStamp() != null) {
             viewHolder.sentTime.setText(TimeUtil.getTimeInWords(secret.getTimeStamp()));

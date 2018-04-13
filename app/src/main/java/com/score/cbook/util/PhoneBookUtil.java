@@ -3,11 +3,9 @@ package com.score.cbook.util;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
-import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 
 import com.google.i18n.phonenumbers.NumberParseException;
@@ -15,7 +13,6 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.score.cbook.R;
 import com.score.cbook.pojo.Contact;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -58,36 +55,7 @@ public class PhoneBookUtil {
      * @param phoneNumber
      * @return
      */
-    public static Bitmap getContactImage(Context context, String phoneNumber) {
-        ContentResolver contentResolver = context.getContentResolver();
-        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-        Cursor cursor = contentResolver.query(uri, new String[]{Phone.PHOTO_URI}, null, null, null);
-        if (cursor == null) return null;
-
-        try {
-            if (cursor.moveToFirst()) {
-                String image_uri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
-                if (image_uri != null)
-                    return MediaStore.Images.Media.getBitmap(contentResolver, Uri.parse(image_uri));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            cursor.close();
-        }
-
-        return null;
-    }
-
-
-    /**
-     * Get image of the matching contact
-     *
-     * @param context
-     * @param phoneNumber
-     * @return
-     */
-    public static Uri getContactUri(Context context, String phoneNumber) {
+    public static Uri getImageUri(Context context, String phoneNumber) {
         ContentResolver contentResolver = context.getContentResolver();
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
         Cursor cursor = contentResolver.query(uri, new String[]{Phone.PHOTO_URI}, null, null, null);
@@ -95,6 +63,21 @@ public class PhoneBookUtil {
 
         if (cursor.moveToFirst()) {
             String image_uri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_URI));
+            if (image_uri != null)
+                return Uri.parse(image_uri);
+        }
+
+        return null;
+    }
+
+    public static Uri getThumbnailUri(Context context, String phoneNumber) {
+        ContentResolver contentResolver = context.getContentResolver();
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
+        Cursor cursor = contentResolver.query(uri, new String[]{Phone.PHOTO_THUMBNAIL_URI}, null, null, null);
+        if (cursor == null) return null;
+
+        if (cursor.moveToFirst()) {
+            String image_uri = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
             if (image_uri != null)
                 return Uri.parse(image_uri);
         }

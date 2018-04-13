@@ -101,7 +101,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
 
         // contact image
         Picasso.with(this)
-                .load(PhoneBookUtil.getContactUri(this, chequeUser.getPhone()))
+                .load(PhoneBookUtil.getImageUri(this, chequeUser.getPhone()))
                 .placeholder(R.drawable.df_user)
                 .error(R.drawable.df_user)
                 .into(userImageView);
