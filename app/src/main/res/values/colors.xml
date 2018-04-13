@@ -43,7 +43,8 @@
     <color name="translucent_black">#80000000</color>
     <color name="translucent_theme">#49f88f8c</color>
     <color name="translucent_red">#F2FF6666</color>
-    <color name="indian_read">#CD5C5C</color>
+    <color name="indian_read">#CD6155</color>
+    <color name="pink">#bc8f8f</color>
 
 
     <color name="my_chat_message">@color/colorPrimary</color>
@@ -51,9 +52,9 @@
     <color name="audio_grey">#000000</color>
     <color name="maps_header_bg">#fbf072</color>
     <color name="yellow">#EEE8AA</color>
-    <color name="lgreen">#9781B5</color>
+    <color name="lgreen">#BB8FCE</color>
     <color name="dpurple">#3C3348</color>
     <color name="teal">#008080</color>
-
+    <color name="brown">#EDBB99</color>
 
 </resources>
