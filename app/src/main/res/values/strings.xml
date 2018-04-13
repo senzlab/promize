@@ -50,4 +50,5 @@
         <item>New Zealand</item>
         <item>India</item>
     </string-array>
+    <string name="salt_info">We have done test transaction from \'%1$s\' account</string>
 </resources>

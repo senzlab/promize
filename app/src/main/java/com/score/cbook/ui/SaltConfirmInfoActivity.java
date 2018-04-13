@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
+import com.score.cbook.util.PreferenceUtil;
 
 /**
  * Activity class that handles login
@@ -42,6 +43,9 @@ public class SaltConfirmInfoActivity extends BaseActivity {
         message = (TextView) findViewById(R.id.welcome_message);
         hi.setTypeface(typeface, Typeface.NORMAL);
         message.setTypeface(typeface, Typeface.NORMAL);
+
+        String hiText = getString(R.string.salt_info, PreferenceUtil.getAccount(this).getAccountNo());
+        hi.setText(hiText);
 
         Button yes = (Button) findViewById(R.id.yes);
         yes.setTypeface(typeface, Typeface.BOLD);
