@@ -34,6 +34,7 @@
     <color name="colorPrimaryMoreTrans">#40f5944e</color>
     <color name="colorWhiteTrans">#B3ffffff</color>
     <color name="colorPrimaryLight">#FCD6C7</color>
+    <color name="blue">#125688</color>
     <color name="colorPrimaryDark">#125688</color>
     <color name="colorAccent">#c8e8ff</color>
     <color name="clouds">#ABABAB</color>
@@ -42,10 +43,17 @@
     <color name="translucent_black">#80000000</color>
     <color name="translucent_theme">#49f88f8c</color>
     <color name="translucent_red">#F2FF6666</color>
+    <color name="indian_read">#CD5C5C</color>
+
 
     <color name="my_chat_message">@color/colorPrimary</color>
     <color name="not_my_chat_message">#75CADC</color>
     <color name="audio_grey">#000000</color>
-    <color name="maps_header_bg">#80FFFFFF</color>
+    <color name="maps_header_bg">#fbf072</color>
+    <color name="yellow">#EEE8AA</color>
+    <color name="lgreen">#9781B5</color>
+    <color name="dpurple">#3C3348</color>
+    <color name="teal">#008080</color>
+
 
 </resources>

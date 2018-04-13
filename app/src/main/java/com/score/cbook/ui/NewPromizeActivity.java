@@ -57,7 +57,10 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     // root layouts
     private ViewGroup captureLayout;
     private FrameLayout previewLayout;
+
+    // image panel
     private ImageView capturedPhoto;
+    private FrameLayout overlayFrame;
 
     // amount panel
     private RelativeLayout infoPanel;
@@ -75,6 +78,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     private FloatingActionButton send;
     private ImageView addText;
     private ImageView addSticker;
+    private ImageView addBackground;
 
     // stickers
     private int xDelta;
@@ -161,7 +165,9 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     private void initUi() {
         captureLayout = (ViewGroup) findViewById(R.id.capture_frame);
         previewLayout = (FrameLayout) findViewById(R.id.preview_frame);
-        capturedPhoto = (ImageView) findViewById(R.id.capture_photo);
+
+        capturedPhoto = (ImageView) findViewById(R.id.captured_photo);
+        overlayFrame = (FrameLayout) findViewById(R.id.overlay_frame);
 
         infoPanel = (RelativeLayout) findViewById(R.id.amount_l);
         amountContainer = (LinearLayout) findViewById(R.id.amount_container);
@@ -193,6 +199,14 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             }
         });
 
+        addText = (ImageView) findViewById(R.id.add_text);
+        addText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addText();
+            }
+        });
+
         addSticker = (ImageView) findViewById(R.id.add_sticker);
         addSticker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,19 +216,21 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             }
         });
 
-        addText = (ImageView) findViewById(R.id.add_text);
-        addText.setOnClickListener(new View.OnClickListener() {
+        addBackground = (ImageView) findViewById(R.id.add_background);
+        addBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addText();
+                Intent intent = new Intent(NewPromizeActivity.this, BackgroundListActivity.class);
+                startActivityForResult(intent, 2);
             }
         });
 
         infoPanel.setVisibility(View.GONE);
         capture.setVisibility(View.VISIBLE);
         send.setVisibility(View.GONE);
-        addSticker.setVisibility(View.GONE);
         addText.setVisibility(View.GONE);
+        addSticker.setVisibility(View.GONE);
+        addBackground.setVisibility(View.GONE);
     }
 
     private void addText() {
@@ -234,6 +250,11 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         imageView.setImageResource(resourceId);
         captureLayout.addView(imageView);
         imageView.setOnTouchListener(this);
+    }
+
+    private void addBackground(int color) {
+        overlayFrame.setBackgroundColor(getResources().getColor(color));
+        capturedPhoto.setVisibility(View.GONE);
     }
 
     private void acquireWakeLock() {
@@ -298,6 +319,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                 capture.setVisibility(View.GONE);
                 addText.setVisibility(View.VISIBLE);
                 addSticker.setVisibility(View.VISIBLE);
+                addBackground.setVisibility(View.VISIBLE);
 
                 infoPanel.setVisibility(View.VISIBLE);
                 Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_in);
@@ -421,10 +443,21 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
+            releaseCameraPreview();
             if (resultCode == Activity.RESULT_OK) {
                 Bundle b = data.getExtras();
                 if (b != null) {
                     addSticker(b.getInt("STICKER"));
+                }
+            } else if (resultCode == 0) {
+                System.out.println("RESULT CANCELLED");
+            }
+        } else if (requestCode == 2) {
+            releaseCameraPreview();
+            if (resultCode == Activity.RESULT_OK) {
+                Bundle b = data.getExtras();
+                if (b != null) {
+                    addBackground(b.getInt("COLOR"));
                 }
             } else if (resultCode == 0) {
                 System.out.println("RESULT CANCELLED");

@@ -134,6 +134,7 @@
         <activity android:name=".ui.PasswordChangeActivity" />
         <activity android:name=".ui.UsernameChangeActivity" />
         <activity android:name=".ui.StickerListActivity" />
+        <activity android:name=".ui.BackgroundListActivity" />
 
         <!-- Servicves -->
         <service
