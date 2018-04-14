@@ -107,7 +107,7 @@ public class BackgroundListActivity extends BaseActivity implements View.OnClick
         } else if (v == eyes) {
             selectSticker(R.color.teal);
         } else if (v == rose) {
-            //selectSticker(R.drawable.rose);
+            selectSticker(R.color.brown);
         }
     }
 
