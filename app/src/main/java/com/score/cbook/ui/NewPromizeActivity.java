@@ -249,7 +249,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         isCameraOn = true;
         initCameraPreview(Camera.CameraInfo.CAMERA_FACING_FRONT);
 
-        capturedPhoto.setImageBitmap(null);
+        overlayFrame.setBackgroundColor(getResources().getColor(R.color.colorPrimaryTrans));
+        capturedPhoto.setVisibility(View.GONE);
 
         send.setVisibility(View.GONE);
         capture.setVisibility(View.VISIBLE);
@@ -348,6 +349,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                 isCameraOn = false;
 
                 Bitmap bitmap = ImageUtil.bytesToBmp(resizedImage);
+                capturedPhoto.setVisibility(View.VISIBLE);
                 capturedPhoto.setImageBitmap(bitmap);
 
                 send.setVisibility(View.VISIBLE);
