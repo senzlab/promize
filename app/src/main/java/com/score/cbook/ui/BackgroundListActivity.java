@@ -12,16 +12,18 @@ import android.widget.TextView;
 import com.score.cbook.R;
 
 public class BackgroundListActivity extends BaseActivity implements View.OnClickListener {
-    private ImageView flower;
-    private ImageView heartj;
-    private ImageView hearti;
-    private ImageView baloon;
-    private ImageView stars;
-    private ImageView cheers;
-    private ImageView newyear;
-    private ImageView gift;
-    private ImageView eyes;
+    private ImageView lblue;
+    private ImageView black;
+    private ImageView wred;
+    private ImageView purple;
+    private ImageView green;
+    private ImageView blue;
+    private ImageView gray;
     private ImageView rose;
+    private ImageView lpurple;
+    private ImageView teal;
+    private ImageView brown;
+    private ImageView dpurple;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,52 +64,60 @@ public class BackgroundListActivity extends BaseActivity implements View.OnClick
     }
 
     private void initStickers() {
-        flower = (ImageView) findViewById(R.id.flowers);
-        heartj = (ImageView) findViewById(R.id.heartsj);
-        hearti = (ImageView) findViewById(R.id.heart);
-        baloon = (ImageView) findViewById(R.id.baloons);
-        stars = (ImageView) findViewById(R.id.stars);
-        cheers = (ImageView) findViewById(R.id.cheers);
-        newyear = (ImageView) findViewById(R.id.newyear);
-        gift = (ImageView) findViewById(R.id.gift);
-        eyes = (ImageView) findViewById(R.id.eyes);
+        lblue = (ImageView) findViewById(R.id.lblue);
+        black = (ImageView) findViewById(R.id.black);
+        wred = (ImageView) findViewById(R.id.wine_red);
+        purple = (ImageView) findViewById(R.id.purple);
+        green = (ImageView) findViewById(R.id.green);
+        blue = (ImageView) findViewById(R.id.blue);
+        gray = (ImageView) findViewById(R.id.gray);
         rose = (ImageView) findViewById(R.id.rose);
+        lpurple = (ImageView) findViewById(R.id.lpurple);
+        teal = (ImageView) findViewById(R.id.teal);
+        brown = (ImageView) findViewById(R.id.brown);
+        dpurple = (ImageView) findViewById(R.id.dpurple);
 
-        flower.setOnClickListener(this);
-        heartj.setOnClickListener(this);
-        hearti.setOnClickListener(this);
-        baloon.setOnClickListener(this);
-        stars.setOnClickListener(this);
-        cheers.setOnClickListener(this);
-        newyear.setOnClickListener(this);
-        gift.setOnClickListener(this);
-        eyes.setOnClickListener(this);
+        lblue.setOnClickListener(this);
+        black.setOnClickListener(this);
+        wred.setOnClickListener(this);
+        purple.setOnClickListener(this);
+        green.setOnClickListener(this);
+        blue.setOnClickListener(this);
+        gray.setOnClickListener(this);
         rose.setOnClickListener(this);
+        lpurple.setOnClickListener(this);
+        teal.setOnClickListener(this);
+        brown.setOnClickListener(this);
+        dpurple.setOnClickListener(this);
     }
 
 
     @Override
     public void onClick(View v) {
-        if (v == flower) {
-            selectSticker(R.color.light_blue);
-        } else if (v == heartj) {
+        if (v == lblue) {
+            selectSticker(R.color.lblue);
+        } else if (v == black) {
             selectSticker(R.color.black);
-        } else if (v == hearti) {
-            selectSticker(R.color.indian_read);
-        } else if (v == baloon) {
-            selectSticker(R.color.dpurple);
-        } else if (v == stars) {
+        } else if (v == wred) {
+            selectSticker(R.color.wine_red);
+        } else if (v == purple) {
+            selectSticker(R.color.purple);
+        } else if (v == green) {
             selectSticker(R.color.android_green);
-        } else if (v == cheers) {
+        } else if (v == blue) {
             selectSticker(R.color.blue);
-        } else if (v == newyear) {
+        } else if (v == gray) {
             selectSticker(R.color.gray);
-        } else if (v == gift) {
-            selectSticker(R.color.rose_red);
-        } else if (v == eyes) {
-            selectSticker(R.color.teal);
         } else if (v == rose) {
+            selectSticker(R.color.rose_red);
+        } else if (v == lpurple) {
+            selectSticker(R.color.lpurple);
+        } else if (v == teal) {
+            selectSticker(R.color.teal);
+        } else if (v == brown) {
             selectSticker(R.color.brown);
+        } else if (v == dpurple) {
+            selectSticker(R.color.dpurple);
         }
     }
 

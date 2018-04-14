@@ -35,7 +35,7 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/flowers"
+                    android:id="@+id/lblue"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
@@ -61,7 +61,7 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/heartsj"
+                    android:id="@+id/black"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
@@ -86,7 +86,7 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/heart"
+                    android:id="@+id/wine_red"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
@@ -122,6 +122,7 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
+                    android:id="@+id/purple"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
@@ -147,7 +148,7 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/baloons"
+                    android:id="@+id/green"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
@@ -173,7 +174,7 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/stars"
+                    android:id="@+id/blue"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
@@ -211,7 +212,7 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/cheers"
+                    android:id="@+id/gray"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
@@ -238,11 +239,11 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/newyear"
+                    android:id="@+id/rose"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/circle_shape_yello" />
+                    android:src="@drawable/circle_shape_rose" />
 
             </RelativeLayout>
         </RelativeLayout>
@@ -264,11 +265,11 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/gift"
+                    android:id="@+id/lpurple"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/circle_shape_lgray" />
+                    android:src="@drawable/circle_shape_light_purple" />
 
             </RelativeLayout>
         </RelativeLayout>
@@ -301,7 +302,7 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/eyes"
+                    android:id="@+id/teal"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
@@ -327,7 +328,7 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/rose"
+                    android:id="@+id/brown"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
@@ -352,7 +353,7 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/heart3"
+                    android:id="@+id/dpurple"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
