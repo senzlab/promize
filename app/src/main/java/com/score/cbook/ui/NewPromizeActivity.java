@@ -76,6 +76,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     // buttons
     private FloatingActionButton capture;
     private FloatingActionButton send;
+    private ImageView addPhoto;
     private ImageView addText;
     private ImageView addSticker;
     private ImageView addBackground;
@@ -199,6 +200,14 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             }
         });
 
+        addPhoto = (ImageView) findViewById(R.id.add_photo);
+        addPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //addPhoto();
+            }
+        });
+
         addText = (ImageView) findViewById(R.id.add_text);
         addText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,6 +237,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         infoPanel.setVisibility(View.GONE);
         capture.setVisibility(View.VISIBLE);
         send.setVisibility(View.GONE);
+        addPhoto.setVisibility(View.GONE);
         addText.setVisibility(View.GONE);
         addSticker.setVisibility(View.GONE);
         addBackground.setVisibility(View.GONE);
@@ -317,6 +327,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
                 send.setVisibility(View.VISIBLE);
                 capture.setVisibility(View.GONE);
+                addPhoto.setVisibility(View.VISIBLE);
                 addText.setVisibility(View.VISIBLE);
                 addSticker.setVisibility(View.VISIBLE);
                 addBackground.setVisibility(View.VISIBLE);

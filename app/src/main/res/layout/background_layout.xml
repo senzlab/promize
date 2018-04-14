@@ -39,7 +39,7 @@
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/capture" />
+                    android:src="@drawable/circle_shape_light_blue" />
             </RelativeLayout>
         </RelativeLayout>
 
@@ -330,8 +330,8 @@
                     android:id="@+id/rose"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:background="@drawable/circle_shape_brown"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    android:background="@drawable/circle_shape_brown" />
             </RelativeLayout>
         </RelativeLayout>
 
@@ -355,7 +355,8 @@
                     android:id="@+id/heart3"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/circle_shape_dark_purple" />
             </RelativeLayout>
         </RelativeLayout>
 

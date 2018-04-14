@@ -85,11 +85,11 @@ public class BackgroundListActivity extends BaseActivity implements View.OnClick
         rose.setOnClickListener(this);
     }
 
+
     @Override
     public void onClick(View v) {
         if (v == flower) {
-            //selectSticker(R.drawable.flowers);
-            // select camera
+            selectSticker(R.color.light_blue);
         } else if (v == heartj) {
             selectSticker(R.color.black);
         } else if (v == hearti) {
