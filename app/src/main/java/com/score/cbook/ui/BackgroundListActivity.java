@@ -103,7 +103,7 @@ public class BackgroundListActivity extends BaseActivity implements View.OnClick
         } else if (v == newyear) {
             selectSticker(R.color.gray);
         } else if (v == gift) {
-            selectSticker(R.color.yellow);
+            selectSticker(R.color.rose_red);
         } else if (v == eyes) {
             selectSticker(R.color.teal);
         } else if (v == rose) {
