@@ -53,6 +53,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     // camera
     private Camera camera;
     private CameraPreview cameraPreview;
+    private boolean isCameraOn;
 
     // root layouts
     private ViewGroup captureLayout;
@@ -166,6 +167,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     private void initUi() {
         captureLayout = (ViewGroup) findViewById(R.id.capture_frame);
         previewLayout = (FrameLayout) findViewById(R.id.preview_frame);
+        isCameraOn = true;
 
         capturedPhoto = (ImageView) findViewById(R.id.captured_photo);
         overlayFrame = (FrameLayout) findViewById(R.id.overlay_frame);
@@ -204,7 +206,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         addPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //addPhoto();
+                addPhoto();
             }
         });
 
@@ -241,6 +243,24 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         addText.setVisibility(View.GONE);
         addSticker.setVisibility(View.GONE);
         addBackground.setVisibility(View.GONE);
+    }
+
+    private void addPhoto() {
+        isCameraOn = true;
+        initCameraPreview(Camera.CameraInfo.CAMERA_FACING_FRONT);
+
+        capturedPhoto.setImageBitmap(null);
+
+        send.setVisibility(View.GONE);
+        capture.setVisibility(View.VISIBLE);
+        addPhoto.setVisibility(View.GONE);
+        addText.setVisibility(View.GONE);
+        addSticker.setVisibility(View.GONE);
+        addBackground.setVisibility(View.GONE);
+
+        infoPanel.setVisibility(View.GONE);
+        Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_out);
+        infoPanel.startAnimation(a);
     }
 
     private void addText() {
@@ -288,29 +308,33 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     private void initCameraPreview(int camFace) {
-        try {
-            camera = Camera.open(camFace);
-            cameraPreview = new CameraPreview(this, camera, camFace);
-            previewLayout.addView(cameraPreview);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (isCameraOn) {
+            try {
+                camera = Camera.open(camFace);
+                cameraPreview = new CameraPreview(this, camera, camFace);
+                previewLayout.addView(cameraPreview);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void releaseCameraPreview() {
-        try {
-            if (camera != null) {
-                cameraPreview.surfaceDestroyed(cameraPreview.getHolder());
-                cameraPreview.getHolder().removeCallback(cameraPreview);
-                cameraPreview.destroyDrawingCache();
-                previewLayout.removeView(cameraPreview);
+        if (isCameraOn) {
+            try {
+                if (camera != null) {
+                    cameraPreview.surfaceDestroyed(cameraPreview.getHolder());
+                    cameraPreview.getHolder().removeCallback(cameraPreview);
+                    cameraPreview.destroyDrawingCache();
+                    previewLayout.removeView(cameraPreview);
 
-                camera.stopPreview();
-                camera.release();
-                camera = null;
+                    camera.stopPreview();
+                    camera.release();
+                    camera = null;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -321,6 +345,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             public void onPictureTaken(byte[] bytes, Camera camera) {
                 byte[] resizedImage = ImageUtil.compressImg(bytes, true, true);
                 releaseCameraPreview();
+                isCameraOn = false;
 
                 Bitmap bitmap = ImageUtil.bytesToBmp(resizedImage);
                 capturedPhoto.setImageBitmap(bitmap);
@@ -454,7 +479,6 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
-            releaseCameraPreview();
             if (resultCode == Activity.RESULT_OK) {
                 Bundle b = data.getExtras();
                 if (b != null) {
@@ -464,7 +488,6 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                 System.out.println("RESULT CANCELLED");
             }
         } else if (requestCode == 2) {
-            releaseCameraPreview();
             if (resultCode == Activity.RESULT_OK) {
                 Bundle b = data.getExtras();
                 if (b != null) {
