@@ -238,6 +238,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
         overlayFrame.setBackgroundColor(getResources().getColor(R.color.gray));
         capturedPhoto.setVisibility(View.GONE);
+        messageContainer.setVisibility(View.VISIBLE);
 
         capture.setVisibility(View.GONE);
         send.setVisibility(View.VISIBLE);
@@ -270,10 +271,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     private void addText() {
         if (messageContainer.getVisibility() == View.VISIBLE) {
             messageContainer.setVisibility(View.GONE);
-            message.setFocusable(false);
         } else {
             messageContainer.setVisibility(View.VISIBLE);
-            message.setFocusable(true);
         }
     }
 
@@ -510,8 +509,11 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         if (view == amountContainer) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            if (message.isFocused()) message.clearFocus();
+            if (amount.requestFocus()) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(amount, InputMethodManager.SHOW_IMPLICIT);
+            }
             return false;
         } else {
             final int x = (int) event.getRawX();
