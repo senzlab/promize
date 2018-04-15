@@ -174,11 +174,13 @@ public class SenzUtil {
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("amnt", cheque.getAmount());
         senzAttributes.put("bnk", account.getBank());
+        senzAttributes.put("id", CryptoUtil.uuid());
         senzAttributes.put("acc", account.getAccountNo());
         senzAttributes.put("blob", cheque.getBlob());
         senzAttributes.put("to", cheque.getUser().getUsername());
         senzAttributes.put("time", cheque.getTimestamp().toString());
         senzAttributes.put("uid", SenzUtil.getUid(context, cheque.getTimestamp().toString()));
+        senzAttributes.put("type", "TRANSFER");
 
         // new senz
         Senz senz = new Senz();
@@ -194,12 +196,13 @@ public class SenzUtil {
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("amnt", cheque.getAmount());
         senzAttributes.put("bnk", "sampath.chain");
+        senzAttributes.put("id", cheque.getCid());
         senzAttributes.put("acc", account);
         senzAttributes.put("blob", "");
-        senzAttributes.put("id", cheque.getCid());
         senzAttributes.put("to", SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
         senzAttributes.put("time", cheque.getTimestamp().toString());
         senzAttributes.put("uid", SenzUtil.getUid(context, cheque.getTimestamp().toString()));
+        senzAttributes.put("type", "REDEEM");
 
         // new senz
         Senz senz = new Senz();

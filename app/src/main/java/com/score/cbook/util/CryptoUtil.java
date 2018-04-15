@@ -22,6 +22,7 @@ import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.UUID;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -279,6 +280,10 @@ public class CryptoUtil {
         cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(salt));
 
         return cipher.doFinal(payload);
+    }
+
+    public static String uuid() {
+        return UUID.randomUUID().toString();
     }
 
 }
