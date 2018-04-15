@@ -58,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/edit_text_no_border"
                         android:gravity="left"
-                        android:hint="Write your message here"
+                        android:hint="Write something here"
                         android:inputType="textMultiLine|textNoSuggestions|textCapSentences"
                         android:textColor="@color/white"
                         android:textColorHint="@color/white"

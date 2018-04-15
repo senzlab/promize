@@ -282,7 +282,7 @@ public class CryptoUtil {
         return cipher.doFinal(payload);
     }
 
-    public static String uuid() {
+    static String uuid() {
         return UUID.randomUUID().toString();
     }
 

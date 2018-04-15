@@ -6,7 +6,7 @@ class Exif {
     private static final String TAG = "CameraExif";
 
     // Returns the degrees in clockwise. Values are 0, 90, 180, or 270.
-    public static int getOrientation(byte[] jpeg) {
+    static int getOrientation(byte[] jpeg) {
         if (jpeg == null) {
             return 0;
         }

@@ -89,6 +89,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     // user
     private ChequeUser user;
     private Cheque cheque;
+    private Senz transferSenz;
 
     private PowerManager.WakeLock wakeLock;
 
@@ -162,6 +163,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
         releaseWakeLock();
         releaseCameraPreview();
+        ActivityUtil.cancelProgressDialog();
     }
 
     private void initUi() {
@@ -236,7 +238,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             }
         });
 
-        overlayFrame.setBackgroundColor(getResources().getColor(R.color.gray));
+        overlayFrame.setBackgroundColor(getResources().getColor(R.color.black));
         capturedPhoto.setVisibility(View.GONE);
         messageContainer.setVisibility(View.VISIBLE);
 
@@ -378,7 +380,6 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             ActivityUtil.isValidGift(amount.getText().toString().trim(), "");
             if (NetworkUtil.isAvailableNetwork(this)) askPassword();
             else Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
-
         } catch (InvalidInputFieldsException e) {
             displayInformationMessageDialog("Error", "Empty iGift amount");
             e.printStackTrace();
@@ -450,21 +451,24 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     private void sendPromize(byte[] compBytes, String amount) {
-        this.cheque = new Cheque();
-        cheque.setUser(user);
-        cheque.setAmount(amount);
-        cheque.setDeliveryState(DeliveryState.PENDING);
-        cheque.setChequeState(ChequeState.TRANSFER);
-        cheque.setMyCheque(true);
-        cheque.setViewed(true);
-        cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
-        cheque.setAccount(PreferenceUtil.getAccount(this).getAccountNo());
+        if (transferSenz == null) {
+            this.cheque = new Cheque();
+            cheque.setUser(user);
+            cheque.setAmount(amount);
+            cheque.setDeliveryState(DeliveryState.PENDING);
+            cheque.setChequeState(ChequeState.TRANSFER);
+            cheque.setMyCheque(true);
+            cheque.setViewed(true);
+            cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
+            cheque.setAccount(PreferenceUtil.getAccount(this).getAccountNo());
 
-        Long timestamp = System.currentTimeMillis() / 1000;
-        cheque.setTimestamp(timestamp);
+            Long timestamp = System.currentTimeMillis() / 1000;
+            cheque.setTimestamp(timestamp);
 
-        Senz senz = SenzUtil.transferSenz(this, cheque, PreferenceUtil.getAccount(this));
-        sendSenz(senz);
+            transferSenz = SenzUtil.transferSenz(this, cheque, PreferenceUtil.getAccount(this));
+        }
+
+        sendSenz(transferSenz);
     }
 
     private void savePromize() {

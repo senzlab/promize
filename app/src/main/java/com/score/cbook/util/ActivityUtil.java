@@ -192,4 +192,8 @@ public class ActivityUtil {
         }
     }
 
+    public static boolean isNewGift(String preAmount, String amount) {
+        return !preAmount.equalsIgnoreCase(amount);
+    }
+
 }

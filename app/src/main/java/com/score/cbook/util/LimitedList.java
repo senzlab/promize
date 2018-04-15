@@ -2,9 +2,6 @@ package com.score.cbook.util;
 
 import java.util.ArrayList;
 
-/**
- * Created by eranga on 9/28/16.
- */
 public class LimitedList<K> extends ArrayList<K> {
 
     private static final int DEFAULT_MAX_SIZE = 7;
