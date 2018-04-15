@@ -167,7 +167,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     private void initUi() {
         captureLayout = (ViewGroup) findViewById(R.id.capture_frame);
         previewLayout = (FrameLayout) findViewById(R.id.preview_frame);
-        isCameraOn = true;
+        isCameraOn = false;
 
         capturedPhoto = (ImageView) findViewById(R.id.captured_photo);
         overlayFrame = (FrameLayout) findViewById(R.id.overlay_frame);
@@ -236,13 +236,16 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             }
         });
 
-        infoPanel.setVisibility(View.GONE);
-        capture.setVisibility(View.VISIBLE);
-        send.setVisibility(View.GONE);
-        addPhoto.setVisibility(View.GONE);
-        addText.setVisibility(View.GONE);
-        addSticker.setVisibility(View.GONE);
-        addBackground.setVisibility(View.GONE);
+        overlayFrame.setBackgroundColor(getResources().getColor(R.color.gray));
+        capturedPhoto.setVisibility(View.GONE);
+
+        capture.setVisibility(View.GONE);
+        send.setVisibility(View.VISIBLE);
+        addPhoto.setVisibility(View.VISIBLE);
+        addText.setVisibility(View.VISIBLE);
+        addSticker.setVisibility(View.VISIBLE);
+        addBackground.setVisibility(View.VISIBLE);
+        infoPanel.setVisibility(View.VISIBLE);
     }
 
     private void addPhoto() {
@@ -265,10 +268,13 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     private void addText() {
-        if (messageContainer.getVisibility() == View.VISIBLE)
+        if (messageContainer.getVisibility() == View.VISIBLE) {
             messageContainer.setVisibility(View.GONE);
-        else messageContainer.setVisibility(View.VISIBLE);
-        messageContainer.setOnTouchListener(this);
+            message.setFocusable(false);
+        } else {
+            messageContainer.setVisibility(View.VISIBLE);
+            message.setFocusable(true);
+        }
     }
 
     private void addSticker(int resourceId) {
@@ -348,8 +354,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                 releaseCameraPreview();
                 isCameraOn = false;
 
-                Bitmap bitmap = ImageUtil.bytesToBmp(resizedImage);
                 capturedPhoto.setVisibility(View.VISIBLE);
+                Bitmap bitmap = ImageUtil.bytesToBmp(resizedImage);
                 capturedPhoto.setImageBitmap(bitmap);
 
                 send.setVisibility(View.VISIBLE);
