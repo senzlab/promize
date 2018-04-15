@@ -107,13 +107,16 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         if (senz.getSenzType() == SenzTypeEnum.DATA) {
             if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
                 ActivityUtil.cancelProgressDialog();
-                Toast.makeText(this, "Successfully sent", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Successfully sent iGift", Toast.LENGTH_LONG).show();
 
                 savePromize();
                 this.finish();
             } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
                 Toast.makeText(this, "Failed to send iGift", Toast.LENGTH_LONG).show();
+            } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("DOUBLE_SPEND")) {
+                ActivityUtil.cancelProgressDialog();
+                Toast.makeText(this, "Successfully processed iGift", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -415,8 +418,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                     dialog.cancel();
                     ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
                     ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
-                    //sendPromize(captureScreen(), amount.getText().toString());
-                    captureScreen();
+                    sendPromize(captureScreen(), amount.getText().toString());
+                    //captureScreen();
                 } else {
                     Toast.makeText(NewPromizeActivity.this, "Invalid password", Toast.LENGTH_LONG).show();
                 }

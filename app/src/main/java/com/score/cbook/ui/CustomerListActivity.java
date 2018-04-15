@@ -27,7 +27,6 @@ import com.score.cbook.db.UserSource;
 import com.score.cbook.enums.CustomerActionType;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.pojo.ChequeUser;
-import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PhoneBookUtil;
 import com.score.senzc.enums.SenzTypeEnum;
@@ -92,6 +91,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     protected void onResume() {
         super.onResume();
         registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
+        refreshList();
     }
 
     @Override
