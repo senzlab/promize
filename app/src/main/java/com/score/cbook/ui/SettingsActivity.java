@@ -24,10 +24,12 @@ public class SettingsActivity extends BaseActivity {
     private TextView phonev;
     private TextView password;
     private TextView terms;
+    private TextView about;
     private Button accBtn;
     private Button phnBtn;
     private Button passBtn;
     private Button termsBtn;
+    private Button aboutBtn;
 
     private Account userAccount;
 
@@ -71,42 +73,16 @@ public class SettingsActivity extends BaseActivity {
         phonev = (TextView) findViewById(R.id.phonev);
         password = (TextView) findViewById(R.id.promizeId);
         terms = (TextView) findViewById(R.id.terms);
+        about = (TextView) findViewById(R.id.about);
         phone.setTypeface(typeface, Typeface.NORMAL);
         phonev.setTypeface(typeface, Typeface.NORMAL);
         accountv.setTypeface(typeface, Typeface.NORMAL);
         account.setTypeface(typeface, Typeface.NORMAL);
         password.setTypeface(typeface, Typeface.NORMAL);
         terms.setTypeface(typeface, Typeface.NORMAL);
+        about.setTypeface(typeface, Typeface.NORMAL);
 
-        // buttons
         accBtn = (Button) findViewById(R.id.acc_btn);
-        phnBtn = (Button) findViewById(R.id.phn_btn);
-        passBtn = (Button) findViewById(R.id.pass_btn);
-        termsBtn = (Button) findViewById(R.id.terms_btn);
-        accBtn.setTypeface(typeface, Typeface.BOLD);
-        phnBtn.setTypeface(typeface, Typeface.BOLD);
-        passBtn.setTypeface(typeface, Typeface.BOLD);
-        termsBtn.setTypeface(typeface, Typeface.BOLD);
-
-        Button passBtn = (Button) findViewById(R.id.pass_btn);
-        passBtn.setTypeface(typeface, Typeface.BOLD);
-        passBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateTopasswordChange();
-            }
-        });
-
-        Button phnBtn = (Button) findViewById(R.id.phn_btn);
-        phnBtn.setTypeface(typeface, Typeface.BOLD);
-        phnBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToUsernameChange();
-            }
-        });
-
-        Button accBtn = (Button) findViewById(R.id.acc_btn);
         accBtn.setTypeface(typeface, Typeface.BOLD);
         accBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +91,25 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 
-        Button termsBtn = (Button) findViewById(R.id.terms_btn);
+        phnBtn = (Button) findViewById(R.id.phn_btn);
+        phnBtn.setTypeface(typeface, Typeface.BOLD);
+        phnBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToUsernameChange();
+            }
+        });
+
+        passBtn = (Button) findViewById(R.id.pass_btn);
+        passBtn.setTypeface(typeface, Typeface.BOLD);
+        passBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateTopasswordChange();
+            }
+        });
+
+        termsBtn = (Button) findViewById(R.id.terms_btn);
         termsBtn.setTypeface(typeface, Typeface.BOLD);
         termsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +118,14 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 
+        aboutBtn = (Button) findViewById(R.id.about_btn);
+        aboutBtn.setTypeface(typeface, Typeface.BOLD);
+        aboutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToAbout();
+            }
+        });
     }
 
     private void initPrefs() {
@@ -170,22 +172,6 @@ public class SettingsActivity extends BaseActivity {
         setSupportActionBar(toolbar);
     }
 
-    private void navigateTopasswordChange() {
-        Intent intent = new Intent(SettingsActivity.this, PasswordChangeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
-        finish();
-    }
-
-    private void navigateToUsernameChange() {
-        Intent intent = new Intent(SettingsActivity.this, UsernameChangeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
-        finish();
-    }
-
     private void navigateToAddAccount() {
         if (userAccount.getAccountNo().isEmpty()) {
             // account verify
@@ -210,12 +196,32 @@ public class SettingsActivity extends BaseActivity {
         }
     }
 
+    private void navigateToUsernameChange() {
+        Intent intent = new Intent(SettingsActivity.this, UsernameChangeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
+        finish();
+    }
+
+    private void navigateTopasswordChange() {
+        Intent intent = new Intent(SettingsActivity.this, PasswordChangeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
+        finish();
+    }
+
     private void navigateToTerms() {
         Intent intent = new Intent(SettingsActivity.this, TermsOfUseActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.stay_in);
         finish();
+    }
+
+    private void navigateToAbout() {
+
     }
 
 }
