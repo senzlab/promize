@@ -15,6 +15,7 @@ public class StickerListActivity extends BaseActivity implements View.OnClickLis
     private ImageView flower;
     private ImageView heartj;
     private ImageView hearti;
+    private ImageView valentineGift;
     private ImageView baloon;
     private ImageView stars;
     private ImageView cheers;
@@ -22,6 +23,7 @@ public class StickerListActivity extends BaseActivity implements View.OnClickLis
     private ImageView gift;
     private ImageView eyes;
     private ImageView rose;
+    private ImageView starShoot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class StickerListActivity extends BaseActivity implements View.OnClickLis
         flower = (ImageView) findViewById(R.id.flowers);
         heartj = (ImageView) findViewById(R.id.heartsj);
         hearti = (ImageView) findViewById(R.id.heart);
+        valentineGift = (ImageView) findViewById(R.id.valentine_gift);
         baloon = (ImageView) findViewById(R.id.baloons);
         stars = (ImageView) findViewById(R.id.stars);
         cheers = (ImageView) findViewById(R.id.cheers);
@@ -72,10 +75,12 @@ public class StickerListActivity extends BaseActivity implements View.OnClickLis
         gift = (ImageView) findViewById(R.id.gift);
         eyes = (ImageView) findViewById(R.id.eyes);
         rose = (ImageView) findViewById(R.id.rose);
+        starShoot = (ImageView) findViewById(R.id.shoot_star);
 
         flower.setOnClickListener(this);
         heartj.setOnClickListener(this);
         hearti.setOnClickListener(this);
+        valentineGift.setOnClickListener(this);
         baloon.setOnClickListener(this);
         stars.setOnClickListener(this);
         cheers.setOnClickListener(this);
@@ -83,6 +88,7 @@ public class StickerListActivity extends BaseActivity implements View.OnClickLis
         gift.setOnClickListener(this);
         eyes.setOnClickListener(this);
         rose.setOnClickListener(this);
+        starShoot.setOnClickListener(this);
     }
 
     @Override
@@ -93,6 +99,8 @@ public class StickerListActivity extends BaseActivity implements View.OnClickLis
             selectSticker(R.drawable.heartsj);
         } else if (v == hearti) {
             selectSticker(R.drawable.heartsi);
+        } else if (v == valentineGift) {
+            selectSticker(R.drawable.giftbox);
         } else if (v == baloon) {
             selectSticker(R.drawable.balloons);
         } else if (v == stars) {
@@ -107,6 +115,8 @@ public class StickerListActivity extends BaseActivity implements View.OnClickLis
             selectSticker(R.drawable.heartw);
         } else if (v == rose) {
             selectSticker(R.drawable.rose);
+        } else if (v == starShoot) {
+            selectSticker(R.drawable.shooting_star);
         }
     }
 
@@ -115,6 +125,5 @@ public class StickerListActivity extends BaseActivity implements View.OnClickLis
         intent.putExtra("STICKER", stickerId);
         setResult(Activity.RESULT_OK, intent);
         finish();
-        //overridePendingTransition(R.anim.stay_in, R.anim.right_out);
     }
 }

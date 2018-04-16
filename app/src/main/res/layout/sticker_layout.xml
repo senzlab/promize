@@ -122,9 +122,11 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
+                    android:id="@+id/valentine_gift"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/giftbox" />
 
             </RelativeLayout>
         </RelativeLayout>
@@ -352,10 +354,11 @@
                 android:layout_centerInParent="true">
 
                 <ImageView
-                    android:id="@+id/heart3"
+                    android:id="@+id/shoot_star"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/shooting_star" />
             </RelativeLayout>
         </RelativeLayout>
 
