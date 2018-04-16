@@ -70,7 +70,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     private TextView rsHeader;
     private EditText amount;
 
-    // message panel
+    // image/message panel
+    private RelativeLayout imgPanel;
     private RelativeLayout messageContainer;
     private EditText message;
 
@@ -129,6 +130,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         // init
         initUi();
         if (getIntent().hasExtra("USER")) this.user = getIntent().getParcelableExtra("USER");
+        else this.user = new ChequeUser("Era");
     }
 
     @Override
@@ -281,11 +283,16 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     private void addSticker(int resourceId) {
+        View parent = findViewById(R.id.img_container);
         int w = (int) getResources().getDimension(R.dimen.imageview_width);
         int h = (int) getResources().getDimension(R.dimen.imageview_height);
+        int t = (parent.getHeight() - h) / 2;
+        int l = (parent.getWidth() - w) / 2;
 
         ImageView imageView = new ImageView(this);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(w, h);
+        layoutParams.topMargin = t;
+        layoutParams.leftMargin = l;
         imageView.setLayoutParams(layoutParams);
         imageView.setImageResource(resourceId);
         captureLayout.addView(imageView);
