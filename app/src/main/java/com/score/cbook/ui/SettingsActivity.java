@@ -115,6 +115,15 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 
+        Button termsBtn = (Button) findViewById(R.id.terms_btn);
+        termsBtn.setTypeface(typeface, Typeface.BOLD);
+        termsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToTerms();
+            }
+        });
+
     }
 
     private void initPrefs() {
@@ -199,6 +208,14 @@ public class SettingsActivity extends BaseActivity {
             overridePendingTransition(R.anim.right_in, R.anim.stay_in);
             finish();
         }
+    }
+
+    private void navigateToTerms() {
+        Intent intent = new Intent(SettingsActivity.this, TermsOfUseActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
+        finish();
     }
 
 }

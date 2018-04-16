@@ -222,6 +222,12 @@ public class RegistrationActivity extends BaseActivity {
         sendSenz(SenzUtil.authSenz(this, user));
     }
 
+    private void navigateToTerms() {
+        Intent intent = new Intent(RegistrationActivity.this, DashBoardActivity.class);
+        RegistrationActivity.this.startActivity(intent);
+        RegistrationActivity.this.finish();
+    }
+
     private void navigateToHome() {
         Intent intent = new Intent(RegistrationActivity.this, DashBoardActivity.class);
         RegistrationActivity.this.startActivity(intent);

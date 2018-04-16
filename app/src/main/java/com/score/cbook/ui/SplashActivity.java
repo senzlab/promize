@@ -56,13 +56,20 @@ public class SplashActivity extends BaseActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    navigateToRegistration();
+                    navigateToTerms();
                 }
             }, 3000);
         } else {
             // have account, goto login
             navigateToHome();
         }
+    }
+
+    public void navigateToTerms() {
+        Intent intent = new Intent(this, TermsOfUseActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        SplashActivity.this.finish();
     }
 
     public void navigateToHome() {
@@ -72,10 +79,4 @@ public class SplashActivity extends BaseActivity {
         SplashActivity.this.finish();
     }
 
-    public void navigateToRegistration() {
-        Intent intent = new Intent(this, RegistrationActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        SplashActivity.this.finish();
-    }
 }
