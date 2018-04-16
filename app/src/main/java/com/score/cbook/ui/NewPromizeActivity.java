@@ -71,7 +71,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     private EditText amount;
 
     // image/message panel
-    private RelativeLayout imgPanel;
+    private View stickerContainer;
     private RelativeLayout messageContainer;
     private EditText message;
 
@@ -175,6 +175,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         previewLayout = (FrameLayout) findViewById(R.id.preview_frame);
         isCameraOn = false;
 
+        stickerContainer = findViewById(R.id.sticker_container);
         capturedPhoto = (ImageView) findViewById(R.id.captured_photo);
         overlayFrame = (FrameLayout) findViewById(R.id.overlay_frame);
 
@@ -283,11 +284,10 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     private void addSticker(int resourceId) {
-        //View parent = findViewById(R.id.img_container);
         int w = (int) getResources().getDimension(R.dimen.imageview_width);
         int h = (int) getResources().getDimension(R.dimen.imageview_height);
-        //int t = (parent.getHeight() - h) / 2;
-        //int l = (parent.getWidth() - w) / 2;
+        //int t = (stickerContainer.getHeight() - h) / 2;
+        //int l = (stickerContainer.getWidth() - w) / 2;
         int t = 100;
         int l = 100;
 
@@ -552,6 +552,10 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                     layoutParams.rightMargin = 0;
                     layoutParams.bottomMargin = 0;
                     view.setLayoutParams(layoutParams);
+
+                    if (layoutParams.topMargin > stickerContainer.getHeight()) {
+                        captureLayout.removeView(view);
+                    }
                     break;
             }
             captureLayout.invalidate();
