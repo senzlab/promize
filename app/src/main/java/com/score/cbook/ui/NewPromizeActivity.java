@@ -283,11 +283,13 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     private void addSticker(int resourceId) {
-        View parent = findViewById(R.id.img_container);
+        //View parent = findViewById(R.id.img_container);
         int w = (int) getResources().getDimension(R.dimen.imageview_width);
         int h = (int) getResources().getDimension(R.dimen.imageview_height);
-        int t = (parent.getHeight() - h) / 2;
-        int l = (parent.getWidth() - w) / 2;
+        //int t = (parent.getHeight() - h) / 2;
+        //int l = (parent.getWidth() - w) / 2;
+        int t = 100;
+        int l = 100;
 
         ImageView imageView = new ImageView(this);
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(w, h);
