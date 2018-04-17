@@ -21,12 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.senz.ISenzService;
 import com.score.senzc.pojos.Senz;
-
-import java.util.List;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -112,7 +109,7 @@ public class BaseActivity extends AppCompatActivity {
 
         // set layout for dialog
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.share_confirm_message_dialog);
+        dialog.setContentView(R.layout.confirm_message_dialog);
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(true);
@@ -128,7 +125,7 @@ public class BaseActivity extends AppCompatActivity {
         messageTextView.setTypeface(typeface);
 
         //set ok button
-        Button okButton = (Button) dialog.findViewById(R.id.information_message_dialog_layout_ok_button);
+        Button okButton = (Button) dialog.findViewById(R.id.done);
         okButton.setTypeface(typeface, Typeface.BOLD);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,7 +136,7 @@ public class BaseActivity extends AppCompatActivity {
         });
 
         // cancel button
-        Button cancelButton = (Button) dialog.findViewById(R.id.information_message_dialog_layout_cancel_button);
+        Button cancelButton = (Button) dialog.findViewById(R.id.cancel);
         cancelButton.setTypeface(typeface, Typeface.BOLD);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

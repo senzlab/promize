@@ -59,10 +59,11 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/edit_text_no_border"
                         android:gravity="left"
-                        android:hint="Write something here"
+                        android:hint="Write your message here"
                         android:inputType="textMultiLine|textNoSuggestions|textCapSentences"
                         android:textColor="@color/white"
                         android:textColorHint="@color/white"
+                        android:textCursorDrawable="@drawable/cursor_drawable_white"
                         android:textSize="30sp"
                         android:visibility="visible" />
                 </RelativeLayout>

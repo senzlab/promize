@@ -37,6 +37,7 @@ import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAmountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
+import com.score.cbook.exceptions.InvalidMsgException;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.util.ActivityUtil;
@@ -197,6 +198,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         capture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
                 capture();
             }
         });
@@ -205,6 +207,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
                 send();
             }
         });
@@ -213,6 +216,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         addPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
                 addPhoto();
             }
         });
@@ -221,6 +225,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         addText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
                 addText();
             }
         });
@@ -229,6 +234,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         addSticker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
                 Intent intent = new Intent(NewPromizeActivity.this, StickerListActivity.class);
                 startActivityForResult(intent, 1);
             }
@@ -238,6 +244,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         addBackground.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
                 Intent intent = new Intent(NewPromizeActivity.this, BackgroundListActivity.class);
                 startActivityForResult(intent, 2);
             }
@@ -388,7 +395,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
     private void send() {
         try {
-            ActivityUtil.isValidGift(amount.getText().toString().trim(), "");
+            ActivityUtil.isValidGift(amount.getText().toString().trim(), message.getText().toString().trim());
             if (NetworkUtil.isAvailableNetwork(this)) askPassword();
             else Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
         } catch (InvalidInputFieldsException e) {
@@ -397,6 +404,9 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         } catch (InvalidAmountException e) {
             displayInformationMessageDialog("Error", "iGift amount should not exceed 100000 rupees");
             e.printStackTrace();
+        } catch (InvalidMsgException e) {
+            e.printStackTrace();
+            displayInformationMessageDialog("Error", "Please write iGift message to send");
         }
     }
 

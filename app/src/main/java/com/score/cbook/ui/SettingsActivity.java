@@ -188,7 +188,7 @@ public class SettingsActivity extends BaseActivity {
             overridePendingTransition(R.anim.right_in, R.anim.stay_in);
             finish();
         } else {
-            Intent intent = new Intent(SettingsActivity.this, AddAccountActivity.class);
+            Intent intent = new Intent(SettingsActivity.this, AddAccountInfoActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             overridePendingTransition(R.anim.right_in, R.anim.stay_in);

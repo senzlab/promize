@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidAmountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
+import com.score.cbook.exceptions.InvalidMsgException;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.MisMatchFieldException;
 
@@ -178,18 +179,13 @@ public class ActivityUtil {
             }
         }
 
-        if (!acc.equals(confirmAcc))
-            throw new InvalidAccountException();
+        if (!acc.equals(confirmAcc)) throw new InvalidAccountException();
     }
 
-    public static void isValidGift(String amount, String msg) throws InvalidInputFieldsException, InvalidAmountException {
-        if (amount.isEmpty()) {
-            throw new InvalidInputFieldsException();
-        }
-
-        if (Integer.parseInt(amount) > 100000) {
-            throw new InvalidAmountException();
-        }
+    public static void isValidGift(String amount, String msg) throws InvalidInputFieldsException, InvalidAmountException, InvalidMsgException {
+        if (amount.isEmpty()) throw new InvalidInputFieldsException();
+        if (msg.isEmpty()) throw new InvalidMsgException();
+        if (Integer.parseInt(amount) > 100000) throw new InvalidAmountException();
     }
 
     public static boolean isNewGift(String preAmount, String amount) {
