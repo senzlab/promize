@@ -196,10 +196,10 @@ public class RedeemActivity extends BaseActivity {
             });
         } catch (InvalidAccountException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("Error", "Mismatching account number");
+            displayInformationMessageDialog("ERROR", "Mismatching account number");
         } catch (InvalidInputFieldsException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("Error", "Invalid account number. Your account number must be 12 digits and starting with 1 or 0");
+            displayInformationMessageDialog("ERROR", "Invalid account number. Your account number must be 12 digits and starting with 1 or 0");
         }
     }
 

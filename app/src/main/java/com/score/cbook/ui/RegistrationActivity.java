@@ -192,13 +192,13 @@ public class RegistrationActivity extends BaseActivity {
             });
         } catch (InvalidAccountException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("Error", "Invalid phone no");
+            displayInformationMessageDialog("ERROR", "Invalid phone no");
         } catch (InvalidPasswordException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("Error", "Invalid password. Password should contains more than 7 characters with special character");
+            displayInformationMessageDialog("ERROR", "Invalid password. Password should contains more than 7 characters with special character");
         } catch (MisMatchFieldException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("Error", "Mismatching password and confirm password");
+            displayInformationMessageDialog("ERROR", "Mismatching password and confirm password");
         }
     }
 

@@ -117,7 +117,7 @@ public class BaseActivity extends AppCompatActivity {
         // set dialog texts
         TextView messageHeaderTextView = (TextView) dialog.findViewById(R.id.information_message_dialog_layout_message_header_text);
         TextView messageTextView = (TextView) dialog.findViewById(R.id.information_message_dialog_layout_message_text);
-        messageHeaderTextView.setText("Confirm");
+        messageHeaderTextView.setText("CONFIRM");
         messageTextView.setText(Html.fromHtml(message));
 
         // set custom font

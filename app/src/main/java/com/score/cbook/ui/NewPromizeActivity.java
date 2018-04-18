@@ -398,14 +398,14 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             if (NetworkUtil.isAvailableNetwork(this)) askPassword();
             else Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
         } catch (InvalidInputFieldsException e) {
-            displayInformationMessageDialog("Error", "Empty iGift amount");
+            displayInformationMessageDialog("ERROR", "Empty iGift amount");
             e.printStackTrace();
         } catch (InvalidAmountException e) {
-            displayInformationMessageDialog("Error", "iGift amount should not exceed 100000 rupees");
+            displayInformationMessageDialog("ERROR", "iGift amount should not exceed 100000 rupees");
             e.printStackTrace();
         } catch (InvalidMsgException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("Error", "Please write iGift message to send");
+            displayInformationMessageDialog("ERROR", "Please write iGift message to send");
         }
     }
 

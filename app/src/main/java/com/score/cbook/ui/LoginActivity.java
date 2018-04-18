@@ -123,10 +123,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             Toast.makeText(this, "Login success", Toast.LENGTH_LONG).show();
         } catch (MisMatchFieldException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("Error", "Invalid password");
+            displayInformationMessageDialog("ERROR", "Invalid password");
         } catch (InvalidInputFieldsException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("Error", "Empty password");
+            displayInformationMessageDialog("ERROR", "Empty password");
         }
     }
 

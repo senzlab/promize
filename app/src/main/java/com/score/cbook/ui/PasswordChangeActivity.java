@@ -91,13 +91,13 @@ public class PasswordChangeActivity extends BaseActivity {
                         navigateToSettings(useAccount);
                     } catch (InvalidPasswordException e) {
                         e.printStackTrace();
-                        displayInformationMessageDialog("Error", "Invalid password. Password should contains more than 7 characters with special character");
+                        displayInformationMessageDialog("ERROR", "Invalid password. Password should contains more than 7 characters with special character");
                     } catch (MisMatchFieldException e) {
                         e.printStackTrace();
-                        displayInformationMessageDialog("Error", "Mismatching password and confirm password");
+                        displayInformationMessageDialog("ERROR", "Mismatching password and confirm password");
                     }
                 } else {
-                    displayInformationMessageDialog("Error", "Invalid current password ");
+                    displayInformationMessageDialog("ERROR", "Invalid current password ");
                 }
             }
         });
