@@ -131,7 +131,6 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         // init
         initUi();
         if (getIntent().hasExtra("USER")) this.user = getIntent().getParcelableExtra("USER");
-        else this.user = new ChequeUser("Era");
     }
 
     @Override

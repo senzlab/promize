@@ -81,7 +81,7 @@
                 android:layout_marginRight="40dp"
                 android:layout_weight="2"
                 android:gravity="center"
-                android:text="There aren't any contacts. Click on plus(+) sign to add a contact"
+                android:text="You don't have any iGift contacts. Please click on plus(+) sign to add a new contact"
                 android:textColor="@color/android_grey"
                 android:textSize="24sp" />
         </LinearLayout>

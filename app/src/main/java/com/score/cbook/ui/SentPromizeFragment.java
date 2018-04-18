@@ -68,7 +68,7 @@ public class SentPromizeFragment extends Fragment implements AdapterView.OnItemC
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/GeosansLight.ttf");
         TextView emptyText = (TextView) view.findViewById(R.id.empty_view_text);
         emptyText.setTypeface(typeface, Typeface.NORMAL);
-        emptyText.setText("There aren't any sent iGifts yet");
+        emptyText.setText("You haven't sent any iGifts yet");
     }
 
     private void initListView(View view) {

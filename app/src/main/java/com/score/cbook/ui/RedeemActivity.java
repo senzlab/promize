@@ -199,7 +199,7 @@ public class RedeemActivity extends BaseActivity {
             displayInformationMessageDialog("Error", "Mismatching account number");
         } catch (InvalidInputFieldsException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("Error", "Account number should be 12 character length and start with 0 or 1");
+            displayInformationMessageDialog("Error", "Invalid account number. Your account number must be 12 digits and starting with 1 or 0");
         }
     }
 
