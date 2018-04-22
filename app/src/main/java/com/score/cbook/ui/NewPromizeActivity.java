@@ -63,6 +63,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     // image panel
     private ImageView capturedPhoto;
     private FrameLayout overlayFrame;
+    private int color = R.color.black;
 
     // amount panel
     private RelativeLayout infoPanel;
@@ -79,6 +80,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     // buttons
     private FloatingActionButton capture;
     private FloatingActionButton send;
+    private ImageView camClose;
     private ImageView addPhoto;
     private ImageView addText;
     private ImageView addSticker;
@@ -131,6 +133,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         // init
         initUi();
         if (getIntent().hasExtra("USER")) this.user = getIntent().getParcelableExtra("USER");
+        else this.user = new ChequeUser("era");
     }
 
     @Override
@@ -249,8 +252,16 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             }
         });
 
-        overlayFrame.setBackgroundColor(getResources().getColor(R.color.black));
-        capturedPhoto.setVisibility(View.GONE);
+        camClose = (ImageView) findViewById(R.id.cam_close);
+        camClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
+                closeCam();
+            }
+        });
+
+        addBackground(color);
         messageContainer.setVisibility(View.VISIBLE);
 
         capture.setVisibility(View.GONE);
@@ -259,6 +270,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         addText.setVisibility(View.VISIBLE);
         addSticker.setVisibility(View.VISIBLE);
         addBackground.setVisibility(View.VISIBLE);
+        camClose.setVisibility(View.GONE);
         infoPanel.setVisibility(View.VISIBLE);
     }
 
@@ -266,8 +278,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         isCameraOn = true;
         initCameraPreview(Camera.CameraInfo.CAMERA_FACING_FRONT);
 
-        overlayFrame.setBackgroundColor(getResources().getColor(R.color.colorPrimaryTrans));
-        capturedPhoto.setVisibility(View.GONE);
+        addBackground(R.color.colorPrimaryTrans);
 
         send.setVisibility(View.GONE);
         capture.setVisibility(View.VISIBLE);
@@ -275,6 +286,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         addText.setVisibility(View.GONE);
         addSticker.setVisibility(View.GONE);
         addBackground.setVisibility(View.GONE);
+        camClose.setVisibility(View.VISIBLE);
 
         infoPanel.setVisibility(View.GONE);
         Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_out);
@@ -382,6 +394,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                 addText.setVisibility(View.VISIBLE);
                 addSticker.setVisibility(View.VISIBLE);
                 addBackground.setVisibility(View.VISIBLE);
+                camClose.setVisibility(View.GONE);
 
                 infoPanel.setVisibility(View.VISIBLE);
                 Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_in);
@@ -390,6 +403,27 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                 amount.requestFocus();
             }
         });
+    }
+
+    private void closeCam() {
+        releaseCameraPreview();
+        isCameraOn = false;
+
+        addBackground(color);
+
+        send.setVisibility(View.VISIBLE);
+        capture.setVisibility(View.GONE);
+        addPhoto.setVisibility(View.VISIBLE);
+        addText.setVisibility(View.VISIBLE);
+        addSticker.setVisibility(View.VISIBLE);
+        addBackground.setVisibility(View.VISIBLE);
+        camClose.setVisibility(View.GONE);
+
+        infoPanel.setVisibility(View.VISIBLE);
+        Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bottom_in);
+        infoPanel.startAnimation(a);
+
+        amount.requestFocus();
     }
 
     private void send() {
@@ -401,7 +435,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             displayInformationMessageDialog("ERROR", "Empty iGift amount");
             e.printStackTrace();
         } catch (InvalidAmountException e) {
-            displayInformationMessageDialog("ERROR", "iGift amount should not exceed 100000 rupees");
+            displayInformationMessageDialog("ERROR", "iGift amount should not exceed 10000 rupees");
             e.printStackTrace();
         } catch (InvalidMsgException e) {
             e.printStackTrace();
@@ -522,7 +556,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             if (resultCode == Activity.RESULT_OK) {
                 Bundle b = data.getExtras();
                 if (b != null) {
-                    addBackground(b.getInt("COLOR"));
+                    color = b.getInt("COLOR");
+                    addBackground(color);
                 }
             } else if (resultCode == 0) {
                 System.out.println("RESULT CANCELLED");
