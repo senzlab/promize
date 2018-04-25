@@ -132,6 +132,7 @@ public class AccountVerifyInfoActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // exit
+                finish();
             }
         });
     }

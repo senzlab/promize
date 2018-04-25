@@ -31,7 +31,7 @@ import java.util.List;
 public class SenzService extends Service {
 
     public static final String SENZ_HOST = "222.165.167.19";
-    //public static final String SENZ_HOST = "192.168.43.241";
+    //public static final String SENZ_HOST = "10.2.2.148";
     public static final int SENZ_PORT = 7171;
 
     // senz socket
