@@ -496,12 +496,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         Bitmap bitmap = Bitmap.createBitmap(v1.getDrawingCache());
         v1.setDrawingCacheEnabled(false);
 
-        // resize and save image
-        Long t = System.currentTimeMillis();
-        byte[] resizedImage = ImageUtil.compressImg(ImageUtil.bmpToBytes(bitmap), false, false);
-        ImageUtil.saveImg(SenzUtil.getUid(this, t.toString() + ".jpg"), resizedImage);
-
-        return resizedImage;
+        return ImageUtil.compressImg(ImageUtil.bmpToBytes(bitmap), false, false);
     }
 
     private void sendPromize(byte[] compBytes, String amount) {

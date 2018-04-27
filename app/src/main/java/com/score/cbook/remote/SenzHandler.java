@@ -138,25 +138,27 @@ class SenzHandler {
                 senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARE_FAILED"));
             }
         } else if (senz.getAttributes().containsKey("blob")) {
-            // save cheque
-            Long timestamp = (System.currentTimeMillis() / 1000);
-            String user = senz.getAttributes().get("from");
-            saveCheque(timestamp, senz.getAttributes().get("uid"), senz.getAttributes().get("id"), senz.getAttributes().get("amnt"), user, senzService.getApplicationContext());
+            try {
+                // save cheque
+                Long timestamp = (System.currentTimeMillis() / 1000);
+                String user = senz.getAttributes().get("from");
+                saveCheque(timestamp, senz.getAttributes().get("uid"), senz.getAttributes().get("id"), senz.getAttributes().get("amnt"), user, senzService.getApplicationContext());
 
-            // save img
-            String imgName = senz.getAttributes().get("uid") + ".jpg";
-            ImageUtil.saveImg(imgName, senz.getAttributes().get("blob"));
+                // save img
+                String imgName = senz.getAttributes().get("uid") + ".jpg";
+                ImageUtil.saveImg(imgName, senz.getAttributes().get("blob"));
 
-            // broadcast
-            broadcastSenz(senz, senzService.getApplicationContext());
-            ChequeUser secretUser = UserSource.getUser(senzService.getApplicationContext(), user);
+                // broadcast
+                broadcastSenz(senz, senzService.getApplicationContext());
+                ChequeUser secretUser = UserSource.getUser(senzService.getApplicationContext(), user);
 
-            //senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "CHEQUE_SHARED"));
-
-            // show notification
-            String title = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
-            Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, title, senzService.getString(R.string.cheque_notification), user);
-            NotificationzHandler.notifyCheque(senzService.getApplicationContext(), notifcationz);
+                // show notification
+                String title = PhoneBookUtil.getContactName(senzService, secretUser.getPhone());
+                Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, title, senzService.getString(R.string.cheque_notification), user);
+                NotificationzHandler.notifyCheque(senzService.getApplicationContext(), notifcationz);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -242,51 +244,43 @@ class SenzHandler {
     }
 
     private void saveCheque(Long timestamp, String uid, String id, String amnt, String user, final Context context) {
-        try {
-            // create secret
-            final Cheque cheque = new Cheque();
-            cheque.setUid(uid);
-            cheque.setTimestamp(timestamp);
-            cheque.setDeliveryState(DeliveryState.NONE);
-            cheque.setBlob("");
-            cheque.setMyCheque(false);
-            cheque.setCid(id);
-            cheque.setChequeState(ChequeState.TRANSFER);
-            cheque.setAmount(amnt);
-            cheque.setViewed(false);
+        // create secret
+        final Cheque cheque = new Cheque();
+        cheque.setUid(uid);
+        cheque.setTimestamp(timestamp);
+        cheque.setDeliveryState(DeliveryState.NONE);
+        cheque.setBlob("");
+        cheque.setMyCheque(false);
+        cheque.setCid(id);
+        cheque.setChequeState(ChequeState.TRANSFER);
+        cheque.setAmount(amnt);
+        cheque.setViewed(false);
 
-            ChequeUser chequeUser = new ChequeUser(user);
-            cheque.setUser(chequeUser);
-            ChequeSource.createCheque(context, cheque);
+        ChequeUser chequeUser = new ChequeUser(user);
+        cheque.setUser(chequeUser);
+        ChequeSource.createCheque(context, cheque);
 
-            // update unread count by one
-            UserSource.updateUnreadChequeCount(context, user, 1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // update unread count by one
+        UserSource.updateUnreadChequeCount(context, user, 1);
     }
 
     private void saveSecret(Long timestamp, String uid, String blob, BlobType blobType, String user, final Context context) {
-        try {
-            // create secret
-            final Secret secret = new Secret();
-            secret.setId(uid);
-            secret.setTimeStamp(timestamp);
-            secret.setDeliveryState(DeliveryState.NONE);
-            secret.setBlob(blob);
-            secret.setBlobType(blobType);
-            secret.setMySecret(false);
-            secret.setViewed(false);
+        // create secret
+        final Secret secret = new Secret();
+        secret.setId(uid);
+        secret.setTimeStamp(timestamp);
+        secret.setDeliveryState(DeliveryState.NONE);
+        secret.setBlob(blob);
+        secret.setBlobType(blobType);
+        secret.setMySecret(false);
+        secret.setViewed(false);
 
-            ChequeUser chequeUser = new ChequeUser(user);
-            secret.setUser(chequeUser);
-            SecretSource.createSecret(context, secret);
+        ChequeUser chequeUser = new ChequeUser(user);
+        secret.setUser(chequeUser);
+        SecretSource.createSecret(context, secret);
 
-            // update unread count by one
-            UserSource.updateUnreadSecretCount(context, user, 1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // update unread count by one
+        UserSource.updateUnreadSecretCount(context, user, 1);
     }
 
     private void broadcastSenz(Senz senz, Context context) {

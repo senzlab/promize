@@ -111,8 +111,7 @@
         <activity
             android:name=".ui.NewPromizeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme">
-        </activity>
+            android:theme="@style/MyMaterialTheme"></activity>
         <activity android:name=".ui.ChequeListTabActivity" />
 
         <activity
@@ -125,17 +124,50 @@
             android:theme="@style/MyMaterialTheme" />
         <activity
             android:name=".ui.RedeemActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".ui.AddAccountActivity" />
-        <activity android:name=".ui.SaltConfirmInfoActivity" />
-        <activity android:name=".ui.SaltConfirmActivity" />
-        <activity android:name=".ui.SettingsActivity" />
-        <activity android:name=".ui.BankListActivity" />
-        <activity android:name=".ui.PasswordChangeActivity" />
-        <activity android:name=".ui.UsernameChangeActivity" />
-        <activity android:name=".ui.StickerListActivity" />
-        <activity android:name=".ui.BackgroundListActivity" />
-        <activity android:name=".ui.TermsOfUseActivity" />
+        <activity
+            android:name=".ui.AddAccountActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.SaltConfirmInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.SaltConfirmActivity"
+
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.BankListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.PasswordChangeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.UsernameChangeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.StickerListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.BackgroundListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.TermsOfUseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
 
         <!-- Servicves -->
         <service

@@ -115,11 +115,6 @@ public class ImageUtil {
     }
 
     public static void saveImg(String name, String image) {
-        byte data[] = Base64.decode(image, Base64.DEFAULT);
-        saveImg(name, data);
-    }
-
-    public static void saveImg(String name, byte[] image) {
         // create root
         File rahasakRootDir = new File(Environment.getExternalStorageDirectory().getPath() + "/iGift");
         if (!rahasakRootDir.exists()) {
@@ -130,7 +125,7 @@ public class ImageUtil {
         try {
             File selfi = new File(rahasakRootDir, name);
             FileOutputStream fos = new FileOutputStream(selfi, false);
-            fos.write(image);
+            fos.write(Base64.decode(image, Base64.DEFAULT));
             fos.flush();
             fos.close();
         } catch (IOException e) {

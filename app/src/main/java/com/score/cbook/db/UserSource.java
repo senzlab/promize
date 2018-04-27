@@ -54,16 +54,14 @@ public class UserSource {
             // have matching user
             // so get user data
             // we return id as password since we no storing users password in database
-            String _username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_USERNAME));
-
-            // clear
-            cursor.close();
-
-            ChequeUser chequeUser = new ChequeUser(_username);
+            String username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_USERNAME));
+            ChequeUser chequeUser = new ChequeUser(username);
             chequeUser.setPhone(phoneNo);
 
             return chequeUser;
         }
+
+        cursor.close();
 
         return null;
     }
@@ -196,6 +194,7 @@ public class UserSource {
                 null, // group by
                 null); // join
 
+        ChequeUser chequeUser = new ChequeUser(username);
         if (cursor.moveToFirst()) {
             // have matching user
             // so get user data
@@ -212,9 +211,6 @@ public class UserSource {
             int unreadChequeCount = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_UNREAD_CHEQUE_COUNT));
 
             // clear
-            cursor.close();
-
-            ChequeUser chequeUser = new ChequeUser(username);
             chequeUser.setPhone(phone);
             chequeUser.setPubKey(pubKey);
             chequeUser.setPubKeyHash(pubKeyHash);
@@ -229,7 +225,9 @@ public class UserSource {
             return chequeUser;
         }
 
-        return null;
+        cursor.close();
+
+        return chequeUser;
     }
 
     public static LinkedList<ChequeUser> getAllUsers(Context context) {
