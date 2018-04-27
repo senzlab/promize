@@ -2,7 +2,6 @@ package com.score.cbook.remote;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.score.cbook.R;
 import com.score.cbook.application.SenzApplication;
@@ -52,14 +51,12 @@ class SenzHandler {
             Senz senz = SenzParser.parse(senzMsg);
             switch (senz.getSenzType()) {
                 case SHARE:
-                    Log.d(TAG, "SHARE received");
                     // first write AWA to switch
                     // then handle
                     senzService.writeSenz(SenzUtil.awaSenz(senz.getAttributes().get("uid")));
                     handleShare(senz, senzService);
                     break;
                 case DATA:
-                    Log.d(TAG, "DATA received");
                     // send AWA back
                     // then handle
                     if (senz.getAttributes().containsValue("REG_DONE") || senz.getAttributes().containsValue("REG_ALR"))
@@ -70,13 +67,11 @@ class SenzHandler {
                     handleData(senz, senzService);
                     break;
                 case AWA:
-                    Log.d(TAG, "AWA received");
                     ChequeSource.updateChequeDeliveryState(senzService.getApplicationContext(), senz.getAttributes().get("uid"), DeliveryState.RECEIVED);
                     SecretSource.updateSecretDeliveryState(senzService.getApplicationContext(), senz.getAttributes().get("uid"), DeliveryState.RECEIVED);
                     broadcastSenz(senz, senzService.getApplicationContext());
                     break;
                 case GIYA:
-                    Log.d(TAG, "GIYA received");
                     ChequeSource.updateChequeDeliveryState(senzService.getApplicationContext(), senz.getAttributes().get("uid"), DeliveryState.DELIVERED);
                     SecretSource.updateSecretDeliveryState(senzService.getApplicationContext(), senz.getAttributes().get("uid"), DeliveryState.DELIVERED);
                     broadcastSenz(senz, senzService.getApplicationContext());
@@ -90,7 +85,7 @@ class SenzHandler {
         List<Senz> unackSenzes = new ArrayList<>();
         for (Secret secret : SecretSource.getPendingDeliverySecrets(senzService)) {
             try {
-                unackSenzes.add(SenzUtil.senzFromSecret(senzService.getApplicationContext(), secret));
+                unackSenzes.add(SenzUtil.senzFromSecret(secret));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -101,17 +96,18 @@ class SenzHandler {
     }
 
     private void handleShare(Senz senz, SenzService senzService) {
-        if (senz.getAttributes().containsKey("msg") && senz.getAttributes().containsKey("status")) {
+        if (senz.getAttributes().containsKey("$key")) {
             try {
                 // create user
                 String username = senz.getSender();
+                String encryptedSessionKey = senz.getAttributes().get("$skey");
                 ChequeUser chequeUser = UserSource.getUser(senzService.getApplicationContext(), username);
+                String sessionKey = CryptoUtil.decryptRSA(CryptoUtil.getPrivateKey(senzService.getApplicationContext()), encryptedSessionKey);
                 if (chequeUser != null) {
-                    String encryptedSessionKey = senz.getAttributes().get("$skey");
-                    String sessionKey = CryptoUtil.decryptRSA(CryptoUtil.getPrivateKey(senzService.getApplicationContext()), encryptedSessionKey);
                     UserSource.updateUser(senzService.getApplicationContext(), username, "session_key", sessionKey);
                 } else {
                     chequeUser = new ChequeUser(senz.getSender());
+                    chequeUser.setSessionKey(sessionKey);
                     UserSource.createUser(senzService.getApplicationContext(), chequeUser);
                 }
 
@@ -131,25 +127,6 @@ class SenzHandler {
 
                 // send error ack
                 senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "USER_SHARE_FAILED"));
-            }
-        } else if (senz.getAttributes().containsKey("$skey")) {
-            try {
-                if (UserSource.isExistingUser(senzService.getApplicationContext(), senz.getSender())) {
-                    String encryptedSessionKey = senz.getAttributes().get("$skey");
-                    String sessionKey = CryptoUtil.decryptRSA(CryptoUtil.getPrivateKey(senzService.getApplicationContext()), encryptedSessionKey);
-                    UserSource.updateUser(senzService.getApplicationContext(), senz.getSender(), "session_key", sessionKey);
-
-                    broadcastSenz(senz, senzService.getApplicationContext());
-                    senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARED"));
-                } else {
-                    // means error
-                    senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARE_FAILED"));
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-
-                // send error ack
-                senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARE_FAILED"));
             }
         } else if (senz.getAttributes().containsKey("blob")) {
             try {

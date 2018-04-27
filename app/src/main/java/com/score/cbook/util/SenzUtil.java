@@ -214,15 +214,9 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz senzFromSecret(Context context, Secret secret) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException, UnsupportedEncodingException {
+    public static Senz senzFromSecret(Secret secret) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException, UnsupportedEncodingException {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
-
-        // TODO set new timestamp and uid
-        // TODO update them in db
-        //Long timestamp = (System.currentTimeMillis() / 1000);
-        //String uid = SenzUtil.getUid(context,timestamp.toString());
-
         senzAttributes.put("time", secret.getTimeStamp().toString());
         senzAttributes.put("uid", secret.getId());
         senzAttributes.put("user", secret.getUser().getUsername());
