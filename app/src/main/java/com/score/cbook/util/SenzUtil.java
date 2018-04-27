@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.score.cbook.pojo.Account;
 import com.score.cbook.pojo.Cheque;
+import com.score.cbook.pojo.Secret;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
@@ -213,27 +214,28 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz senzFromPromize(Context context, Cheque cheque) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException, UnsupportedEncodingException {
+    public static Senz senzFromSecret(Context context, Secret secret) throws IllegalBlockSizeException, InvalidKeyException, BadPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, NoSuchProviderException, InvalidAlgorithmParameterException, UnsupportedEncodingException {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
 
         // TODO set new timestamp and uid
         // TODO update them in db
         //Long timestamp = (System.currentTimeMillis() / 1000);
-        //String uid = SenzUtil.getUid(context, timestamp.toString());
-        senzAttributes.put("time", cheque.getTimestamp().toString());
-        senzAttributes.put("uid", cheque.getUid());
-        senzAttributes.put("user", cheque.getUser().getUsername());
-        if (cheque.getUser().getSessionKey() != null && !cheque.getUser().getSessionKey().isEmpty()) {
-            senzAttributes.put("$msg", CryptoUtil.encryptECB(CryptoUtil.getSecretKey(cheque.getUser().getSessionKey()), cheque.getBlob()));
+        //String uid = SenzUtil.getUid(context,timestamp.toString());
+
+        senzAttributes.put("time", secret.getTimeStamp().toString());
+        senzAttributes.put("uid", secret.getId());
+        senzAttributes.put("user", secret.getUser().getUsername());
+        if (secret.getUser().getSessionKey() != null && !secret.getUser().getSessionKey().isEmpty()) {
+            senzAttributes.put("$msg", CryptoUtil.encryptECB(CryptoUtil.getSecretKey(secret.getUser().getSessionKey()), secret.getBlob()));
         } else {
-            senzAttributes.put("msg", cheque.getBlob());
+            senzAttributes.put("msg", secret.getBlob());
         }
 
         // new senz object
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.DATA);
-        senz.setReceiver(cheque.getUser().getUsername());
+        senz.setReceiver(secret.getUser().getUsername());
         senz.setAttributes(senzAttributes);
 
         return senz;

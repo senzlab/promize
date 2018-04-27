@@ -154,7 +154,7 @@ public class SecretSource {
         return getSecretsFromCursor(context, cursor);
     }
 
-    public static ArrayList<Secret> getPendingDeliverySecrects(Context context) {
+    public static ArrayList<Secret> getPendingDeliverySecrets(Context context) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
                 "SELECT _id, " +
@@ -167,6 +167,7 @@ public class SecretSource {
                         "view_timestamp, " +
                         "missed, " +
                         "timestamp, " +
+                        "in_order, " +
                         "delivery_state " +
                         "FROM secret " +
                         "WHERE delivery_state = ? " +

@@ -24,6 +24,8 @@ import com.score.cbook.util.SenzUtil;
 import com.score.senzc.pojos.Senz;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 
 class SenzHandler {
     private static final String TAG = SenzHandler.class.getName();
@@ -60,9 +62,10 @@ class SenzHandler {
                     Log.d(TAG, "DATA received");
                     // send AWA back
                     // then handle
-                    if (!senz.getAttributes().containsValue("REG_DONE") && !senz.getAttributes().containsValue("REG_ALR")) {
+                    if (senz.getAttributes().containsValue("REG_DONE") || senz.getAttributes().containsValue("REG_ALR"))
+                        handleConnect(senzService);
+                    else
                         senzService.writeSenz(SenzUtil.awaSenz(senz.getAttributes().get("uid")));
-                    }
 
                     handleData(senz, senzService);
                     break;
@@ -84,6 +87,17 @@ class SenzHandler {
 
     private void handleConnect(SenzService senzService) {
         // get all un-ack senzes from db
+        List<Senz> unackSenzes = new ArrayList<>();
+        for (Secret secret : SecretSource.getPendingDeliverySecrets(senzService)) {
+            try {
+                unackSenzes.add(SenzUtil.senzFromSecret(senzService.getApplicationContext(), secret));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        // send them
+        senzService.writeSenzes(unackSenzes);
     }
 
     private void handleShare(Senz senz, SenzService senzService) {
