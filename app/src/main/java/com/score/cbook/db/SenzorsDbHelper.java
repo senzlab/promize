@@ -18,7 +18,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
     private static SenzorsDbHelper senzorsDbHelper;
 
     // If you change the database schema, you must increment the database version
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_NAME = "Cheque.db";
 
     // data types, keywords and queries
@@ -75,6 +75,13 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
                     SenzorsDbContract.Secret.DELIVERY_STATE + INT_TYPE +
                     " )";
 
+    private static final String SQL_CREATE_SENZ =
+            "CREATE TABLE IF NOT EXISTS " + SenzorsDbContract.Senz.TABLE_NAME + " (" +
+                    SenzorsDbContract.Senz._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + ", " +
+                    SenzorsDbContract.Senz.COLUMN_UNIQUE_ID + TEXT_TYPE + " UNIQUE NOT NULL" + ", " +
+                    SenzorsDbContract.Senz.COLUMN_MSG + TEXT_TYPE +
+                    " )";
+
     /**
      * Init context
      * Init database
@@ -106,10 +113,12 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
         Log.d(TAG, SQL_CREATE_USER);
         Log.d(TAG, SQL_CREATE_CHEQUE);
         Log.d(TAG, SQL_CREATE_SECRET);
+        Log.d(TAG, SQL_CREATE_SENZ);
 
         db.execSQL(SQL_CREATE_USER);
         db.execSQL(SQL_CREATE_CHEQUE);
         db.execSQL(SQL_CREATE_SECRET);
+        db.execSQL(SQL_CREATE_SENZ);
     }
 
     /**
@@ -133,6 +142,7 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE USER;");
         db.execSQL("DROP TABLE CHEQUE;");
         db.execSQL("DROP TABLE SECRET;");
+        db.execSQL("DROP TABLE SENZ;");
         onCreate(db);
     }
 

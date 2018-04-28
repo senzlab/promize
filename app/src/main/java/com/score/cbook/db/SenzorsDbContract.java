@@ -64,4 +64,11 @@ class SenzorsDbContract {
         static final String DELIVERY_STATE = "delivery_state";
     }
 
+    /* Inner class that defines senz table, keeps pending delivery senz */
+    static abstract class Senz implements BaseColumns {
+        static final String TABLE_NAME = "senz";
+        static final String COLUMN_UNIQUE_ID = "uid";
+        static final String COLUMN_MSG = "msg";
+    }
+
 }
