@@ -120,8 +120,6 @@ public class SenzUtil {
         // create senz attributes
         Long timestamp = System.currentTimeMillis();
         HashMap<String, String> senzAttributes = new HashMap<>();
-        senzAttributes.put("msg", "");
-        senzAttributes.put("status", "");
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", SenzUtil.getUid(context, timestamp.toString()));
 
