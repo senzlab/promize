@@ -96,18 +96,17 @@ class SenzHandler {
     }
 
     private void handleShare(Senz senz, SenzService senzService) {
-        if (senz.getAttributes().containsKey("$key")) {
+        if (senz.getAttributes().containsKey("msg") && senz.getAttributes().containsKey("status")) {
             try {
                 // create user
                 String username = senz.getSender();
-                String encryptedSessionKey = senz.getAttributes().get("$skey");
                 ChequeUser chequeUser = UserSource.getUser(senzService.getApplicationContext(), username);
-                String sessionKey = CryptoUtil.decryptRSA(CryptoUtil.getPrivateKey(senzService.getApplicationContext()), encryptedSessionKey);
                 if (chequeUser != null) {
+                    String encryptedSessionKey = senz.getAttributes().get("$skey");
+                    String sessionKey = CryptoUtil.decryptRSA(CryptoUtil.getPrivateKey(senzService.getApplicationContext()), encryptedSessionKey);
                     UserSource.updateUser(senzService.getApplicationContext(), username, "session_key", sessionKey);
                 } else {
                     chequeUser = new ChequeUser(senz.getSender());
-                    chequeUser.setSessionKey(sessionKey);
                     UserSource.createUser(senzService.getApplicationContext(), chequeUser);
                 }
 
@@ -127,6 +126,25 @@ class SenzHandler {
 
                 // send error ack
                 senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "USER_SHARE_FAILED"));
+            }
+        } else if (senz.getAttributes().containsKey("$skey")) {
+            try {
+                if (UserSource.isExistingUser(senzService.getApplicationContext(), senz.getSender())) {
+                    String encryptedSessionKey = senz.getAttributes().get("$skey");
+                    String sessionKey = CryptoUtil.decryptRSA(CryptoUtil.getPrivateKey(senzService.getApplicationContext()), encryptedSessionKey);
+                    UserSource.updateUser(senzService.getApplicationContext(), senz.getSender(), "session_key", sessionKey);
+
+                    broadcastSenz(senz, senzService.getApplicationContext());
+                    senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARED"));
+                } else {
+                    // means error
+                    senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARE_FAILED"));
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+
+                // send error ack
+                senzService.writeSenz(SenzUtil.statusSenz(senzService.getApplicationContext(), senz.getSender(), "KEY_SHARE_FAILED"));
             }
         } else if (senz.getAttributes().containsKey("blob")) {
             try {
