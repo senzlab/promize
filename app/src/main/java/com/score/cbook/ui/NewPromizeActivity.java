@@ -117,7 +117,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                 this.finish();
             } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
-                Toast.makeText(this, "Failed to send iGift", Toast.LENGTH_LONG).show();
+                displayInformationMessageDialog("ERROR", "Failed to send iGift");
             } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("DOUBLE_SPEND")) {
                 ActivityUtil.cancelProgressDialog();
                 Toast.makeText(this, "Successfully processed iGift", Toast.LENGTH_LONG).show();

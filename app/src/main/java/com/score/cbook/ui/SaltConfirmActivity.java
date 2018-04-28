@@ -32,6 +32,7 @@ public class SaltConfirmActivity extends BaseActivity {
     private static final String TAG = SaltConfirmActivity.class.getName();
 
     private EditText amount;
+    private int retry = 0;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
         @Override
@@ -117,8 +118,12 @@ public class SaltConfirmActivity extends BaseActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtil.showProgressDialog(SaltConfirmActivity.this, "Please wait...");
-                confirmSalt();
+                if (retry >= 3) {
+                    displayInformationMessageDialog("ERROR", "Maximum no of attempts exceeded");
+                } else {
+                    ActivityUtil.showProgressDialog(SaltConfirmActivity.this, "Please wait...");
+                    confirmSalt();
+                }
             }
         });
     }
@@ -155,6 +160,7 @@ public class SaltConfirmActivity extends BaseActivity {
         String salt = amount.getText().toString().trim();
         Senz senz = SenzUtil.saltSenz(this, salt);
         sendSenz(senz);
+        retry++;
     }
 
 }

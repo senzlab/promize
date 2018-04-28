@@ -139,10 +139,10 @@ class SenzorsDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "OnUpgrade: updating db helper, db version - " + DATABASE_VERSION);
 
-        db.execSQL("DROP TABLE USER;");
-        db.execSQL("DROP TABLE CHEQUE;");
-        db.execSQL("DROP TABLE SECRET;");
-        db.execSQL("DROP TABLE SENZ;");
+        db.execSQL("DROP TABLE IF EXISTS USER;");
+        db.execSQL("DROP TABLE IF EXISTS CHEQUE;");
+        db.execSQL("DROP TABLE IF EXISTS SECRET;");
+        db.execSQL("DROP TABLE iF EXISTS SENZ;");
         onCreate(db);
     }
 

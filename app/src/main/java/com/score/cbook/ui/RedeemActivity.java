@@ -71,7 +71,7 @@ public class RedeemActivity extends BaseActivity {
                 ChequeSource.updateChequeAccount(this, cheque.getUid(), cheque.getAccount());
             } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
-                Toast.makeText(RedeemActivity.this, "Failed to redeem iGift", Toast.LENGTH_LONG).show();
+                displayInformationMessageDialog("ERROR", "Failed  send iGift");
             }
         }
     }
@@ -181,19 +181,12 @@ public class RedeemActivity extends BaseActivity {
         final String confirmAccountNo = editTextConfirmAccount.getText().toString().trim();
         try {
             ActivityUtil.isValidRedeem(accountNo, confirmAccountNo);
-
-            String confirmationMessage = "<font color=#636363>Are you sure you want to redeem the iGift for account </font> <font color=#F37920>" + "<b>" + accountNo + "</b>" + "</font>";
-            displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (NetworkUtil.isAvailableNetwork(RedeemActivity.this)) {
-                        cheque.setAccount(accountNo);
-                        confirmPassword();
-                    } else {
-                        Toast.makeText(RedeemActivity.this, "No network connection", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
+            if (NetworkUtil.isAvailableNetwork(RedeemActivity.this)) {
+                cheque.setAccount(accountNo);
+                confirmPassword();
+            } else {
+                Toast.makeText(RedeemActivity.this, "No network connection", Toast.LENGTH_LONG).show();
+            }
         } catch (InvalidAccountException e) {
             e.printStackTrace();
             displayInformationMessageDialog("ERROR", "Mismatching account number");
