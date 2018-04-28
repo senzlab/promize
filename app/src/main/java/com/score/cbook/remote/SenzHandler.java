@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 class SenzHandler {
-    private static final String TAG = SenzHandler.class.getName();
-
     private static SenzHandler instance;
 
     static SenzHandler getInstance() {
@@ -125,7 +123,7 @@ class SenzHandler {
                 // save cheque
                 Long timestamp = (System.currentTimeMillis() / 1000);
                 String user = senz.getAttributes().get("from");
-                saveCheque(timestamp, senz.getAttributes().get("uid"), senz.getAttributes().get("id"), senz.getAttributes().get("amnt"), user, senzService.getApplicationContext());
+                savePromize(timestamp, senz.getAttributes().get("uid"), senz.getAttributes().get("id"), senz.getAttributes().get("amnt"), user, senzService.getApplicationContext());
 
                 // save img
                 String imgName = senz.getAttributes().get("uid") + ".jpg";
@@ -226,7 +224,7 @@ class SenzHandler {
         }
     }
 
-    private void saveCheque(Long timestamp, String uid, String id, String amnt, String user, final Context context) {
+    private void savePromize(Long timestamp, String uid, String id, String amnt, String user, final Context context) {
         // create secret
         final Cheque cheque = new Cheque();
         cheque.setUid(uid);

@@ -7,12 +7,10 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.os.RemoteException;
-import android.widget.Toast;
 
 import com.score.cbook.application.IntentProvider;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.util.CryptoUtil;
-import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
@@ -62,18 +60,13 @@ public class SenzService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             NotificationzHandler.cancel(context, NotificationzHandler.CUSTOMER_NOTIFICATION_ID);
+            // send sms
+            String phone = intent.getStringExtra("PHONE").trim();
+            SmsUtil.sendAccept(SenzService.this, phone);
 
-            if (NetworkUtil.isAvailableNetwork(context)) {
-                // send sms
-                String phone = intent.getStringExtra("PHONE").trim();
-                SmsUtil.sendAccept(SenzService.this, phone);
-
-                // get pubkey
-                String username = intent.getStringExtra("USERNAME").trim();
-                writeSenz(SenzUtil.senzieKeySenz(SenzService.this, username));
-            } else {
-                Toast.makeText(context, "No network connection", Toast.LENGTH_LONG).show();
-            }
+            // get pubkey
+            String username = intent.getStringExtra("USERNAME").trim();
+            writeSenz(SenzUtil.senzieKeySenz(SenzService.this, username));
         }
     };
 
