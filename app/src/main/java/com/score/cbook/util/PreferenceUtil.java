@@ -62,6 +62,7 @@ public class PreferenceUtil {
     public static void saveAccountNo(Context context, String accountNo) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(PreferenceUtil.BANK, SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
         editor.putString(PreferenceUtil.ACCOUNT_NO, accountNo);
         editor.commit();
     }
@@ -127,7 +128,7 @@ public class PreferenceUtil {
     public static void updatePasswordAccount(Context context, Account account) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-          editor.putString(PreferenceUtil.PASSWORD, account.getPassword());
+        editor.putString(PreferenceUtil.PASSWORD, account.getPassword());
         editor.commit();
     }
 

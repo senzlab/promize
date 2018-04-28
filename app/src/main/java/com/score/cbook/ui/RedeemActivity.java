@@ -220,7 +220,7 @@ public class RedeemActivity extends BaseActivity {
             public void onClick(View v) {
                 if (password.getText().toString().trim().equalsIgnoreCase(PreferenceUtil.getAccount(RedeemActivity.this).getPassword())) {
                     ActivityUtil.showProgressDialog(RedeemActivity.this, "Please wait...");
-                    Senz senz = SenzUtil.redeemSenz(RedeemActivity.this, cheque, cheque.getAccount());
+                    Senz senz = SenzUtil.redeemSenz(RedeemActivity.this, cheque, "sampath", cheque.getAccount());
                     sendSenz(senz);
                     dialog.cancel();
                 } else {

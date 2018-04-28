@@ -22,9 +22,8 @@ import javax.crypto.NoSuchPaddingException;
 public class SenzUtil {
 
     public static final String SWITCH_NAME = "senzswitch";
-    public static final String SAMPATH_CHAIN_SENZIE_NAME = "sampath.chain";
+    public static final String SAMPATH_CHAIN_SENZIE_NAME = "sampath";
     public static final String SAMPATH_SUPPORT_SENZIE_NAME = "sampath.support";
-
 
     public static Senz regSenz(Context context, String sender) {
         // create create senz
@@ -190,11 +189,11 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz redeemSenz(Context context, Cheque cheque, String account) {
+    public static Senz redeemSenz(Context context, Cheque cheque, String bank, String account) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("amnt", cheque.getAmount());
-        senzAttributes.put("bnk", "sampath.chain");
+        senzAttributes.put("bnk", bank);
         senzAttributes.put("id", cheque.getCid());
         senzAttributes.put("acc", account);
         senzAttributes.put("blob", "");
