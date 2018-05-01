@@ -88,7 +88,6 @@ public class PasswordResetQuestionActivity extends BaseActivity {
     }
 
     private void onClickSave() {
-        // validate input
         final String answer1 = question1.getText().toString().trim();
         final String answer2 = question2.getText().toString().trim();
         final String answer3 = question3.getText().toString().trim();
@@ -96,11 +95,19 @@ public class PasswordResetQuestionActivity extends BaseActivity {
         if (answer1.isEmpty() || answer2.isEmpty() || answer3.isEmpty()) {
             Toast.makeText(this, "Empty answers", Toast.LENGTH_LONG).show();
         } else {
-            if (answer1.equalsIgnoreCase(PreferenceUtil.getQuestionAnswer(this, PreferenceUtil.QUESTION1)) &&
-                    answer2.equalsIgnoreCase(PreferenceUtil.getQuestionAnswer(this, PreferenceUtil.QUESTION2))) {
+            int match = 0;
+            if (answer1.equalsIgnoreCase(PreferenceUtil.getQuestionAnswer(this, PreferenceUtil.QUESTION1)))
+                match++;
+            if (answer2.equalsIgnoreCase(PreferenceUtil.getQuestionAnswer(this, PreferenceUtil.QUESTION2)))
+                match++;
+            if (answer3.equalsIgnoreCase(PreferenceUtil.getQuestionAnswer(this, PreferenceUtil.QUESTION3)))
+                match++;
+
+            if (match >= 2) {
                 navigateToPasswordReset();
             } else {
                 Toast.makeText(this, "Invalid answers", Toast.LENGTH_LONG).show();
+                displayInformationMessageDialog("Invalid answers", "You have to answer at least two questions correctly");
             }
         }
     }
