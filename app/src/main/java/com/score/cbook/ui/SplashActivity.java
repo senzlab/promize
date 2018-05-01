@@ -60,13 +60,24 @@ public class SplashActivity extends BaseActivity {
                 }
             }, 3000);
         } else {
-            // have account, goto login
-            navigateToHome();
+            // have account,
+            if (PreferenceUtil.getQuestionAnswer(this, PreferenceUtil.QUESTION1).isEmpty()) {
+                navigateToQuestionInfo();
+            } else {
+                navigateToHome();
+            }
         }
     }
 
     public void navigateToTerms() {
         Intent intent = new Intent(this, TermsOfUseActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        SplashActivity.this.finish();
+    }
+
+    public void navigateToQuestionInfo() {
+        Intent intent = new Intent(this, RegistrationQuestionInfoActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         SplashActivity.this.finish();

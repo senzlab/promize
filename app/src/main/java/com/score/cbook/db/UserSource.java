@@ -271,4 +271,21 @@ public class UserSource {
         return chequeUserList;
     }
 
+    public static boolean hasUsers(Context context) {
+        // get all non admin users
+        SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
+        Cursor cursor = db.query(SenzorsDbContract.User.TABLE_NAME, // table
+                null, // columns
+                SenzorsDbContract.User.COLUMN_NAME_IS_ADMIN + " = ?", // constraint
+                new String[]{"0"}, // prams,
+                null, // order by
+                null, // group by
+                null); // join
+
+        boolean hasNext = cursor.moveToNext();
+
+        cursor.close();
+        return hasNext;
+    }
+
 }

@@ -27,7 +27,8 @@ public class SettingsActivity extends BaseActivity {
     private TextView about;
     private Button accBtn;
     private Button phnBtn;
-    private Button passBtn;
+    private Button passChangeBtn;
+    private Button passResetBtn;
     private Button termsBtn;
     private Button aboutBtn;
 
@@ -100,12 +101,21 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 
-        passBtn = (Button) findViewById(R.id.pass_btn);
-        passBtn.setTypeface(typeface, Typeface.BOLD);
-        passBtn.setOnClickListener(new View.OnClickListener() {
+        passChangeBtn = (Button) findViewById(R.id.pass_btn);
+        passChangeBtn.setTypeface(typeface, Typeface.BOLD);
+        passChangeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigateTopasswordChange();
+                navigateToPasswordChange();
+            }
+        });
+
+        passResetBtn = (Button) findViewById(R.id.pass_reset_btn);
+        passResetBtn.setTypeface(typeface, Typeface.BOLD);
+        passResetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToPasswordReset();
             }
         });
 
@@ -204,8 +214,16 @@ public class SettingsActivity extends BaseActivity {
         finish();
     }
 
-    private void navigateTopasswordChange() {
+    private void navigateToPasswordChange() {
         Intent intent = new Intent(SettingsActivity.this, PasswordChangeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(R.anim.right_in, R.anim.stay_in);
+        finish();
+    }
+
+    private void navigateToPasswordReset() {
+        Intent intent = new Intent(SettingsActivity.this, PasswordResetInfoActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.stay_in);

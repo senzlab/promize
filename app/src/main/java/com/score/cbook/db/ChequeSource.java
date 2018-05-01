@@ -139,28 +139,17 @@ public class ChequeSource {
         return getChequesFromCursor(context, cursor);
     }
 
-    public static ArrayList<Cheque> getChequesOfUserByTime(Context context, String username, Long t) {
+    public static boolean hasChequesToRedeem(Context context, String username) {
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
         String query =
-                "SELECT _id, " +
-                        "uid, " +
-                        "user, " +
-                        "my_cheque, " +
-                        "viewed, " +
-                        "timestamp, " +
-                        "view_timestamp, " +
-                        "delivery_state, " +
-                        "cheque_state, " +
-                        "cid, " +
-                        "amount, " +
-                        "date, " +
-                        "blob, " +
-                        "account " +
+                "SELECT _id " +
                         "FROM cheque " +
-                        "WHERE user = ? AND timestamp > ? " +
-                        "ORDER BY _id ASC";
-        Cursor cursor = db.rawQuery(query, new String[]{username, t.toString()});
-        return getChequesFromCursor(context, cursor);
+                        "WHERE user = ? AND cheque_state = ? AND my_cheque = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{username, Integer.toString(ChequeState.TRANSFER.getState()), "0"});
+        boolean hasNext = cursor.moveToNext();
+
+        cursor.close();
+        return hasNext;
     }
 
     public static ArrayList<Cheque> getPendingDeliveryCheques(Context context) {

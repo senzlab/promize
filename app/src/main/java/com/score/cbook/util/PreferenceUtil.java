@@ -13,12 +13,15 @@ import com.score.cbook.pojo.Account;
  */
 public class PreferenceUtil {
 
-    private static final String Z_ADDRESS = "Z_ADDRESS";
-    private static final String BANK = "BANK";
-    private static final String ACCOUNT_NO = "ACCOUNT_NO";
-    private static final String PHONE_NO = "PHONE_NO";
-    private static final String PASSWORD = "PASSWORD";
-    private static final String STATE = "STATE";
+    public static final String Z_ADDRESS = "Z_ADDRESS";
+    public static final String BANK = "BANK";
+    public static final String ACCOUNT_NO = "ACCOUNT_NO";
+    public static final String PHONE_NO = "PHONE_NO";
+    public static final String PASSWORD = "PASSWORD";
+    public static final String STATE = "STATE";
+    public static final String QUESTION1 = "QUESTION1";
+    public static final String QUESTION2 = "QUESTION2";
+    public static final String QUESTION3 = "QUESTION3";
 
     /**
      * Save user credentials in shared preference
@@ -123,12 +126,12 @@ public class PreferenceUtil {
      * update password in shared preference
      *
      * @param context application context
-     * @param account
+     * @param password
      */
-    public static void updatePasswordAccount(Context context, Account account) {
+    public static void updatePassword(Context context, String password) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(PreferenceUtil.PASSWORD, account.getPassword());
+        editor.putString(PreferenceUtil.PASSWORD, password);
         editor.commit();
     }
 
@@ -143,6 +146,18 @@ public class PreferenceUtil {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(PreferenceUtil.PHONE_NO, account.getPhoneNo());
         editor.commit();
+    }
+
+    public static void saveQuestionAnswer(Context context, String questionNo, String answer) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(questionNo, answer.toLowerCase());
+        editor.commit();
+    }
+
+    public static String getQuestionAnswer(Context context, String questionNo) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        return preferences.getString(questionNo, "");
     }
 
 }

@@ -151,6 +151,19 @@
                     android:paddingRight="25dp"
                     android:text="Change"
                     android:textColor="@color/colorPrimary" />
+
+                <Button
+                    android:id="@+id/pass_reset_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_height="37dp"
+                    android:layout_below="@+id/registering_user_id"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/text_bg3"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="25dp"
+                    android:text="Reset"
+                    android:textColor="@color/colorPrimary" />
             </LinearLayout>
 
             <TextView

@@ -285,19 +285,22 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
         final ChequeUser chequeUser = customerList.get(position);
-        displayConfirmationMessageDialog("Are you sure your want to remove the user", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // delete item
-                customerList.remove(position);
-                customerListAdapter.notifyDataSetChanged();
 
-                // delete from db
-                UserSource.deleteUser(CustomerListActivity.this, chequeUser.getUsername());
-                ChequeSource.deleteChequesOfUser(CustomerListActivity.this, chequeUser.getUsername());
-                SecretSource.deleteSecretsOfUser(CustomerListActivity.this, chequeUser.getUsername());
-            }
-        });
+        if (ChequeSource.hasChequesToRedeem(CustomerListActivity.this, chequeUser.getUsername())) {
+            displayConfirmationMessageDialog("Are you sure your want to remove the user", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // delete item
+                    customerList.remove(position);
+                    customerListAdapter.notifyDataSetChanged();
+
+                    // delete from db
+                    UserSource.deleteUser(CustomerListActivity.this, chequeUser.getUsername());
+                    ChequeSource.deleteChequesOfUser(CustomerListActivity.this, chequeUser.getUsername());
+                    SecretSource.deleteSecretsOfUser(CustomerListActivity.this, chequeUser.getUsername());
+                }
+            });
+        }
 
         return true;
     }

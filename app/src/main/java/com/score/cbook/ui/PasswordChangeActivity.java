@@ -1,6 +1,5 @@
 package com.score.cbook.ui;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.MisMatchFieldException;
 import com.score.cbook.pojo.Account;
@@ -35,7 +33,6 @@ public class PasswordChangeActivity extends BaseActivity {
         setContentView(R.layout.activity_password_change);
 
         initUi();
-        // initPrefs();
         initToolbar();
         initActionBar();
     }
@@ -86,9 +83,8 @@ public class PasswordChangeActivity extends BaseActivity {
                 if (useAccount.getPassword().equals(currentPassword)) {
                     try {
                         ActivityUtil.isValidPasswordFields(currentPassword, newPassword, newConfirmPassword);
-                        useAccount.setPassword(newPassword);
-
-                        navigateToSettings(useAccount);
+                        PreferenceUtil.updatePassword(PasswordChangeActivity.this, newPassword);
+                        finish();
                     } catch (InvalidPasswordException e) {
                         e.printStackTrace();
                         displayInformationMessageDialog("ERROR", "Invalid password. Password should contains more than 7 characters with special character");
@@ -129,15 +125,6 @@ public class PasswordChangeActivity extends BaseActivity {
         toolbar.setCollapsible(false);
         toolbar.setOverScrollMode(Toolbar.OVER_SCROLL_NEVER);
         setSupportActionBar(toolbar);
-    }
-
-    private void navigateToSettings(Account useAccount) {
-        Intent intent = new Intent(PasswordChangeActivity.this, SettingsActivity.class);
-        startActivity(intent);
-        PreferenceUtil.updatePasswordAccount(this, useAccount);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        finish();
     }
 
 }
