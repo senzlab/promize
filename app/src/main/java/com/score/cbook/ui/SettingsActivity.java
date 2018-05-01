@@ -101,7 +101,7 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 
-        passChangeBtn = (Button) findViewById(R.id.pass_btn);
+        passChangeBtn = (Button) findViewById(R.id.pass_change_btn);
         passChangeBtn.setTypeface(typeface, Typeface.BOLD);
         passChangeBtn.setOnClickListener(new View.OnClickListener() {
             @Override

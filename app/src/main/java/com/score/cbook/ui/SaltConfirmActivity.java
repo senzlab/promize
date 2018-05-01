@@ -119,7 +119,7 @@ public class SaltConfirmActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (retry >= 3) {
-                    displayInformationMessageDialog("ERROR", "Maximum no of attempts exceeded");
+                    displayInformationMessageDialog("ERROR", "Maximum no of retry attempts exceeded");
                 } else {
                     ActivityUtil.showProgressDialog(SaltConfirmActivity.this, "Please wait...");
                     confirmSalt();

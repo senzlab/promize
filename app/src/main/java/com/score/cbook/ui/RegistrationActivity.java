@@ -65,7 +65,7 @@ public class RegistrationActivity extends BaseActivity {
                 Toast.makeText(this, "Registration done", Toast.LENGTH_LONG).show();
 
                 PreferenceUtil.saveAccount(this, account);
-                navigateToHome();
+                navigateToQuestionInfo();
             } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
                 displayInformationMessageDialog("ERROR", "Registration fail");
@@ -228,8 +228,8 @@ public class RegistrationActivity extends BaseActivity {
         RegistrationActivity.this.finish();
     }
 
-    private void navigateToHome() {
-        Intent intent = new Intent(RegistrationActivity.this, DashBoardActivity.class);
+    private void navigateToQuestionInfo() {
+        Intent intent = new Intent(RegistrationActivity.this, RegistrationQuestionInfoActivity.class);
         RegistrationActivity.this.startActivity(intent);
         RegistrationActivity.this.finish();
     }

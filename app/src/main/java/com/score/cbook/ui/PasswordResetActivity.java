@@ -21,7 +21,9 @@ public class PasswordResetActivity extends BaseActivity {
     // UI fields
     private EditText editTextPassword;
     private EditText editTextConfirmPassword;
-    private Button loginButton;
+    private Button resetButton;
+
+    private int retry = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,17 +70,23 @@ public class PasswordResetActivity extends BaseActivity {
         editTextPassword.setTypeface(typeface, Typeface.NORMAL);
         editTextConfirmPassword.setTypeface(typeface, Typeface.NORMAL);
 
-        loginButton = (Button) findViewById(R.id.login_btn);
-        loginButton.setTypeface(typeface, Typeface.BOLD);
-        loginButton.setOnClickListener(new View.OnClickListener() {
+        resetButton = (Button) findViewById(R.id.reset_btn);
+        resetButton.setTypeface(typeface, Typeface.BOLD);
+        resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickReset();
+                if (retry >= 3) {
+                    displayInformationMessageDialog("ERROR", "Maximum no of retry attempts exceeded");
+                } else {
+                    onClickReset();
+                }
             }
         });
     }
 
     private void onClickReset() {
+        retry++;
+
         ActivityUtil.hideSoftKeyboard(this);
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();

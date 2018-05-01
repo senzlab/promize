@@ -60,6 +60,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name="com.score.cbook.ui.ChatActivity"
@@ -167,19 +171,23 @@
         <activity
             android:name=".ui.RegistrationQuestionInfoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/MyMaterialTheme" />
         <activity
             android:name=".ui.RegistrationQuestionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
-        <activity android:name=".ui.PasswordResetInfoActivity" />
-        <activity android:name=".ui.PasswordResetQuestionActivity" />
-        <activity android:name=".ui.PasswordResetActivity" />
+        <activity
+            android:name=".ui.PasswordResetInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.PasswordResetQuestionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".ui.PasswordResetActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" />
 
         <!-- Servicves -->
         <service
