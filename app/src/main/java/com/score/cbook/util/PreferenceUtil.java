@@ -26,6 +26,8 @@ public class PreferenceUtil {
     public static final String QUESTION1 = "QUESTION1";
     public static final String QUESTION2 = "QUESTION2";
     public static final String QUESTION3 = "QUESTION3";
+    public static final String TODAY = "TODAY";
+    public static final String TODAY_AMOUNT = "TODAY_COUNT";
 
     public static Account getAccount(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
@@ -49,6 +51,18 @@ public class PreferenceUtil {
     public static String get(Context context, String key) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         return preferences.getString(key, "");
+    }
+
+    public static void put(Context context, String key, int value) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(key, value);
+        editor.commit();
+    }
+
+    public static int get(Context context, String key, int defVal) {
+        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        return preferences.getInt(key, defVal);
     }
 
 }

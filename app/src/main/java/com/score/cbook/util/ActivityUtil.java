@@ -33,17 +33,6 @@ public class ActivityUtil {
         inputMethodManager.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    /**
-     * Create and show custom progress dialog
-     * Progress dialogs displaying on background tasks
-     * <p/>
-     * So in here
-     * 1. Create custom layout for message dialog
-     * 2, Set messages to dialog
-     *
-     * @param context activity context
-     * @param message message to be display
-     */
     public static void showProgressDialog(Context context, String message) {
         progressDialog = ProgressDialog.show(context, null, message, true);
         progressDialog.setCanceledOnTouchOutside(false);
@@ -52,25 +41,12 @@ public class ActivityUtil {
         progressDialog.show();
     }
 
-    /**
-     * Cancel progress dialog when background task finish
-     */
     public static void cancelProgressDialog() {
         if (progressDialog != null) {
             progressDialog.cancel();
         }
     }
 
-    /**
-     * Validate input fields of registration form,
-     * Need to have
-     * 1. non empty valid phone no
-     * 2. non empty username
-     * 3. non empty passwords
-     * 4. two passwords should be match
-     *
-     * @return valid or not
-     */
     public static void isValidRegistrationFields(String phone, String password, String confirmPassword) throws InvalidAccountException, InvalidPasswordException, MisMatchFieldException {
         if (phone.isEmpty()) {
             throw new InvalidAccountException();
@@ -91,15 +67,6 @@ public class ActivityUtil {
 
     }
 
-    /**
-     * Validate input fields of registration form,
-     * Need to have
-     * 1. non empty valid passwords
-     * 2. non empty passwords
-     * 3. two passwords should be match
-     *
-     * @return valid or not
-     */
     public static void isValidPasswordFields(String currentPassword, String newPassword, String newConfirmPassword) throws InvalidPasswordException, MisMatchFieldException {
         if (currentPassword.isEmpty())
             throw new InvalidPasswordException();
@@ -119,11 +86,6 @@ public class ActivityUtil {
 
     }
 
-    /**
-     * validate input fields of login form
-     *
-     * @return valid of not
-     */
     public static void isValidLoginFields(String givenAccount, String givenPassword, String account, String password) throws InvalidInputFieldsException, MisMatchFieldException {
         if (givenAccount.isEmpty() || givenPassword.isEmpty())
             // empty fields
@@ -163,7 +125,6 @@ public class ActivityUtil {
         if (currUsername.length() < 5 || newUsername.length() < 5) {
             throw new InvalidInputFieldsException();
         }
-
     }
 
     public static void isValidRedeem(String acc, String confirmAcc) throws InvalidInputFieldsException, InvalidAccountException {

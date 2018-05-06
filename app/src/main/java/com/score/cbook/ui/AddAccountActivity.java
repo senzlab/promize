@@ -50,7 +50,7 @@ public class AddAccountActivity extends BaseActivity {
                 String confirmAccount = confirmAccountText.getText().toString().trim();
                 try {
                     ActivityUtil.isValidAccount(account, confirmAccount);
-                    navigateToVishwaConfirm();
+                    navigateToAccountVerifyInfo();
                 } catch (InvalidInputFieldsException e) {
                     e.printStackTrace();
                     displayInformationMessageDialog("ERROR", "Invalid account number. Your account number must be 12 digits and starting with 1 or 0");
@@ -90,7 +90,7 @@ public class AddAccountActivity extends BaseActivity {
         setSupportActionBar(toolbar);
     }
 
-    private void navigateToVishwaConfirm() {
+    private void navigateToAccountVerifyInfo() {
         Intent intent = new Intent(AddAccountActivity.this, AccountVerifyInfoActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("ACCOUNT", accountText.getText().toString().trim());

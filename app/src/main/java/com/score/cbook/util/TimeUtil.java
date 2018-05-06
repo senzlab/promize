@@ -50,7 +50,12 @@ public class TimeUtil {
         return time;
     }
 
+    public static String today() {
+        return DATE_FORMAT.format(new Date());
+    }
+
     public static boolean isInOrder(long t1, long t2) {
         return (t2 - t1) < 60 * 5;
     }
+
 }

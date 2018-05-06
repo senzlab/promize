@@ -45,6 +45,7 @@ import com.score.cbook.util.ImageUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzUtil;
+import com.score.cbook.util.TimeUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
@@ -113,6 +114,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                 ActivityUtil.cancelProgressDialog();
                 Toast.makeText(this, "Successfully sent iGift", Toast.LENGTH_LONG).show();
 
+                updateTodayLimit();
                 savePromize();
                 this.finish();
             } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
@@ -132,6 +134,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
         // init
         initUi();
+        resetTodayLimit();
         if (getIntent().hasExtra("USER")) this.user = getIntent().getParcelableExtra("USER");
         else this.user = new ChequeUser("era");
     }
@@ -210,7 +213,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             @Override
             public void onClick(View v) {
                 ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
-                send();
+                sendiGift();
             }
         });
 
@@ -426,11 +429,17 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         amount.requestFocus();
     }
 
-    private void send() {
+    private void sendiGift() {
         try {
-            ActivityUtil.isValidGift(amount.getText().toString().trim(), message.getText().toString().trim());
-            if (NetworkUtil.isAvailableNetwork(this)) askPassword();
-            else Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
+            String a = amount.getText().toString().trim();
+            String m = message.getText().toString().trim();
+            ActivityUtil.isValidGift(a, m);
+            if (PreferenceUtil.get(this, PreferenceUtil.TODAY_AMOUNT, 0) + Integer.parseInt(a) > 10000) {
+                displayInformationMessageDialog("ERROR", "Your daily iGift limit Rs 10000 will exceeded with this iGift");
+            } else {
+                if (NetworkUtil.isAvailableNetwork(this)) askPassword();
+                else Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
+            }
         } catch (InvalidInputFieldsException e) {
             displayInformationMessageDialog("ERROR", "Empty iGift amount");
             e.printStackTrace();
@@ -533,6 +542,19 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void resetTodayLimit() {
+        String today = TimeUtil.today();
+        if (!PreferenceUtil.get(this, PreferenceUtil.TODAY).equalsIgnoreCase(today)) {
+            PreferenceUtil.put(this, PreferenceUtil.TODAY, today);
+            PreferenceUtil.put(this, PreferenceUtil.TODAY_AMOUNT, 0);
+        }
+    }
+
+    private void updateTodayLimit() {
+        int todayAmount = PreferenceUtil.get(this, PreferenceUtil.TODAY_AMOUNT, 0);
+        PreferenceUtil.put(this, PreferenceUtil.TODAY_AMOUNT, todayAmount + Integer.parseInt(cheque.getAmount()));
     }
 
     @Override

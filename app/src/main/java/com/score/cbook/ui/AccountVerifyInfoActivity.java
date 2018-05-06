@@ -57,13 +57,9 @@ public class AccountVerifyInfoActivity extends BaseActivity {
                 PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_BANK, SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
                 PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_NO, account);
                 navigateToConfirm();
-            } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {
+            } else {
                 ActivityUtil.cancelProgressDialog();
                 displayInformationMessageDialog("ERROR", "Fail to verify account");
-            } else if (msg != null && msg.equalsIgnoreCase("VERIFICATION_FAIL")) {
-                ActivityUtil.cancelProgressDialog();
-                String informationMessage = "Verification fail. Please contact sampath support regarding this issue";
-                displayInformationMessageDialog("ERROR", informationMessage);
             }
         }
     }
