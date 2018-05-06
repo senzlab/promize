@@ -61,7 +61,7 @@ public class SplashActivity extends BaseActivity {
             }, 3000);
         } else {
             // have account,
-            if (PreferenceUtil.getQuestionAnswer(this, PreferenceUtil.QUESTION1).isEmpty()) {
+            if (PreferenceUtil.get(this, PreferenceUtil.QUESTION1).isEmpty()) {
                 navigateToQuestionInfo();
             } else {
                 navigateToHome();

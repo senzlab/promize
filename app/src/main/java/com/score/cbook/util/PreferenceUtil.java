@@ -14,6 +14,10 @@ import com.score.cbook.pojo.Account;
 public class PreferenceUtil {
 
     public static final String Z_ADDRESS = "Z_ADDRESS";
+    public static final String PUBLIC_KEY = "PUBLIC_KEY";
+    public static final String PRIVATE_KEY = "PRIVATE_KEY";
+    public static final String ZWITCH_KEY = "ZWITCH_KEY";
+    public static final String CHAINZ_KEY = "CHAINZ_KEY";
     public static final String BANK = "BANK";
     public static final String ACCOUNT_NO = "ACCOUNT_NO";
     public static final String ACCOUNT_STATE = "ACCOUNT_STATE";
@@ -33,32 +37,6 @@ public class PreferenceUtil {
         account.setState(preferences.getString(PreferenceUtil.ACCOUNT_STATE, "PENDING"));
 
         return account;
-    }
-
-    /**
-     * Save public/private keys in shared preference,
-     *
-     * @param context application context
-     * @param key     public/private keys(encoded key string)
-     * @param keyType public_key, private_key, server_key
-     */
-    static void saveRsaKey(Context context, String key, String keyType) {
-        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(keyType, key);
-        editor.commit();
-    }
-
-    /**
-     * Get saved RSA key string from shared preference
-     *
-     * @param context application context
-     * @param keyType public_key, private_key, server_key
-     * @return key string
-     */
-    static String getRsaKey(Context context, String keyType) {
-        SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        return preferences.getString(keyType, "");
     }
 
     public static void put(Context context, String key, String value) {

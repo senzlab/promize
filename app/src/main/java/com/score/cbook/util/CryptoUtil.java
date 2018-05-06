@@ -38,12 +38,6 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class CryptoUtil {
 
-    // key name
-    public static final String PUBLIC_KEY_NAME = "PUBLIC_KEY";
-    public static final String PRIVATE_KEY_NAME = "PRIVATE_KEY";
-    public static final String ZWITCH_KEY_NAME = "ZWITCH_KEY";
-    public static final String CHAINZ_KEY_NAME = "CHAINZ_KEY";
-
     // keys
     private static final String ZWITCH_KEY = "44323232";
     private static final String CHAINZ_KEY = "232ewewe";
@@ -64,8 +58,8 @@ public class CryptoUtil {
         savePrivateKey(context, keyPair);
 
         // save zwitch/chainz key
-        PreferenceUtil.saveRsaKey(context, CryptoUtil.ZWITCH_KEY, CryptoUtil.ZWITCH_KEY_NAME);
-        PreferenceUtil.saveRsaKey(context, CryptoUtil.CHAINZ_KEY, CryptoUtil.CHAINZ_KEY_NAME);
+        PreferenceUtil.put(context, PreferenceUtil.ZWITCH_KEY, CryptoUtil.ZWITCH_KEY);
+        PreferenceUtil.put(context, PreferenceUtil.CHAINZ_KEY, CryptoUtil.CHAINZ_KEY);
     }
 
     private static void savePublicKey(Context context, KeyPair keyPair) {
@@ -74,7 +68,7 @@ public class CryptoUtil {
         String publicKey = Base64.encodeToString(keyContent, Base64.DEFAULT).replaceAll("\n", "").replaceAll("\r", "");
 
         // save public key in shared preference
-        PreferenceUtil.saveRsaKey(context, publicKey, CryptoUtil.PUBLIC_KEY_NAME);
+        PreferenceUtil.put(context, PreferenceUtil.PUBLIC_KEY, publicKey);
     }
 
     private static void savePrivateKey(Context context, KeyPair keyPair) {
@@ -83,12 +77,12 @@ public class CryptoUtil {
         String privateKey = Base64.encodeToString(keyContent, Base64.DEFAULT).replaceAll("\n", "").replaceAll("\r", "");
 
         // save private key in shared preference
-        PreferenceUtil.saveRsaKey(context, privateKey, CryptoUtil.PRIVATE_KEY_NAME);
+        PreferenceUtil.put(context, PreferenceUtil.PRIVATE_KEY, privateKey);
     }
 
     public static PublicKey getPublicKey(Context context) throws InvalidKeySpecException, NoSuchAlgorithmException, NoSuchProviderException {
         // get key string from shared preference
-        String keyString = PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY_NAME);
+        String keyString = PreferenceUtil.get(context, PreferenceUtil.PUBLIC_KEY);
 
         // convert to string key public key
         X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.decode(keyString, Base64.DEFAULT));
@@ -107,7 +101,7 @@ public class CryptoUtil {
 
     public static PrivateKey getPrivateKey(Context context) throws InvalidKeySpecException, NoSuchAlgorithmException {
         // get key string from shared preference
-        String keyString = PreferenceUtil.getRsaKey(context, CryptoUtil.PRIVATE_KEY_NAME);
+        String keyString = PreferenceUtil.get(context, PreferenceUtil.PRIVATE_KEY);
 
         // convert to string key public key
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(Base64.decode(keyString, Base64.DEFAULT));
@@ -118,7 +112,7 @@ public class CryptoUtil {
 
     public static String getZaddress(Context context) throws NoSuchAlgorithmException {
         // get public key
-        byte[] key = Base64.decode(PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY_NAME), Base64.DEFAULT);
+        byte[] key = Base64.decode(PreferenceUtil.get(context, PreferenceUtil.PUBLIC_KEY), Base64.DEFAULT);
 
         // generate digest
         byte[] ph = new byte[20];
