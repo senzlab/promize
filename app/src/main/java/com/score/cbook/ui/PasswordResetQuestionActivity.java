@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.util.PreferenceUtil;
@@ -92,23 +91,18 @@ public class PasswordResetQuestionActivity extends BaseActivity {
         final String answer2 = question2.getText().toString().trim();
         final String answer3 = question3.getText().toString().trim();
 
-        if (answer1.isEmpty() || answer2.isEmpty() || answer3.isEmpty()) {
-            Toast.makeText(this, "Empty answers", Toast.LENGTH_LONG).show();
-        } else {
-            int match = 0;
-            if (answer1.equalsIgnoreCase(PreferenceUtil.get(this, PreferenceUtil.QUESTION1)))
-                match++;
-            if (answer2.equalsIgnoreCase(PreferenceUtil.get(this, PreferenceUtil.QUESTION2)))
-                match++;
-            if (answer3.equalsIgnoreCase(PreferenceUtil.get(this, PreferenceUtil.QUESTION3)))
-                match++;
+        int match = 0;
+        if (answer1.equalsIgnoreCase(PreferenceUtil.get(this, PreferenceUtil.QUESTION1)))
+            match++;
+        if (answer2.equalsIgnoreCase(PreferenceUtil.get(this, PreferenceUtil.QUESTION2)))
+            match++;
+        if (answer3.equalsIgnoreCase(PreferenceUtil.get(this, PreferenceUtil.QUESTION3)))
+            match++;
 
-            if (match >= 2) {
-                navigateToPasswordReset();
-            } else {
-                Toast.makeText(this, "Invalid answers", Toast.LENGTH_LONG).show();
-                displayInformationMessageDialog("Invalid answers", "You have to answer at least two questions correctly");
-            }
+        if (match >= 2) {
+            navigateToPasswordReset();
+        } else {
+            displayInformationMessageDialog("ERROR", "You have to give correct answers for two questions");
         }
     }
 

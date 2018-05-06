@@ -94,7 +94,7 @@ public class RegistrationQuestionActivity extends BaseActivity {
         final String answer3 = question3.getText().toString().trim();
 
         if (answer1.isEmpty() || answer2.isEmpty() || answer3.isEmpty()) {
-            Toast.makeText(this, "Invalid answers", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please answer for all three questions", Toast.LENGTH_LONG).show();
         } else {
             displayConfirmationMessageDialog("Are you sure you want to save the answers for the questions", new View.OnClickListener() {
                 @Override

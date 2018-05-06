@@ -111,7 +111,8 @@
         <activity
             android:name=".ui.NewPromizeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme"></activity>
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity android:name=".ui.ChequeListTabActivity" />
 
         <activity
@@ -175,7 +176,8 @@
         <activity
             android:name=".ui.RegistrationQuestionActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.PasswordResetInfoActivity"
             android:screenOrientation="portrait"
@@ -183,7 +185,8 @@
         <activity
             android:name=".ui.PasswordResetQuestionActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.PasswordResetActivity"
             android:screenOrientation="portrait"
