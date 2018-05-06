@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 22
-        versionCode 10
-        versionName "1.0"
+        versionCode 12
+        versionName "1.2"
         applicationId "com.score.cbook"
 
         renderscriptTargetApi 18

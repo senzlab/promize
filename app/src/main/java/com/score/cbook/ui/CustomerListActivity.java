@@ -286,7 +286,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
         final ChequeUser chequeUser = customerList.get(position);
 
-        if (ChequeSource.hasChequesToRedeem(CustomerListActivity.this, chequeUser.getUsername())) {
+        if (!ChequeSource.hasChequesToRedeem(CustomerListActivity.this, chequeUser.getUsername())) {
             displayConfirmationMessageDialog("Are you sure your want to remove the user", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

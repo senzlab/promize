@@ -185,7 +185,8 @@ public class ActivityUtil {
     public static void isValidGift(String amount, String msg) throws InvalidInputFieldsException, InvalidAmountException, InvalidMsgException {
         if (amount.isEmpty()) throw new InvalidInputFieldsException();
         if (msg.isEmpty()) throw new InvalidMsgException();
-        if (Integer.parseInt(amount) > 10000) throw new InvalidAmountException();
+        if (Integer.parseInt(amount) > 10000 || Integer.parseInt(amount) < 100)
+            throw new InvalidAmountException();
     }
 
     public static boolean isNewGift(String preAmount, String amount) {

@@ -435,7 +435,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             displayInformationMessageDialog("ERROR", "Empty iGift amount");
             e.printStackTrace();
         } catch (InvalidAmountException e) {
-            displayInformationMessageDialog("ERROR", "iGift amount should not exceed 10000 rupees");
+            displayInformationMessageDialog("ERROR", "iGift amount should not be less than 100 rupees and not exceed 10000 rupees");
             e.printStackTrace();
         } catch (InvalidMsgException e) {
             e.printStackTrace();

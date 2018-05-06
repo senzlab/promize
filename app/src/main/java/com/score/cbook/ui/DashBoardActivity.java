@@ -105,16 +105,9 @@ public class DashBoardActivity extends BaseActivity {
         findViewById(R.id.messages_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (UserSource.hasUsers(DashBoardActivity.this)) {
-                    // navigate to customer list
-                    Intent intent = new Intent(DashBoardActivity.this, CustomerListActivity.class);
-                    intent.putExtra("ACTION", CustomerActionType.CUSTOMER_LIST.toString());
-                    startActivity(intent);
-                } else {
-                    // navigate to customer list
-                    Intent intent = new Intent(DashBoardActivity.this, SecretListActivity.class);
-                    startActivity(intent);
-                }
+                // navigate to customer list
+                Intent intent = new Intent(DashBoardActivity.this, SecretListActivity.class);
+                startActivity(intent);
             }
         });
     }
