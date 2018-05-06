@@ -47,7 +47,7 @@ public class TermsOfUseActivity extends BaseActivity {
         message.setTypeface(typeface, Typeface.NORMAL);
 
         buttonPanel = (RelativeLayout) findViewById(R.id.button_panel);
-        if (PreferenceUtil.getAccount(this).getPhoneNo().isEmpty()) {
+        if (PreferenceUtil.getAccount(this).getUsername().isEmpty()) {
             // means not registered yet
             buttonPanel.setVisibility(View.VISIBLE);
         } else {

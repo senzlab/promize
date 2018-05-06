@@ -70,10 +70,10 @@ public class UsernameChangeActivity extends BaseActivity {
                 String currentUsername = current_username.getText().toString().trim();
                 String newUsername = new_username.getText().toString().trim();
 
-                if (account.getPhoneNo().equals(currentUsername)) {
+                if (account.getUsername().equals(currentUsername)) {
                     try {
                         ActivityUtil.isValidUsername(currentUsername, newUsername);
-                        PreferenceUtil.put(UsernameChangeActivity.this, PreferenceUtil.PHONE_NO, newUsername);
+                        PreferenceUtil.put(UsernameChangeActivity.this, PreferenceUtil.USERNAME, newUsername);
                         navigateToSettings();
                     } catch (InvalidInputFieldsException e) {
                         e.printStackTrace();

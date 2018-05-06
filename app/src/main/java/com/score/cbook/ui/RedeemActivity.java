@@ -167,7 +167,7 @@ public class RedeemActivity extends BaseActivity {
     }
 
     private void initPrefs() {
-        this.bank = getIntent().getParcelableExtra("BANK");
+        this.bank = getIntent().getParcelableExtra("ACCOUNT_BANK");
         this.cheque = getIntent().getParcelableExtra("CHEQUE");
 
         editTextBank.setText(this.bank.getBankName());

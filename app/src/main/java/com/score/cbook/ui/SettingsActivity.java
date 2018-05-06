@@ -151,7 +151,7 @@ public class SettingsActivity extends BaseActivity {
             account.setText("Account - " + userAccount.getAccountNo());
             accBtn.setText("CHANGE");
         }
-        phone.setText("Username - " + userAccount.getPhoneNo());
+        phone.setText("Username - " + userAccount.getUsername());
     }
 
     private void initActionBar() {

@@ -50,7 +50,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void initNavigation() {
-        if (PreferenceUtil.getAccount(this).getPhoneNo().isEmpty()) {
+        if (PreferenceUtil.getAccount(this).getUsername().isEmpty()) {
             // no registered account yet
             // stay three seconds go to registration
             new Handler().postDelayed(new Runnable() {

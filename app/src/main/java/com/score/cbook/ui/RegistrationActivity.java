@@ -65,7 +65,7 @@ public class RegistrationActivity extends BaseActivity {
                 ActivityUtil.cancelProgressDialog();
                 Toast.makeText(this, "Registration done", Toast.LENGTH_LONG).show();
 
-                PreferenceUtil.put(this, PreferenceUtil.PHONE_NO, account.getPhoneNo());
+                PreferenceUtil.put(this, PreferenceUtil.USERNAME, account.getUsername());
                 PreferenceUtil.put(this, PreferenceUtil.PASSWORD, account.getPassword());
                 navigateToQuestionInfo();
             } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {
@@ -180,7 +180,7 @@ public class RegistrationActivity extends BaseActivity {
                     if (NetworkUtil.isAvailableNetwork(RegistrationActivity.this)) {
                         ActivityUtil.showProgressDialog(RegistrationActivity.this, "Please wait...");
                         account = new Account();
-                        account.setPhoneNo(phone);
+                        account.setUsername(phone);
                         account.setPassword(password);
                         if (PreferenceUtil.get(RegistrationActivity.this, PreferenceUtil.Z_ADDRESS).isEmpty())
                             doReg();

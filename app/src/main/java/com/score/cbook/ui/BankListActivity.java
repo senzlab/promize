@@ -117,7 +117,7 @@ public class BankListActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Bank bank = (Bank) adapter.getItem(position);
                 Intent intent = new Intent(BankListActivity.this, RedeemActivity.class);
-                intent.putExtra("BANK", bank);
+                intent.putExtra("ACCOUNT_BANK", bank);
                 intent.putExtra("CHEQUE", cheque);
                 startActivity(intent);
                 BankListActivity.this.finish();

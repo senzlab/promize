@@ -69,7 +69,7 @@ public class PromizePreviewActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(PromizePreviewActivity.this, RedeemActivity.class);
                 intent.putExtra("CHEQUE", cheque);
-                intent.putExtra("BANK", new Bank("7179", "Sampath bank"));
+                intent.putExtra("ACCOUNT_BANK", new Bank("7179", "Sampath bank"));
                 startActivity(intent);
                 PromizePreviewActivity.this.finish();
             }
