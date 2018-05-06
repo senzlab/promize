@@ -149,7 +149,7 @@ public class SenzService extends Service {
                 try {
                     // if sender not already set find user(sender) and set it to senz first
                     if (senz.getSender() == null || senz.getSender().isEmpty())
-                        senz.setSender(PreferenceUtil.getSenzieAddress(getBaseContext()));
+                        senz.setSender(PreferenceUtil.get(getBaseContext(), PreferenceUtil.Z_ADDRESS));
 
                     // get digital signature of the senz
                     PrivateKey privateKey = CryptoUtil.getPrivateKey(SenzService.this);
@@ -173,7 +173,7 @@ public class SenzService extends Service {
                 try {
                     for (Senz senz : senzList) {
                         if (senz.getSender() == null || senz.getSender().isEmpty())
-                            senz.setSender(PreferenceUtil.getSenzieAddress(getBaseContext()));
+                            senz.setSender(PreferenceUtil.get(getBaseContext(), PreferenceUtil.Z_ADDRESS));
 
                         // get digital signature of the senz
                         PrivateKey privateKey = CryptoUtil.getPrivateKey(SenzService.this);
@@ -226,7 +226,7 @@ public class SenzService extends Service {
         }
 
         private void reg() {
-            String address = PreferenceUtil.getSenzieAddress(SenzService.this);
+            String address = PreferenceUtil.get(SenzService.this, PreferenceUtil.Z_ADDRESS);
             if (!address.isEmpty()) writeSenz(SenzUtil.regSenz(SenzService.this, address));
         }
 

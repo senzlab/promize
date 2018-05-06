@@ -116,7 +116,7 @@ public class CryptoUtil {
         return kf.generatePrivate(spec);
     }
 
-    public static String getSenzieAddress(Context context) throws NoSuchAlgorithmException {
+    public static String getZaddress(Context context) throws NoSuchAlgorithmException {
         // get public key
         byte[] key = Base64.decode(PreferenceUtil.getRsaKey(context, CryptoUtil.PUBLIC_KEY_NAME), Base64.DEFAULT);
 

@@ -52,7 +52,7 @@ public class SaltConfirmActivity extends BaseActivity {
                 ActivityUtil.cancelProgressDialog();
 
                 // set account state as verified
-                PreferenceUtil.saveAccountState(this, "VERIFIED");
+                PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_STATE, "VERIFIED");
                 Toast.makeText(this, "Your account has been verified", Toast.LENGTH_LONG).show();
                 SaltConfirmActivity.this.finish();
             } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {

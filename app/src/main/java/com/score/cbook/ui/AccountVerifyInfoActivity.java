@@ -53,8 +53,9 @@ public class AccountVerifyInfoActivity extends BaseActivity {
                 // reset account state
                 // save account
                 // navigate to salt confirm
-                PreferenceUtil.saveAccountState(this, "PENDING");
-                PreferenceUtil.saveAccountNo(this, account);
+                PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_STATE, "PENDING");
+                PreferenceUtil.put(this, PreferenceUtil.BANK, SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
+                PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_NO, account);
                 navigateToConfirm();
             } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();

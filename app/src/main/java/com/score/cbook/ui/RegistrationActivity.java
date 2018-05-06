@@ -38,7 +38,7 @@ public class RegistrationActivity extends BaseActivity {
     private EditText editTextPassword;
     private EditText editTextConfirmPassword;
 
-    private String senzieAddress;
+    private String zaddress;
     private Account account;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
@@ -56,7 +56,8 @@ public class RegistrationActivity extends BaseActivity {
         if (senz.getAttributes().containsKey("status")) {
             String msg = senz.getAttributes().get("status");
             if (msg != null && msg.equalsIgnoreCase("REG_DONE")) {
-                PreferenceUtil.saveSenzeisAddress(RegistrationActivity.this, senzieAddress);
+                //PreferenceUtil.saveSenzeisAddress(RegistrationActivity.this, senzieAddress);
+                PreferenceUtil.put(RegistrationActivity.this, PreferenceUtil.Z_ADDRESS, zaddress);
                 doAuth();
             } else if (msg != null && msg.equalsIgnoreCase("REG_ALR")) {
                 doAuth();
@@ -64,7 +65,8 @@ public class RegistrationActivity extends BaseActivity {
                 ActivityUtil.cancelProgressDialog();
                 Toast.makeText(this, "Registration done", Toast.LENGTH_LONG).show();
 
-                PreferenceUtil.saveAccount(this, account);
+                PreferenceUtil.put(this, PreferenceUtil.PHONE_NO, account.getPhoneNo());
+                PreferenceUtil.put(this, PreferenceUtil.PASSWORD, account.getPassword());
                 navigateToQuestionInfo();
             } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
@@ -180,7 +182,7 @@ public class RegistrationActivity extends BaseActivity {
                         account = new Account();
                         account.setPhoneNo(phone);
                         account.setPassword(password);
-                        if (PreferenceUtil.getSenzieAddress(RegistrationActivity.this).isEmpty())
+                        if (PreferenceUtil.get(RegistrationActivity.this, PreferenceUtil.Z_ADDRESS).isEmpty())
                             doReg();
                         else {
                             doAuth();
@@ -207,10 +209,10 @@ public class RegistrationActivity extends BaseActivity {
             // generate keypair
             // generate senzie address
             CryptoUtil.initKeys(this);
-            senzieAddress = CryptoUtil.getSenzieAddress(this);
+            zaddress = CryptoUtil.getZaddress(this);
 
             // share keys with zwitch
-            sendSenz(SenzUtil.regSenz(this, senzieAddress));
+            sendSenz(SenzUtil.regSenz(this, zaddress));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -218,7 +220,7 @@ public class RegistrationActivity extends BaseActivity {
 
     private void doAuth() {
         // share keys with auth
-        String user = PreferenceUtil.getSenzieAddress(this);
+        String user = PreferenceUtil.get(this, PreferenceUtil.Z_ADDRESS);
         sendSenz(SenzUtil.authSenz(this, user));
     }
 

@@ -83,7 +83,7 @@ public class PasswordChangeActivity extends BaseActivity {
                 if (useAccount.getPassword().equals(currentPassword)) {
                     try {
                         ActivityUtil.isValidPasswordFields(currentPassword, newPassword, newConfirmPassword);
-                        PreferenceUtil.updatePassword(PasswordChangeActivity.this, newPassword);
+                        PreferenceUtil.put(PasswordChangeActivity.this, PreferenceUtil.PASSWORD, newPassword);
                         finish();
                     } catch (InvalidPasswordException e) {
                         e.printStackTrace();

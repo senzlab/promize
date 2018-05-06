@@ -96,11 +96,11 @@ public class PasswordResetQuestionActivity extends BaseActivity {
             Toast.makeText(this, "Empty answers", Toast.LENGTH_LONG).show();
         } else {
             int match = 0;
-            if (answer1.equalsIgnoreCase(PreferenceUtil.getQuestionAnswer(this, PreferenceUtil.QUESTION1)))
+            if (answer1.equalsIgnoreCase(PreferenceUtil.get(this, PreferenceUtil.QUESTION1)))
                 match++;
-            if (answer2.equalsIgnoreCase(PreferenceUtil.getQuestionAnswer(this, PreferenceUtil.QUESTION2)))
+            if (answer2.equalsIgnoreCase(PreferenceUtil.get(this, PreferenceUtil.QUESTION2)))
                 match++;
-            if (answer3.equalsIgnoreCase(PreferenceUtil.getQuestionAnswer(this, PreferenceUtil.QUESTION3)))
+            if (answer3.equalsIgnoreCase(PreferenceUtil.get(this, PreferenceUtil.QUESTION3)))
                 match++;
 
             if (match >= 2) {

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,8 +18,6 @@ import com.score.cbook.util.PreferenceUtil;
 
 public class UsernameChangeActivity extends BaseActivity {
 
-    private static final String TAG = UsernameChangeActivity.class.getName();
-
     private EditText current_username;
     private EditText new_username;
 
@@ -32,7 +29,6 @@ public class UsernameChangeActivity extends BaseActivity {
         setContentView(R.layout.activity_usernme_change);
 
         initUi();
-        // initPrefs();
         initToolbar();
         initActionBar();
     }
@@ -41,7 +37,6 @@ public class UsernameChangeActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
 
-        Log.d(TAG, "Bind to senz service");
         bindToService();
     }
 
@@ -51,7 +46,6 @@ public class UsernameChangeActivity extends BaseActivity {
 
         // unbind from service
         if (isServiceBound) {
-            Log.d(TAG, "Unbind to senz service");
             unbindService(senzServiceConnection);
 
             isServiceBound = false;
@@ -59,7 +53,6 @@ public class UsernameChangeActivity extends BaseActivity {
     }
 
     private void initUi() {
-
         // text views
         current_username = (EditText) findViewById(R.id.current_username);
         new_username = (EditText) findViewById(R.id.new_username);
@@ -69,7 +62,7 @@ public class UsernameChangeActivity extends BaseActivity {
         // buttons
         update_btn = (Button) findViewById(R.id.update_btn);
         update_btn.setTypeface(typeface, Typeface.BOLD);
-        final Account useAccount = PreferenceUtil.getAccount(this);
+        final Account account = PreferenceUtil.getAccount(this);
 
         update_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,12 +70,11 @@ public class UsernameChangeActivity extends BaseActivity {
                 String currentUsername = current_username.getText().toString().trim();
                 String newUsername = new_username.getText().toString().trim();
 
-
-                if (useAccount.getPhoneNo().equals(currentUsername)) {
+                if (account.getPhoneNo().equals(currentUsername)) {
                     try {
                         ActivityUtil.isValidUsername(currentUsername, newUsername);
-                        useAccount.setPhoneNo(newUsername);
-                        navigateToSettings(useAccount);
+                        PreferenceUtil.put(UsernameChangeActivity.this, PreferenceUtil.PHONE_NO, newUsername);
+                        navigateToSettings();
                     } catch (InvalidInputFieldsException e) {
                         e.printStackTrace();
                         displayInformationMessageDialog("ERROR", "Invalid new username");
@@ -122,10 +114,9 @@ public class UsernameChangeActivity extends BaseActivity {
         setSupportActionBar(toolbar);
     }
 
-    private void navigateToSettings(Account useAccount) {
+    private void navigateToSettings() {
         Intent intent = new Intent(UsernameChangeActivity.this, SettingsActivity.class);
         startActivity(intent);
-        PreferenceUtil.updateUsernameAccount(this, useAccount);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();

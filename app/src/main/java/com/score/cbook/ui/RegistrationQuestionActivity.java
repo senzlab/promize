@@ -100,9 +100,9 @@ public class RegistrationQuestionActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     // save answers
-                    PreferenceUtil.saveQuestionAnswer(RegistrationQuestionActivity.this, PreferenceUtil.QUESTION1, answer1);
-                    PreferenceUtil.saveQuestionAnswer(RegistrationQuestionActivity.this, PreferenceUtil.QUESTION2, answer2);
-                    PreferenceUtil.saveQuestionAnswer(RegistrationQuestionActivity.this, PreferenceUtil.QUESTION3, answer3);
+                    PreferenceUtil.put(RegistrationQuestionActivity.this, PreferenceUtil.QUESTION1, answer1);
+                    PreferenceUtil.put(RegistrationQuestionActivity.this, PreferenceUtil.QUESTION2, answer2);
+                    PreferenceUtil.put(RegistrationQuestionActivity.this, PreferenceUtil.QUESTION3, answer3);
                     navigateToHome();
                     Toast.makeText(RegistrationQuestionActivity.this, "Successfully saved answers", Toast.LENGTH_LONG).show();
                 }

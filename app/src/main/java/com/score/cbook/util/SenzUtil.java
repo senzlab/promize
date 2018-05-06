@@ -233,7 +233,7 @@ public class SenzUtil {
     }
 
     public static String getUid(Context context, String timestamp) {
-        String username = PreferenceUtil.getSenzieAddress(context);
+        String username = PreferenceUtil.get(context, PreferenceUtil.Z_ADDRESS);
         return username + timestamp;
     }
 
