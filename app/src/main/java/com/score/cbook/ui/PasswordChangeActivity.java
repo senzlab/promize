@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.exceptions.InvalidPasswordException;
@@ -84,6 +85,7 @@ public class PasswordChangeActivity extends BaseActivity {
                     try {
                         ActivityUtil.isValidPasswordFields(currentPassword, newPassword, newConfirmPassword);
                         PreferenceUtil.put(PasswordChangeActivity.this, PreferenceUtil.PASSWORD, newPassword);
+                        Toast.makeText(PasswordChangeActivity.this, "Successfully changed password", Toast.LENGTH_LONG).show();
                         finish();
                     } catch (InvalidPasswordException e) {
                         e.printStackTrace();
