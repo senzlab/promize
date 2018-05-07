@@ -39,7 +39,7 @@ public class RedeemActivity extends BaseActivity {
     private static final String TAG = RedeemActivity.class.getName();
 
     // ui controls
-    private Button done;
+    private Button redeem;
     private EditText editTextBank;
     private EditText editTextAccount;
     private EditText editTextConfirmAccount;
@@ -47,6 +47,7 @@ public class RedeemActivity extends BaseActivity {
 
     private Bank bank;
     private Cheque cheque;
+    private Senz transferSenz;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
         @Override
@@ -61,6 +62,7 @@ public class RedeemActivity extends BaseActivity {
 
     private void handleSenz(Senz senz) {
         if (senz.getSenzType() == SenzTypeEnum.DATA) {
+            ActivityUtil.hideSoftKeyboard(this);
             if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
                 // share success
                 ActivityUtil.cancelProgressDialog();
@@ -72,7 +74,7 @@ public class RedeemActivity extends BaseActivity {
                 ChequeSource.updateChequeAccount(this, cheque.getUid(), cheque.getAccount());
             } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
-                displayInformationMessageDialog("ERROR", "Failed  send iGift");
+                displayInformationMessageDialog("ERROR", "Failed to redeem iGift");
             }
         }
     }
@@ -119,6 +121,7 @@ public class RedeemActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         if (senzReceiver != null) unregisterReceiver(senzReceiver);
+        ActivityUtil.cancelProgressDialog();
     }
 
     private void initActionBar() {
@@ -158,11 +161,12 @@ public class RedeemActivity extends BaseActivity {
         editTextAccount.setTypeface(typeface, Typeface.BOLD);
         editTextConfirmAccount.setTypeface(typeface, Typeface.BOLD);
 
-        done = (Button) findViewById(R.id.done);
-        done.setTypeface(typeface, Typeface.BOLD);
-        done.setOnClickListener(new View.OnClickListener() {
+        redeem = (Button) findViewById(R.id.done);
+        redeem.setTypeface(typeface, Typeface.BOLD);
+        redeem.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                onClickDone();
+                ActivityUtil.hideSoftKeyboard(RedeemActivity.this);
+                redeemIgift();
             }
         });
     }
@@ -174,9 +178,7 @@ public class RedeemActivity extends BaseActivity {
         editTextBank.setText(this.bank.getBankName());
     }
 
-    private void onClickDone() {
-        ActivityUtil.hideSoftKeyboard(this);
-
+    private void redeemIgift() {
         // crate account
         final String accountNo = editTextAccount.getText().toString().trim();
         final String confirmAccountNo = editTextConfirmAccount.getText().toString().trim();
@@ -184,7 +186,7 @@ public class RedeemActivity extends BaseActivity {
             ActivityUtil.isValidRedeem(accountNo, confirmAccountNo);
             if (NetworkUtil.isAvailableNetwork(RedeemActivity.this)) {
                 cheque.setAccount(accountNo);
-                confirmPassword();
+                askPassword();
             } else {
                 Toast.makeText(RedeemActivity.this, "No network connection", Toast.LENGTH_LONG).show();
             }
@@ -200,7 +202,7 @@ public class RedeemActivity extends BaseActivity {
         }
     }
 
-    public void confirmPassword() {
+    public void askPassword() {
         final Dialog dialog = new Dialog(this);
 
         // set layout for dialog
@@ -224,8 +226,9 @@ public class RedeemActivity extends BaseActivity {
             public void onClick(View v) {
                 if (password.getText().toString().trim().equalsIgnoreCase(PreferenceUtil.getAccount(RedeemActivity.this).getPassword())) {
                     ActivityUtil.showProgressDialog(RedeemActivity.this, "Please wait...");
-                    Senz senz = SenzUtil.redeemSenz(RedeemActivity.this, cheque, "sampath", cheque.getAccount());
-                    sendSenz(senz);
+                    if (transferSenz == null)
+                        transferSenz = SenzUtil.redeemSenz(RedeemActivity.this, cheque, "sampath", cheque.getAccount());
+                    sendSenz(transferSenz);
                     dialog.cancel();
                 } else {
                     Toast.makeText(RedeemActivity.this, "Invalid password", Toast.LENGTH_LONG).show();

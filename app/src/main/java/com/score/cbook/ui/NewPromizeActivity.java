@@ -92,7 +92,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     private int xDelta;
     private int yDelta;
 
-    // user
+    // objs
     private ChequeUser user;
     private Cheque cheque;
     private Senz transferSenz;
@@ -172,6 +172,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     protected void onPause() {
         super.onPause();
         if (senzReceiver != null) unregisterReceiver(senzReceiver);
+        ActivityUtil.cancelProgressDialog();
 
         releaseWakeLock();
         releaseCameraPreview();
