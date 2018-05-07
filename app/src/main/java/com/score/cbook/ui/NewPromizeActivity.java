@@ -35,9 +35,10 @@ import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.enums.IntentType;
-import com.score.cbook.exceptions.InvalidAmountException;
+import com.score.cbook.exceptions.ExceedAmountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.InvalidMsgException;
+import com.score.cbook.exceptions.LessAmountException;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.util.ActivityUtil;
@@ -110,6 +111,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
     private void handleSenz(Senz senz) {
         if (senz.getSenzType() == SenzTypeEnum.DATA) {
+            ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
             if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
                 ActivityUtil.cancelProgressDialog();
                 Toast.makeText(this, "Successfully sent iGift", Toast.LENGTH_LONG).show();
@@ -435,7 +437,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             String m = message.getText().toString().trim();
             ActivityUtil.isValidGift(a, m);
             if (PreferenceUtil.get(this, PreferenceUtil.TODAY_AMOUNT, 0) + Integer.parseInt(a) > 10000) {
-                displayInformationMessageDialog("ERROR", "Your daily iGift limit Rs 10000 will exceeded with this iGift");
+                displayInformationMessageDialog("ERROR", "Daily iGift transaction limit should be 10,000 rupees");
             } else {
                 if (NetworkUtil.isAvailableNetwork(this)) askPassword();
                 else Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
@@ -443,12 +445,15 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         } catch (InvalidInputFieldsException e) {
             displayInformationMessageDialog("ERROR", "Empty iGift amount");
             e.printStackTrace();
-        } catch (InvalidAmountException e) {
-            displayInformationMessageDialog("ERROR", "iGift amount should not be less than 100 rupees and not be exceed 10000 rupees");
-            e.printStackTrace();
         } catch (InvalidMsgException e) {
             e.printStackTrace();
             displayInformationMessageDialog("ERROR", "Please write iGift message to send");
+        } catch (LessAmountException e) {
+            e.printStackTrace();
+            displayInformationMessageDialog("ERROR", "iGift transaction amount should exceed 100 rupees");
+        } catch (ExceedAmountException e) {
+            e.printStackTrace();
+            displayInformationMessageDialog("ERROR", "iGift transaction amount should not exceed 10,000 rupees");
         }
     }
 

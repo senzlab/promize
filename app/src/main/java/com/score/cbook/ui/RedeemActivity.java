@@ -24,6 +24,7 @@ import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
+import com.score.cbook.exceptions.MisMatchFieldException;
 import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.util.ActivityUtil;
@@ -189,10 +190,13 @@ public class RedeemActivity extends BaseActivity {
             }
         } catch (InvalidAccountException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Mismatching account number");
+            displayInformationMessageDialog("ERROR", "Fail to verify account");
         } catch (InvalidInputFieldsException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Invalid account number. Your account number must be 12 digits and starting with 1 or 0");
+            displayInformationMessageDialog("ERROR", "Fail to verify account");
+        } catch (MisMatchFieldException e) {
+            displayInformationMessageDialog("ERROR", "Mismatching account number");
+            e.printStackTrace();
         }
     }
 

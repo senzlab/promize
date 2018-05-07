@@ -5,11 +5,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
 
+import com.score.cbook.exceptions.ExceedAmountException;
 import com.score.cbook.exceptions.InvalidAccountException;
-import com.score.cbook.exceptions.InvalidAmountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.InvalidMsgException;
 import com.score.cbook.exceptions.InvalidPasswordException;
+import com.score.cbook.exceptions.LessAmountException;
 import com.score.cbook.exceptions.MisMatchFieldException;
 
 /**
@@ -94,27 +95,6 @@ public class ActivityUtil {
         if (!givenPassword.equalsIgnoreCase(password))
             // invalid username/password
             throw new MisMatchFieldException();
-
-    }
-
-    public static void isValidAccount(String account, String confirmAccount) throws InvalidInputFieldsException, MisMatchFieldException {
-        if (account.isEmpty() || confirmAccount.isEmpty()) {
-            throw new InvalidInputFieldsException();
-        }
-
-        if (account.length() != 12 || confirmAccount.length() != 12) {
-            throw new InvalidInputFieldsException();
-        } else if (account.length() == 12) {
-            String pattern = "^(0|1)[0-9]*$";
-            if (!account.matches(pattern)) {
-                throw new InvalidInputFieldsException();
-            }
-        }
-
-        if (!account.equalsIgnoreCase(confirmAccount)) {
-            throw new MisMatchFieldException();
-        }
-
     }
 
     public static void isValidUsername(String currUsername, String newUsername) throws InvalidInputFieldsException {
@@ -127,7 +107,27 @@ public class ActivityUtil {
         }
     }
 
-    public static void isValidRedeem(String acc, String confirmAcc) throws InvalidInputFieldsException, InvalidAccountException {
+    public static void isValidAccount(String account, String confirmAccount) throws InvalidInputFieldsException, MisMatchFieldException, InvalidAccountException {
+        if (account.isEmpty() || confirmAccount.isEmpty()) {
+            throw new InvalidInputFieldsException();
+        }
+
+        if (account.length() != 12 || confirmAccount.length() != 12) {
+            throw new InvalidInputFieldsException();
+        } else if (account.length() == 12) {
+            String pattern = "^(0|1)[0-9]*$";
+            if (!account.matches(pattern)) {
+                throw new InvalidAccountException();
+            }
+        }
+
+        if (!account.equalsIgnoreCase(confirmAccount)) {
+            throw new MisMatchFieldException();
+        }
+
+    }
+
+    public static void isValidRedeem(String acc, String confirmAcc) throws InvalidInputFieldsException, InvalidAccountException, MisMatchFieldException {
         if (acc.isEmpty() || confirmAcc.isEmpty())
             throw new InvalidInputFieldsException();
 
@@ -136,18 +136,18 @@ public class ActivityUtil {
         } else if (acc.length() == 12) {
             String pattern = "^(0|1)[0-9]*$";
             if (!acc.matches(pattern)) {
-                throw new InvalidInputFieldsException();
+                throw new InvalidAccountException();
             }
         }
 
-        if (!acc.equals(confirmAcc)) throw new InvalidAccountException();
+        if (!acc.equals(confirmAcc)) throw new MisMatchFieldException();
     }
 
-    public static void isValidGift(String amount, String msg) throws InvalidInputFieldsException, InvalidAmountException, InvalidMsgException {
+    public static void isValidGift(String amount, String msg) throws InvalidInputFieldsException, InvalidMsgException, LessAmountException, ExceedAmountException {
         if (amount.isEmpty()) throw new InvalidInputFieldsException();
         if (msg.isEmpty()) throw new InvalidMsgException();
-        if (Integer.parseInt(amount) > 10000 || Integer.parseInt(amount) < 100)
-            throw new InvalidAmountException();
+        if (Integer.parseInt(amount) > 10000) throw new ExceedAmountException();
+        if (Integer.parseInt(amount) < 100) throw new LessAmountException();
     }
 
     public static boolean isNewGift(String preAmount, String amount) {
