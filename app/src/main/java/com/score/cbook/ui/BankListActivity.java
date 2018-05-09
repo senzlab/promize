@@ -14,6 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
+import com.score.cbook.enums.ChequeState;
+import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
 
@@ -30,7 +32,8 @@ public class BankListActivity extends BaseActivity {
 
     static {
         bankList = new ArrayList<>();
-        bankList.add(new Bank("3232", "Sampath bank"));
+
+        bankList.add(new Bank("7010", "Sampath bank"));
         bankList.add(new Bank("3232", "Commercial bank"));
         bankList.add(new Bank("3232", "Hatton national bank"));
         bankList.add(new Bank("3232", "BOC"));
@@ -103,6 +106,15 @@ public class BankListActivity extends BaseActivity {
     private void initPrefs() {
         if (getIntent().hasExtra("CHEQUE"))
             this.cheque = getIntent().getParcelableExtra("CHEQUE");
+        else {
+            this.cheque = new Cheque();
+            cheque.setAccount("231234323489");
+            cheque.setAmount("3400");
+            cheque.setTimestamp(34232323L);
+            cheque.setUid("32342212121");
+            cheque.setDeliveryState(DeliveryState.DELIVERED);
+            cheque.setChequeState(ChequeState.DEPOSIT);
+        }
     }
 
     private void initList() {
