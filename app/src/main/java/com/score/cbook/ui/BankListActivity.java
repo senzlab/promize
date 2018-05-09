@@ -20,6 +20,11 @@ import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+import static org.spongycastle.asn1.x500.style.RFC4519Style.o;
 
 public class BankListActivity extends BaseActivity {
 
@@ -41,6 +46,13 @@ public class BankListActivity extends BaseActivity {
         bankList.add(new Bank("3232", "HSBC"));
         bankList.add(new Bank("3232", "ICIC"));
         bankList.add(new Bank("3232", "DFCC"));
+
+        Collections.sort(bankList, new Comparator<Bank>() {
+            public int compare(Bank o1, Bank o2) {
+                return o1.getBankName().compareTo(o2.getBankName());
+            }
+        });
+
     }
 
     @Override
