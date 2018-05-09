@@ -2,7 +2,9 @@ package com.score.cbook.ui;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,10 +21,17 @@ import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Scanner;
 
 import static org.spongycastle.asn1.x500.style.RFC4519Style.o;
 
@@ -38,14 +47,29 @@ public class BankListActivity extends BaseActivity {
     static {
         bankList = new ArrayList<>();
 
-        bankList.add(new Bank("7010", "Sampath bank"));
+ /*       bankList.add(new Bank("7010", "Sampath bank"));
         bankList.add(new Bank("3232", "Commercial bank"));
         bankList.add(new Bank("3232", "Hatton national bank"));
         bankList.add(new Bank("3232", "BOC"));
         bankList.add(new Bank("3232", "Peoples bank"));
         bankList.add(new Bank("3232", "HSBC"));
         bankList.add(new Bank("3232", "ICIC"));
-        bankList.add(new Bank("3232", "DFCC"));
+        bankList.add(new Bank("3232", "DFCC"));*/
+
+        try {
+            File file1 = new File("banklist.txt");
+            Scanner Filereader1 = new Scanner(file1);
+            while (Filereader1.hasNextLine()) {
+
+                String a = Filereader1.next();
+                String[] parse = a.split(" ");
+                bankList.add(new Bank(parse[0], parse[2]));
+
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("error" + e);
+        }
+
 
         Collections.sort(bankList, new Comparator<Bank>() {
             public int compare(Bank o1, Bank o2) {
