@@ -2,9 +2,7 @@ package com.score.cbook.ui;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,24 +19,13 @@ import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Scanner;
-
-import static org.spongycastle.asn1.x500.style.RFC4519Style.o;
 
 public class BankListActivity extends BaseActivity {
 
     private EditText searchView;
-
     private ListView bankListView;
     private BankListAdapter adapter;
     private Cheque cheque;
@@ -46,30 +33,38 @@ public class BankListActivity extends BaseActivity {
 
     static {
         bankList = new ArrayList<>();
-
- /*       bankList.add(new Bank("7010", "Sampath bank"));
-        bankList.add(new Bank("3232", "Commercial bank"));
-        bankList.add(new Bank("3232", "Hatton national bank"));
-        bankList.add(new Bank("3232", "BOC"));
-        bankList.add(new Bank("3232", "Peoples bank"));
-        bankList.add(new Bank("3232", "HSBC"));
-        bankList.add(new Bank("3232", "ICIC"));
-        bankList.add(new Bank("3232", "DFCC"));*/
-
-        try {
-            File file1 = new File("banklist.txt");
-            Scanner Filereader1 = new Scanner(file1);
-            while (Filereader1.hasNextLine()) {
-
-                String a = Filereader1.next();
-                String[] parse = a.split(" ");
-                bankList.add(new Bank(parse[0], parse[2]));
-
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("error" + e);
-        }
-
+        bankList.add(new Bank("7205", "Deutsche Bank"));
+        bankList.add(new Bank("7214", "National Development Bank PLC"));
+        bankList.add(new Bank("7269", "MCB Bank Ltd"));
+        bankList.add(new Bank("7278", "Sampath Bank PLC"));
+        bankList.add(new Bank("7287", "Seylan Bank PLC"));
+        bankList.add(new Bank("7296", "Public Bank"));
+        bankList.add(new Bank("7302", "Union Bank of Colombo PLC"));
+        bankList.add(new Bank("7311", "Pan Asia Banking Corporation PLC"));
+        bankList.add(new Bank("7384", "ICICI Bank Ltd"));
+        bankList.add(new Bank("7454", "DFCC Bank PLC"));
+        bankList.add(new Bank("7463", "Amana Bank PLC"));
+        bankList.add(new Bank("7472", "Axis Bank"));
+        bankList.add(new Bank("7481", "Cargills Bank Limited"));
+        bankList.add(new Bank("7719", "National Savings Bank"));
+        bankList.add(new Bank("7728", "Sanasa Development Bank"));
+        bankList.add(new Bank("7737", "HDFC Bank"));
+        bankList.add(new Bank("7746", "Citizen Development Business Finance PLC"));
+        bankList.add(new Bank("7755", "Regional Development Bank"));
+        bankList.add(new Bank("7764", "State Mortgage&Investment Bank"));
+        bankList.add(new Bank("7773", "LB Finance PLC"));
+        bankList.add(new Bank("7782", "Senkadagala Finance PLC"));
+        bankList.add(new Bank("7807", "Commercial Leasing and Finance"));
+        bankList.add(new Bank("7816", "Vallibel Finance PLC"));
+        bankList.add(new Bank("7834", "Kanrich Finance Limited"));
+        bankList.add(new Bank("7852", "Alliance Finance Company PLC"));
+        bankList.add(new Bank("7861", "LOLC Finance PLC"));
+        bankList.add(new Bank("7870", "Commercial Credit&Finance PLC"));
+        bankList.add(new Bank("7898", "Merchant Bank of Sri Lanka&Finance PLC"));
+        bankList.add(new Bank("7904", "HNB Grameen Finance Limited"));
+        bankList.add(new Bank("7913", "Mercantile Investment and Finance PLC"));
+        bankList.add(new Bank("7922", "People's Leasing & Finance PLC"));
+        bankList.add(new Bank("8004", "Central Bank of Sri Lanka"));
 
         Collections.sort(bankList, new Comparator<Bank>() {
             public int compare(Bank o1, Bank o2) {
