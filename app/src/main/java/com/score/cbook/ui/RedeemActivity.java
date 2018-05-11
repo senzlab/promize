@@ -227,7 +227,7 @@ public class RedeemActivity extends BaseActivity {
                 if (password.getText().toString().trim().equalsIgnoreCase(PreferenceUtil.getAccount(RedeemActivity.this).getPassword())) {
                     ActivityUtil.showProgressDialog(RedeemActivity.this, "Please wait...");
                     if (transferSenz == null)
-                        transferSenz = SenzUtil.redeemSenz(RedeemActivity.this, cheque, "sampath", cheque.getAccount());
+                        transferSenz = SenzUtil.redeemSenz(RedeemActivity.this, cheque, bank, cheque.getAccount());
                     sendSenz(transferSenz);
                     dialog.cancel();
                 } else {

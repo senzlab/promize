@@ -3,6 +3,7 @@ package com.score.cbook.util;
 import android.content.Context;
 
 import com.score.cbook.pojo.Account;
+import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.Secret;
 import com.score.senzc.enums.SenzTypeEnum;
@@ -189,11 +190,12 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz redeemSenz(Context context, Cheque cheque, String bank, String account) {
+    public static Senz redeemSenz(Context context, Cheque cheque, Bank bank, String account) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();
         senzAttributes.put("amnt", cheque.getAmount());
-        senzAttributes.put("bnk", bank);
+        senzAttributes.put("bnk", "sampath");
+        senzAttributes.put("bnkcode", bank.getBankCode());
         senzAttributes.put("id", cheque.getCid());
         senzAttributes.put("acc", account);
         senzAttributes.put("blob", "");
