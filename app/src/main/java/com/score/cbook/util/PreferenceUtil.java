@@ -28,6 +28,7 @@ public class PreferenceUtil {
     public static final String QUESTION3 = "QUESTION3";
     public static final String TODAY = "TODAY";
     public static final String TODAY_AMOUNT = "TODAY_COUNT";
+    public static final String FIREBASE_TOKEN = "FIREBASE_TOKEN";
 
     public static Account getAccount(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);

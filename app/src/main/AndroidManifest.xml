@@ -20,7 +20,7 @@
     <!-- access to vibrate phone -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <!-- access to retrive contacts on phone -->
+    <!-- access to contacts on phone -->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <!-- access to send sms -->
@@ -34,6 +34,9 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <!-- firebase -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -199,6 +202,18 @@
             android:enabled="true">
             <intent-filter>
                 <action android:name="com.score.cbook.remote.SenzService" />
+            </intent-filter>
+        </service>
+
+        <!-- fire base service -->
+        <service android:name=".remote.SenzFirebaseIdService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".remote.SenzFirebaseMessageService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 

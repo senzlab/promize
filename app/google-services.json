@@ -1,0 +1,41 @@
+{
+  "project_info": {
+    "project_number": "708670684165",
+    "firebase_url": "https://decent-envoy-431.firebaseio.com",
+    "project_id": "decent-envoy-431"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:708670684165:android:6bfc1274cc23ed6d",
+        "android_client_info": {
+          "package_name": "com.score.cbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "708670684165-bnhleklhkmo4kejo6q4fnt6l9k4k44r1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZ4ysX67gR6NQaZPzs5Mm38-RuA1XlWsM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
