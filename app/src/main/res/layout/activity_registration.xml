@@ -51,7 +51,7 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
                 android:background="@drawable/edit_text_border_bottom"
-                android:hint="Username "
+                android:hint="Phone no "
                 android:inputType="text"
                 android:maxLength="12"
                 android:paddingBottom="10dp"
@@ -60,6 +60,25 @@
                 android:textCursorDrawable="@drawable/cursor_drawable"
                 android:textSize="25sp" />
 
+            <EditText
+                android:id="@+id/registering_confirm_user_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="35dp"
+                android:background="@drawable/edit_text_border_bottom"
+                android:hint="Confirm Phone no "
+                android:inputType="text"
+                android:maxLength="12"
+                android:paddingBottom="10dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textCursorDrawable="@drawable/cursor_drawable"
+                android:textSize="25sp" />
+
+-->
             <EditText
                 android:id="@+id/registering_password"
                 android:layout_width="match_parent"
@@ -96,7 +115,7 @@
                 android:textCursorDrawable="@drawable/cursor_drawable"
                 android:textSize="25sp" />
 
-            <EditText
+            <!--            <EditText
                 android:id="@+id/registering_phone_no"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,7 +132,8 @@
                 android:textColorHint="@color/white"
                 android:textCursorDrawable="@drawable/cursor_drawable"
                 android:textSize="25sp"
-                android:visibility="gone" />
+                android:visibility="gone" />-->
+
         </LinearLayout>
     </ScrollView>
 

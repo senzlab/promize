@@ -10,6 +10,7 @@ import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.InvalidMsgException;
 import com.score.cbook.exceptions.InvalidPasswordException;
+import com.score.cbook.exceptions.InvalidPhoneNumberException;
 import com.score.cbook.exceptions.LessAmountException;
 import com.score.cbook.exceptions.MisMatchFieldException;
 
@@ -48,9 +49,18 @@ public class ActivityUtil {
         }
     }
 
-    public static void isValidRegistrationFields(String phone, String password, String confirmPassword) throws InvalidAccountException, InvalidPasswordException, MisMatchFieldException {
+    public static void isValidRegistrationFields(String phone, String confirmPhone, String password, String confirmPassword) throws InvalidPhoneNumberException, InvalidPasswordException, MisMatchFieldException {
         if (phone.isEmpty()) {
-            throw new InvalidAccountException();
+            throw new InvalidPhoneNumberException();
+        }
+
+        if (phone.length() != 10 || phone.length() != 10) {
+            throw new InvalidPhoneNumberException();
+        } else if (phone.length() == 10) {
+            String pattern = "^(0)[0-9]*$";
+            if (!phone.matches(pattern)) {
+                throw new InvalidPhoneNumberException();
+            }
         }
 
         if (password.isEmpty() || password.length() < 8)
@@ -65,6 +75,9 @@ public class ActivityUtil {
 
         if (!password.equals(confirmPassword))
             throw new MisMatchFieldException();
+
+        if (!phone.equals(confirmPhone))
+            throw new InvalidPhoneNumberException();
 
     }
 

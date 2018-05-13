@@ -17,6 +17,7 @@ import com.score.cbook.R;
 import com.score.cbook.async.PostTask;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidPasswordException;
+import com.score.cbook.exceptions.InvalidPhoneNumberException;
 import com.score.cbook.exceptions.MisMatchFieldException;
 import com.score.cbook.interfaces.IPostTaskListener;
 import com.score.cbook.pojo.Account;
@@ -38,6 +39,7 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
     // ui controls
     private Button registerBtn;
     private EditText editTextPhone;
+    private EditText editTextConfirmPhone;
     private EditText editTextPassword;
     private EditText editTextConfirmPassword;
 
@@ -137,10 +139,13 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
 
     private void initUi() {
         editTextPhone = (EditText) findViewById(R.id.registering_user_id);
+        editTextConfirmPhone = (EditText) findViewById(R.id.registering_confirm_user_id);
         editTextPassword = (EditText) findViewById(R.id.registering_password);
         editTextConfirmPassword = (EditText) findViewById(R.id.registering_confirm_password);
 
+
         editTextPhone.setTypeface(typeface, Typeface.NORMAL);
+        editTextConfirmPhone.setTypeface(typeface, Typeface.NORMAL);
         editTextPassword.setTypeface(typeface, Typeface.NORMAL);
         editTextConfirmPassword.setTypeface(typeface, Typeface.NORMAL);
 
@@ -158,10 +163,11 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
 
         // crate account
         final String phone = editTextPhone.getText().toString().trim();
+        final String confirmPhone= editTextConfirmPhone.getText().toString().trim();
         final String password = editTextPassword.getText().toString().trim();
         final String confirmPassword = editTextConfirmPassword.getText().toString().trim();
         try {
-            ActivityUtil.isValidRegistrationFields(phone, password, confirmPassword);
+            ActivityUtil.isValidRegistrationFields(phone,confirmPhone,password, confirmPassword);
             String confirmationMessage = "<font color=#636363>Please confirm to register as </font> <font color=#F37920>" + "<b>" + phone + "</b>" + "</font> <font color=#636363> in iGifts </font> ";
             displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                 @Override
@@ -181,15 +187,15 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
                     }
                 }
             });
-        } catch (InvalidAccountException e) {
-            e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Invalid phone no");
         } catch (InvalidPasswordException e) {
             e.printStackTrace();
             displayInformationMessageDialog("ERROR", "Invalid password. Password should contains more than 7 characters with special character");
         } catch (MisMatchFieldException e) {
             e.printStackTrace();
             displayInformationMessageDialog("ERROR", "Mismatching password and confirm password");
+        } catch (InvalidPhoneNumberException e) {
+            e.printStackTrace();
+            displayInformationMessageDialog("ERROR", "Invalid phone no");
         }
     }
 
