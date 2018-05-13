@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import com.score.cbook.R;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.ChequeState;
-import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
 import com.squareup.picasso.Picasso;
 
@@ -69,7 +68,6 @@ public class PromizePreviewActivity extends BaseActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(PromizePreviewActivity.this, BankListActivity.class);
                 intent.putExtra("CHEQUE", cheque);
-                //intent.putExtra("ACCOUNT_BANK", new Bank("7179", "Sampath bank"));
                 startActivity(intent);
                 PromizePreviewActivity.this.finish();
             }

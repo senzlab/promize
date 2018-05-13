@@ -2,12 +2,12 @@ package com.score.cbook.ui;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.hardware.Camera;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.design.widget.FloatingActionButton;
@@ -30,27 +30,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.application.IntentProvider;
+import com.score.cbook.async.PostTask;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.DeliveryState;
-import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.ExceedAmountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.InvalidMsgException;
 import com.score.cbook.exceptions.LessAmountException;
+import com.score.cbook.interfaces.IPostTaskListener;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
+import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.ImageUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PreferenceUtil;
+import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
 import com.score.cbook.util.TimeUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
-public class NewPromizeActivity extends BaseActivity implements View.OnTouchListener {
+import java.security.PrivateKey;
+
+public class NewPromizeActivity extends BaseActivity implements View.OnTouchListener, IPostTaskListener {
     protected static final String TAG = NewPromizeActivity.class.getName();
 
     // camera
@@ -99,26 +104,10 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
     private PowerManager.WakeLock wakeLock;
 
-    private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.hasExtra("SENZ")) {
-                Senz senz = intent.getExtras().getParcelable("SENZ");
-                handleSenz(senz);
-            }
-        }
-    };
-
     private void handleSenz(Senz senz) {
         if (senz.getSenzType() == SenzTypeEnum.DATA) {
             ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
             if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
-                ActivityUtil.cancelProgressDialog();
-                Toast.makeText(this, "Successfully sent iGift", Toast.LENGTH_LONG).show();
-
-                updateTodayLimit();
-                savePromize();
-                this.finish();
             } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
                 displayInformationMessageDialog("ERROR", "Failed to send iGift");
@@ -142,26 +131,8 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        bindToService();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        if (isServiceBound) {
-            unbindService(senzServiceConnection);
-            isServiceBound = false;
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
 
         // init camera with front
         acquireWakeLock();
@@ -171,8 +142,6 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     @Override
     protected void onPause() {
         super.onPause();
-        if (senzReceiver != null) unregisterReceiver(senzReceiver);
-        ActivityUtil.cancelProgressDialog();
 
         releaseWakeLock();
         releaseCameraPreview();
@@ -485,7 +454,6 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                     ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
                     ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
                     sendPromize(captureScreen(), amount.getText().toString());
-                    //captureScreen();
                 } else {
                     Toast.makeText(NewPromizeActivity.this, "Invalid password", Toast.LENGTH_LONG).show();
                 }
@@ -532,7 +500,21 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             transferSenz = SenzUtil.transferSenz(this, cheque, PreferenceUtil.getAccount(this));
         }
 
-        sendSenz(transferSenz);
+        try {
+            PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
+            String senzPayload = SenzParser.compose(transferSenz);
+            String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
+
+            // senz msg
+            String uid = transferSenz.getAttributes().get("#uid");
+            String message = SenzParser.senzMsg(senzPayload, signature);
+            SenzMsg senzMsg = new SenzMsg(uid, message);
+
+            PostTask task = new PostTask(this, PostTask.PROMIZE_API, senzMsg);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void savePromize() {
@@ -630,4 +612,18 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         }
     }
 
+    @Override
+    public void onFinishTask(Integer status) {
+        if (status == 200) {
+            ActivityUtil.cancelProgressDialog();
+            Toast.makeText(this, "Successfully sent iGift", Toast.LENGTH_LONG).show();
+
+            updateTodayLimit();
+            savePromize();
+            this.finish();
+        } else {
+            ActivityUtil.cancelProgressDialog();
+            displayInformationMessageDialog("ERROR", "Failed to send iGift");
+        }
+    }
 }

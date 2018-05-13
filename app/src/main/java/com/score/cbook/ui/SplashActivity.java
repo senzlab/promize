@@ -17,7 +17,7 @@ public class SplashActivity extends BaseActivity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.splash_layout);
-        initService();
+        //initService();
         initUi();
         initNavigation();
     }

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -13,19 +14,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.application.IntentProvider;
-import com.score.cbook.enums.IntentType;
+import com.score.cbook.async.PostTask;
+import com.score.cbook.interfaces.IPostTaskListener;
+import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.PreferenceUtil;
+import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
 import com.score.senzc.pojos.Senz;
+
+import java.security.PrivateKey;
 
 /**
  * Activity class that handles login
  *
  * @author erangaeb@gmail.com (eranga herath)
  */
-public class AccountVerifyInfoActivity extends BaseActivity {
+public class AccountVerifyInfoActivity extends BaseActivity implements IPostTaskListener {
 
     // UI fields
     private TextView hi;
@@ -34,17 +40,6 @@ public class AccountVerifyInfoActivity extends BaseActivity {
     private String account;
 
     private static final String TAG = AccountVerifyInfoActivity.class.getName();
-
-    private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "Got message from Senz service");
-            if (intent.hasExtra("SENZ")) {
-                Senz senz = intent.getExtras().getParcelable("SENZ");
-                handleSenz(senz);
-            }
-        }
-    };
 
     private void handleSenz(Senz senz) {
         if (senz.getAttributes().containsKey("status")) {
@@ -73,38 +68,6 @@ public class AccountVerifyInfoActivity extends BaseActivity {
         initToolbar();
         initActionBar();
         initPrefs();
-    }
-
-    protected void onStart() {
-        super.onStart();
-
-        Log.d(TAG, "Bind to senz service");
-        bindToService();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // unbind from service
-        if (isServiceBound) {
-            Log.d(TAG, "Unbind to senz service");
-            unbindService(senzServiceConnection);
-
-            isServiceBound = false;
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (senzReceiver != null) unregisterReceiver(senzReceiver);
     }
 
     private void initUi() {
@@ -168,8 +131,23 @@ public class AccountVerifyInfoActivity extends BaseActivity {
     }
 
     private void verifyAccount() {
-        Senz senz = SenzUtil.accountSenz(this, account);
-        sendSenz(senz);
+        // create senz
+        try {
+            Senz senz = SenzUtil.accountSenz(this, account);
+            PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
+            String senzPayload = SenzParser.compose(senz);
+            String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
+
+            // senz msg
+            String uid = senz.getAttributes().get("#uid");
+            String message = SenzParser.senzMsg(senzPayload, signature);
+            SenzMsg senzMsg = new SenzMsg(uid, message);
+
+            PostTask task = new PostTask(this, PostTask.UZER_API, senzMsg);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "PUT");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void navigateToConfirm() {
@@ -180,5 +158,20 @@ public class AccountVerifyInfoActivity extends BaseActivity {
         finish();
     }
 
+    @Override
+    public void onFinishTask(Integer status) {
+        if (status == 200) {
+            // reset account state
+            // save account
+            // navigate to salt confirm
+            PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_STATE, "PENDING");
+            PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_BANK, SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
+            PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_NO, account);
+            navigateToConfirm();
+        } else {
+            ActivityUtil.cancelProgressDialog();
+            displayInformationMessageDialog("ERROR", "Fail to verify account");
+        }
+    }
 }
 

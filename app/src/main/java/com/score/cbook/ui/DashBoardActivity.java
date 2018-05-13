@@ -145,6 +145,15 @@ public class DashBoardActivity extends BaseActivity {
                     SecretSource.createSecret(DashBoardActivity.this, secret);
                 }
 
+                UserSource.deleteUser(DashBoardActivity.this, "FdURfg4ZgPFsxfn2wbLz7WTh4Cc");
+
+                // another user
+                ChequeUser user = new ChequeUser("FdURfg4ZgPFsxfn2wbLz7WTh4Cc");
+                user.setActive(true);
+                user.setAdmin(false);
+                user.setPhone("0754919294");
+                UserSource.createUser(DashBoardActivity.this, user);
+
                 // navigate to chat activity
                 Intent intent = new Intent(DashBoardActivity.this, ChatActivity.class);
                 intent.putExtra("SENDER", chequeUser.getUsername());

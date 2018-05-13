@@ -77,6 +77,7 @@ public class SenzUtil {
         senz.setSenzType(SenzTypeEnum.SHARE);
         senz.setReceiver(SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
+        senz.setSender(PreferenceUtil.get(context, PreferenceUtil.Z_ADDRESS));
 
         return senz;
     }
@@ -94,6 +95,7 @@ public class SenzUtil {
         senz.setSenzType(SenzTypeEnum.SHARE);
         senz.setReceiver(SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
+        senz.setSender(PreferenceUtil.get(context, PreferenceUtil.Z_ADDRESS));
 
         return senz;
     }
@@ -186,6 +188,7 @@ public class SenzUtil {
         senz.setSenzType(SenzTypeEnum.SHARE);
         senz.setReceiver(SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
         senz.setAttributes(senzAttributes);
+        senz.setSender(PreferenceUtil.get(context, PreferenceUtil.Z_ADDRESS));
 
         return senz;
     }

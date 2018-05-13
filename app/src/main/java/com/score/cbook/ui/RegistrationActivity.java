@@ -1,9 +1,8 @@
 package com.score.cbook.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,20 +14,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.application.IntentProvider;
-import com.score.cbook.enums.IntentType;
+import com.score.cbook.async.PostTask;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.MisMatchFieldException;
+import com.score.cbook.interfaces.IPostTaskListener;
 import com.score.cbook.pojo.Account;
+import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PreferenceUtil;
+import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
 import com.score.senzc.pojos.Senz;
 
-public class RegistrationActivity extends BaseActivity {
+import java.security.PrivateKey;
+
+public class RegistrationActivity extends BaseActivity implements IPostTaskListener {
 
     private static final String TAG = RegistrationActivity.class.getName();
 
@@ -41,23 +44,11 @@ public class RegistrationActivity extends BaseActivity {
     private String zaddress;
     private Account account;
 
-    private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "Got message from Senz service");
-            if (intent.hasExtra("SENZ")) {
-                Senz senz = intent.getExtras().getParcelable("SENZ");
-                handleSenz(senz);
-            }
-        }
-    };
-
     private void handleSenz(Senz senz) {
         if (senz.getAttributes().containsKey("status")) {
             String msg = senz.getAttributes().get("status");
             if (msg != null && msg.equalsIgnoreCase("REG_DONE")) {
                 //PreferenceUtil.saveSenzeisAddress(RegistrationActivity.this, senzieAddress);
-                PreferenceUtil.put(RegistrationActivity.this, PreferenceUtil.Z_ADDRESS, zaddress);
                 doAuth();
             } else if (msg != null && msg.equalsIgnoreCase("REG_ALR")) {
                 doAuth();
@@ -109,13 +100,11 @@ public class RegistrationActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        if (senzReceiver != null) unregisterReceiver(senzReceiver);
     }
 
     private void initActionBar() {
@@ -211,8 +200,19 @@ public class RegistrationActivity extends BaseActivity {
             CryptoUtil.initKeys(this);
             zaddress = CryptoUtil.getZaddress(this);
 
-            // share keys with zwitch
-            sendSenz(SenzUtil.regSenz(this, zaddress));
+            // create senz
+            Senz senz = SenzUtil.regSenz(this, zaddress);
+            PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
+            String senzPayload = SenzParser.compose(senz);
+            String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
+
+            // senz msg
+            String uid = senz.getAttributes().get("#uid");
+            String message = SenzParser.senzMsg(senzPayload, signature);
+            SenzMsg senzMsg = new SenzMsg(uid, message);
+
+            PostTask task = new PostTask(this, PostTask.UZER_API, senzMsg);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -224,15 +224,26 @@ public class RegistrationActivity extends BaseActivity {
         sendSenz(SenzUtil.authSenz(this, user));
     }
 
-    private void navigateToTerms() {
-        Intent intent = new Intent(RegistrationActivity.this, DashBoardActivity.class);
-        RegistrationActivity.this.startActivity(intent);
-        RegistrationActivity.this.finish();
-    }
-
     private void navigateToQuestionInfo() {
         Intent intent = new Intent(RegistrationActivity.this, RegistrationQuestionInfoActivity.class);
         RegistrationActivity.this.startActivity(intent);
         RegistrationActivity.this.finish();
+    }
+
+    @Override
+    public void onFinishTask(Integer status) {
+        if (status == 200) {
+            // HTTP OK
+            ActivityUtil.cancelProgressDialog();
+            Toast.makeText(this, "Registration done", Toast.LENGTH_LONG).show();
+
+            PreferenceUtil.put(this, PreferenceUtil.Z_ADDRESS, zaddress);
+            PreferenceUtil.put(this, PreferenceUtil.USERNAME, account.getUsername());
+            PreferenceUtil.put(this, PreferenceUtil.PASSWORD, account.getPassword());
+            navigateToQuestionInfo();
+        } else {
+            ActivityUtil.cancelProgressDialog();
+            displayInformationMessageDialog("ERROR", "Registration fail");
+        }
     }
 }
