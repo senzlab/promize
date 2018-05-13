@@ -35,23 +35,14 @@ public class SenzFirebaseMessageService extends FirebaseMessagingService {
     }
 
     private void handleSenz(Senz senz) {
-        // save promize
-        Long timestamp = (System.currentTimeMillis() / 1000);
-        String user = senz.getAttributes().get("from");
-        //savePromize(timestamp, senz.getAttributes().get("uid"), senz.getAttributes().get("id"), senz.getAttributes().get("amnt"), user);
-
         // show notification
     }
 
-    private void saveUser(Senz senz) {
-
+    private void addUser(Senz senz) {
+        
     }
 
-    private void activeUser(Senz senz) {
-
-    }
-
-    private void savePromize(Long timestamp, String uid, String id, String amnt, String user) {
+    private void addPromize(Long timestamp, String uid, String id, String amnt, String user) {
         // create secret
         final Cheque cheque = new Cheque();
         cheque.setUid(uid);
