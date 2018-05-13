@@ -121,7 +121,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         } else if (actionType == CustomerActionType.NEW_CHEQUE || actionType == CustomerActionType.NEW_MESSAGE) {
             titleText.setText("Choose contact");
         } else {
-            titleText.setText("iGift contacts");
+            titleText.setText("iGift Contacts");
         }
 
         // back button

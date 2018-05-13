@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_marginLeft="50dp"
-                    android:text="iGifts Store"
+                    android:text="iGift Store"
                     android:textColor="@color/white"
                     android:textSize="30sp" />
             </RelativeLayout>
