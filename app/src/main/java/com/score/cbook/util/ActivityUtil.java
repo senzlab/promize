@@ -13,6 +13,7 @@ import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.InvalidPhoneNumberException;
 import com.score.cbook.exceptions.LessAmountException;
 import com.score.cbook.exceptions.MisMatchFieldException;
+import com.score.cbook.exceptions.MisMatchPhoneNumberException;
 
 /**
  * Utility class to handle activity related common functions
@@ -49,7 +50,7 @@ public class ActivityUtil {
         }
     }
 
-    public static void isValidRegistrationFields(String phone, String confirmPhone, String password, String confirmPassword) throws InvalidPhoneNumberException, InvalidPasswordException, MisMatchFieldException {
+    public static void isValidRegistrationFields(String phone, String confirmPhone, String password, String confirmPassword) throws InvalidPhoneNumberException, InvalidPasswordException, MisMatchFieldException,MisMatchPhoneNumberException {
         if (phone.isEmpty()) {
             throw new InvalidPhoneNumberException();
         }
@@ -77,7 +78,7 @@ public class ActivityUtil {
             throw new MisMatchFieldException();
 
         if (!phone.equals(confirmPhone))
-            throw new InvalidPhoneNumberException();
+            throw new MisMatchPhoneNumberException();
 
     }
 

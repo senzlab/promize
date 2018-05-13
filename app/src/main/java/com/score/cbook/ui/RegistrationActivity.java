@@ -19,6 +19,7 @@ import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.InvalidPhoneNumberException;
 import com.score.cbook.exceptions.MisMatchFieldException;
+import com.score.cbook.exceptions.MisMatchPhoneNumberException;
 import com.score.cbook.interfaces.IPostTaskListener;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.pojo.SenzMsg;
@@ -195,7 +196,10 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
             displayInformationMessageDialog("ERROR", "Mismatching password and confirm password");
         } catch (InvalidPhoneNumberException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Invalid phone no");
+            displayInformationMessageDialog("ERROR", "Invalid phone no. Phone no should contains 10 digits and start with 0");
+        } catch (MisMatchPhoneNumberException e) {
+            e.printStackTrace();
+            displayInformationMessageDialog("ERROR", "Mismatching Phone no and confirm Phone no");
         }
     }
 
