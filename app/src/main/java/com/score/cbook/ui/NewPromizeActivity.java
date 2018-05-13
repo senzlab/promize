@@ -614,8 +614,9 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
 
     @Override
     public void onFinishTask(Integer status) {
+        ActivityUtil.cancelProgressDialog();
+        ActivityUtil.hideSoftKeyboard(this);
         if (status == 200) {
-            ActivityUtil.cancelProgressDialog();
             Toast.makeText(this, "Successfully sent iGift", Toast.LENGTH_LONG).show();
 
             updateTodayLimit();

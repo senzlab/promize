@@ -12,7 +12,7 @@ public class SenzFirebaseIdService extends FirebaseInstanceIdService {
 
     @Override
     public void onTokenRefresh() {
-        // get updated token.
+        // get updated token
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "refreshed token: " + refreshedToken);
 

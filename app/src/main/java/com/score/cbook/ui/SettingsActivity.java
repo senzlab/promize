@@ -145,13 +145,13 @@ public class SettingsActivity extends BaseActivity {
             account.setText("Account");
             accBtn.setText("Add");
         } else if (userAccount.getState().equalsIgnoreCase("PENDING")) {
-            account.setText("Account - " + userAccount.getAccountNo());
+            account.setText("Account " + userAccount.getAccountNo());
             accBtn.setText("VERIFY");
         } else {
-            account.setText("Account - " + userAccount.getAccountNo());
+            account.setText("Account " + userAccount.getAccountNo());
             accBtn.setText("CHANGE");
         }
-        phone.setText("Username - " + userAccount.getUsername());
+        phonev.setText(userAccount.getUsername());
     }
 
     private void initActionBar() {

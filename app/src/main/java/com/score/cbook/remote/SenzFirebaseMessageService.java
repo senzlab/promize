@@ -21,7 +21,7 @@ public class SenzFirebaseMessageService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if (remoteMessage.getData().size() > 0) {
-            Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());
+            Log.e(TAG, "Data Payload: " + remoteMessage.getData().entrySet());
 
             try {
                 JSONObject json = new JSONObject(remoteMessage.getData().toString());
@@ -41,6 +41,14 @@ public class SenzFirebaseMessageService extends FirebaseMessagingService {
         //savePromize(timestamp, senz.getAttributes().get("uid"), senz.getAttributes().get("id"), senz.getAttributes().get("amnt"), user);
 
         // show notification
+    }
+
+    private void saveUser(Senz senz) {
+
+    }
+
+    private void activeUser(Senz senz) {
+
     }
 
     private void savePromize(Long timestamp, String uid, String id, String amnt, String user) {
