@@ -4,15 +4,17 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.score.cbook.R;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.db.UserSource;
 import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
+import com.score.cbook.pojo.Notifcationz;
+import com.score.cbook.util.PhoneBookUtil;
+import com.score.cbook.util.SenzParser;
 import com.score.senzc.pojos.Senz;
-
-import org.json.JSONObject;
 
 public class SenzFirebaseMessageService extends FirebaseMessagingService {
 
@@ -21,13 +23,11 @@ public class SenzFirebaseMessageService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if (remoteMessage.getData().size() > 0) {
-            Log.e(TAG, "Data Payload: " + remoteMessage.getData().entrySet());
-
+            Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());
             try {
-                JSONObject json = new JSONObject(remoteMessage.getData().toString());
-                //Senz senz = SenzParser.parse(json.getString("message"));
-                //handleSenz(senz);
-                Log.d(TAG, json.toString());
+                String msg = remoteMessage.getData().get("Msg");
+                Senz senz = SenzParser.parse(msg);
+                handleSenz(senz);
             } catch (Exception e) {
                 Log.e(TAG, "Exception: " + e.getMessage());
             }
@@ -35,32 +35,67 @@ public class SenzFirebaseMessageService extends FirebaseMessagingService {
     }
 
     private void handleSenz(Senz senz) {
-        // show notification
+        if (senz.getAttributes().containsKey("pubkey")) {
+            // connect
+            addContact(senz);
+        } else if (senz.getAttributes().containsKey("amnt")) {
+            // promize
+            addPromize(senz);
+        }
     }
 
-    private void addUser(Senz senz) {
-        
+    private void addContact(Senz senz) {
+        String phoneNo = senz.getAttributes().get("from");
+        String contactName = PhoneBookUtil.getContactName(this, phoneNo);
+
+        ChequeUser existingUser = UserSource.getExistingUserWithPhoneNo(this, phoneNo);
+        if (existingUser == null) {
+            // this means new connect request
+            // create user
+            ChequeUser chequeUser = new ChequeUser(phoneNo);
+            chequeUser.setPhone(phoneNo);
+            chequeUser.setPubKey(senz.getAttributes().get("pubkey"));
+            chequeUser.setActive(true);
+            UserSource.createUser(this, chequeUser);
+
+            // notify
+            Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, contactName, "New iGift request received", phoneNo);
+            NotificationzHandler.notifiyStatus(this, notifcationz);
+        } else {
+            // this means confirm connect request
+            UserSource.activateUser(this, existingUser.getUsername());
+
+            // notify
+            Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, contactName, "Confirmed your request", phoneNo);
+            NotificationzHandler.notifiyStatus(this, notifcationz);
+        }
     }
 
-    private void addPromize(Long timestamp, String uid, String id, String amnt, String user) {
-        // create secret
+    private void addPromize(Senz senz) {
         final Cheque cheque = new Cheque();
-        cheque.setUid(uid);
+        Long timestamp = (System.currentTimeMillis() / 1000);
         cheque.setTimestamp(timestamp);
+        cheque.setUid(senz.getAttributes().get("uid"));
         cheque.setDeliveryState(DeliveryState.NONE);
         cheque.setBlob("");
         cheque.setMyCheque(false);
-        cheque.setCid(id);
+        cheque.setCid(senz.getAttributes().get("id"));
         cheque.setChequeState(ChequeState.TRANSFER);
-        cheque.setAmount(amnt);
+        cheque.setAmount(senz.getAttributes().get("amnt"));
         cheque.setViewed(false);
 
-        ChequeUser chequeUser = new ChequeUser(user);
+        String phoneNo = senz.getAttributes().get("from");
+        ChequeUser chequeUser = new ChequeUser(phoneNo);
         cheque.setUser(chequeUser);
         ChequeSource.createCheque(this, cheque);
 
         // update unread count by one
-        UserSource.updateUnreadChequeCount(this, user, 1);
+        UserSource.updateUnreadChequeCount(this, phoneNo, 1);
+
+        // notify
+        String title = PhoneBookUtil.getContactName(this, phoneNo);
+        Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, title, this.getString(R.string.cheque_notification), phoneNo);
+        NotificationzHandler.notifyCheque(this, notifcationz);
     }
 
 }

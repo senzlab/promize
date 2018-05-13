@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
@@ -21,26 +22,35 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
+import com.score.cbook.async.PostTask;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.db.SecretSource;
 import com.score.cbook.db.UserSource;
 import com.score.cbook.enums.CustomerActionType;
 import com.score.cbook.enums.IntentType;
+import com.score.cbook.interfaces.IPostTaskListener;
 import com.score.cbook.pojo.ChequeUser;
+import com.score.cbook.pojo.SenzMsg;
+import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PhoneBookUtil;
+import com.score.cbook.util.SenzParser;
+import com.score.cbook.util.SenzUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
+import java.security.PrivateKey;
 import java.util.LinkedList;
 
 
-public class CustomerListActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class CustomerListActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, IPostTaskListener {
 
     private LinkedList<ChequeUser> customerList;
     private CustomerListAdapter customerListAdapter;
 
     private CustomerActionType actionType = CustomerActionType.CUSTOMER_LIST;
+    private ChequeUser selectedUser;
 
     private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
         @Override
@@ -251,13 +261,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                 displayConfirmationMessageDialog("Would you like to resend request to " + contactName + "?", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // start sharing again
-                        // broadcast
-                        Intent intent = new Intent(IntentProvider.ACTION_SMS_REQUEST_CONFIRM);
-                        intent.putExtra("USERNAME", chequeUser.getUsername());
-                        intent.putExtra("PHONE", chequeUser.getPhone());
-                        sendBroadcast(intent);
-                        Toast.makeText(CustomerListActivity.this, "Request sent", Toast.LENGTH_LONG).show();
+
                     }
                 });
             } else {
@@ -268,11 +272,8 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                         // start getting public key and sending confirmation sms
                         // broadcast
                         if (NetworkUtil.isAvailableNetwork(CustomerListActivity.this)) {
-                            Intent intent = new Intent(IntentProvider.ACTION_SMS_REQUEST_ACCEPT);
-                            intent.putExtra("USERNAME", chequeUser.getUsername());
-                            intent.putExtra("PHONE", chequeUser.getPhone());
-                            sendBroadcast(intent);
-                            Toast.makeText(CustomerListActivity.this, "Confirmation sent", Toast.LENGTH_LONG).show();
+                            selectedUser = chequeUser;
+                            addContact(selectedUser.getPhone());
                         } else {
                             Toast.makeText(CustomerListActivity.this, "No network connection", Toast.LENGTH_LONG).show();
                         }
@@ -305,5 +306,40 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         return true;
     }
 
+    private void addContact(String phoneNo) {
+        // create senz
+        try {
+            Senz senz = SenzUtil.connectSenz(this, phoneNo);
+            PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
+            String senzPayload = SenzParser.compose(senz);
+            String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
+
+            // senz msg
+            String uid = senz.getAttributes().get("uid");
+            String message = SenzParser.senzMsg(senzPayload, signature);
+            SenzMsg senzMsg = new SenzMsg(uid, message);
+
+            PostTask task = new PostTask(this, PostTask.CONNECTION_API, senzMsg);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onFinishTask(Integer status) {
+        ActivityUtil.cancelProgressDialog();
+        if (status == 200) {
+            // save contact
+            ChequeUser chequeUser = new ChequeUser(selectedUser.getPhone());
+            chequeUser.setPhone(selectedUser.getPhone());
+            chequeUser.setActive(false);
+            chequeUser.setSMSRequester(true);
+            UserSource.createUser(this, chequeUser);
+            Toast.makeText(this, "Successfully added contact", Toast.LENGTH_LONG).show();
+        } else {
+            displayInformationMessageDialog("ERROR", "Fail to add contact");
+        }
+    }
 
 }

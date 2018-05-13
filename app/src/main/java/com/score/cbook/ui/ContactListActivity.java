@@ -16,21 +16,30 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.async.ContactReader;
+import com.score.cbook.async.PostTask;
 import com.score.cbook.db.UserSource;
 import com.score.cbook.interfaces.IContactReaderListener;
+import com.score.cbook.interfaces.IPostTaskListener;
+import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.pojo.Contact;
+import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
-import com.score.cbook.util.SmsUtil;
+import com.score.cbook.util.SenzParser;
+import com.score.cbook.util.SenzUtil;
+import com.score.senzc.pojos.Senz;
 
+import java.security.PrivateKey;
 import java.util.ArrayList;
 
-public class ContactListActivity extends BaseActivity implements IContactReaderListener {
+public class ContactListActivity extends BaseActivity implements IContactReaderListener, IPostTaskListener {
 
     private EditText searchView;
 
     private ListView contactListView;
     private ContactListAdapter adapter;
+    private Contact selectedContact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,8 +130,8 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
                 @Override
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(ContactListActivity.this)) {
-                        SmsUtil.sendRequest(ContactListActivity.this, contact.getPhoneNo());
-                        Toast.makeText(ContactListActivity.this, "Request sent via SMS", Toast.LENGTH_LONG).show();
+                        selectedContact = contact;
+                        addContact(selectedContact.getPhoneNo());
                     } else {
                         Toast.makeText(ContactListActivity.this, "No network connection", Toast.LENGTH_LONG).show();
                     }
@@ -133,9 +142,45 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
         }
     }
 
+    private void addContact(String phoneNo) {
+        // create senz
+        try {
+            Senz senz = SenzUtil.connectSenz(this, phoneNo);
+            PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
+            String senzPayload = SenzParser.compose(senz);
+            String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
+
+            // senz msg
+            String uid = senz.getAttributes().get("uid");
+            String message = SenzParser.senzMsg(senzPayload, signature);
+            SenzMsg senzMsg = new SenzMsg(uid, message);
+
+            PostTask task = new PostTask(this, PostTask.CONNECTION_API, senzMsg);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onPostRead(ArrayList<Contact> contactList) {
         ActivityUtil.cancelProgressDialog();
         initContactList(contactList);
+    }
+
+    @Override
+    public void onFinishTask(Integer status) {
+        if (status == 200) {
+            // save contact
+            ChequeUser chequeUser = new ChequeUser(selectedContact.getPhoneNo());
+            chequeUser.setPhone(selectedContact.getPhoneNo());
+            chequeUser.setActive(false);
+            chequeUser.setSMSRequester(true);
+            UserSource.createUser(this, chequeUser);
+            Toast.makeText(this, "Request has been sent", Toast.LENGTH_LONG).show();
+        } else {
+            ActivityUtil.cancelProgressDialog();
+            displayInformationMessageDialog("ERROR", "Fail to add account");
+        }
     }
 }

@@ -16,6 +16,7 @@ public class PostTask extends AsyncTask<String, String, Integer> {
     private static final String TAG = PostTask.class.getName();
 
     public static final String UZER_API = "http://10.2.2.9:7171/uzers";
+    public static final String CONNECTION_API = "http://10.2.2.9:7171/connections";
     public static final String PROMIZE_API = "http://10.2.2.9:7171/promizes";
 
     private IPostTaskListener listener;
