@@ -1,10 +1,8 @@
 package com.score.cbook.ui;
 
 import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,23 +16,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.application.IntentProvider;
+import com.score.cbook.async.PostTask;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.ChequeState;
-import com.score.cbook.enums.IntentType;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.MisMatchFieldException;
+import com.score.cbook.interfaces.IPostTaskListener;
 import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
+import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
+import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PreferenceUtil;
+import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
 import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
-public class RedeemActivity extends BaseActivity {
+import java.security.PrivateKey;
+
+public class RedeemActivity extends BaseActivity implements IPostTaskListener {
 
     private static final String TAG = RedeemActivity.class.getName();
 
@@ -47,18 +50,7 @@ public class RedeemActivity extends BaseActivity {
 
     private Bank bank;
     private Cheque cheque;
-    private Senz transferSenz;
-
-    private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "Got message from Senz service");
-            if (intent.hasExtra("SENZ")) {
-                Senz senz = intent.getExtras().getParcelable("SENZ");
-                handleSenz(senz);
-            }
-        }
-    };
+    private Senz redeemSenz;
 
     private void handleSenz(Senz senz) {
         if (senz.getSenzType() == SenzTypeEnum.DATA) {
@@ -111,19 +103,6 @@ public class RedeemActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (senzReceiver != null) unregisterReceiver(senzReceiver);
-        ActivityUtil.cancelProgressDialog();
-    }
-
     private void initActionBar() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setCustomView(getLayoutInflater().inflate(R.layout.add_user_header, null));
@@ -166,7 +145,7 @@ public class RedeemActivity extends BaseActivity {
         redeem.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 ActivityUtil.hideSoftKeyboard(RedeemActivity.this);
-                redeemIgift();
+                onClickRedeem();
             }
         });
     }
@@ -178,7 +157,7 @@ public class RedeemActivity extends BaseActivity {
         editTextBank.setText(this.bank.getBankName());
     }
 
-    private void redeemIgift() {
+    private void onClickRedeem() {
         // crate account
         final String accountNo = editTextAccount.getText().toString().trim();
         final String confirmAccountNo = editTextConfirmAccount.getText().toString().trim();
@@ -226,10 +205,8 @@ public class RedeemActivity extends BaseActivity {
             public void onClick(View v) {
                 if (password.getText().toString().trim().equalsIgnoreCase(PreferenceUtil.getAccount(RedeemActivity.this).getPassword())) {
                     ActivityUtil.showProgressDialog(RedeemActivity.this, "Please wait...");
-                    if (transferSenz == null)
-                        transferSenz = SenzUtil.redeemSenz(RedeemActivity.this, cheque, bank, cheque.getAccount());
-                    sendSenz(transferSenz);
                     dialog.cancel();
+                    redeem();
                 } else {
                     Toast.makeText(RedeemActivity.this, "Invalid password", Toast.LENGTH_LONG).show();
                 }
@@ -248,5 +225,41 @@ public class RedeemActivity extends BaseActivity {
         dialog.show();
     }
 
+    private void redeem() {
+        try {
+            if (redeemSenz == null)
+                redeemSenz = SenzUtil.redeemSenz(RedeemActivity.this, cheque, bank, cheque.getAccount());
 
+            PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
+            String senzPayload = SenzParser.compose(redeemSenz);
+            String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
+
+            // senz msg
+            String uid = redeemSenz.getAttributes().get("uid");
+            String message = SenzParser.senzMsg(senzPayload, signature);
+            SenzMsg senzMsg = new SenzMsg(uid, message);
+
+            PostTask task = new PostTask(this, PostTask.PROMIZE_API, senzMsg);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onFinishTask(Integer status) {
+        ActivityUtil.cancelProgressDialog();
+        ActivityUtil.hideSoftKeyboard(this);
+        if (status == 200) {
+            // update cheque status and account
+            ChequeSource.updateChequeState(this, cheque.getUid(), ChequeState.DEPOSIT);
+            ChequeSource.updateChequeAccount(this, cheque.getUid(), cheque.getAccount());
+
+            Toast.makeText(RedeemActivity.this, "Successfully redeemed the iGift", Toast.LENGTH_LONG).show();
+            RedeemActivity.this.finish();
+        } else {
+            ActivityUtil.cancelProgressDialog();
+            displayInformationMessageDialog("ERROR", "Failed to redeem iGift");
+        }
+    }
 }

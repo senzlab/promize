@@ -25,7 +25,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        bindToService();
+        //bindToService();
     }
 
     @Override

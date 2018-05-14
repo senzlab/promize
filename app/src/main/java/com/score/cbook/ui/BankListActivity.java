@@ -33,13 +33,13 @@ public class BankListActivity extends BaseActivity {
 
     static {
         bankList = new ArrayList<>();
-        bankList.add(new Bank("7205", "Deutsche Bank"));
-        bankList.add(new Bank("7214", "National Development Bank PLC"));
-        bankList.add(new Bank("7269", "MCB Bank Ltd"));
-        bankList.add(new Bank("7278", "Sampath Bank PLC"));
-        bankList.add(new Bank("7287", "Seylan Bank PLC"));
-        bankList.add(new Bank("7296", "Public Bank"));
-        bankList.add(new Bank("7302", "Union Bank of Colombo PLC"));
+        bankList.add(new Bank("7010", "Bank of Ceylon"));
+        bankList.add(new Bank("7038", "Standard Chartered Bank"));
+        bankList.add(new Bank("7047", "Citi Bank"));
+        bankList.add(new Bank("7056", "Commercial Bank PLC"));
+        bankList.add(new Bank("7074", "Habib Bank Ltd"));
+        bankList.add(new Bank("7083", "Hatton National Bank PLC"));
+        bankList.add(new Bank("7302", "Hongkong   Shanghai Bank"));
         bankList.add(new Bank("7311", "Pan Asia Banking Corporation PLC"));
         bankList.add(new Bank("7384", "ICICI Bank Ltd"));
         bankList.add(new Bank("7454", "DFCC Bank PLC"));

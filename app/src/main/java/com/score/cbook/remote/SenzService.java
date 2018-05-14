@@ -126,9 +126,9 @@ public class SenzService extends Service {
         super.onStartCommand(intent, flags, startId);
 
         if (running) {
-            tukSenz();
+            //tukSenz();
         } else {
-            new SenzCom().start();
+            //new SenzCom().start();
         }
 
         return START_STICKY;

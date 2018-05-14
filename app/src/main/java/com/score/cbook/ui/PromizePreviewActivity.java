@@ -47,15 +47,13 @@ public class PromizePreviewActivity extends BaseActivity implements IFetchTaskLi
 
         setContentView(R.layout.cheque_p);
 
-        initPrefs();
-        initUi();
-    }
-
-    private void initPrefs() {
         this.cheque = getIntent().getParcelableExtra("CHEQUE");
+        initUi();
 
         // update viewed state
-        if (!cheque.isViewed()) {
+        if (cheque.isViewed()) {
+            loadBitmap(imageView, cheque.getUid());
+        } else {
             // fetch blob from zwitch
             fetchBlob(cheque.getUid());
         }
