@@ -119,6 +119,23 @@ public class SenzUtil {
         return senz;
     }
 
+    public static Senz blobSenz(Context context, String uid) {
+        // create create senz
+        HashMap<String, String> senzAttributes = new HashMap<>();
+        Long timestamp = System.currentTimeMillis();
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("uid", uid);
+
+        // new senz
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.GET);
+        senz.setReceiver(SenzUtil.SWITCH_NAME);
+        senz.setAttributes(senzAttributes);
+        senz.setSender(PreferenceUtil.get(context, PreferenceUtil.Z_ADDRESS));
+
+        return senz;
+    }
+
     public static Senz senzieKeySenz(Context context, String user) {
         // create senz attributes
         HashMap<String, String> senzAttributes = new HashMap<>();

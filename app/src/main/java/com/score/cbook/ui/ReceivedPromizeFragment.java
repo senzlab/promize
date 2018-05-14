@@ -107,7 +107,6 @@ public class ReceivedPromizeFragment extends Fragment implements AdapterView.OnI
         return senz.getSenzType() == SenzTypeEnum.SHARE && senz.getAttributes().containsKey("cimg");
     }
 
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         final Cheque cheque = chequeList.get(position);
