@@ -55,11 +55,11 @@ public class SenzFirebaseMessageService extends FirebaseMessagingService {
             ChequeUser chequeUser = new ChequeUser(phoneNo);
             chequeUser.setPhone(phoneNo);
             chequeUser.setPubKey(senz.getAttributes().get("pubkey"));
-            chequeUser.setActive(true);
+            chequeUser.setActive(false);
             UserSource.createUser(this, chequeUser);
 
             // notify
-            Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, contactName, "New iGift request received", phoneNo);
+            Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, contactName, "New request received", phoneNo);
             NotificationzHandler.notifiyStatus(this, notifcationz);
         } else {
             // this means confirm connect request
@@ -94,7 +94,7 @@ public class SenzFirebaseMessageService extends FirebaseMessagingService {
 
         // notify
         String title = PhoneBookUtil.getContactName(this, phoneNo);
-        Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, title, this.getString(R.string.cheque_notification), phoneNo);
+        Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, title, "New iGift received", phoneNo);
         NotificationzHandler.notifyCheque(this, notifcationz);
     }
 

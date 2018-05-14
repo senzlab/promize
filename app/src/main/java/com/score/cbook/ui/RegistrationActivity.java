@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.async.PostTask;
-import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.InvalidPhoneNumberException;
 import com.score.cbook.exceptions.MisMatchFieldException;
@@ -26,6 +25,7 @@ import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
+import com.score.cbook.util.PhoneBookUtil;
 import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
@@ -164,11 +164,11 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
 
         // crate account
         final String phone = editTextPhone.getText().toString().trim();
-        final String confirmPhone= editTextConfirmPhone.getText().toString().trim();
+        final String confirmPhone = editTextConfirmPhone.getText().toString().trim();
         final String password = editTextPassword.getText().toString().trim();
         final String confirmPassword = editTextConfirmPassword.getText().toString().trim();
         try {
-            ActivityUtil.isValidRegistrationFields(phone,confirmPhone,password, confirmPassword);
+            ActivityUtil.isValidRegistrationFields(phone, confirmPhone, password, confirmPassword);
             String confirmationMessage = "<font color=#636363>Please confirm to register as </font> <font color=#F37920>" + "<b>" + phone + "</b>" + "</font> <font color=#636363> in iGifts </font> ";
             displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
                 @Override
@@ -179,7 +179,7 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
                         account.setUsername(phone);
                         account.setPassword(password);
                         if (PreferenceUtil.get(RegistrationActivity.this, PreferenceUtil.Z_ADDRESS).isEmpty())
-                            doReg();
+                            doReg(phone);
                         else {
                             doAuth();
                         }
@@ -203,12 +203,12 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
         }
     }
 
-    private void doReg() {
+    private void doReg(String phone) {
         try {
             // generate keypair
             // generate senzie address
             CryptoUtil.initKeys(this);
-            zaddress = CryptoUtil.getZaddress(this);
+            zaddress = PhoneBookUtil.getFormattedPhoneNo(this, phone);
 
             // create senz
             Senz senz = SenzUtil.regSenz(this, zaddress);
@@ -217,7 +217,7 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
             String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
 
             // senz msg
-            String uid = senz.getAttributes().get("#uid");
+            String uid = senz.getAttributes().get("uid");
             String message = SenzParser.senzMsg(senzPayload, signature);
             SenzMsg senzMsg = new SenzMsg(uid, message);
 

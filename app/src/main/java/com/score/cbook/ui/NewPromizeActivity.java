@@ -506,7 +506,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
 
             // senz msg
-            String uid = transferSenz.getAttributes().get("#uid");
+            String uid = transferSenz.getAttributes().get("uid");
             String message = SenzParser.senzMsg(senzPayload, signature);
             SenzMsg senzMsg = new SenzMsg(uid, message);
 

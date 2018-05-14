@@ -123,7 +123,7 @@ public class SaltConfirmActivity extends BaseActivity implements IPostTaskListen
             String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
 
             // senz msg
-            String uid = senz.getAttributes().get("#uid");
+            String uid = senz.getAttributes().get("uid");
             String message = SenzParser.senzMsg(senzPayload, signature);
             SenzMsg senzMsg = new SenzMsg(uid, message);
 

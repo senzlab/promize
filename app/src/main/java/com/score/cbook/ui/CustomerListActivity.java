@@ -330,12 +330,8 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     public void onFinishTask(Integer status) {
         ActivityUtil.cancelProgressDialog();
         if (status == 200) {
-            // save contact
-            ChequeUser chequeUser = new ChequeUser(selectedUser.getPhone());
-            chequeUser.setPhone(selectedUser.getPhone());
-            chequeUser.setActive(false);
-            chequeUser.setSMSRequester(true);
-            UserSource.createUser(this, chequeUser);
+            // activate user
+            UserSource.activateUser(this, selectedUser.getUsername());
             Toast.makeText(this, "Successfully added contact", Toast.LENGTH_LONG).show();
         } else {
             displayInformationMessageDialog("ERROR", "Fail to add contact");

@@ -33,6 +33,7 @@ public class SenzUtil {
         String uid = timestamp.toString() + sender;
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", uid);
+        senzAttributes.put("did", PreferenceUtil.get(context, PreferenceUtil.FIREBASE_TOKEN));
         senzAttributes.put("pubkey", PreferenceUtil.get(context, PreferenceUtil.PUBLIC_KEY));
 
         // new senz
