@@ -205,6 +205,7 @@ public class RedeemActivity extends BaseActivity implements IPostTaskListener {
             public void onClick(View v) {
                 if (password.getText().toString().trim().equalsIgnoreCase(PreferenceUtil.getAccount(RedeemActivity.this).getPassword())) {
                     dialog.cancel();
+                    ActivityUtil.hideSoftKeyboard(RedeemActivity.this);
                     redeem();
                 } else {
                     Toast.makeText(RedeemActivity.this, "Invalid password", Toast.LENGTH_LONG).show();

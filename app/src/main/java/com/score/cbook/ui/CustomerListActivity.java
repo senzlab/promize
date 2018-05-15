@@ -250,10 +250,6 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                 Intent intent = new Intent(CustomerListActivity.this, ChatActivity.class);
                 intent.putExtra("SENDER", chequeUser.getUsername());
                 startActivity(intent);
-            } else if (actionType == CustomerActionType.CUSTOMER_LIST) {
-                Intent intent = new Intent(CustomerListActivity.this, UserProfileActivity.class);
-                intent.putExtra("SECRET_USER", chequeUser);
-                startActivity(intent);
             }
         } else {
             if (chequeUser.isSMSRequester()) {

@@ -54,9 +54,8 @@ class CustomerListAdapter extends ArrayAdapter<ChequeUser> {
             holder.userImageView = (CircularImageView) view.findViewById(R.id.user_image);
             holder.selected = (ImageView) view.findViewById(R.id.selected);
             holder.usernameView = (TextView) view.findViewById(R.id.user_name);
-            holder.phoneBookNameView = (TextView) view.findViewById(R.id.user_name_from_contacts);
-            holder.userLocationPermView = (ImageView) view.findViewById(R.id.perm_locations);
-            holder.userCameraPermView = (ImageView) view.findViewById(R.id.perm_camera);
+            holder.phoneNoView = (TextView) view.findViewById(R.id.phoneno);
+            holder.statusView = (TextView) view.findViewById(R.id.status);
 
             view.setTag(holder);
         } else {
@@ -71,7 +70,8 @@ class CustomerListAdapter extends ArrayAdapter<ChequeUser> {
 
     private void setUpRow(int i, ChequeUser chequeUser, View view, ViewHolder viewHolder) {
         viewHolder.usernameView.setTypeface(typeface, Typeface.NORMAL);
-        viewHolder.phoneBookNameView.setTypeface(typeface, Typeface.NORMAL);
+        viewHolder.phoneNoView.setTypeface(typeface, Typeface.NORMAL);
+        viewHolder.statusView.setTypeface(typeface, Typeface.NORMAL);
 
         // load contact image
         Picasso.with(context)
@@ -80,13 +80,13 @@ class CustomerListAdapter extends ArrayAdapter<ChequeUser> {
                 .into(viewHolder.userImageView);
 
         // request text
+        viewHolder.usernameView.setText(PhoneBookUtil.getContactName(context, chequeUser.getPhone()));
+        viewHolder.phoneNoView.setText(chequeUser.getPhone());
         if (chequeUser.isActive()) {
-            viewHolder.usernameView.setText(PhoneBookUtil.getContactName(context, chequeUser.getPhone()));
-            viewHolder.phoneBookNameView.setVisibility(View.GONE);
+            viewHolder.statusView.setVisibility(View.GONE);
         } else {
-            viewHolder.usernameView.setText(PhoneBookUtil.getContactName(context, chequeUser.getPhone()));
-            viewHolder.phoneBookNameView.setText(chequeUser.isSMSRequester() ? "Sent request" : "Received request");
-            viewHolder.phoneBookNameView.setVisibility(View.VISIBLE);
+            viewHolder.statusView.setVisibility(View.VISIBLE);
+            viewHolder.statusView.setText(chequeUser.isSMSRequester() ? "Sent request" : "New request");
         }
 
         // selected
@@ -104,9 +104,8 @@ class CustomerListAdapter extends ArrayAdapter<ChequeUser> {
         CircularImageView userImageView;
         ImageView selected;
         TextView usernameView;
-        TextView phoneBookNameView;
-        ImageView userCameraPermView;
-        ImageView userLocationPermView;
+        TextView phoneNoView;
+        TextView statusView;
     }
 
 }

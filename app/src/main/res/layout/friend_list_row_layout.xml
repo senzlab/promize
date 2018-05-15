@@ -8,8 +8,8 @@
     android:orientation="horizontal">
 
     <RelativeLayout
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_gravity="center_vertical"
         android:padding="0dp">
 
@@ -33,6 +33,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_marginBottom="7dp"
+            android:visibility="gone"
             android:layout_marginRight="5dp"
             android:src="@drawable/check_c" />
     </RelativeLayout>
@@ -65,54 +66,44 @@
                         android:id="@+id/user_name"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_centerVertical="true"
                         android:layout_weight="1"
                         android:ellipsize="end"
-                        android:gravity="center_vertical"
                         android:lines="1"
                         android:text="Lakmal"
                         android:textColor="@color/black"
                         android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/user_name_from_contacts"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_centerVertical="true"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:gravity="center_vertical"
-                        android:lines="1"
-                        android:text="Lakmal"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="18sp"
-                        android:visibility="visible" />
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:id="@+id/phoneno"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:lines="1"
+                            android:text="Lakmal"
+                            android:textSize="18sp"
+                            android:visibility="visible" />
+
+                        <TextView
+                            android:id="@+id/status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/text_bg3"
+                            android:paddingBottom="3dp"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="12dp"
+                            android:paddingTop="3dp"
+                            android:text="Redeem"
+                            android:textSize="12sp" />
+                    </LinearLayout>
                 </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/perm_locations"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignTop="@+id/user_name"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toLeftOf="@+id/perm_camera"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/perm_locations_active"
-                    android:visibility="gone" />
-
-                <ImageView
-                    android:id="@+id/perm_camera"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="15dp"
-                    android:layout_toLeftOf="@+id/perm_mic"
-                    android:adjustViewBounds="true"
-                    android:src="@drawable/perm_camera_active"
-                    android:visibility="gone" />
 
             </LinearLayout>
 
