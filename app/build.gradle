@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 22
-        versionCode 13
-        versionName "1.3"
+        versionCode 14
+        versionName "1.4"
         applicationId "com.score.cbook"
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true

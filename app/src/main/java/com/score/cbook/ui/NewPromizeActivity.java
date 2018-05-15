@@ -510,7 +510,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
-            PostTask task = new PostTask(this, PostTask.PROMIZE_API, senzMsg);
+            PostTask task = new PostTask(this,this, PostTask.PROMIZE_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
         } catch (Exception e) {
             e.printStackTrace();

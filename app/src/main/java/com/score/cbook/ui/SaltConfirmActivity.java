@@ -127,7 +127,7 @@ public class SaltConfirmActivity extends BaseActivity implements IPostTaskListen
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(SaltConfirmActivity.this, "Please wait...");
-            PostTask task = new PostTask(this, PostTask.UZER_API, senzMsg);
+            PostTask task = new PostTask(this,this, PostTask.UZER_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "PUT");
             retry++;
         } catch (Exception e) {

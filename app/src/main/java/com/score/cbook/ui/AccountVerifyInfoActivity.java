@@ -143,7 +143,7 @@ public class AccountVerifyInfoActivity extends BaseActivity implements IPostTask
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(AccountVerifyInfoActivity.this, "Please wait...");
-            PostTask task = new PostTask(this, PostTask.UZER_API, senzMsg);
+            PostTask task = new PostTask(this,this, PostTask.UZER_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "PUT");
         } catch (Exception e) {
             e.printStackTrace();

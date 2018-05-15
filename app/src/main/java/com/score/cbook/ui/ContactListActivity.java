@@ -156,7 +156,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(ContactListActivity.this, "Requesting...");
-            PostTask task = new PostTask(this, PostTask.CONNECTION_API, senzMsg);
+            PostTask task = new PostTask(this,this, PostTask.CONNECTION_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
         } catch (Exception e) {
             e.printStackTrace();
@@ -171,6 +171,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
 
     @Override
     public void onFinishTask(Integer status) {
+        ActivityUtil.cancelProgressDialog();
         if (status == 200) {
             // save contact
             ChequeUser chequeUser = new ChequeUser(selectedContact.getPhoneNo());
@@ -180,7 +181,6 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
             UserSource.createUser(this, chequeUser);
             Toast.makeText(this, "Request has been sent", Toast.LENGTH_LONG).show();
         } else {
-            ActivityUtil.cancelProgressDialog();
             displayInformationMessageDialog("ERROR", "Fail to add account");
         }
     }

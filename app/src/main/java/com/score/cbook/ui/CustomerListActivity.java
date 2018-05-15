@@ -316,7 +316,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(CustomerListActivity.this, "Accepting...");
-            PostTask task = new PostTask(this, PostTask.CONNECTION_API, senzMsg);
+            PostTask task = new PostTask(this, this, PostTask.CONNECTION_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
         } catch (Exception e) {
             e.printStackTrace();

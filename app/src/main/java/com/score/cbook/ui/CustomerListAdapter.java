@@ -63,15 +63,15 @@ class CustomerListAdapter extends ArrayAdapter<ChequeUser> {
             holder = (ViewHolder) view.getTag();
         }
 
-        setUpRow(i, chequeUser, view, holder);
+        setUpRow(chequeUser, holder);
 
         return view;
     }
 
-    private void setUpRow(int i, ChequeUser chequeUser, View view, ViewHolder viewHolder) {
+    private void setUpRow(ChequeUser chequeUser, ViewHolder viewHolder) {
         viewHolder.usernameView.setTypeface(typeface, Typeface.NORMAL);
         viewHolder.phoneNoView.setTypeface(typeface, Typeface.NORMAL);
-        viewHolder.statusView.setTypeface(typeface, Typeface.NORMAL);
+        viewHolder.statusView.setTypeface(typeface, Typeface.BOLD);
 
         // load contact image
         Picasso.with(context)

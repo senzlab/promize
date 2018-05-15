@@ -47,28 +47,6 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
     private String zaddress;
     private Account account;
 
-    private void handleSenz(Senz senz) {
-        if (senz.getAttributes().containsKey("status")) {
-            String msg = senz.getAttributes().get("status");
-            if (msg != null && msg.equalsIgnoreCase("REG_DONE")) {
-                //PreferenceUtil.saveSenzeisAddress(RegistrationActivity.this, senzieAddress);
-                doAuth();
-            } else if (msg != null && msg.equalsIgnoreCase("REG_ALR")) {
-                doAuth();
-            } else if (msg != null && msg.equalsIgnoreCase("SUCCESS")) {
-                ActivityUtil.cancelProgressDialog();
-                Toast.makeText(this, "Registration done", Toast.LENGTH_LONG).show();
-
-                PreferenceUtil.put(this, PreferenceUtil.USERNAME, account.getUsername());
-                PreferenceUtil.put(this, PreferenceUtil.PASSWORD, account.getPassword());
-                navigateToQuestionInfo();
-            } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {
-                ActivityUtil.cancelProgressDialog();
-                displayInformationMessageDialog("ERROR", "Registration fail");
-            }
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,7 +132,10 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
         registerBtn.setTypeface(typeface, Typeface.BOLD);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                onClickRegister();
+
+                //onClickRegister();
+                PostTask task = new PostTask(RegistrationActivity.this, RegistrationActivity.this, PostTask.UZER_API, new SenzMsg("wewe", "32323"));
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
             }
         });
     }
@@ -174,7 +155,6 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
                 @Override
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(RegistrationActivity.this)) {
-                        ActivityUtil.showProgressDialog(RegistrationActivity.this, "Please wait...");
                         account = new Account();
                         account.setUsername(phone);
                         account.setPassword(password);
@@ -219,17 +199,11 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(this, "Please wait...");
-            PostTask task = new PostTask(this, PostTask.UZER_API, senzMsg);
+            PostTask task = new PostTask(this,this, PostTask.UZER_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void doAuth() {
-        // share keys with auth
-        String user = PreferenceUtil.get(this, PreferenceUtil.Z_ADDRESS);
-        sendSenz(SenzUtil.authSenz(this, user));
     }
 
     private void navigateToQuestionInfo() {
@@ -240,9 +214,9 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
 
     @Override
     public void onFinishTask(Integer status) {
+        ActivityUtil.cancelProgressDialog();
         if (status == 200) {
             // HTTP OK
-            ActivityUtil.cancelProgressDialog();
             Toast.makeText(this, "Registration done", Toast.LENGTH_LONG).show();
 
             PreferenceUtil.put(this, PreferenceUtil.Z_ADDRESS, zaddress);
