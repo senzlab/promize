@@ -132,10 +132,7 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
         registerBtn.setTypeface(typeface, Typeface.BOLD);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                //onClickRegister();
-                PostTask task = new PostTask(RegistrationActivity.this, RegistrationActivity.this, PostTask.UZER_API, new SenzMsg("wewe", "32323"));
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
+                onClickRegister();
             }
         });
     }
@@ -199,7 +196,7 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(this, "Please wait...");
-            PostTask task = new PostTask(this,this, PostTask.UZER_API, senzMsg);
+            PostTask task = new PostTask(this, this, PostTask.UZER_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
         } catch (Exception e) {
             e.printStackTrace();
