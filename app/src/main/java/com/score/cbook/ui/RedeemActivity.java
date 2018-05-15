@@ -204,7 +204,6 @@ public class RedeemActivity extends BaseActivity implements IPostTaskListener {
             @Override
             public void onClick(View v) {
                 if (password.getText().toString().trim().equalsIgnoreCase(PreferenceUtil.getAccount(RedeemActivity.this).getPassword())) {
-                    ActivityUtil.showProgressDialog(RedeemActivity.this, "Please wait...");
                     dialog.cancel();
                     redeem();
                 } else {
@@ -239,6 +238,7 @@ public class RedeemActivity extends BaseActivity implements IPostTaskListener {
             String message = SenzParser.senzMsg(senzPayload, signature);
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
+            ActivityUtil.showProgressDialog(RedeemActivity.this, "Please wait...");
             PostTask task = new PostTask(this, PostTask.PROMIZE_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
         } catch (Exception e) {

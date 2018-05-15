@@ -81,7 +81,6 @@ public class AccountVerifyInfoActivity extends BaseActivity implements IPostTask
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ActivityUtil.showProgressDialog(AccountVerifyInfoActivity.this, "Please wait...");
                 verifyAccount();
             }
         });
@@ -143,6 +142,7 @@ public class AccountVerifyInfoActivity extends BaseActivity implements IPostTask
             String message = SenzParser.senzMsg(senzPayload, signature);
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
+            ActivityUtil.showProgressDialog(AccountVerifyInfoActivity.this, "Please wait...");
             PostTask task = new PostTask(this, PostTask.UZER_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "PUT");
         } catch (Exception e) {
@@ -160,6 +160,7 @@ public class AccountVerifyInfoActivity extends BaseActivity implements IPostTask
 
     @Override
     public void onFinishTask(Integer status) {
+        ActivityUtil.cancelProgressDialog();
         if (status == 200) {
             // reset account state
             // save account

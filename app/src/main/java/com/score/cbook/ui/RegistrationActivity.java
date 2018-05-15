@@ -180,9 +180,6 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
                         account.setPassword(password);
                         if (PreferenceUtil.get(RegistrationActivity.this, PreferenceUtil.Z_ADDRESS).isEmpty())
                             doReg(phone);
-                        else {
-                            doAuth();
-                        }
                     } else {
                         Toast.makeText(RegistrationActivity.this, "No network connection", Toast.LENGTH_LONG).show();
                     }
@@ -221,6 +218,7 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
             String message = SenzParser.senzMsg(senzPayload, signature);
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
+            ActivityUtil.showProgressDialog(this, "Please wait...");
             PostTask task = new PostTask(this, PostTask.UZER_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
         } catch (Exception e) {

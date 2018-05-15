@@ -319,6 +319,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
             String message = SenzParser.senzMsg(senzPayload, signature);
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
+            ActivityUtil.showProgressDialog(CustomerListActivity.this, "Accepting...");
             PostTask task = new PostTask(this, PostTask.CONNECTION_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
         } catch (Exception e) {
@@ -332,6 +333,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         if (status == 200) {
             // activate user
             UserSource.activateUser(this, selectedUser.getUsername());
+            customerListAdapter.notifyDataSetChanged();
             Toast.makeText(this, "Successfully added contact", Toast.LENGTH_LONG).show();
         } else {
             displayInformationMessageDialog("ERROR", "Fail to add contact");

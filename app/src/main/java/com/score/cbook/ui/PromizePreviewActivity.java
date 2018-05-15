@@ -55,6 +55,7 @@ public class PromizePreviewActivity extends BaseActivity implements IFetchTaskLi
             loadBitmap(imageView, cheque.getUid());
         } else {
             // fetch blob from zwitch
+            ActivityUtil.showProgressDialog(this, "Fetching iGift");
             fetchBlob(cheque.getUid());
         }
     }

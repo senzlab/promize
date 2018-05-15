@@ -452,7 +452,6 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                 if (password.getText().toString().trim().equalsIgnoreCase(PreferenceUtil.getAccount(NewPromizeActivity.this).getPassword())) {
                     dialog.cancel();
                     ActivityUtil.hideSoftKeyboard(NewPromizeActivity.this);
-                    ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
                     sendPromize(captureScreen(), amount.getText().toString());
                 } else {
                     Toast.makeText(NewPromizeActivity.this, "Invalid password", Toast.LENGTH_LONG).show();
@@ -483,24 +482,24 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     private void sendPromize(byte[] compBytes, String amount) {
-        if (transferSenz == null) {
-            this.cheque = new Cheque();
-            cheque.setUser(user);
-            cheque.setAmount(amount);
-            cheque.setDeliveryState(DeliveryState.PENDING);
-            cheque.setChequeState(ChequeState.TRANSFER);
-            cheque.setMyCheque(true);
-            cheque.setViewed(true);
-            cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
-            cheque.setAccount(PreferenceUtil.getAccount(this).getAccountNo());
-
-            Long timestamp = System.currentTimeMillis() / 1000;
-            cheque.setTimestamp(timestamp);
-
-            transferSenz = SenzUtil.transferSenz(this, cheque, PreferenceUtil.getAccount(this));
-        }
-
         try {
+            if (transferSenz == null) {
+                this.cheque = new Cheque();
+                cheque.setUser(user);
+                cheque.setAmount(amount);
+                cheque.setDeliveryState(DeliveryState.PENDING);
+                cheque.setChequeState(ChequeState.TRANSFER);
+                cheque.setMyCheque(true);
+                cheque.setViewed(true);
+                cheque.setBlob(Base64.encodeToString(compBytes, Base64.DEFAULT));
+                cheque.setAccount(PreferenceUtil.getAccount(this).getAccountNo());
+
+                Long timestamp = System.currentTimeMillis() / 1000;
+                cheque.setTimestamp(timestamp);
+
+                transferSenz = SenzUtil.transferSenz(this, cheque, PreferenceUtil.getAccount(this));
+            }
+
             PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
             String senzPayload = SenzParser.compose(transferSenz);
             String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
@@ -510,6 +509,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             String message = SenzParser.senzMsg(senzPayload, signature);
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
+            ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
             PostTask task = new PostTask(this, PostTask.PROMIZE_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
         } catch (Exception e) {

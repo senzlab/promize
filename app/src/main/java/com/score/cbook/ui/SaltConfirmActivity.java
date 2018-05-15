@@ -79,7 +79,6 @@ public class SaltConfirmActivity extends BaseActivity implements IPostTaskListen
                 if (retry >= 3) {
                     displayInformationMessageDialog("ERROR", "Maximum no of retry attempts exceeded");
                 } else {
-                    ActivityUtil.showProgressDialog(SaltConfirmActivity.this, "Please wait...");
                     confirmSalt();
                 }
             }
@@ -127,6 +126,7 @@ public class SaltConfirmActivity extends BaseActivity implements IPostTaskListen
             String message = SenzParser.senzMsg(senzPayload, signature);
             SenzMsg senzMsg = new SenzMsg(uid, message);
 
+            ActivityUtil.showProgressDialog(SaltConfirmActivity.this, "Please wait...");
             PostTask task = new PostTask(this, PostTask.UZER_API, senzMsg);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "PUT");
             retry++;
@@ -137,6 +137,7 @@ public class SaltConfirmActivity extends BaseActivity implements IPostTaskListen
 
     @Override
     public void onFinishTask(Integer status) {
+        ActivityUtil.cancelProgressDialog();
         if (status == 200) {
             PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_STATE, "VERIFIED");
             Toast.makeText(this, "Your account has been verified", Toast.LENGTH_LONG).show();

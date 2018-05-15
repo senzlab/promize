@@ -21,7 +21,7 @@ public class FetchTask extends AsyncTask<SenzMsg, String, Integer> {
 
     private static final String TAG = FetchTask.class.getName();
 
-    public static final String BLOB_API = "https://uatweb.sampath.lk/blobs/";
+    public static final String BLOB_API = "http://10.2.2.9:7171/blobs";
 
     private IFetchTaskListener listener;
     private String api;
