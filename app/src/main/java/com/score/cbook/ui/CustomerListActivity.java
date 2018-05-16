@@ -22,15 +22,14 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.application.IntentProvider;
-import com.score.cbook.async.PostTask;
+import com.score.cbook.async.SenzPublisher;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.db.SecretSource;
 import com.score.cbook.db.UserSource;
 import com.score.cbook.enums.CustomerActionType;
 import com.score.cbook.enums.IntentType;
-import com.score.cbook.interfaces.IPostTaskListener;
+import com.score.cbook.interfaces.ISenzPublisherListener;
 import com.score.cbook.pojo.ChequeUser;
-import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
@@ -44,7 +43,7 @@ import java.security.PrivateKey;
 import java.util.LinkedList;
 
 
-public class CustomerListActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, IPostTaskListener {
+public class CustomerListActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, ISenzPublisherListener {
 
     private LinkedList<ChequeUser> customerList;
     private CustomerListAdapter customerListAdapter;
@@ -313,27 +312,25 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
             // senz msg
             String uid = senz.getAttributes().get("uid");
             String message = SenzParser.senzMsg(senzPayload, signature);
-            SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(CustomerListActivity.this, "Accepting...");
-            PostTask task = new PostTask(this, this, PostTask.CONNECTION_API, senzMsg);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
+            SenzPublisher task = new SenzPublisher(this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void onFinishTask(Integer status) {
+    public void onFinish(String senz) {
         ActivityUtil.cancelProgressDialog();
-        if (status == 200) {
+        if (senz == null) {
+            displayInformationMessageDialog("ERROR", "Fail to add contact");
+        } else {
             // activate user
             UserSource.activateUser(this, selectedUser.getUsername());
             customerListAdapter.notifyDataSetChanged();
             Toast.makeText(this, "Successfully added contact", Toast.LENGTH_LONG).show();
-        } else {
-            displayInformationMessageDialog("ERROR", "Fail to add contact");
         }
     }
-
 }

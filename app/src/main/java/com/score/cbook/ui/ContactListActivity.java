@@ -16,13 +16,12 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.async.ContactReader;
-import com.score.cbook.async.PostTask;
+import com.score.cbook.async.SenzPublisher;
 import com.score.cbook.db.UserSource;
 import com.score.cbook.interfaces.IContactReaderListener;
-import com.score.cbook.interfaces.IPostTaskListener;
+import com.score.cbook.interfaces.ISenzPublisherListener;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.pojo.Contact;
-import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
@@ -33,7 +32,7 @@ import com.score.senzc.pojos.Senz;
 import java.security.PrivateKey;
 import java.util.ArrayList;
 
-public class ContactListActivity extends BaseActivity implements IContactReaderListener, IPostTaskListener {
+public class ContactListActivity extends BaseActivity implements IContactReaderListener, ISenzPublisherListener {
 
     private EditText searchView;
 
@@ -149,15 +148,11 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
             PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
             String senzPayload = SenzParser.compose(senz);
             String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
-
-            // senz msg
-            String uid = senz.getAttributes().get("uid");
             String message = SenzParser.senzMsg(senzPayload, signature);
-            SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(ContactListActivity.this, "Requesting...");
-            PostTask task = new PostTask(this,this, PostTask.CONNECTION_API, senzMsg);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
+            SenzPublisher task = new SenzPublisher(this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -170,9 +165,11 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
     }
 
     @Override
-    public void onFinishTask(Integer status) {
+    public void onFinish(String senz) {
         ActivityUtil.cancelProgressDialog();
-        if (status == 200) {
+        if (senz == null) {
+            displayInformationMessageDialog("ERROR", "Fail to add account");
+        } else {
             // save contact
             ChequeUser chequeUser = new ChequeUser(selectedContact.getPhoneNo());
             chequeUser.setPhone(selectedContact.getPhoneNo());
@@ -180,8 +177,6 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
             chequeUser.setSMSRequester(true);
             UserSource.createUser(this, chequeUser);
             Toast.makeText(this, "Request has been sent", Toast.LENGTH_LONG).show();
-        } else {
-            displayInformationMessageDialog("ERROR", "Fail to add account");
         }
     }
 }

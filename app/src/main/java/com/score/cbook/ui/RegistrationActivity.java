@@ -14,14 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.async.PostTask;
+import com.score.cbook.async.SenzPublisher;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.InvalidPhoneNumberException;
 import com.score.cbook.exceptions.MisMatchFieldException;
 import com.score.cbook.exceptions.MisMatchPhoneNumberException;
-import com.score.cbook.interfaces.IPostTaskListener;
+import com.score.cbook.interfaces.ISenzPublisherListener;
 import com.score.cbook.pojo.Account;
-import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
@@ -33,7 +32,7 @@ import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
 
-public class RegistrationActivity extends BaseActivity implements IPostTaskListener {
+public class RegistrationActivity extends BaseActivity implements ISenzPublisherListener {
 
     private static final String TAG = RegistrationActivity.class.getName();
 
@@ -189,15 +188,11 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
             PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
             String senzPayload = SenzParser.compose(senz);
             String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
-
-            // senz msg
-            String uid = senz.getAttributes().get("uid");
             String message = SenzParser.senzMsg(senzPayload, signature);
-            SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(this, "Please wait...");
-            PostTask task = new PostTask(this, this, PostTask.UZER_API, senzMsg);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
+            SenzPublisher task = new SenzPublisher(this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -210,19 +205,19 @@ public class RegistrationActivity extends BaseActivity implements IPostTaskListe
     }
 
     @Override
-    public void onFinishTask(Integer status) {
+    public void onFinish(String senz) {
         ActivityUtil.cancelProgressDialog();
-        if (status == 200) {
-            // HTTP OK
+        if (senz == null) {
+            ActivityUtil.cancelProgressDialog();
+            displayInformationMessageDialog("ERROR", "Registration fail");
+        } else {
+            // OK
             Toast.makeText(this, "Registration done", Toast.LENGTH_LONG).show();
 
             PreferenceUtil.put(this, PreferenceUtil.Z_ADDRESS, zaddress);
             PreferenceUtil.put(this, PreferenceUtil.USERNAME, account.getUsername());
             PreferenceUtil.put(this, PreferenceUtil.PASSWORD, account.getPassword());
             navigateToQuestionInfo();
-        } else {
-            ActivityUtil.cancelProgressDialog();
-            displayInformationMessageDialog("ERROR", "Registration fail");
         }
     }
 }

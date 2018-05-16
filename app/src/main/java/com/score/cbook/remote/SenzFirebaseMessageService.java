@@ -23,9 +23,9 @@ public class SenzFirebaseMessageService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if (remoteMessage.getData().size() > 0) {
-            Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());
+            Log.e(TAG, "Data Payload: " + remoteMessage.getData());
             try {
-                String msg = remoteMessage.getData().get("Msg");
+                String msg = remoteMessage.getData().get("senz");
                 Senz senz = SenzParser.parse(msg);
                 handleSenz(senz);
             } catch (Exception e) {

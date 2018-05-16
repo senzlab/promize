@@ -1,22 +1,18 @@
 package com.score.cbook.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.async.PostTask;
-import com.score.cbook.interfaces.IPostTaskListener;
-import com.score.cbook.pojo.SenzMsg;
+import com.score.cbook.async.SenzPublisher;
+import com.score.cbook.interfaces.ISenzPublisherListener;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.PreferenceUtil;
@@ -31,7 +27,7 @@ import java.security.PrivateKey;
  *
  * @author erangaeb@gmail.com (eranga herath)
  */
-public class AccountVerifyInfoActivity extends BaseActivity implements IPostTaskListener {
+public class AccountVerifyInfoActivity extends BaseActivity implements ISenzPublisherListener {
 
     // UI fields
     private TextView hi;
@@ -136,15 +132,11 @@ public class AccountVerifyInfoActivity extends BaseActivity implements IPostTask
             PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
             String senzPayload = SenzParser.compose(senz);
             String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
-
-            // senz msg
-            String uid = senz.getAttributes().get("uid");
             String message = SenzParser.senzMsg(senzPayload, signature);
-            SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(AccountVerifyInfoActivity.this, "Please wait...");
-            PostTask task = new PostTask(this,this, PostTask.UZER_API, senzMsg);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "PUT");
+            SenzPublisher task = new SenzPublisher(this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -159,9 +151,12 @@ public class AccountVerifyInfoActivity extends BaseActivity implements IPostTask
     }
 
     @Override
-    public void onFinishTask(Integer status) {
+    public void onFinish(String senz) {
         ActivityUtil.cancelProgressDialog();
-        if (status == 200) {
+        if (senz == null) {
+            ActivityUtil.cancelProgressDialog();
+            displayInformationMessageDialog("ERROR", "Fail to verify account");
+        } else {
             // reset account state
             // save account
             // navigate to salt confirm
@@ -169,9 +164,6 @@ public class AccountVerifyInfoActivity extends BaseActivity implements IPostTask
             PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_BANK, SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
             PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_NO, account);
             navigateToConfirm();
-        } else {
-            ActivityUtil.cancelProgressDialog();
-            displayInformationMessageDialog("ERROR", "Fail to verify account");
         }
     }
 }

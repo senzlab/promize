@@ -39,7 +39,7 @@ public class SenzUtil {
 
         // new senz
         Senz senz = new Senz();
-        senz.setSenzType(SenzTypeEnum.SHARE);
+        senz.setSenzType(SenzTypeEnum.PUT);
         senz.setSender(sender);
         senz.setReceiver(SenzUtil.SWITCH_NAME);
         senz.setAttributes(senzAttributes);
@@ -47,21 +47,21 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz authSenz(Context context, String sender) {
+    public static Senz connectSenz(Context context, String receiver) {
         // create create senz
         HashMap<String, String> senzAttributes = new HashMap<>();
         Long timestamp = System.currentTimeMillis();
-        String uid = timestamp.toString() + sender;
         senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("uid", uid);
+        senzAttributes.put("uid", getUid(context, timestamp.toString()));
+        senzAttributes.put("to", receiver);
         senzAttributes.put("pubkey", PreferenceUtil.get(context, PreferenceUtil.PUBLIC_KEY));
 
         // new senz
         Senz senz = new Senz();
         senz.setSenzType(SenzTypeEnum.SHARE);
-        senz.setSender(sender);
-        senz.setReceiver(SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
+        senz.setReceiver(SenzUtil.SWITCH_NAME);
         senz.setAttributes(senzAttributes);
+        senz.setSender(PreferenceUtil.get(context, PreferenceUtil.Z_ADDRESS));
 
         return senz;
     }
@@ -102,24 +102,6 @@ public class SenzUtil {
         return senz;
     }
 
-    public static Senz connectSenz(Context context, String receiver) {
-        // create create senz
-        HashMap<String, String> senzAttributes = new HashMap<>();
-        Long timestamp = System.currentTimeMillis();
-        senzAttributes.put("time", timestamp.toString());
-        senzAttributes.put("uid", getUid(context, timestamp.toString()));
-        senzAttributes.put("pubkey", PreferenceUtil.get(context, PreferenceUtil.PUBLIC_KEY));
-
-        // new senz
-        Senz senz = new Senz();
-        senz.setSenzType(SenzTypeEnum.SHARE);
-        senz.setReceiver(receiver);
-        senz.setAttributes(senzAttributes);
-        senz.setSender(PreferenceUtil.get(context, PreferenceUtil.Z_ADDRESS));
-
-        return senz;
-    }
-
     public static Senz blobSenz(Context context, String uid) {
         // create create senz
         HashMap<String, String> senzAttributes = new HashMap<>();
@@ -133,6 +115,25 @@ public class SenzUtil {
         senz.setReceiver(SenzUtil.SWITCH_NAME);
         senz.setAttributes(senzAttributes);
         senz.setSender(PreferenceUtil.get(context, PreferenceUtil.Z_ADDRESS));
+
+        return senz;
+    }
+
+    public static Senz authSenz(Context context, String sender) {
+        // create create senz
+        HashMap<String, String> senzAttributes = new HashMap<>();
+        Long timestamp = System.currentTimeMillis();
+        String uid = timestamp.toString() + sender;
+        senzAttributes.put("time", timestamp.toString());
+        senzAttributes.put("uid", uid);
+        senzAttributes.put("pubkey", PreferenceUtil.get(context, PreferenceUtil.PUBLIC_KEY));
+
+        // new senz
+        Senz senz = new Senz();
+        senz.setSenzType(SenzTypeEnum.SHARE);
+        senz.setSender(sender);
+        senz.setReceiver(SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
+        senz.setAttributes(senzAttributes);
 
         return senz;
     }

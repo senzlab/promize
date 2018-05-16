@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.async.PostTask;
+import com.score.cbook.async.SenzPublisher;
 import com.score.cbook.interfaces.IPostTaskListener;
+import com.score.cbook.interfaces.ISenzPublisherListener;
 import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
@@ -29,7 +31,7 @@ import java.security.PrivateKey;
  *
  * @author erangaeb@gmail.com (eranga herath)
  */
-public class SaltConfirmActivity extends BaseActivity implements IPostTaskListener {
+public class SaltConfirmActivity extends BaseActivity implements ISenzPublisherListener {
 
     private static final String TAG = SaltConfirmActivity.class.getName();
 
@@ -120,15 +122,11 @@ public class SaltConfirmActivity extends BaseActivity implements IPostTaskListen
             PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
             String senzPayload = SenzParser.compose(senz);
             String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
-
-            // senz msg
-            String uid = senz.getAttributes().get("uid");
             String message = SenzParser.senzMsg(senzPayload, signature);
-            SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(SaltConfirmActivity.this, "Please wait...");
-            PostTask task = new PostTask(this,this, PostTask.UZER_API, senzMsg);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "PUT");
+            SenzPublisher task = new SenzPublisher(this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
             retry++;
         } catch (Exception e) {
             e.printStackTrace();
@@ -136,15 +134,15 @@ public class SaltConfirmActivity extends BaseActivity implements IPostTaskListen
     }
 
     @Override
-    public void onFinishTask(Integer status) {
+    public void onFinish(String senz) {
         ActivityUtil.cancelProgressDialog();
-        if (status == 200) {
+        if (senz == null) {
+            ActivityUtil.cancelProgressDialog();
+            displayInformationMessageDialog("ERROR", "Fail to verify account");
+        } else {
             PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_STATE, "VERIFIED");
             Toast.makeText(this, "Your account has been verified", Toast.LENGTH_LONG).show();
             SaltConfirmActivity.this.finish();
-        } else {
-            ActivityUtil.cancelProgressDialog();
-            displayInformationMessageDialog("ERROR", "Fail to verify account");
         }
     }
 }
