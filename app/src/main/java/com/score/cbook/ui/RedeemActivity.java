@@ -16,16 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.async.PostTask;
+import com.score.cbook.async.SenzPublisher;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.ChequeState;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.MisMatchFieldException;
-import com.score.cbook.interfaces.IPostTaskListener;
+import com.score.cbook.interfaces.ISenzPublisherListener;
 import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
-import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
@@ -37,7 +36,7 @@ import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
 
-public class RedeemActivity extends BaseActivity implements IPostTaskListener {
+public class RedeemActivity extends BaseActivity implements ISenzPublisherListener {
 
     private static final String TAG = RedeemActivity.class.getName();
 
@@ -233,34 +232,30 @@ public class RedeemActivity extends BaseActivity implements IPostTaskListener {
             PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
             String senzPayload = SenzParser.compose(redeemSenz);
             String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
-
-            // senz msg
-            String uid = redeemSenz.getAttributes().get("uid");
             String message = SenzParser.senzMsg(senzPayload, signature);
-            SenzMsg senzMsg = new SenzMsg(uid, message);
 
             ActivityUtil.showProgressDialog(RedeemActivity.this, "Please wait...");
-            PostTask task = new PostTask(this,this, PostTask.PROMIZE_API, senzMsg);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "POST");
+            SenzPublisher task = new SenzPublisher(RedeemActivity.this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void onFinishTask(Integer status) {
+    public void onFinish(String senz) {
         ActivityUtil.cancelProgressDialog();
         ActivityUtil.hideSoftKeyboard(this);
-        if (status == 200) {
+        if (senz == null) {
+            ActivityUtil.cancelProgressDialog();
+            displayInformationMessageDialog("ERROR", "Failed to redeem iGift");
+        } else {
             // update cheque status and account
             ChequeSource.updateChequeState(this, cheque.getUid(), ChequeState.DEPOSIT);
             ChequeSource.updateChequeAccount(this, cheque.getUid(), cheque.getAccount());
 
             Toast.makeText(RedeemActivity.this, "Successfully redeemed the iGift", Toast.LENGTH_LONG).show();
             RedeemActivity.this.finish();
-        } else {
-            ActivityUtil.cancelProgressDialog();
-            displayInformationMessageDialog("ERROR", "Failed to redeem iGift");
         }
     }
 }

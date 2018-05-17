@@ -1,7 +1,5 @@
 package com.score.cbook.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -21,13 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.application.IntentProvider;
 import com.score.cbook.async.SenzPublisher;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.db.SecretSource;
 import com.score.cbook.db.UserSource;
 import com.score.cbook.enums.CustomerActionType;
-import com.score.cbook.enums.IntentType;
 import com.score.cbook.interfaces.ISenzPublisherListener;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.util.ActivityUtil;
@@ -36,7 +32,6 @@ import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PhoneBookUtil;
 import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
-import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
@@ -50,18 +45,6 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
 
     private CustomerActionType actionType = CustomerActionType.CUSTOMER_LIST;
     private ChequeUser selectedUser;
-
-    private BroadcastReceiver senzReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.hasExtra("SENZ")) {
-                Senz senz = intent.getExtras().getParcelable("SENZ");
-                if (needToRefreshList(senz)) {
-                    refreshList();
-                }
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,41 +61,16 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-
-        bindToService();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // unbind from service
-        if (isServiceBound) {
-            unbindService(senzServiceConnection);
-
-            isServiceBound = false;
-        }
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(senzReceiver, IntentProvider.getIntentFilter(IntentType.SENZ));
         refreshList();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (senzReceiver != null) unregisterReceiver(senzReceiver);
     }
 
     private void initPrefs() {
         String action = getIntent().getStringExtra("ACTION");
         if (action != null && !action.isEmpty()) {
             actionType = CustomerActionType.valueOf(action);
+            customerList = UserSource.getAllUsers(this);
         }
     }
 
@@ -125,7 +83,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
-        if (UserSource.getAllUsers(this).size() == 0) {
+        if (customerList.size() == 0) {
             titleText.setText("Add contact");
         } else if (actionType == CustomerActionType.NEW_CHEQUE || actionType == CustomerActionType.NEW_MESSAGE) {
             titleText.setText("Choose contact");
@@ -207,14 +165,13 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         friendListView.setOnItemLongClickListener(this);
 
         RelativeLayout emptyView = (RelativeLayout) findViewById(R.id.empty_view);
-        if (UserSource.getAllUsers(this).size() == 0) {
+        if (customerList.size() == 0) {
             emptyView.setVisibility(View.VISIBLE);
             friendListView.setEmptyView(emptyView);
         } else {
             emptyView.setVisibility(View.GONE);
         }
 
-        customerList = UserSource.getAllUsers(this);
         if (customerList.size() > 0) {
             customerListAdapter = new CustomerListAdapter(this, customerList);
             customerListAdapter.notifyDataSetChanged();
@@ -229,11 +186,6 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         customerList.clear();
         customerList.addAll(UserSource.getAllUsers(this));
         customerListAdapter.notifyDataSetChanged();
-    }
-
-    private boolean needToRefreshList(Senz senz) {
-        return senz.getSenzType() == SenzTypeEnum.SHARE ||
-                senz.getSenzType() == SenzTypeEnum.DATA && (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("USER_SHARED"));
     }
 
     @Override
@@ -308,9 +260,6 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
             PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
             String senzPayload = SenzParser.compose(senz);
             String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
-
-            // senz msg
-            String uid = senz.getAttributes().get("uid");
             String message = SenzParser.senzMsg(senzPayload, signature);
 
             ActivityUtil.showProgressDialog(CustomerListActivity.this, "Accepting...");

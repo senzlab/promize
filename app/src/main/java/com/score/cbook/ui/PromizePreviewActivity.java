@@ -13,14 +13,14 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.async.FetchTask;
+import com.score.cbook.async.SenzPublisher;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.ChequeState;
-import com.score.cbook.interfaces.IFetchTaskListener;
+import com.score.cbook.interfaces.ISenzPublisherListener;
 import com.score.cbook.pojo.Cheque;
-import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
+import com.score.cbook.util.ImageUtil;
 import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
 import com.score.senzc.pojos.Senz;
@@ -29,7 +29,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.security.PrivateKey;
 
-public class PromizePreviewActivity extends BaseActivity implements IFetchTaskListener {
+public class PromizePreviewActivity extends BaseActivity implements ISenzPublisherListener {
 
     private FloatingActionButton cancel;
     private FloatingActionButton done;
@@ -55,7 +55,6 @@ public class PromizePreviewActivity extends BaseActivity implements IFetchTaskLi
             loadBitmap(imageView, cheque.getUid());
         } else {
             // fetch blob from zwitch
-            ActivityUtil.showProgressDialog(this, "Fetching iGift");
             fetchBlob(cheque.getUid());
         }
     }
@@ -99,27 +98,13 @@ public class PromizePreviewActivity extends BaseActivity implements IFetchTaskLi
             PrivateKey privateKey = CryptoUtil.getPrivateKey(this);
             String senzPayload = SenzParser.compose(senz);
             String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
-
-            // senz msg
             String message = SenzParser.senzMsg(senzPayload, signature);
-            SenzMsg senzMsg = new SenzMsg(uid, message);
 
-            FetchTask task = new FetchTask(this, FetchTask.BLOB_API);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, senzMsg);
+            ActivityUtil.showProgressDialog(this, "Fetching iGift");
+            SenzPublisher task = new SenzPublisher(this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onFinishTask(Integer status) {
-        ActivityUtil.cancelProgressDialog();
-        if (status == 200) {
-            cheque.setViewed(true);
-            ChequeSource.markChequeViewed(this, cheque.getUid());
-            loadBitmap(imageView, cheque.getUid());
-        } else {
-            Toast.makeText(this, "Failed to fetch iGift", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -130,5 +115,26 @@ public class PromizePreviewActivity extends BaseActivity implements IFetchTaskLi
                 .load(file)
                 .error(R.drawable.rahaslogo_3)
                 .into(view);
+    }
+
+    @Override
+    public void onFinish(String senz) {
+        ActivityUtil.cancelProgressDialog();
+        if (senz == null) {
+            Toast.makeText(this, "Failed to fetch iGift", Toast.LENGTH_LONG).show();
+        } else {
+            // parse senz and get blob
+            Senz bSenz = SenzParser.parse(senz);
+            if (bSenz.getAttributes().containsKey("blob")) {
+                String imgName = bSenz.getAttributes().get("uid") + ".jpg";
+                ImageUtil.saveImg(imgName, bSenz.getAttributes().get("blob"));
+
+                cheque.setViewed(true);
+                ChequeSource.markChequeViewed(this, cheque.getUid());
+                loadBitmap(imageView, cheque.getUid());
+            } else {
+                Toast.makeText(this, "Failed to fetch iGift", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
