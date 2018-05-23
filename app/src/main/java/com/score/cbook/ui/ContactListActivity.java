@@ -168,7 +168,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
     public void onFinish(String senz) {
         ActivityUtil.cancelProgressDialog();
         if (senz == null) {
-            displayInformationMessageDialog("ERROR", "Fail to add account");
+            displayInformationMessageDialog("ERROR", "Fail to send request");
         } else {
             // save contact
             ChequeUser chequeUser = new ChequeUser(selectedContact.getPhoneNo());

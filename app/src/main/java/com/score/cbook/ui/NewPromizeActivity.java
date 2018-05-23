@@ -391,12 +391,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             String a = amount.getText().toString().trim();
             String m = message.getText().toString().trim();
             ActivityUtil.isValidGift(a, m);
-            if (PreferenceUtil.get(this, PreferenceUtil.TODAY_AMOUNT, 0) + Integer.parseInt(a) > 10000) {
-                displayInformationMessageDialog("ERROR", "Daily iGift transaction limit should be 10,000 rupees");
-            } else {
-                if (NetworkUtil.isAvailableNetwork(this)) askPassword();
-                else Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
-            }
+            askPassword();
         } catch (InvalidInputFieldsException e) {
             displayInformationMessageDialog("ERROR", "Empty iGift amount");
             e.printStackTrace();

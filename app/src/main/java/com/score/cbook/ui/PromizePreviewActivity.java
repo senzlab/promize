@@ -1,6 +1,5 @@
 package com.score.cbook.ui;
 
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;

@@ -12,7 +12,8 @@ import java.net.Socket;
 
 public class SenzPublisher extends AsyncTask<String, String, String> {
 
-    private static final String SENZ_HOST = "10.2.2.9";
+    //private static final String SENZ_HOST = "10.2.2.9";
+    private static final String SENZ_HOST = "222.165.167.19";
     private static final int SENZ_PORT = 7171;
 
     private Socket socket;

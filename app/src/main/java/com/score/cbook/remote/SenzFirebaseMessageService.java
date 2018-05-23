@@ -55,6 +55,7 @@ public class SenzFirebaseMessageService extends FirebaseMessagingService {
             ChequeUser chequeUser = new ChequeUser(phoneNo);
             chequeUser.setPhone(phoneNo);
             chequeUser.setPubKey(senz.getAttributes().get("pubkey"));
+            chequeUser.setSMSRequester(false);
             chequeUser.setActive(false);
             UserSource.createUser(this, chequeUser);
 

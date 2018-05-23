@@ -70,8 +70,8 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         String action = getIntent().getStringExtra("ACTION");
         if (action != null && !action.isEmpty()) {
             actionType = CustomerActionType.valueOf(action);
-            customerList = UserSource.getAllUsers(this);
         }
+        customerList = UserSource.getAllUsers(this);
     }
 
     private void initActionBar() {
@@ -85,7 +85,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         titleText.setTypeface(typeface, Typeface.BOLD);
         if (customerList.size() == 0) {
             titleText.setText("Add contact");
-        } else if (actionType == CustomerActionType.NEW_CHEQUE || actionType == CustomerActionType.NEW_MESSAGE) {
+        } else if (actionType == CustomerActionType.NEW_CHEQUE) {
             titleText.setText("Choose contact");
         } else {
             titleText.setText("iGift Contacts");
@@ -193,15 +193,9 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         final ChequeUser chequeUser = customerList.get(position);
 
         if (chequeUser.isActive()) {
-            if (actionType == CustomerActionType.NEW_CHEQUE) {
-                Intent intent = new Intent(CustomerListActivity.this, NewPromizeActivity.class);
-                intent.putExtra("USER", chequeUser);
-                startActivity(intent);
-            } else if (actionType == CustomerActionType.NEW_MESSAGE) {
-                Intent intent = new Intent(CustomerListActivity.this, ChatActivity.class);
-                intent.putExtra("SENDER", chequeUser.getUsername());
-                startActivity(intent);
-            }
+            Intent intent = new Intent(CustomerListActivity.this, NewPromizeActivity.class);
+            intent.putExtra("USER", chequeUser);
+            startActivity(intent);
         } else {
             if (chequeUser.isSMSRequester()) {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
