@@ -30,6 +30,7 @@ import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PhoneBookUtil;
+import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
 import com.score.senzc.pojos.Senz;
@@ -193,9 +194,14 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         final ChequeUser chequeUser = customerList.get(position);
 
         if (chequeUser.isActive()) {
-            Intent intent = new Intent(CustomerListActivity.this, NewPromizeActivity.class);
-            intent.putExtra("USER", chequeUser);
-            startActivity(intent);
+            if (PreferenceUtil.get(CustomerListActivity.this, PreferenceUtil.ACCOUNT_NO).isEmpty()) {
+                Intent intent = new Intent(CustomerListActivity.this, AddAccountInfoActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(CustomerListActivity.this, NewPromizeActivity.class);
+                intent.putExtra("USER", chequeUser);
+                startActivity(intent);
+            }
         } else {
             if (chequeUser.isSMSRequester()) {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
