@@ -28,12 +28,12 @@ public class DashBoardActivity extends BaseActivity {
     }
 
     private void initUi() {
-        ((TextView) findViewById(R.id.new_cheque_text)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.customer_text)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.inbox_text)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.messages_text)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.outbox_text)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.support_text)).setTypeface(typeface, Typeface.BOLD);
+        ((TextView) findViewById(R.id.new_cheque_text)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.customer_text)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.inbox_text)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.messages_text)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.outbox_text)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.support_text)).setTypeface(typeface, Typeface.NORMAL);
 
         onClickWriteCheque();
         onClickReceivedCheques();

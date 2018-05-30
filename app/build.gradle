@@ -12,7 +12,6 @@ android {
         applicationId "com.score.cbook"
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
-
     }
 
     buildTypes {

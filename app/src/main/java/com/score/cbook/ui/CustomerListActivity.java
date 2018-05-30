@@ -194,10 +194,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         final ChequeUser chequeUser = customerList.get(position);
 
         if (chequeUser.isActive()) {
-            if (PreferenceUtil.get(CustomerListActivity.this, PreferenceUtil.ACCOUNT_NO).isEmpty()) {
-                Intent intent = new Intent(CustomerListActivity.this, AddAccountInfoActivity.class);
-                startActivity(intent);
-            } else {
+            if (PreferenceUtil.get(CustomerListActivity.this, PreferenceUtil.ACCOUNT_STATE).equalsIgnoreCase("VERIFIED") && actionType == CustomerActionType.NEW_CHEQUE) {
                 Intent intent = new Intent(CustomerListActivity.this, NewPromizeActivity.class);
                 intent.putExtra("USER", chequeUser);
                 startActivity(intent);

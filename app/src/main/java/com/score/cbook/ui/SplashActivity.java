@@ -44,11 +44,6 @@ public class SplashActivity extends BaseActivity {
         ((TextView) findViewById(R.id.splash_name)).setTypeface(typeface, Typeface.BOLD);
     }
 
-    private void initService() {
-        Intent serviceIntent = new Intent(this, SenzService.class);
-        startService(serviceIntent);
-    }
-
     private void initNavigation() {
         if (PreferenceUtil.getAccount(this).getUsername().isEmpty()) {
             // no registered account yet
@@ -56,7 +51,7 @@ public class SplashActivity extends BaseActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    navigateToTerms();
+                    navigateToRegistration();
                 }
             }, 3000);
         } else {
@@ -69,8 +64,8 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
-    public void navigateToTerms() {
-        Intent intent = new Intent(this, TermsOfUseActivity.class);
+    public void navigateToRegistration() {
+        Intent intent = new Intent(this, RegistrationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         SplashActivity.this.finish();
