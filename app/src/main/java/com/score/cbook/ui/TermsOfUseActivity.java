@@ -1,17 +1,13 @@
 package com.score.cbook.ui;
 
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.util.PreferenceUtil;
 
 /**
  * Activity class that handles login
@@ -21,9 +17,7 @@ import com.score.cbook.util.PreferenceUtil;
 public class TermsOfUseActivity extends BaseActivity {
 
     // UI fields
-    private TextView hi;
     private TextView message;
-    private RelativeLayout buttonPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,36 +35,18 @@ public class TermsOfUseActivity extends BaseActivity {
      * set custom font for UI fields
      */
     private void initUi() {
-        hi = (TextView) findViewById(R.id.hi_message);
-        message = (TextView) findViewById(R.id.welcome_message);
-        hi.setTypeface(typeface, Typeface.NORMAL);
-        message.setTypeface(typeface, Typeface.NORMAL);
-
-        buttonPanel = (RelativeLayout) findViewById(R.id.button_panel);
-        if (PreferenceUtil.getAccount(this).getUsername().isEmpty()) {
-            // means not registered yet
-            buttonPanel.setVisibility(View.VISIBLE);
-        } else {
-            buttonPanel.setVisibility(View.GONE);
-        }
-
-        Button yes = (Button) findViewById(R.id.yes);
-        yes.setTypeface(typeface, Typeface.BOLD);
-        yes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigateToRegistration();
-            }
-        });
-
-        Button no = (Button) findViewById(R.id.no);
-        no.setTypeface(typeface, Typeface.BOLD);
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TermsOfUseActivity.this.finish();
-            }
-        });
+        ((TextView) findViewById(R.id.message2)).setTypeface(typeface);
+        ((TextView) findViewById(R.id.message3)).setTypeface(typeface);
+        ((TextView) findViewById(R.id.message4)).setTypeface(typeface);
+        ((TextView) findViewById(R.id.message5)).setTypeface(typeface);
+        ((TextView) findViewById(R.id.message6)).setTypeface(typeface);
+        ((TextView) findViewById(R.id.message7)).setTypeface(typeface);
+        ((TextView) findViewById(R.id.message8)).setTypeface(typeface);
+        ((TextView) findViewById(R.id.message9)).setTypeface(typeface);
+        ((TextView) findViewById(R.id.message10)).setTypeface(typeface);
+        ((TextView) findViewById(R.id.message11)).setTypeface(typeface);
+        ((TextView) findViewById(R.id.message12)).setTypeface(typeface);
+        ((TextView) findViewById(R.id.message13)).setTypeface(typeface);
     }
 
     private void initActionBar() {
@@ -99,13 +75,6 @@ public class TermsOfUseActivity extends BaseActivity {
         toolbar.setCollapsible(false);
         toolbar.setOverScrollMode(Toolbar.OVER_SCROLL_NEVER);
         setSupportActionBar(toolbar);
-    }
-
-    public void navigateToRegistration() {
-        Intent intent = new Intent(this, RegistrationActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-        TermsOfUseActivity.this.finish();
     }
 
 }
