@@ -88,7 +88,7 @@ igift vouchers cannot be used as a form of online purchasing. The receiver is on
                 android:text="    3. Suspending or Cancelling of igift
 An igift voucher once sent cannot be canceled or stopped. In case of you sending an igift voucher to an unintended recipient, Sampath Bank PLC will not be under any obligation to correct same."
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="28sp"
                 android:visibility="visible" />
 
             <TextView

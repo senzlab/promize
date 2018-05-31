@@ -16,9 +16,6 @@ import com.score.cbook.R;
  */
 public class TermsOfUseActivity extends BaseActivity {
 
-    // UI fields
-    private TextView message;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
