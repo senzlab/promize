@@ -96,9 +96,11 @@ public class ActivityUtil {
             }
         }
 
+        if (currentPassword.equalsIgnoreCase(newPassword))
+            throw new InvalidPasswordException();
+
         if (!newPassword.equals(newConfirmPassword))
             throw new MisMatchFieldException();
-
     }
 
     public static void isValidLoginFields(String givenAccount, String givenPassword, String account, String password) throws InvalidInputFieldsException, MisMatchFieldException {
