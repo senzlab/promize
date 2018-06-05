@@ -27,6 +27,7 @@ import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
+import com.score.cbook.util.SmsUtil;
 import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
@@ -158,6 +159,18 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
         }
     }
 
+    private void confirmSmsRequest() {
+        String message = "<b><font color=#F37920>" + selectedContact.getName() + "</b></font>" + "<font size=10> is not using sampath iGift app, would you like to send invitation via SMS?</font>";
+        displayConfirmationMessageDialog(message, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // send sms
+                SmsUtil.iGiftRequest(selectedContact.getPhoneNo());
+                Toast.makeText(ContactListActivity.this, "Invitation has been sent via SMS", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
     @Override
     public void onPostRead(ArrayList<Contact> contactList) {
         ActivityUtil.cancelProgressDialog();
@@ -170,13 +183,21 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
         if (senz == null) {
             displayInformationMessageDialog("ERROR", "Fail to send request");
         } else {
-            // save contact
-            ChequeUser chequeUser = new ChequeUser(selectedContact.getPhoneNo());
-            chequeUser.setPhone(selectedContact.getPhoneNo());
-            chequeUser.setActive(false);
-            chequeUser.setSMSRequester(true);
-            UserSource.createUser(this, chequeUser);
-            Toast.makeText(this, "Request has been sent", Toast.LENGTH_LONG).show();
+            Senz z = SenzParser.parse(senz);
+            if (z.getAttributes().get("status").equalsIgnoreCase("201")) {
+                // sent request
+                ChequeUser chequeUser = new ChequeUser(selectedContact.getPhoneNo());
+                chequeUser.setPhone(selectedContact.getPhoneNo());
+                chequeUser.setActive(false);
+                chequeUser.setSMSRequester(true);
+                UserSource.createUser(this, chequeUser);
+                Toast.makeText(this, "Request has been sent", Toast.LENGTH_LONG).show();
+            } else if (z.getAttributes().get("status").equalsIgnoreCase("404")) {
+                // user does not exists,
+                // ask for sms
+                confirmSmsRequest();
+            }
         }
     }
+
 }

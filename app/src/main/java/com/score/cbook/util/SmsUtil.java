@@ -8,6 +8,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SmsUtil {
+    public static void iGiftRequest(String phone) {
+        String msg = "Please install sampath iGift app to happy share gifts";
+        SmsManager.getDefault().sendTextMessage(phone, null, msg, null, null);
+    }
+
     public static void sendRequest(Context context, String phone) {
         String address = PreferenceUtil.get(context, PreferenceUtil.Z_ADDRESS);
         String msg = "#iGift #request\nI'm using sampath bank iGift app, #username " + address + " #code 41r33";
