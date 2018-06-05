@@ -126,7 +126,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
         // check existing secret user with given phone no
         if (!UserSource.isExistingUserWithPhoneNo(this, contact.getPhoneNo())) {
             String confirmationMessage = "<font size=10>Are you sure you want to add </font> <font color=#F37920>" + "<b>" + contact.getName() + "</b>" + "</font> (" + contact.getPhoneNo() + ") as iGift contact?";
-            displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
+            displayConfirmationMessageDialog("CONFIRM", confirmationMessage, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(ContactListActivity.this)) {
@@ -161,7 +161,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
 
     private void confirmSmsRequest() {
         String message = "<b><font color=#F37920>" + selectedContact.getName() + "</b></font>" + "<font size=10> is not using sampath iGift app, would you like to send invitation via SMS?</font>";
-        displayConfirmationMessageDialog(message, new View.OnClickListener() {
+        displayConfirmationMessageDialog("INVITE", message, new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // send sms

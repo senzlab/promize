@@ -147,7 +147,7 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
         try {
             ActivityUtil.isValidRegistrationFields(phone, confirmPhone, password, confirmPassword);
             String confirmationMessage = "<font color=#636363>Please confirm to register as </font> <font color=#F37920>" + "<b>" + phone + "</b>" + "</font> <font color=#636363> in iGifts </font> ";
-            displayConfirmationMessageDialog(confirmationMessage, new View.OnClickListener() {
+            displayConfirmationMessageDialog("CONFIRM", confirmationMessage, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(RegistrationActivity.this)) {

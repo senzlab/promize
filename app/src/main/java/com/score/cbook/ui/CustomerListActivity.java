@@ -202,7 +202,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         } else {
             if (chequeUser.isSMSRequester()) {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
-                displayConfirmationMessageDialog("Would you like to resend request to " + contactName + "?", new View.OnClickListener() {
+                displayConfirmationMessageDialog("CONFIRM", "Would you like to resend request to " + contactName + "?", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -210,7 +210,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                 });
             } else {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
-                displayConfirmationMessageDialog("Would you like to accept the request from " + contactName + "?", new View.OnClickListener() {
+                displayConfirmationMessageDialog("CONFIRM", "Would you like to accept the request from " + contactName + "?", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // start getting public key and sending confirmation sms
@@ -232,7 +232,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         final ChequeUser chequeUser = customerList.get(position);
 
         if (!ChequeSource.hasChequesToRedeem(CustomerListActivity.this, chequeUser.getUsername())) {
-            displayConfirmationMessageDialog("Are you sure your want to remove the user", new View.OnClickListener() {
+            displayConfirmationMessageDialog("CONFIRM", "Are you sure your want to remove the user", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // delete item
