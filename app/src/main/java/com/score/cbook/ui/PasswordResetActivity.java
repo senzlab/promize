@@ -91,7 +91,7 @@ public class PasswordResetActivity extends BaseActivity {
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
         try {
-            ActivityUtil.isValidPasswordFields(password, password, confirmPassword);
+            ActivityUtil.isValidResetPassword(password, confirmPassword);
             PreferenceUtil.put(this, PreferenceUtil.PASSWORD, password);
             finish();
             Toast.makeText(this, "Successfully reset password", Toast.LENGTH_LONG).show();

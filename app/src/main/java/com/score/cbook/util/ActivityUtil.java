@@ -14,6 +14,7 @@ import com.score.cbook.exceptions.InvalidPhoneNumberException;
 import com.score.cbook.exceptions.LessAmountException;
 import com.score.cbook.exceptions.MisMatchFieldException;
 import com.score.cbook.exceptions.MisMatchPhoneNumberException;
+import com.score.cbook.exceptions.SamePasswordException;
 
 /**
  * Utility class to handle activity related common functions
@@ -82,7 +83,7 @@ public class ActivityUtil {
 
     }
 
-    public static void isValidPasswordFields(String currentPassword, String newPassword, String newConfirmPassword) throws InvalidPasswordException, MisMatchFieldException {
+    public static void isValidChangePassword(String currentPassword, String newPassword, String newConfirmPassword) throws InvalidPasswordException, MisMatchFieldException, SamePasswordException {
         if (currentPassword.isEmpty())
             throw new InvalidPasswordException();
 
@@ -97,7 +98,22 @@ public class ActivityUtil {
         }
 
         if (currentPassword.equalsIgnoreCase(newPassword))
+            throw new SamePasswordException();
+
+        if (!newPassword.equals(newConfirmPassword))
+            throw new MisMatchFieldException();
+    }
+
+    public static void isValidResetPassword(String newPassword, String newConfirmPassword) throws InvalidPasswordException, MisMatchFieldException {
+        if (newPassword.isEmpty() || newPassword.length() < 8)
             throw new InvalidPasswordException();
+
+        else if (newPassword.length() >= 8) {
+            String pattern = "^(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+            if (!newPassword.matches(pattern)) {
+                throw new InvalidPasswordException();
+            }
+        }
 
         if (!newPassword.equals(newConfirmPassword))
             throw new MisMatchFieldException();

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.score.cbook.R;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.MisMatchFieldException;
+import com.score.cbook.exceptions.SamePasswordException;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.PreferenceUtil;
@@ -83,7 +84,7 @@ public class PasswordChangeActivity extends BaseActivity {
 
                 if (useAccount.getPassword().equals(currentPassword)) {
                     try {
-                        ActivityUtil.isValidPasswordFields(currentPassword, newPassword, newConfirmPassword);
+                        ActivityUtil.isValidChangePassword(currentPassword, newPassword, newConfirmPassword);
                         PreferenceUtil.put(PasswordChangeActivity.this, PreferenceUtil.PASSWORD, newPassword);
                         Toast.makeText(PasswordChangeActivity.this, "Successfully changed password", Toast.LENGTH_LONG).show();
                         finish();
@@ -93,6 +94,9 @@ public class PasswordChangeActivity extends BaseActivity {
                     } catch (MisMatchFieldException e) {
                         e.printStackTrace();
                         displayInformationMessageDialog("ERROR", "Mismatching password and confirm password");
+                    } catch (SamePasswordException e) {
+                        e.printStackTrace();
+                        displayInformationMessageDialog("ERROR", "Your old password and new password are same, please choose a different new password");
                     }
                 } else {
                     displayInformationMessageDialog("ERROR", "Invalid current password ");
