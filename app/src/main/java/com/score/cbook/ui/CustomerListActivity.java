@@ -201,13 +201,13 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
             }
         } else {
             if (chequeUser.isSMSRequester()) {
-                String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
-                displayConfirmationMessageDialog("CONFIRM", "Would you like to resend request to " + contactName + "?", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
+                //String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
+                //displayConfirmationMessageDialog("CONFIRM", "Would you like to resend request to " + contactName + "?", new View.OnClickListener() {
+                //    @Override
+                //    public void onClick(View v) {
+                //
+                //    }
+                //});
             } else {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
                 displayConfirmationMessageDialog("CONFIRM", "Would you like to accept the request from " + contactName + "?", new View.OnClickListener() {
