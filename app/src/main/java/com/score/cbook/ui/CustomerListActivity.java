@@ -275,7 +275,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         } else {
             // activate user
             UserSource.activateUser(this, selectedUser.getUsername());
-            customerListAdapter.notifyDataSetChanged();
+            refreshList();
             Toast.makeText(this, "Successfully added contact", Toast.LENGTH_LONG).show();
         }
     }

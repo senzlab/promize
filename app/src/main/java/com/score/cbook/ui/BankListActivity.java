@@ -79,6 +79,7 @@ public class BankListActivity extends BaseActivity {
         bankList.add(new Bank("7913", "Mercantile Investment and Finance"));
         bankList.add(new Bank("7922", "People's Leasing & Finance"));
         bankList.add(new Bank("8004", "Central Bank of Sri Lanka"));
+        bankList.add(new Bank("6990", "Lank Pay Test"));
 
         Collections.sort(bankList, new Comparator<Bank>() {
             public int compare(Bank o1, Bank o2) {
