@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:text="3. In which town was your grade 1 school?"
+                android:text="3. In which town had you attended grade 1 school?"
                 android:textColor="@color/white"
                 android:textSize="25sp" />
 

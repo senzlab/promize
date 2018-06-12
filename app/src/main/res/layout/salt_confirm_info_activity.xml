@@ -53,7 +53,7 @@
                 android:layout_above="@+id/registering_user_id"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:text="To confirm the account, please find the transaction amount via sampath vishwa or by visiting nearest sampath bank and enter in next window"
+                android:text="To confirm the account, please find the transaction amount either via Sampath Vishwa -or by means of visiting the nearest Sampath bank- and enter this (transaction) amount in the next window."
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:visibility="visible" />

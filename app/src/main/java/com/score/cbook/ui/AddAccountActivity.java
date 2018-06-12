@@ -57,7 +57,7 @@ public class AddAccountActivity extends BaseActivity {
                     displayInformationMessageDialog("ERROR", "Fail to verify account");
                 } catch (MisMatchFieldException e) {
                     e.printStackTrace();
-                    displayInformationMessageDialog("ERROR", "Mismatching account number");
+                    displayInformationMessageDialog("ERROR", "Account number mismatch");
                 } catch (InvalidAccountException e) {
                     e.printStackTrace();
                     displayInformationMessageDialog("ERROR", "Fail to verify account");

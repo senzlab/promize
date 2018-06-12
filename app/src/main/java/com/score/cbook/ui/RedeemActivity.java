@@ -175,7 +175,7 @@ public class RedeemActivity extends BaseActivity implements ISenzPublisherListen
             e.printStackTrace();
             displayInformationMessageDialog("ERROR", "Fail to verify account");
         } catch (MisMatchFieldException e) {
-            displayInformationMessageDialog("ERROR", "Mismatching account number");
+            displayInformationMessageDialog("ERROR", "Account number mismatch");
             e.printStackTrace();
         }
     }
