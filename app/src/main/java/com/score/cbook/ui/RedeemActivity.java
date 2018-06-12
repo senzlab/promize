@@ -161,7 +161,7 @@ public class RedeemActivity extends BaseActivity implements ISenzPublisherListen
         final String accountNo = editTextAccount.getText().toString().trim();
         final String confirmAccountNo = editTextConfirmAccount.getText().toString().trim();
         try {
-            ActivityUtil.isValidRedeem(accountNo, confirmAccountNo);
+            ActivityUtil.isValidRedeem(bank.getBankCode(), accountNo, confirmAccountNo);
             if (NetworkUtil.isAvailableNetwork(RedeemActivity.this)) {
                 cheque.setAccount(accountNo);
                 askPassword();

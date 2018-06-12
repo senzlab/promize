@@ -51,7 +51,7 @@ public class ActivityUtil {
         }
     }
 
-    public static void isValidRegistrationFields(String phone, String confirmPhone, String password, String confirmPassword) throws InvalidPhoneNumberException, InvalidPasswordException, MisMatchFieldException,MisMatchPhoneNumberException {
+    public static void isValidRegistrationFields(String phone, String confirmPhone, String password, String confirmPassword) throws InvalidPhoneNumberException, InvalidPasswordException, MisMatchFieldException, MisMatchPhoneNumberException {
         if (phone.isEmpty()) {
             throw new InvalidPhoneNumberException();
         }
@@ -159,20 +159,28 @@ public class ActivityUtil {
 
     }
 
-    public static void isValidRedeem(String acc, String confirmAcc) throws InvalidInputFieldsException, InvalidAccountException, MisMatchFieldException {
+    public static void isValidRedeem(String bankCode, String acc, String confirmAcc) throws InvalidInputFieldsException, InvalidAccountException, MisMatchFieldException {
         if (acc.isEmpty() || confirmAcc.isEmpty())
             throw new InvalidInputFieldsException();
 
-        if (acc.length() != 12 || confirmAcc.length() != 12) {
-            throw new InvalidInputFieldsException();
-        } else if (acc.length() == 12) {
-            String pattern = "^(0|1)[0-9]*$";
-            if (!acc.matches(pattern)) {
-                throw new InvalidAccountException();
+        if (!acc.equals(confirmAcc)) throw new MisMatchFieldException();
+
+        if (bankCode.equalsIgnoreCase("7278")) {
+            // sampath bank
+            if (acc.length() != 12 || confirmAcc.length() != 12) {
+                throw new InvalidInputFieldsException();
+            } else if (acc.length() == 12) {
+                String pattern = "^(0|1)[0-9]*$";
+                if (!acc.matches(pattern)) {
+                    throw new InvalidAccountException();
+                }
+            }
+        } else {
+            // other bank, at least have 8 digit
+            if (acc.length() != 8 || confirmAcc.length() != 8) {
+                throw new InvalidInputFieldsException();
             }
         }
-
-        if (!acc.equals(confirmAcc)) throw new MisMatchFieldException();
     }
 
     public static void isValidGift(String amount, String msg) throws InvalidInputFieldsException, InvalidMsgException, LessAmountException, ExceedAmountException {

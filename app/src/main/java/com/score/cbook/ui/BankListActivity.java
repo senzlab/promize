@@ -152,15 +152,6 @@ public class BankListActivity extends BaseActivity {
     private void initPrefs() {
         if (getIntent().hasExtra("CHEQUE"))
             this.cheque = getIntent().getParcelableExtra("CHEQUE");
-        else {
-            this.cheque = new Cheque();
-            cheque.setAccount("231234323489");
-            cheque.setAmount("3400");
-            cheque.setTimestamp(34232323L);
-            cheque.setUid("32342212121");
-            cheque.setDeliveryState(DeliveryState.DELIVERED);
-            cheque.setChequeState(ChequeState.DEPOSIT);
-        }
     }
 
     private void initList() {
