@@ -177,7 +177,7 @@ public class ActivityUtil {
             }
         } else {
             // other bank, at least have 8 digit
-            if (acc.length() != 8 || confirmAcc.length() != 8) {
+            if (acc.length() < 8 || confirmAcc.length() < 8) {
                 throw new InvalidInputFieldsException();
             }
         }
