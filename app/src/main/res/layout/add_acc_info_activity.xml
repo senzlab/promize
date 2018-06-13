@@ -38,7 +38,7 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:text="You need to set up a Sampath bank account in order to send an iGift. Please note that if you do not have a Sampath bank account, you cannot Send an iGift. You can however Receive."
+                android:text="You need to set up a Sampath bank account in order to send an iGift."
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:visibility="visible" />
@@ -50,7 +50,7 @@
                 android:layout_above="@+id/registering_user_id"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:text="Please note that, if you don't have a sampath bank account, you cannot send iGifts. You can only receive iGifts :)"
+                android:text="Please note that if you do not have a Sampath bank account, you cannot Send an iGift. You can however Receive."
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:visibility="visible" />
