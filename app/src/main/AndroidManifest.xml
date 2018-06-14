@@ -141,7 +141,6 @@
             android:theme="@style/MyMaterialTheme" />
         <activity
             android:name=".ui.SaltConfirmActivity"
-
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
         <activity

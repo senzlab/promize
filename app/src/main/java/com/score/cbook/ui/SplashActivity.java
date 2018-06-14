@@ -51,7 +51,7 @@ public class SplashActivity extends BaseActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    navigateToRegistration();
+                    navigateToTerms();
                 }
             }, 3000);
         } else {
@@ -64,9 +64,10 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
-    public void navigateToRegistration() {
-        Intent intent = new Intent(this, RegistrationActivity.class);
+    public void navigateToTerms() {
+        Intent intent = new Intent(this, TermsOfUseActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("ACCEPT_TERMS", true);
         startActivity(intent);
         SplashActivity.this.finish();
     }
