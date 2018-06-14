@@ -28,8 +28,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:orientation="vertical">
 
             <TextView
@@ -191,8 +191,8 @@ These terms and conditions shall be governed by the laws of the Democratic Socia
             android:id="@+id/accept"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/rounded_corner_button"
             android:text="ACCEPT"
             android:textColor="@color/white" />
