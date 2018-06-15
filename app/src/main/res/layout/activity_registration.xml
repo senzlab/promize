@@ -133,6 +133,33 @@
                 android:textSize="25sp"
                 android:visibility="gone" />-->
 
+            <TextView
+                android:id="@+id/terms_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="35dp"
+                android:gravity="center"
+                android:text="By registering in iGift you agree to our"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/terms_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:padding="3dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="Terms and Conditions"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
         </LinearLayout>
     </ScrollView>
 

@@ -51,4 +51,5 @@
         <item>India</item>
     </string-array>
     <string name="salt_info">We have tested a transaction from account \'%1$s\'</string>
+    <string name="terms">By registering in iGift you agree to our \nTerms and Condition</string>
 </resources>

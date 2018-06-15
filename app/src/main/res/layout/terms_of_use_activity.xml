@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/registering_user_id"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="By registering for iGift, you represent that you are above 18 years of age and is capable of entering into a legally binding contract. iGift vouchers cannot be redeemed by a minor."
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -58,7 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/registering_user_id"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="    1. Account Verification
 You are responsible for providing accurate registration information and notifying us in the event of any change. Verification of your account is a necessary part of registering for igift. An authentication transaction will initiate from your account as a form of verification. Sampath Bank PLC may debit random amounts less than Rs.2/- from your account and will credit it back to your account once the verification process is completed. The transaction can be viewed via Sampath Vishwa or you may contact a Sampath Bank Branch."
                 android:textColor="@color/black"
@@ -71,7 +71,7 @@ You are responsible for providing accurate registration information and notifyin
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/registering_user_id"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="    2. Use of the igift
 You agree that you may only send an igift voucher when there is sufficient balance in your bank account corresponding to the value of the igift voucher. By registering for igift, you authorize Sampath Bank PLC to move funds from your bank account by debiting your account according to the value of the igift voucher. Maximum value of an igift voucher cannot exceed Rupees Ten Thousand (Rs.10, 000/-) per transaction and the daily transaction limit is Rupees One Hundred Thousand (Rs. 100,000/-).
 igift vouchers cannot be used as a form of online purchasing. The receiver is only entitled to redeem the igift voucher via a bank account and it must be redeemed within 12 months from the date of sending. If an igift voucher expires prior to redemption, the value of the igift voucher shall be credited back to the sender’s account."
@@ -84,7 +84,7 @@ igift vouchers cannot be used as a form of online purchasing. The receiver is on
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/registering_user_id"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="    3. Suspending or Cancelling of igift
 An igift voucher once sent cannot be canceled or stopped. In case of you sending an igift voucher to an unintended recipient, Sampath Bank PLC will not be under any obligation to correct same."
                 android:textColor="@color/black"
@@ -96,7 +96,7 @@ An igift voucher once sent cannot be canceled or stopped. In case of you sending
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/registering_user_id"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="    4. Third Party Agreements
 You will be responsible for all fees that may be imposed by third parties in connection with your use of  igift (such as data usage charges imposed on you by your wireless carrier, third party Bank charges) and be subject to any restrictions those third parties may impose. "
                 android:textColor="@color/black"
@@ -108,7 +108,7 @@ You will be responsible for all fees that may be imposed by third parties in con
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/registering_user_id"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="    5. Fees
 For vouchers which are less than or equal to Rs.5000/- a transaction fee of Rs.20/- shall be applicable. For igift vouchers exceeding Rs.5000/- a transaction fee of Rs.50/- shall be applicable.
 An additional fee of Rs.50/- will be deducted from the igift voucher value in the event of recipient redeeming such igift voucher via a Bank Account other than of Sampath Bank PLC’s.
@@ -123,7 +123,7 @@ Sampath Bank reserves the right to change applicable fees from time to time with
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/registering_user_id"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="    6. Security
 You are solely responsible for maintaining the confidentiality of your igift user credentials. In the event of you misplacing the mobile device, the loss should be immediately reported to Sampath Bank in writing.  Sampath Bank will not be responsible for any loss/damage you may experience due to delay in duly informing."
                 android:textColor="@color/black"
@@ -135,7 +135,7 @@ You are solely responsible for maintaining the confidentiality of your igift use
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/registering_user_id"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="    7. Notices
 The notices and the igift terms and conditions will be available on the igift app."
                 android:textColor="@color/black"
@@ -147,7 +147,7 @@ The notices and the igift terms and conditions will be available on the igift ap
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/registering_user_id"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="8. Termination
 In the event of you deciding to terminate the use of igift you may uninstall the igift mobile application from your mobile device."
                 android:textColor="@color/black"
@@ -159,7 +159,7 @@ In the event of you deciding to terminate the use of igift you may uninstall the
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/registering_user_id"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="    9. Intellectual Property
 You acknowledge that the intellectual property rights of igift is owned by Sampath Bank PLC. You may view, print or use the Content for personal, non-commercial use only, provided further that you do not modify the Content and that you retain all copyright notices and other proprietary notices contained in the Content."
                 android:textColor="@color/black"
@@ -171,7 +171,7 @@ You acknowledge that the intellectual property rights of igift is owned by Sampa
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/registering_user_id"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="    10. Governing Law
 These terms and conditions shall be governed by the laws of the Democratic Socialist Republic of Sri Lanka and shall be subject to the exclusive jurisdiction of a court of competent authority in Colombo."
                 android:textColor="@color/black"
@@ -181,11 +181,11 @@ These terms and conditions shall be governed by the laws of the Democratic Socia
     </ScrollView>
 
     <RelativeLayout
+        android:id="@+id/button_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button_panel"
         android:layout_marginBottom="10dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <Button
             android:id="@+id/accept"
@@ -205,10 +205,10 @@ These terms and conditions shall be governed by the laws of the Democratic Socia
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
             android:layout_marginTop="10dp"
-            android:visibility="gone"
             android:background="@drawable/rounded_corner_button"
             android:text="REJECT"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>

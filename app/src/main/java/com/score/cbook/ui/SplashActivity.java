@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.remote.SenzService;
 import com.score.cbook.util.PreferenceUtil;
 
 
@@ -51,7 +50,7 @@ public class SplashActivity extends BaseActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    navigateToTerms();
+                    navigateToRegistration();
                 }
             }, 3000);
         } else {
@@ -64,10 +63,9 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
-    public void navigateToTerms() {
-        Intent intent = new Intent(this, TermsOfUseActivity.class);
+    public void navigateToRegistration() {
+        Intent intent = new Intent(this, RegistrationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("ACCEPT_TERMS", true);
         startActivity(intent);
         SplashActivity.this.finish();
     }

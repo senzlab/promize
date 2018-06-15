@@ -1,6 +1,7 @@
 package com.score.cbook.ui;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -42,6 +43,8 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
     private EditText editTextConfirmPhone;
     private EditText editTextPassword;
     private EditText editTextConfirmPassword;
+    private TextView termsText;
+    private TextView termsLink;
 
     private String zaddress;
     private Account account;
@@ -120,18 +123,29 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
         editTextConfirmPhone = (EditText) findViewById(R.id.registering_confirm_user_id);
         editTextPassword = (EditText) findViewById(R.id.registering_password);
         editTextConfirmPassword = (EditText) findViewById(R.id.registering_confirm_password);
-
+        termsText = (TextView) findViewById(R.id.terms_text);
+        termsLink = (TextView) findViewById(R.id.terms_link);
+        termsLink.setPaintFlags(termsLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         editTextPhone.setTypeface(typeface, Typeface.NORMAL);
         editTextConfirmPhone.setTypeface(typeface, Typeface.NORMAL);
         editTextPassword.setTypeface(typeface, Typeface.NORMAL);
         editTextConfirmPassword.setTypeface(typeface, Typeface.NORMAL);
+        termsText.setTypeface(typeface, Typeface.BOLD);
+        termsLink.setTypeface(typeface, Typeface.BOLD);
 
         registerBtn = (Button) findViewById(R.id.register_btn);
         registerBtn.setTypeface(typeface, Typeface.BOLD);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onClickRegister();
+            }
+        });
+
+        termsLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigateToTerms();
             }
         });
     }
@@ -202,6 +216,11 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
         Intent intent = new Intent(RegistrationActivity.this, RegistrationQuestionInfoActivity.class);
         RegistrationActivity.this.startActivity(intent);
         RegistrationActivity.this.finish();
+    }
+
+    private void navigateToTerms() {
+        Intent intent = new Intent(RegistrationActivity.this, TermsOfUseActivity.class);
+        RegistrationActivity.this.startActivity(intent);
     }
 
     @Override
