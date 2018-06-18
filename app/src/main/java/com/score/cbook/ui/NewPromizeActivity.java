@@ -49,7 +49,6 @@ import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
 import com.score.cbook.util.TimeUtil;
-import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
@@ -391,7 +390,12 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             String a = amount.getText().toString().trim();
             String m = message.getText().toString().trim();
             ActivityUtil.isValidGift(a, m);
-            askPassword();
+            if (PreferenceUtil.get(this, PreferenceUtil.TODAY_AMOUNT, 0) + Integer.parseInt(a) > 100000) {
+                displayInformationMessageDialog("ERROR", "Daily iGift transaction limit should be 100,000 rupees");
+            } else {
+                if (NetworkUtil.isAvailableNetwork(this)) askPassword();
+                else Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
+            }
         } catch (InvalidInputFieldsException e) {
             displayInformationMessageDialog("ERROR", "Empty iGift amount");
             e.printStackTrace();
