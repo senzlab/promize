@@ -14,8 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.enums.ChequeState;
-import com.score.cbook.enums.DeliveryState;
 import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
 
@@ -165,13 +163,31 @@ public class BankListActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final Bank bank = (Bank) adapter.getItem(position);
-                Intent intent = new Intent(BankListActivity.this, RedeemActivity.class);
-                intent.putExtra("ACCOUNT_BANK", bank);
-                intent.putExtra("CHEQUE", cheque);
-                startActivity(intent);
-                BankListActivity.this.finish();
+                onSelectBank(bank);
             }
         });
+    }
+
+    private void onSelectBank(final Bank bank) {
+        if (bank.getBankCode().equalsIgnoreCase("7278")) {
+            navigateRedeem(bank);
+        } else {
+            String message = "When you redeem iGift for non sampath account, a charge of Rs 50.00 will be debit from your iGift as the commission";
+            displayConfirmationMessageDialog("CONFIRM", message, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    navigateRedeem(bank);
+                }
+            });
+        }
+    }
+
+    private void navigateRedeem(final Bank bank) {
+        Intent intent = new Intent(BankListActivity.this, RedeemActivity.class);
+        intent.putExtra("ACCOUNT_BANK", bank);
+        intent.putExtra("CHEQUE", cheque);
+        startActivity(intent);
+        BankListActivity.this.finish();
     }
 
 }

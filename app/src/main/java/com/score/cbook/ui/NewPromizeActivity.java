@@ -111,7 +111,6 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         initUi();
         resetTodayLimit();
         if (getIntent().hasExtra("USER")) this.user = getIntent().getParcelableExtra("USER");
-        else this.user = new ChequeUser("era");
     }
 
     @Override

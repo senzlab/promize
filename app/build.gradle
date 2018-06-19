@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 22
-        versionCode 22
-        versionName "2.2"
+        versionCode 1
+        versionName "0.1"
         applicationId "com.score.cbook"
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
@@ -17,7 +17,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            debuggable true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
