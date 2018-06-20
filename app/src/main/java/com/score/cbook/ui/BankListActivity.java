@@ -172,7 +172,7 @@ public class BankListActivity extends BaseActivity {
         if (bank.getBankCode().equalsIgnoreCase("7278")) {
             navigateRedeem(bank);
         } else {
-            String message = "When you redeem iGift for non sampath account, a charge of Rs 50.00 will be debit from your iGift as the commission";
+            String message = "When you redeem igift to other bank accounts a charge of Rs 50.00 will be debited from your igift as the commission";
             displayConfirmationMessageDialog("CONFIRM", message, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
