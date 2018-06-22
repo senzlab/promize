@@ -25,6 +25,7 @@ import com.score.cbook.util.NetworkUtil;
 import com.score.senz.ISenzService;
 import com.score.senzc.pojos.Senz;
 
+
 public class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = BaseActivity.class.getName();

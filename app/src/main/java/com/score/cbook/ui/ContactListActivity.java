@@ -184,7 +184,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
             displayInformationMessageDialog("ERROR", "Fail to send request");
         } else {
             Senz z = SenzParser.parse(senz);
-            if (z.getAttributes().get("status").equalsIgnoreCase("201")) {
+            if (z.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
                 // sent request
                 ChequeUser chequeUser = new ChequeUser(selectedContact.getPhoneNo());
                 chequeUser.setPhone(selectedContact.getPhoneNo());

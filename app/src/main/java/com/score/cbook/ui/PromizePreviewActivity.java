@@ -28,6 +28,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.security.PrivateKey;
 
+
 public class PromizePreviewActivity extends BaseActivity implements ISenzPublisherListener {
 
     private FloatingActionButton cancel;
