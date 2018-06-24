@@ -108,6 +108,7 @@ public class SenzUtil {
         Long timestamp = System.currentTimeMillis();
         senzAttributes.put("time", timestamp.toString());
         senzAttributes.put("uid", uid);
+        senzAttributes.put("id", uid);
 
         // new senz
         Senz senz = new Senz();

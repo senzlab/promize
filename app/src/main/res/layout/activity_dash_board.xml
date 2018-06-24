@@ -27,10 +27,11 @@
 
                 <ImageView
                     android:id="@+id/new_cheque"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="35dp"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="35dp"
                     android:src="@drawable/group_write" />
 
                 <TextView
@@ -40,7 +41,7 @@
                     android:layout_centerInParent="true"
                     android:text="Send iGift"
                     android:textColor="@color/white"
-                    android:textSize="30sp" />
+                    android:textSize="23sp" />
             </RelativeLayout>
         </RelativeLayout>
 
@@ -90,8 +91,8 @@
 
                 <ImageView
                     android:id="@+id/received_cheques"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="35dp"
                     android:src="@drawable/group_inbox" />
@@ -104,7 +105,7 @@
                     android:layout_marginLeft="50dp"
                     android:text="iGift Store"
                     android:textColor="@color/white"
-                    android:textSize="30sp" />
+                    android:textSize="23sp" />
             </RelativeLayout>
         </RelativeLayout>
 
@@ -177,8 +178,8 @@
 
                 <ImageView
                     android:id="@+id/customers"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="35dp"
                     android:src="@drawable/group_customer" />
@@ -190,7 +191,7 @@
                     android:layout_centerInParent="true"
                     android:text="Contacts"
                     android:textColor="@color/white"
-                    android:textSize="30sp" />
+                    android:textSize="23sp" />
             </RelativeLayout>
         </RelativeLayout>
 
@@ -230,8 +231,8 @@
 
                 <ImageView
                     android:id="@+id/sent_cheques"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="54dp"
+                    android:layout_height="54dp"
                     android:layout_marginLeft="35dp"
                     android:src="@drawable/setting_g" />
 
@@ -243,7 +244,7 @@
                     android:layout_marginTop="10dp"
                     android:text="Settings"
                     android:textColor="@color/white"
-                    android:textSize="30sp" />
+                    android:textSize="23sp" />
             </RelativeLayout>
         </RelativeLayout>
 
