@@ -9,7 +9,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="300dp"
         android:background="@color/pressed_sensor"
         android:fitsSystemWindows="true"
         android:theme="@style/MyMaterialTheme"
@@ -54,7 +54,6 @@
             android:layout_height="match_parent"
             android:layout_marginTop="0dp">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +72,7 @@
                         android:layout_marginRight="15dp"
                         android:background="@drawable/light_bottom_border"
                         android:orientation="horizontal"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <TextView
                             android:id="@+id/account"
@@ -134,7 +133,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/gray_back" />
-
                 </LinearLayout>
 
                 <Button
@@ -145,7 +143,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/rounded_corner_button"
                     android:gravity="center"
-                    android:text="Write Cheque"
+                    android:text="Cheque"
                     android:textColor="@color/white"
                     android:visibility="gone" />
             </LinearLayout>
@@ -157,30 +155,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/transparent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <android.support.design.widget.FloatingActionButton
-                android:id="@+id/capture_selfie"
+                android:id="@+id/delete_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/group_write"
-                app:backgroundTint="@color/white" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/capture_selfie1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/capture_selfie"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/group_messages"
-                app:backgroundTint="@color/white" />
-
+                android:src="@drawable/delete_bin_w"
+                app:backgroundTint="@color/colorPrimary" />
         </RelativeLayout>
 
     </FrameLayout>

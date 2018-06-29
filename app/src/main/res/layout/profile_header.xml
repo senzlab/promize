@@ -17,8 +17,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_gravity="left"
-            android:layout_marginLeft="5dp"
-            android:padding="10dp"
+            android:layout_marginLeft="0dp"
+            android:padding="11dp"
             android:src="@drawable/backo" />
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/done_btn"
@@ -37,6 +37,7 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="5dp"
             android:padding="10dp"
-            android:src="@drawable/delete_bin" />
+            android:src="@drawable/delete_bin"
+            android:visibility="gone" />
     </RelativeLayout>
 </RelativeLayout>

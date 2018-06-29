@@ -3,6 +3,7 @@ package com.score.cbook.ui;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,11 +19,10 @@ import com.squareup.picasso.Picasso;
 
 public class UserProfileActivity extends BaseActivity implements View.OnClickListener {
 
-    private static final String TAG = UserProfileActivity.class.getName();
-
     private ImageView backImageView;
     private ImageView deleteImageView;
     private ImageView userImageView;
+    private FloatingActionButton deleteButton;
 
     private TextView title;
     private TextView phone;
@@ -54,11 +54,13 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         account = (TextView) findViewById(R.id.account);
         accountV = (TextView) findViewById(R.id.accountv);
         phone.setTypeface(typeface, Typeface.NORMAL);
-        phoneV.setTypeface(typeface, Typeface.NORMAL);
+        phoneV.setTypeface(typeface, Typeface.BOLD);
         account.setTypeface(typeface, Typeface.NORMAL);
-        accountV.setTypeface(typeface, Typeface.NORMAL);
+        accountV.setTypeface(typeface, Typeface.BOLD);
 
         userImageView = (ImageView) findViewById(R.id.clickable_image);
+        deleteButton = (FloatingActionButton) findViewById(R.id.delete_user);
+        deleteButton.setOnClickListener(this);
 
         // user values
         accountV.setText(PhoneBookUtil.getContactName(this, chequeUser.getPhone()));
@@ -99,7 +101,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     public void onClick(View v) {
         if (v == backImageView) {
             finish();
-        } else if (v == deleteImageView) {
+        } else if (v == deleteButton) {
             delete();
         }
     }
