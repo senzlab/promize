@@ -43,6 +43,8 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
 
     private LinkedList<ChequeUser> customerList;
     private CustomerListAdapter customerListAdapter;
+    private RelativeLayout emptyView;
+    private ListView friendListView;
 
     private CustomerActionType actionType = CustomerActionType.CUSTOMER_LIST;
     private ChequeUser selectedUser;
@@ -120,13 +122,6 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                 startActivity(intent);
             }
         });
-
-        if (actionType == CustomerActionType.CUSTOMER_LIST) {
-            newCustomer.setVisibility(View.VISIBLE);
-        } else {
-            if (customerList.size() > 0) newCustomer.setVisibility(View.GONE);
-            else newCustomer.setVisibility(View.VISIBLE);
-        }
     }
 
     private void initSearchView() {
@@ -161,11 +156,11 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     }
 
     private void initListView() {
-        ListView friendListView = (ListView) findViewById(R.id.customer_list_view);
+        friendListView = (ListView) findViewById(R.id.customer_list_view);
         friendListView.setOnItemClickListener(this);
         friendListView.setOnItemLongClickListener(this);
 
-        RelativeLayout emptyView = (RelativeLayout) findViewById(R.id.empty_view);
+        emptyView = (RelativeLayout) findViewById(R.id.empty_view);
         if (customerList.size() == 0) {
             emptyView.setVisibility(View.VISIBLE);
             friendListView.setEmptyView(emptyView);
@@ -187,6 +182,13 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         customerList.clear();
         customerList.addAll(UserSource.getAllUsers(this));
         customerListAdapter.notifyDataSetChanged();
+
+        if (customerList.size() == 0) {
+            emptyView.setVisibility(View.VISIBLE);
+            friendListView.setEmptyView(emptyView);
+        } else {
+            emptyView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -194,23 +196,26 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         final ChequeUser chequeUser = customerList.get(position);
 
         if (chequeUser.isActive()) {
-            if (PreferenceUtil.get(CustomerListActivity.this, PreferenceUtil.ACCOUNT_STATE).equalsIgnoreCase("VERIFIED") && actionType == CustomerActionType.NEW_CHEQUE) {
-                Intent intent = new Intent(CustomerListActivity.this, NewPromizeActivity.class);
-                intent.putExtra("USER", chequeUser);
+            if (actionType == CustomerActionType.CUSTOMER_LIST) {
+                // navigate to user profile
+                Intent intent = new Intent(CustomerListActivity.this, UserProfileActivity.class);
+                intent.putExtra("SECRET_USER", chequeUser);
                 startActivity(intent);
+            } else if (actionType == CustomerActionType.NEW_CHEQUE) {
+                // navigate to new gift
+                if (PreferenceUtil.get(CustomerListActivity.this, PreferenceUtil.ACCOUNT_STATE).equalsIgnoreCase("VERIFIED")) {
+                    Intent intent = new Intent(CustomerListActivity.this, NewPromizeActivity.class);
+                    intent.putExtra("USER", chequeUser);
+                    startActivity(intent);
+                }
             }
         } else {
             if (chequeUser.isSMSRequester()) {
-                //String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
-                //displayConfirmationMessageDialog("CONFIRM", "Would you like to resend request to " + contactName + "?", new View.OnClickListener() {
-                //    @Override
-                //    public void onClick(View v) {
-                //
-                //    }
-                //});
+                String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
+                displayInformationMessageDialog("Information", contactName + " not accepted your igift contact request yet");
             } else {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
-                displayConfirmationMessageDialog("CONFIRM", "Would you like to accept the request from " + contactName + "?", new View.OnClickListener() {
+                displayConfirmationMessageDialog("Confirm", "Would you like to accept the request from " + contactName + "?", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // start getting public key and sending confirmation sms
@@ -231,8 +236,8 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
         final ChequeUser chequeUser = customerList.get(position);
 
-        if (!ChequeSource.hasChequesToRedeem(CustomerListActivity.this, chequeUser.getUsername())) {
-            displayConfirmationMessageDialog("CONFIRM", "Are you sure your want to remove the user", new View.OnClickListener() {
+        if (!chequeUser.isActive()) {
+            displayConfirmationMessageDialog("Confirm", "Are you sure your want to remove the user", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // delete item
@@ -271,7 +276,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     public void onFinish(String senz) {
         ActivityUtil.cancelProgressDialog();
         if (senz == null) {
-            displayInformationMessageDialog("ERROR", "Fail to add contact");
+            displayInformationMessageDialog("Error", "Fail to add contact");
         } else {
             // activate user
             UserSource.activateUser(this, selectedUser.getUsername());

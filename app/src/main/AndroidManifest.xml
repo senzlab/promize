@@ -95,7 +95,8 @@
         <activity
             android:name="com.score.cbook.ui.ContactListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="com.score.cbook.ui.PrivacyTermsActivity"
             android:screenOrientation="portrait"
@@ -107,7 +108,8 @@
         <activity
             android:name=".ui.CustomerListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.SecretListActivity"
             android:screenOrientation="portrait"

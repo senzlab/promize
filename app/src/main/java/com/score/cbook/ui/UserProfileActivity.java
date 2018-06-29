@@ -4,12 +4,14 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
+import com.score.cbook.db.ChequeSource;
+import com.score.cbook.db.SecretSource;
+import com.score.cbook.db.UserSource;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.util.PhoneBookUtil;
 import com.squareup.picasso.Picasso;
@@ -19,8 +21,10 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
     private static final String TAG = UserProfileActivity.class.getName();
 
     private ImageView backImageView;
+    private ImageView deleteImageView;
     private ImageView userImageView;
 
+    private TextView title;
     private TextView phone;
     private TextView phoneV;
     private TextView account;
@@ -36,45 +40,6 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         initUser();
         initUi();
         initToolbar();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        Log.d(TAG, "Bind to senz service");
-        bindToService();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // unbind from service
-        if (isServiceBound) {
-            Log.d(TAG, "Unbind to senz service");
-            unbindService(senzServiceConnection);
-
-            isServiceBound = false;
-        }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the user's current game state
-        savedInstanceState.putParcelable("SECRET_USER", chequeUser);
-
-        // Always call the superclass so it can save the view hierarchy state
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        // Always call the superclass so it can restore the view hierarchy
-        super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            // Restore value of members from saved state
-            chequeUser = savedInstanceState.getParcelable("SECRET_USER");
-        }
     }
 
     private void initUser() {
@@ -96,14 +61,14 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         userImageView = (ImageView) findViewById(R.id.clickable_image);
 
         // user values
+        accountV.setText(PhoneBookUtil.getContactName(this, chequeUser.getPhone()));
         phoneV.setText(chequeUser.getPhone());
-        accountV.setText(chequeUser.getUsername());
 
         // contact image
         Picasso.with(this)
                 .load(PhoneBookUtil.getImageUri(this, chequeUser.getPhone()))
-                .placeholder(R.drawable.df_user)
-                .error(R.drawable.df_user)
+                .placeholder(R.drawable.default_user_icon)
+                .error(R.drawable.default_user_icon)
                 .into(userImageView);
     }
 
@@ -119,14 +84,41 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
         collapsingToolbar.setCollapsedTitleTextColor(getResources().getColor(R.color.colorPrimary));
         collapsingToolbar.setExpandedTitleColor(getResources().getColor(R.color.colorPrimary));
 
-        backImageView = (ImageView) findViewById(R.id.back_btn);
+        title = (TextView) header.findViewById(R.id.title);
+        title.setTypeface(typeface, Typeface.BOLD);
+        title.setText(PhoneBookUtil.getContactName(this, chequeUser.getPhone()));
+
+        backImageView = (ImageView) header.findViewById(R.id.back_btn);
         backImageView.setOnClickListener(this);
+
+        deleteImageView = (ImageView) header.findViewById(R.id.done_btn);
+        deleteImageView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         if (v == backImageView) {
             finish();
+        } else if (v == deleteImageView) {
+            delete();
+        }
+    }
+
+    private void delete() {
+        if (!ChequeSource.hasChequesToRedeem(this, chequeUser.getUsername())) {
+            displayConfirmationMessageDialog("Confirm", "Are you sure your want to remove the user", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // delete from db
+                    UserSource.deleteUser(UserProfileActivity.this, chequeUser.getUsername());
+                    ChequeSource.deleteChequesOfUser(UserProfileActivity.this, chequeUser.getUsername());
+                    SecretSource.deleteSecretsOfUser(UserProfileActivity.this, chequeUser.getUsername());
+
+                    finish();
+                }
+            });
+        } else {
+            displayInformationMessageDialog("Error", "You have igifts from this contact which not yet redeemed. Please redeem them before removing the contact");
         }
     }
 

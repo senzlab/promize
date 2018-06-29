@@ -161,7 +161,7 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
         try {
             ActivityUtil.isValidRegistrationFields(phone, confirmPhone, password, confirmPassword);
             String confirmationMessage = "<font color=#636363>Please confirm to register as </font> <font color=#F37920>" + "<b>" + phone + "</b>" + "</font> <font color=#636363> in iGifts </font> ";
-            displayConfirmationMessageDialog("CONFIRM", confirmationMessage, new View.OnClickListener() {
+            displayConfirmationMessageDialog("Confirm", confirmationMessage, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(RegistrationActivity.this)) {
@@ -228,15 +228,24 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
         ActivityUtil.cancelProgressDialog();
         if (senz == null) {
             ActivityUtil.cancelProgressDialog();
-            displayInformationMessageDialog("ERROR", "Registration fail");
+            displayInformationMessageDialog("Error", "Fail to register in igift");
         } else {
-            // OK
-            Toast.makeText(this, "Registration done", Toast.LENGTH_LONG).show();
+            Senz z = SenzParser.parse(senz);
+            if (z.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
+                // OK
+                Toast.makeText(this, "Registration done", Toast.LENGTH_LONG).show();
 
-            PreferenceUtil.put(this, PreferenceUtil.Z_ADDRESS, zaddress);
-            PreferenceUtil.put(this, PreferenceUtil.USERNAME, account.getUsername());
-            PreferenceUtil.put(this, PreferenceUtil.PASSWORD, account.getPassword());
-            navigateToQuestionInfo();
+                PreferenceUtil.put(this, PreferenceUtil.Z_ADDRESS, zaddress);
+                PreferenceUtil.put(this, PreferenceUtil.USERNAME, account.getUsername());
+                PreferenceUtil.put(this, PreferenceUtil.PASSWORD, account.getPassword());
+                navigateToQuestionInfo();
+            } else if (z.getAttributes().get("status").equalsIgnoreCase("403")) {
+                ActivityUtil.cancelProgressDialog();
+                displayInformationMessageDialog("Error", "Given phone no " + zaddress + " already registered in igift. Please contact sampath support center for verification");
+            } else {
+                ActivityUtil.cancelProgressDialog();
+                displayInformationMessageDialog("Error", "Something went wrong while registering.");
+            }
         }
     }
 }

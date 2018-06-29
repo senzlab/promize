@@ -72,6 +72,42 @@
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:background="@drawable/light_bottom_border"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/account"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="Name"
+                            android:textColor="@color/android_grey"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/accountv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:maxLines="1"
+                            android:text="Eranga bandara"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="20sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray_back"
+                        android:visibility="visible" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="65dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/light_bottom_border"
                         android:orientation="horizontal">
 
                         <TextView
@@ -98,44 +134,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/gray_back" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="65dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:background="@drawable/light_bottom_border"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
-
-                        <TextView
-                            android:id="@+id/account"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="10dp"
-                            android:maxLines="1"
-                            android:text="Promize Id"
-                            android:textColor="@color/android_grey"
-                            android:textSize="20sp" />
-
-                        <TextView
-                            android:id="@+id/accountv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
-                            android:maxLines="1"
-                            android:text="34234532dsdds92sdfsdfsdfsdsd32"
-                            android:textColor="@color/colorPrimary"
-                            android:textSize="20sp" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/gray_back"
-                        android:visibility="gone" />
 
                 </LinearLayout>
 
