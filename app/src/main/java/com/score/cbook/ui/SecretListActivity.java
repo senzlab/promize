@@ -175,7 +175,7 @@ public class SecretListActivity extends BaseActivity implements AdapterView.OnIt
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
         final Secret secret = secretList.get(position);
-        displayConfirmationMessageDialog("CONFIRM", "Are you sure your want to remove the message", new View.OnClickListener() {
+        displayConfirmationMessageDialog("Confirm", "Are you sure your want to remove the message", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // delete item

@@ -50,7 +50,7 @@ public class AccountVerifyInfoActivity extends BaseActivity implements ISenzPubl
                 navigateToConfirm();
             } else {
                 ActivityUtil.cancelProgressDialog();
-                displayInformationMessageDialog("ERROR", "Fail to verify account");
+                displayInformationMessageDialog("Error", "Fail to verify account");
             }
         }
     }
@@ -156,7 +156,7 @@ public class AccountVerifyInfoActivity extends BaseActivity implements ISenzPubl
         ActivityUtil.cancelProgressDialog();
         if (senz == null) {
             ActivityUtil.cancelProgressDialog();
-            displayInformationMessageDialog("ERROR", "Fail to verify account");
+            displayInformationMessageDialog("Error", "Fail to verify account");
         } else {
             // reset account state
             // save account

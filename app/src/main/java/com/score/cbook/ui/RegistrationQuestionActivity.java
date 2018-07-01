@@ -96,7 +96,7 @@ public class RegistrationQuestionActivity extends BaseActivity {
         if (answer1.isEmpty() || answer2.isEmpty() || answer3.isEmpty()) {
             Toast.makeText(this, "Please answer for all three questions", Toast.LENGTH_LONG).show();
         } else {
-            displayConfirmationMessageDialog("CONFIRM", "Are you sure you want to save your answers to the questions?", new View.OnClickListener() {
+            displayConfirmationMessageDialog("Confirm", "Are you sure you want to save your answers to the questions?", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // save answers

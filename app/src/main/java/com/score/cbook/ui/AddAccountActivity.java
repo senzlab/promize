@@ -54,13 +54,13 @@ public class AddAccountActivity extends BaseActivity {
                     navigateToAccountVerifyInfo();
                 } catch (InvalidInputFieldsException e) {
                     e.printStackTrace();
-                    displayInformationMessageDialog("ERROR", "Fail to verify account");
+                    displayInformationMessageDialog("Error", "Fail to verify account");
                 } catch (MisMatchFieldException e) {
                     e.printStackTrace();
-                    displayInformationMessageDialog("ERROR", "Account number mismatch");
+                    displayInformationMessageDialog("Error", "Account number mismatch");
                 } catch (InvalidAccountException e) {
                     e.printStackTrace();
-                    displayInformationMessageDialog("ERROR", "Fail to verify account");
+                    displayInformationMessageDialog("Error", "Fail to verify account");
                 }
             }
         });

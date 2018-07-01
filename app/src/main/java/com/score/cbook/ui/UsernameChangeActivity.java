@@ -77,10 +77,10 @@ public class UsernameChangeActivity extends BaseActivity {
                         navigateToSettings();
                     } catch (InvalidInputFieldsException e) {
                         e.printStackTrace();
-                        displayInformationMessageDialog("ERROR", "Invalid new username");
+                        displayInformationMessageDialog("Error", "Invalid new username");
                     }
                 } else {
-                    displayInformationMessageDialog("ERROR", "Invalid current username ");
+                    displayInformationMessageDialog("Error", "Invalid current username ");
                 }
             }
         });

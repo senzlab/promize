@@ -102,7 +102,7 @@ public class PasswordResetQuestionActivity extends BaseActivity {
         if (match >= 2) {
             navigateToPasswordReset();
         } else {
-            displayInformationMessageDialog("ERROR", "You have to give correct answers for two questions");
+            displayInformationMessageDialog("Error", "You have to give correct answers for two questions");
         }
     }
 

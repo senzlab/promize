@@ -76,7 +76,7 @@ public class PasswordResetActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (retry >= 3) {
-                    displayInformationMessageDialog("ERROR", "Maximum no of retry attempts exceeded");
+                    displayInformationMessageDialog("Error", "Maximum no of retry attempts exceeded");
                 } else {
                     onClickReset();
                 }
@@ -97,10 +97,10 @@ public class PasswordResetActivity extends BaseActivity {
             Toast.makeText(this, "Successfully reset password", Toast.LENGTH_LONG).show();
         } catch (InvalidPasswordException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Invalid password. Password should contains more than 7 characters with special character");
+            displayInformationMessageDialog("Error", "Invalid password. Password should contains more than 7 characters with special character");
         } catch (MisMatchFieldException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Mismatching password and confirm password");
+            displayInformationMessageDialog("Error", "Mismatching password and confirm password");
         }
     }
 

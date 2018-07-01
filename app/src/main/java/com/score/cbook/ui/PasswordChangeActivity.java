@@ -90,16 +90,16 @@ public class PasswordChangeActivity extends BaseActivity {
                         finish();
                     } catch (InvalidPasswordException e) {
                         e.printStackTrace();
-                        displayInformationMessageDialog("ERROR", "Invalid password. Password should contains more than 7 characters with special character");
+                        displayInformationMessageDialog("Error", "Invalid password. Password should contains more than 7 characters with special character");
                     } catch (MisMatchFieldException e) {
                         e.printStackTrace();
-                        displayInformationMessageDialog("ERROR", "Mismatching password and confirm password");
+                        displayInformationMessageDialog("Error", "Mismatching password and confirm password");
                     } catch (SamePasswordException e) {
                         e.printStackTrace();
-                        displayInformationMessageDialog("ERROR", "Your old password and new password are same, please choose a different new password");
+                        displayInformationMessageDialog("Error", "Your old password and new password are same, please choose a different new password");
                     }
                 } else {
-                    displayInformationMessageDialog("ERROR", "Invalid current password ");
+                    displayInformationMessageDialog("Error", "Invalid current password ");
                 }
             }
         });

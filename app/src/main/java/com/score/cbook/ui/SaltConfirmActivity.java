@@ -50,11 +50,11 @@ public class SaltConfirmActivity extends BaseActivity implements ISenzPublisherL
                 SaltConfirmActivity.this.finish();
             } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {
                 ActivityUtil.cancelProgressDialog();
-                displayInformationMessageDialog("ERROR", "Fail to verify account");
+                displayInformationMessageDialog("Error", "Fail to verify account");
             } else if (msg != null && msg.equalsIgnoreCase("VERIFICATION_FAIL")) {
                 ActivityUtil.cancelProgressDialog();
                 String informationMessage = "Verification fail. Please contact sampath support regarding this issue";
-                displayInformationMessageDialog("ERROR", informationMessage);
+                displayInformationMessageDialog("Error", informationMessage);
             }
         }
     }
@@ -79,7 +79,7 @@ public class SaltConfirmActivity extends BaseActivity implements ISenzPublisherL
             @Override
             public void onClick(View v) {
                 if (retry >= 3) {
-                    displayInformationMessageDialog("ERROR", "Maximum no of retry attempts exceeded");
+                    displayInformationMessageDialog("Error", "Maximum no of retry attempts exceeded");
                 } else {
                     confirmSalt();
                 }
@@ -138,7 +138,7 @@ public class SaltConfirmActivity extends BaseActivity implements ISenzPublisherL
         ActivityUtil.cancelProgressDialog();
         if (senz == null) {
             ActivityUtil.cancelProgressDialog();
-            displayInformationMessageDialog("ERROR", "Fail to verify account");
+            displayInformationMessageDialog("Error", "Fail to verify account");
         } else {
             PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_STATE, "VERIFIED");
             Toast.makeText(this, "Your account has been verified", Toast.LENGTH_LONG).show();

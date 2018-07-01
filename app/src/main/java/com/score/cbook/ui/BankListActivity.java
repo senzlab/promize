@@ -173,7 +173,7 @@ public class BankListActivity extends BaseActivity {
             navigateRedeem(bank);
         } else {
             String message = "When you redeem igift to other bank accounts a charge of Rs 50.00 will be debited from your igift as the commission";
-            displayConfirmationMessageDialog("CONFIRM", message, new View.OnClickListener() {
+            displayConfirmationMessageDialog("Confirm", message, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     navigateRedeem(bank);

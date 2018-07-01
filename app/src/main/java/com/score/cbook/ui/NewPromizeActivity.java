@@ -390,23 +390,23 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             String m = message.getText().toString().trim();
             ActivityUtil.isValidGift(a, m);
             if (PreferenceUtil.get(this, PreferenceUtil.TODAY_AMOUNT, 0) + Integer.parseInt(a) > 100000) {
-                displayInformationMessageDialog("ERROR", "Daily iGift transaction limit should be 100,000 rupees");
+                displayInformationMessageDialog("Error", "Daily iGift transaction limit should be 100,000 rupees");
             } else {
                 if (NetworkUtil.isAvailableNetwork(this)) askPassword();
                 else Toast.makeText(this, "No network connection", Toast.LENGTH_LONG).show();
             }
         } catch (InvalidInputFieldsException e) {
-            displayInformationMessageDialog("ERROR", "Empty iGift amount");
+            displayInformationMessageDialog("Error", "Empty iGift amount");
             e.printStackTrace();
         } catch (InvalidMsgException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Please write iGift message to send");
+            displayInformationMessageDialog("Error", "Please write iGift message to send");
         } catch (LessAmountException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "iGift transaction amount should exceed 100 rupees");
+            displayInformationMessageDialog("Error", "iGift transaction amount should exceed 100 rupees");
         } catch (ExceedAmountException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "iGift transaction amount should not exceed 10,000 rupees");
+            displayInformationMessageDialog("Error", "iGift transaction amount should not exceed 10,000 rupees");
         }
     }
 
@@ -597,7 +597,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
         ActivityUtil.hideSoftKeyboard(this);
         if (senz == null) {
             ActivityUtil.cancelProgressDialog();
-            displayInformationMessageDialog("ERROR", "Failed to send iGift");
+            displayInformationMessageDialog("Error", "Failed to send iGift");
         } else {
             Toast.makeText(this, "Successfully sent iGift", Toast.LENGTH_LONG).show();
 

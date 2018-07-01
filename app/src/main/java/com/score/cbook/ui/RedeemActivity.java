@@ -151,12 +151,12 @@ public class RedeemActivity extends BaseActivity implements ISenzPublisherListen
             }
         } catch (InvalidAccountException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Fail to verify account");
+            displayInformationMessageDialog("Error", "Fail to verify account");
         } catch (InvalidInputFieldsException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Fail to verify account");
+            displayInformationMessageDialog("Error", "Fail to verify account");
         } catch (MisMatchFieldException e) {
-            displayInformationMessageDialog("ERROR", "Account number mismatch");
+            displayInformationMessageDialog("Error", "Account number mismatch");
             e.printStackTrace();
         }
     }
@@ -229,7 +229,7 @@ public class RedeemActivity extends BaseActivity implements ISenzPublisherListen
         ActivityUtil.hideSoftKeyboard(this);
         if (senz == null) {
             ActivityUtil.cancelProgressDialog();
-            displayInformationMessageDialog("ERROR", "Failed to redeem iGift");
+            displayInformationMessageDialog("Error", "Failed to redeem iGift");
         } else {
             // update cheque status and account
             ChequeSource.updateChequeState(this, cheque.getUid(), ChequeState.DEPOSIT);

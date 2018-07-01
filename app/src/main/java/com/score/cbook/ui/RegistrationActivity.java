@@ -177,16 +177,16 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
             });
         } catch (InvalidPasswordException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Invalid password. Password should contains more than 7 characters with special character");
+            displayInformationMessageDialog("Error", "Invalid password. Password should contains more than 7 characters with special character");
         } catch (MisMatchFieldException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Mismatching password and confirm password");
+            displayInformationMessageDialog("Error", "Mismatching password and confirm password");
         } catch (InvalidPhoneNumberException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Invalid phone no. Phone no should contains 10 digits and start with 0");
+            displayInformationMessageDialog("Error", "Invalid phone no. Phone no should contains 10 digits and start with 0");
         } catch (MisMatchPhoneNumberException e) {
             e.printStackTrace();
-            displayInformationMessageDialog("ERROR", "Mismatching Phone no and confirm Phone no");
+            displayInformationMessageDialog("Error", "Mismatching Phone no and confirm Phone no");
         }
     }
 
