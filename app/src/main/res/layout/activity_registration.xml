@@ -143,7 +143,6 @@
                 android:layout_marginTop="35dp"
                 android:gravity="center"
                 android:text="By registering in igift you agree to our"
-                android:textColor="#DADADC"
                 android:textSize="15dp" />
 
             <TextView
@@ -153,11 +152,10 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:padding="3dp"
                 android:layout_marginTop="4dp"
                 android:gravity="center"
+                android:padding="3dp"
                 android:text="Terms and Conditions"
-                android:textColor="#DADADC"
                 android:textSize="15dp" />
 
         </LinearLayout>
