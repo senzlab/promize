@@ -74,7 +74,10 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         if (action != null && !action.isEmpty()) {
             actionType = CustomerActionType.valueOf(action);
         }
-        customerList = UserSource.getAllUsers(this);
+
+        if (actionType == CustomerActionType.CUSTOMER_LIST)
+            customerList = UserSource.getAllUsers(this);
+        else customerList = UserSource.getAllActiveUsers(this);
     }
 
     private void initActionBar() {
@@ -122,6 +125,8 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                 startActivity(intent);
             }
         });
+        if (actionType == CustomerActionType.CUSTOMER_LIST) newCustomer.setVisibility(View.VISIBLE);
+        else newCustomer.setVisibility(View.GONE);
     }
 
     private void initSearchView() {
@@ -153,6 +158,10 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     private void initEmptyView() {
         TextView emptyText = (TextView) findViewById(R.id.empty_view_text);
         emptyText.setTypeface(typeface, Typeface.NORMAL);
+        if (actionType == CustomerActionType.CUSTOMER_LIST)
+            emptyText.setText("Please click on plus(+) sign to add a new iGift contact");
+        else
+            emptyText.setText("Please goto 'Contacts' section to setup contacts");
     }
 
     private void initListView() {
@@ -180,7 +189,10 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
 
     private void refreshList() {
         customerList.clear();
-        customerList.addAll(UserSource.getAllUsers(this));
+        if (actionType == CustomerActionType.CUSTOMER_LIST)
+            customerList.addAll(UserSource.getAllUsers(this));
+        else
+            customerList.addAll(UserSource.getAllActiveUsers(this));
         customerListAdapter.notifyDataSetChanged();
 
         if (customerList.size() == 0) {
@@ -212,10 +224,10 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         } else {
             if (chequeUser.isSMSRequester()) {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
-                displayInformationMessageDialog("Information", contactName + " not accepted your igift contact request yet");
+                displayInformationMessageDialog("Information", "You have sent igift contact request to " + contactName + ". Please ask " + contactName + " to accept your request first");
             } else {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
-                displayConfirmationMessageDialog("Confirm", "Would you like to accept the request from " + contactName + "?", new View.OnClickListener() {
+                displayConfirmationMessageDialog("Confirm", "Would you like to accept the igift contact request from " + contactName + "?", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // start getting public key and sending confirmation sms
@@ -234,10 +246,10 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-        final ChequeUser chequeUser = customerList.get(position);
-
-        if (!chequeUser.isActive()) {
-            displayConfirmationMessageDialog("Confirm", "Are you sure your want to remove the user", new View.OnClickListener() {
+        if (actionType == CustomerActionType.CUSTOMER_LIST) {
+            final ChequeUser chequeUser = customerList.get(position);
+            String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
+            displayConfirmationMessageDialog("Confirm", "Are you sure your want to remove " + contactName + " from igift contacts?", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // delete item

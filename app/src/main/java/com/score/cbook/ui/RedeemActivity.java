@@ -51,25 +51,6 @@ public class RedeemActivity extends BaseActivity implements ISenzPublisherListen
     private Cheque cheque;
     private Senz redeemSenz;
 
-    private void handleSenz(Senz senz) {
-        if (senz.getSenzType() == SenzTypeEnum.DATA) {
-            ActivityUtil.hideSoftKeyboard(this);
-            if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
-                // share success
-                ActivityUtil.cancelProgressDialog();
-                Toast.makeText(RedeemActivity.this, "Successfully redeemed the iGift", Toast.LENGTH_LONG).show();
-                RedeemActivity.this.finish();
-
-                // update cheque status and account
-                ChequeSource.updateChequeState(this, cheque.getUid(), ChequeState.DEPOSIT);
-                ChequeSource.updateChequeAccount(this, cheque.getUid(), cheque.getAccount());
-            } else if (senz.getAttributes().containsKey("status") && senz.getAttributes().get("status").equalsIgnoreCase("ERROR")) {
-                ActivityUtil.cancelProgressDialog();
-                displayInformationMessageDialog("ERROR", "Failed to redeem iGift");
-            }
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

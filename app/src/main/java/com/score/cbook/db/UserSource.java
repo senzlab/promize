@@ -271,6 +271,48 @@ public class UserSource {
         return chequeUserList;
     }
 
+    public static LinkedList<ChequeUser> getAllActiveUsers(Context context) {
+        // get all non admin users
+        SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();
+        Cursor cursor = db.query(SenzorsDbContract.User.TABLE_NAME, // table
+                null, // columns
+                SenzorsDbContract.User.COLUMN_NAME_IS_ADMIN + " = ? AND " +
+                        SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE + " = ?", // constraint
+                new String[]{"0", "1"}, // prams,
+                null, // order by
+                null, // group by
+                null); // join
+
+        LinkedList<ChequeUser> chequeUserList = new LinkedList<>();
+
+        while (cursor.moveToNext()) {
+            String username = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_USERNAME));
+            String phone = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PHONE));
+            String pubKey = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY));
+            String pubKeyHash = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_PUBKEY_HASH));
+            int isActive = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ACTIVE));
+            int isAdmin = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_ADMIN));
+            String image = cursor.getString(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IMAGE));
+            int isSmsRequester = cursor.getInt(cursor.getColumnIndex(SenzorsDbContract.User.COLUMN_NAME_IS_SMS_REQUESTER));
+
+            ChequeUser chequeUser = new ChequeUser(username);
+            chequeUser.setPhone(phone);
+            chequeUser.setPubKey(pubKey);
+            chequeUser.setPubKeyHash(pubKeyHash);
+            chequeUser.setImage(image);
+            chequeUser.setActive(isActive == 1);
+            chequeUser.setAdmin(isAdmin == 1);
+            chequeUser.setSMSRequester(isSmsRequester == 1);
+
+            if (chequeUser.isActive()) chequeUserList.addLast(chequeUser);
+            else chequeUserList.addFirst(chequeUser);
+        }
+
+        cursor.close();
+
+        return chequeUserList;
+    }
+
     public static boolean hasUsers(Context context) {
         // get all non admin users
         SQLiteDatabase db = SenzorsDbHelper.getInstance(context).getReadableDatabase();

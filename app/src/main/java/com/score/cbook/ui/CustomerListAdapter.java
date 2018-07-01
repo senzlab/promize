@@ -86,7 +86,7 @@ class CustomerListAdapter extends ArrayAdapter<ChequeUser> {
             viewHolder.statusView.setVisibility(View.GONE);
         } else {
             viewHolder.statusView.setVisibility(View.VISIBLE);
-            viewHolder.statusView.setText(chequeUser.isSMSRequester() ? "Sent request" : "New request");
+            viewHolder.statusView.setText(chequeUser.isSMSRequester() ? "Sent Request" : "Received request");
         }
 
         // selected
