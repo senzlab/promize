@@ -38,7 +38,7 @@ public class ChequeListTabActivity extends BaseActivity {
 
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
-        titleText.setText("iGift Store");
+        titleText.setText("igift Store");
         titleText.setTypeface(typeface, Typeface.BOLD);
 
         // back button

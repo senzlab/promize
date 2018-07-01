@@ -125,7 +125,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
     private void onContactItemClick(final Contact contact) {
         // check existing secret user with given phone no
         if (!UserSource.isExistingUserWithPhoneNo(this, contact.getPhoneNo())) {
-            String confirmationMessage = "<font size=10>Are you sure you want to add </font> <font color=#F37920>" + "<b>" + contact.getName() + "</b>" + "</font> (" + contact.getPhoneNo() + ") as iGift contact?";
+            String confirmationMessage = "<font size=10>Are you sure you want to add </font> <font color=#F37920>" + "<b>" + contact.getName() + "</b>" + "</font> (" + contact.getPhoneNo() + ") as igift contact?";
             displayConfirmationMessageDialog("Confirm", confirmationMessage, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -138,7 +138,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
                 }
             });
         } else {
-            Toast.makeText(ContactListActivity.this, "This user already added in your iGift contact list", Toast.LENGTH_LONG).show();
+            Toast.makeText(ContactListActivity.this, "This user already added in your igift contact list", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -160,7 +160,7 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
     }
 
     private void confirmSmsRequest() {
-        String message = "<b><font color=#F37920>" + selectedContact.getName() + "</b></font>" + "<font size=10> is not using sampath iGift app, would you like to send invitation via SMS?</font>";
+        String message = "<b><font color=#F37920>" + selectedContact.getName() + "</b></font>" + "<font size=10> is not using sampath igift app, would you like to send invitation via SMS?</font>";
         displayConfirmationMessageDialog("Invite", message, new View.OnClickListener() {
             @Override
             public void onClick(View v) {

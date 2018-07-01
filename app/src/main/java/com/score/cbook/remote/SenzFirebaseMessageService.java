@@ -95,7 +95,7 @@ public class SenzFirebaseMessageService extends FirebaseMessagingService {
 
         // notify
         String title = PhoneBookUtil.getContactName(this, phoneNo);
-        Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, title, "New iGift received", phoneNo);
+        Notifcationz notifcationz = new Notifcationz(R.drawable.ic_notification, title, "New igift received", phoneNo);
         NotificationzHandler.notifyCheque(this, notifcationz);
     }
 

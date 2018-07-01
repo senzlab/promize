@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/registering_user_id"
                 android:layout_marginTop="15dp"
-                android:text="By registering for iGift, you represent that you are above 18 years of age and is capable of entering into a legally binding contract. iGift vouchers cannot be redeemed by a minor."
+                android:text="By registering for igift, you represent that you are above 18 years of age and is capable of entering into a legally binding contract. igift vouchers cannot be redeemed by a minor."
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:visibility="visible" />

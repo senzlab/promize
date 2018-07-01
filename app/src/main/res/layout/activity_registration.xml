@@ -142,7 +142,7 @@
                 android:layout_marginRight="50dp"
                 android:layout_marginTop="35dp"
                 android:gravity="center"
-                android:text="By registering in iGift you agree to our"
+                android:text="By registering in igift you agree to our"
                 android:textColor="#DADADC"
                 android:textSize="15dp" />
 

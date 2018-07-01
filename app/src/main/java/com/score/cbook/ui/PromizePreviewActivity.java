@@ -100,7 +100,7 @@ public class PromizePreviewActivity extends BaseActivity implements ISenzPublish
             String signature = CryptoUtil.getDigitalSignature(senzPayload, privateKey);
             String message = SenzParser.senzMsg(senzPayload, signature);
 
-            ActivityUtil.showProgressDialog(this, "Fetching iGift");
+            ActivityUtil.showProgressDialog(this, "Fetching igift");
             SenzPublisher task = new SenzPublisher(this);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
         } catch (Exception e) {
@@ -121,7 +121,7 @@ public class PromizePreviewActivity extends BaseActivity implements ISenzPublish
     public void onFinish(String senz) {
         ActivityUtil.cancelProgressDialog();
         if (senz == null) {
-            Toast.makeText(this, "Failed to fetch iGift", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Failed to fetch igift", Toast.LENGTH_LONG).show();
         } else {
             // parse senz and get blob
             Senz bSenz = SenzParser.parse(senz);
@@ -133,7 +133,7 @@ public class PromizePreviewActivity extends BaseActivity implements ISenzPublish
                 ChequeSource.markChequeViewed(this, cheque.getUid());
                 loadBitmap(imageView, cheque.getUid());
             } else {
-                Toast.makeText(this, "Failed to fetch iGift", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Failed to fetch igift", Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -92,7 +92,7 @@ public class RedeemActivity extends BaseActivity implements ISenzPublisherListen
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
-        titleText.setText("Redeem iGift");
+        titleText.setText("Redeem igift");
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);
@@ -229,13 +229,13 @@ public class RedeemActivity extends BaseActivity implements ISenzPublisherListen
         ActivityUtil.hideSoftKeyboard(this);
         if (senz == null) {
             ActivityUtil.cancelProgressDialog();
-            displayInformationMessageDialog("Error", "Failed to redeem iGift");
+            displayInformationMessageDialog("Error", "Failed to redeem igift");
         } else {
             // update cheque status and account
             ChequeSource.updateChequeState(this, cheque.getUid(), ChequeState.DEPOSIT);
             ChequeSource.updateChequeAccount(this, cheque.getUid(), cheque.getAccount());
 
-            Toast.makeText(RedeemActivity.this, "Successfully redeemed the iGift", Toast.LENGTH_LONG).show();
+            Toast.makeText(RedeemActivity.this, "Successfully redeemed the igift", Toast.LENGTH_LONG).show();
             RedeemActivity.this.finish();
         }
     }

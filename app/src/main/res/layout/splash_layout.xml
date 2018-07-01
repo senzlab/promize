@@ -28,7 +28,7 @@
             android:layout_below="@+id/logo"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="iGift"
+            android:text="igift"
             android:textColor="@color/white"
             android:textSize="25sp" />
     </LinearLayout>
