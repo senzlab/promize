@@ -56,10 +56,14 @@ public class DashBoardActivity extends BaseActivity {
                     // salt confirm
                     Intent intent = new Intent(DashBoardActivity.this, SaltConfirmInfoActivity.class);
                     startActivity(intent);
-                } else {
+                } else if (UserSource.hasUsers(DashBoardActivity.this)) {
                     // navigate to new cheque
                     Intent intent = new Intent(DashBoardActivity.this, CustomerListActivity.class);
                     intent.putExtra("ACTION", CustomerActionType.NEW_CHEQUE.toString());
+                    startActivity(intent);
+                } else {
+                    // navigate to add contact info
+                    Intent intent = new Intent(DashBoardActivity.this, AddContactInfoActivity.class);
                     startActivity(intent);
                 }
             }

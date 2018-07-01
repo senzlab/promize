@@ -196,6 +196,7 @@
             android:name=".ui.PasswordResetActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" />
+        <activity android:name=".ui.AddContactInfoActivity" />
 
         <!-- Servicves -->
         <service

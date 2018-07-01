@@ -16,7 +16,7 @@ import com.score.cbook.R;
  *
  * @author erangaeb@gmail.com (eranga herath)
  */
-public class AddAccountInfoActivity extends BaseActivity {
+public class AddContactInfoActivity extends BaseActivity {
 
     // UI fields
     private TextView hi;
@@ -25,7 +25,7 @@ public class AddAccountInfoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_acc_info_activity);
+        setContentView(R.layout.add_contact_info_activity);
 
         initUi();
         initToolbar();
@@ -43,13 +43,13 @@ public class AddAccountInfoActivity extends BaseActivity {
         hi.setTypeface(typeface, Typeface.NORMAL);
         message.setTypeface(typeface, Typeface.NORMAL);
 
-        Button yes = (Button) findViewById(R.id.yes);
+        Button yes = (Button) findViewById(R.id.phonebook);
         yes.setTypeface(typeface, Typeface.BOLD);
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // goto acc select
-                navigateToAddAccount();
+                navigateToPhoneBook();
             }
         });
 
@@ -58,6 +58,7 @@ public class AddAccountInfoActivity extends BaseActivity {
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // exit
                 finish();
             }
         });
@@ -72,7 +73,7 @@ public class AddAccountInfoActivity extends BaseActivity {
         // title
         TextView titleText = (TextView) findViewById(R.id.title);
         titleText.setTypeface(typeface, Typeface.BOLD);
-        titleText.setText("Add account");
+        titleText.setText("Add contact");
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);
@@ -92,18 +93,12 @@ public class AddAccountInfoActivity extends BaseActivity {
         setSupportActionBar(toolbar);
     }
 
-    private void navigateToAddAccount() {
-        Intent intent = new Intent(AddAccountInfoActivity.this, AddAccountActivity.class);
+    private void navigateToPhoneBook() {
+        Intent intent = new Intent(AddContactInfoActivity.this, ContactListActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         overridePendingTransition(R.anim.right_in, R.anim.stay_in);
         finish();
-    }
-
-    private void navigateToHome() {
-        Intent intent = new Intent(this, DashBoardActivity.class);
-        startActivity(intent);
-        this.finish();
     }
 
 }

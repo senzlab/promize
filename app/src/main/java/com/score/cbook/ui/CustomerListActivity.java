@@ -74,10 +74,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
         if (action != null && !action.isEmpty()) {
             actionType = CustomerActionType.valueOf(action);
         }
-
-        if (actionType == CustomerActionType.CUSTOMER_LIST)
-            customerList = UserSource.getAllUsers(this);
-        else customerList = UserSource.getAllActiveUsers(this);
+        customerList = UserSource.getAllUsers(this);
     }
 
     private void initActionBar() {
@@ -125,7 +122,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                 startActivity(intent);
             }
         });
-        if (actionType == CustomerActionType.CUSTOMER_LIST) newCustomer.setVisibility(View.VISIBLE);
+        if (actionType == CustomerActionType.CUSTOMER_LIST || customerList.size() == 0) newCustomer.setVisibility(View.VISIBLE);
         else newCustomer.setVisibility(View.GONE);
     }
 
@@ -158,10 +155,6 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     private void initEmptyView() {
         TextView emptyText = (TextView) findViewById(R.id.empty_view_text);
         emptyText.setTypeface(typeface, Typeface.NORMAL);
-        if (actionType == CustomerActionType.CUSTOMER_LIST)
-            emptyText.setText("Please click on plus(+) sign to add a new iGift contact");
-        else
-            emptyText.setText("Please goto 'Contacts' section to setup contacts");
     }
 
     private void initListView() {
@@ -189,10 +182,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
 
     private void refreshList() {
         customerList.clear();
-        if (actionType == CustomerActionType.CUSTOMER_LIST)
-            customerList.addAll(UserSource.getAllUsers(this));
-        else
-            customerList.addAll(UserSource.getAllActiveUsers(this));
+        customerList.addAll(UserSource.getAllUsers(this));
         customerListAdapter.notifyDataSetChanged();
 
         if (customerList.size() == 0) {

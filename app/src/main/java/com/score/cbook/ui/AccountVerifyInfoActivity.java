@@ -105,6 +105,7 @@ public class AccountVerifyInfoActivity extends BaseActivity implements ISenzPubl
 
         // back button
         ImageView backBtn = (ImageView) findViewById(R.id.back_btn);
+        backBtn.setVisibility(View.INVISIBLE);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
