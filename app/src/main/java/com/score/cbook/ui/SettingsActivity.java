@@ -45,27 +45,6 @@ public class SettingsActivity extends BaseActivity {
         initActionBar();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        Log.d(TAG, "Bind to senz service");
-        bindToService();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // unbind from service
-        if (isServiceBound) {
-            Log.d(TAG, "Unbind to senz service");
-            unbindService(senzServiceConnection);
-
-            isServiceBound = false;
-        }
-    }
-
     private void initUi() {
         // text views
         account = (TextView) findViewById(R.id.account);

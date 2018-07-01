@@ -33,25 +33,6 @@ public class UsernameChangeActivity extends BaseActivity {
         initActionBar();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        bindToService();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // unbind from service
-        if (isServiceBound) {
-            unbindService(senzServiceConnection);
-
-            isServiceBound = false;
-        }
-    }
-
     private void initUi() {
         // text views
         current_username = (EditText) findViewById(R.id.current_username);

@@ -58,20 +58,11 @@ public class SecretListActivity extends BaseActivity implements AdapterView.OnIt
     @Override
     protected void onStart() {
         super.onStart();
-
-        bindToService();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
-        // unbind from service
-        if (isServiceBound) {
-            unbindService(senzServiceConnection);
-
-            isServiceBound = false;
-        }
     }
 
     @Override

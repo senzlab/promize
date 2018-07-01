@@ -62,27 +62,6 @@ public class RedeemActivity extends BaseActivity implements ISenzPublisherListen
         initActionBar();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        Log.d(TAG, "Bind to senz service");
-        bindToService();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // unbind from service
-        if (isServiceBound) {
-            Log.d(TAG, "Unbind to senz service");
-            unbindService(senzServiceConnection);
-
-            isServiceBound = false;
-        }
-    }
-
     private void initActionBar() {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setCustomView(getLayoutInflater().inflate(R.layout.add_user_header, null));

@@ -96,13 +96,11 @@ public class ChatActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        bindToService();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unbindFromService();
     }
 
     @Override
@@ -301,8 +299,6 @@ public class ChatActivity extends BaseActivity {
             String signature = "_SIGNATURE";
             SenzTypeEnum senzType = SenzTypeEnum.DATA;
             Senz senz = new Senz(id, signature, senzType, null, chequeUser.getUsername(), senzAttributes);
-
-            sendSenz(senz);
         } catch (Exception e) {
             e.printStackTrace();
         }

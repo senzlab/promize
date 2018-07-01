@@ -3,7 +3,6 @@ package com.score.cbook.ui;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,27 +36,6 @@ public class PasswordChangeActivity extends BaseActivity {
         initUi();
         initToolbar();
         initActionBar();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        Log.d(TAG, "Bind to senz service");
-        bindToService();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // unbind from service
-        if (isServiceBound) {
-            Log.d(TAG, "Unbind to senz service");
-            unbindService(senzServiceConnection);
-
-            isServiceBound = false;
-        }
     }
 
     private void initUi() {

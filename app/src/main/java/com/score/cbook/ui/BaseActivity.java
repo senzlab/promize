@@ -30,47 +30,12 @@ public class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = BaseActivity.class.getName();
 
-    // service interface
-    protected ISenzService senzService = null;
-    protected boolean isServiceBound = false;
-
     protected Typeface typeface;
-
-    // service connection
-    protected ServiceConnection senzServiceConnection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            Log.d(TAG, "Connected with senz service");
-            senzService = ISenzService.Stub.asInterface(service);
-            isServiceBound = true;
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-            Log.d(TAG, "Disconnected from senz service");
-            senzService = null;
-            isServiceBound = false;
-        }
-    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         typeface = Typeface.createFromAsset(getAssets(), "fonts/GeosansLight.ttf");
-    }
-
-    protected void bindToService() {
-        Intent intent = new Intent("com.score.cbook.remote.SenzService");
-        intent.setPackage(this.getPackageName());
-        bindService(intent, senzServiceConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    protected void unbindFromService() {
-        // unbind from service
-        if (isServiceBound) {
-            Log.d(TAG, "Unbind to senz service");
-            unbindService(senzServiceConnection);
-
-            isServiceBound = false;
-        }
     }
 
     public void displayInformationMessageDialog(String title, String message) {
@@ -148,19 +113,4 @@ public class BaseActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    public void sendSenz(Senz senz) {
-        if (NetworkUtil.isAvailableNetwork(this)) {
-            try {
-                if (isServiceBound) {
-                    senzService.sendSenz(senz);
-                } else {
-                    Toast.makeText(this, "Failed to connected to service.", Toast.LENGTH_LONG).show();
-                }
-            } catch (RemoteException e) {
-                e.printStackTrace();
-            }
-        } else {
-            Toast.makeText(this, this.getResources().getString(R.string.no_internet), Toast.LENGTH_LONG).show();
-        }
-    }
 }

@@ -35,26 +35,6 @@ public class AccountVerifyInfoActivity extends BaseActivity implements ISenzPubl
 
     private String account;
 
-    private static final String TAG = AccountVerifyInfoActivity.class.getName();
-
-    private void handleSenz(Senz senz) {
-        if (senz.getAttributes().containsKey("status")) {
-            String msg = senz.getAttributes().get("status");
-            if (msg != null && msg.equalsIgnoreCase("SUCCESS")) {
-                // reset account state
-                // save account
-                // navigate to salt confirm
-                PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_STATE, "PENDING");
-                PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_BANK, SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
-                PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_NO, account);
-                navigateToConfirm();
-            } else {
-                ActivityUtil.cancelProgressDialog();
-                displayInformationMessageDialog("Error", "Fail to verify account");
-            }
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

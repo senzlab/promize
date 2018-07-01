@@ -9,34 +9,14 @@ import android.widget.TextView;
 import com.score.cbook.R;
 import com.score.cbook.util.PreferenceUtil;
 
-
 public class SplashActivity extends BaseActivity {
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.splash_layout);
-        //initService();
         initUi();
         initNavigation();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //bindToService();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        // unbind from service
-        if (isServiceBound) {
-            unbindService(senzServiceConnection);
-
-            isServiceBound = false;
-        }
     }
 
     private void initUi() {
