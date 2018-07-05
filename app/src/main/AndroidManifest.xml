@@ -69,66 +69,55 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.score.cbook.ui.ChatActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name="com.score.cbook.ui.RegistrationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.score.cbook.ui.LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-
-        <activity
             android:name="com.score.cbook.ui.PromizePreviewActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="com.score.cbook.ui.UserProfileActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="com.score.cbook.ui.ContactListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.score.cbook.ui.PrivacyTermsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
             android:name=".ui.DashBoardActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.CustomerListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ui.SecretListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
             android:name=".ui.NewPromizeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme"
             android:windowSoftInputMode="stateHidden" />
-        <activity android:name=".ui.ChequeListTabActivity" />
-
+        <activity
+            android:name=".ui.ChequeListTabActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.AddAccountInfoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.AccountVerifyInfoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.RedeemActivity"
             android:screenOrientation="portrait"
@@ -137,47 +126,53 @@
         <activity
             android:name=".ui.AddAccountActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.SaltConfirmInfoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.SaltConfirmActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.SettingsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.BankListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.PasswordChangeActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity
-            android:name=".ui.UsernameChangeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.StickerListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.BackgroundListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.TermsOfUseActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.RegistrationQuestionInfoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.RegistrationQuestionActivity"
             android:screenOrientation="portrait"
@@ -186,7 +181,8 @@
         <activity
             android:name=".ui.PasswordResetInfoActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.PasswordResetQuestionActivity"
             android:screenOrientation="portrait"
@@ -195,8 +191,13 @@
         <activity
             android:name=".ui.PasswordResetActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" />
-        <activity android:name=".ui.AddContactInfoActivity" />
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ui.AddContactInfoActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme"
+            android:windowSoftInputMode="stateHidden" />
 
         <!-- Servicves -->
         <service

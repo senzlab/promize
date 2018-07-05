@@ -17,11 +17,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+
 public class FetchTask extends AsyncTask<SenzMsg, String, Integer> {
 
     private static final String TAG = FetchTask.class.getName();
 
-    public static final String BLOB_API = "http://uatweb.sampath.lk/blobs";
+    public static final String BLOB_API = "https://uatweb.sampath.lk";
 
     private IFetchTaskListener listener;
     private String api;
@@ -47,7 +51,12 @@ public class FetchTask extends AsyncTask<SenzMsg, String, Integer> {
         try {
             // get blob
             URL url = new URL(api);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
+            sslcontext.init(null, null, null);
+            SSLSocketFactory NoSSLv3Factory = new NoSSLv3Factory(sslcontext.getSocketFactory());
+
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
+            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             conn.setRequestProperty("Accept", "application/json");
@@ -84,8 +93,8 @@ public class FetchTask extends AsyncTask<SenzMsg, String, Integer> {
     }
 
     private void saveBlob(String response) throws JSONException {
-        Senz senz = JsonUtil.toSenz(response);
-        String imgName = senz.getAttributes().get("uid") + ".jpg";
-        ImageUtil.saveImg(imgName, senz.getAttributes().get("blob"));
+        //Senz senz = JsonUtil.toSenz(response);
+        //String imgName = senz.getAttributes().get("uid") + ".jpg";
+        //ImageUtil.saveImg(imgName, senz.getAttributes().get("blob"));
     }
 }

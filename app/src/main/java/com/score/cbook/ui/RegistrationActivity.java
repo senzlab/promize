@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,13 +14,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
+import com.score.cbook.async.FetchTask;
 import com.score.cbook.async.SenzPublisher;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.InvalidPhoneNumberException;
 import com.score.cbook.exceptions.MisMatchFieldException;
 import com.score.cbook.exceptions.MisMatchPhoneNumberException;
+import com.score.cbook.interfaces.IFetchTaskListener;
 import com.score.cbook.interfaces.ISenzPublisherListener;
 import com.score.cbook.pojo.Account;
+import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
@@ -33,7 +35,7 @@ import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
 
-public class RegistrationActivity extends BaseActivity implements ISenzPublisherListener {
+public class RegistrationActivity extends BaseActivity implements ISenzPublisherListener, IFetchTaskListener {
 
     private static final String TAG = RegistrationActivity.class.getName();
 
@@ -117,7 +119,10 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
         registerBtn.setTypeface(typeface, Typeface.BOLD);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                onClickRegister();
+                //onClickRegister();
+                FetchTask task = new FetchTask(RegistrationActivity.this, FetchTask.BLOB_API);
+                SenzMsg msg = new SenzMsg("2323", "DATA");
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, msg);
             }
         });
 
@@ -226,5 +231,10 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
                 displayInformationMessageDialog("Error", "Something went wrong while registering.");
             }
         }
+    }
+
+    @Override
+    public void onFinishTask(Integer status) {
+
     }
 }
