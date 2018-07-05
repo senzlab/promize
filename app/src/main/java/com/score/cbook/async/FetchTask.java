@@ -5,9 +5,7 @@ import android.util.Log;
 
 import com.score.cbook.interfaces.IFetchTaskListener;
 import com.score.cbook.pojo.SenzMsg;
-import com.score.cbook.util.ImageUtil;
 import com.score.cbook.util.JsonUtil;
-import com.score.senzc.pojos.Senz;
 
 import org.json.JSONException;
 
@@ -24,8 +22,7 @@ import javax.net.ssl.SSLSocketFactory;
 public class FetchTask extends AsyncTask<SenzMsg, String, Integer> {
 
     private static final String TAG = FetchTask.class.getName();
-
-    public static final String BLOB_API = "https://uatweb.sampath.lk";
+    public static final String BLOB_API = "https://uatweb.sampath.lk/ap1/v1/contractz";
 
     private IFetchTaskListener listener;
     private String api;

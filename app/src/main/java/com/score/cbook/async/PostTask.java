@@ -1,72 +1,98 @@
 package com.score.cbook.async;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.score.cbook.interfaces.IPostTaskListener;
 import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.JsonUtil;
+import com.score.senzc.pojos.Senz;
 
+import org.json.JSONException;
+
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.net.HttpURLConnection;
+import java.io.InputStreamReader;
 import java.net.URL;
 
-public class PostTask extends AsyncTask<String, String, Integer> {
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+
+public class PostTask extends AsyncTask<String, String, String> {
 
     private static final String TAG = PostTask.class.getName();
 
-    public static final String UZER_API = "http://10.2.2.9:7171/uzers";
-    public static final String CONNECTION_API = "http://10.2.2.9:7171/connections";
-    public static final String PROMIZE_API = "http://10.2.2.9:7171/promizes";
+    private static final String CONTRACTZ_API = "https://10.25.201.126:7171/api/v1/contractz";
 
     private IPostTaskListener listener;
-    private String api;
     private SenzMsg senzMsg;
-    private Context context;
 
-    public PostTask(Context context, IPostTaskListener listener, String api, SenzMsg senzMsg) {
-        this.context = context;
+    public PostTask(SenzMsg senzMsg, IPostTaskListener listener) {
         this.listener = listener;
-        this.api = api;
         this.senzMsg = senzMsg;
     }
 
     @Override
-    protected Integer doInBackground(String... params) {
-        return doPost(params[0], senzMsg);
+    protected String doInBackground(String... params) {
+        return doPost(senzMsg);
     }
 
-    @Override
-    protected void onPostExecute(Integer status) {
-        super.onPostExecute(status);
-
-        listener.onFinishTask(status);
-    }
-
-    private int doPost(String httpMethod, SenzMsg senzMsg) {
+    private String doPost(SenzMsg senzMsg) {
         try {
-            URL url = new URL(api);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod(httpMethod);
+            // ssl config
+            URL url = new URL(CONTRACTZ_API);
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1.2");
+            sslcontext.init(null, null, null);
+            SSLSocketFactory NoSSLv3Factory = new NoSSLv3Factory(sslcontext.getSocketFactory());
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLv3Factory);
+            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+
+            // connection
+            //HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
             conn.setDoInput(true);
 
+            // post
             DataOutputStream os = new DataOutputStream(conn.getOutputStream());
             os.writeBytes(JsonUtil.toJson(senzMsg));
             os.flush();
             os.close();
 
-            int statusCode = conn.getResponseCode();
-            Log.i(TAG, "StatusCode: " + statusCode);
+            // read response
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
 
-            return statusCode;
+            Log.i(TAG, "StatusCode: " + conn.getResponseCode());
+            Log.i(TAG, "Response: " + response.toString());
+
+            return response.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return HttpURLConnection.HTTP_BAD_REQUEST;
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(String msg) {
+        super.onPostExecute(msg);
+
+        // parse and find result, status back
+        try {
+            Senz senz = JsonUtil.toSenz(msg);
+            listener.onFinishTask(senz.getAttributes().get("status"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            listener.onFinishTask("400");
+        }
     }
 }

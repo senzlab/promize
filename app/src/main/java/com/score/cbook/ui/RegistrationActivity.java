@@ -14,13 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.async.FetchTask;
-import com.score.cbook.async.SenzPublisher;
+import com.score.cbook.async.PostTask;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.InvalidPhoneNumberException;
 import com.score.cbook.exceptions.MisMatchFieldException;
 import com.score.cbook.exceptions.MisMatchPhoneNumberException;
-import com.score.cbook.interfaces.IFetchTaskListener;
+import com.score.cbook.interfaces.IPostTaskListener;
 import com.score.cbook.interfaces.ISenzPublisherListener;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.pojo.SenzMsg;
@@ -35,7 +34,7 @@ import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
 
-public class RegistrationActivity extends BaseActivity implements ISenzPublisherListener, IFetchTaskListener {
+public class RegistrationActivity extends BaseActivity implements ISenzPublisherListener, IPostTaskListener {
 
     private static final String TAG = RegistrationActivity.class.getName();
 
@@ -119,10 +118,7 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
         registerBtn.setTypeface(typeface, Typeface.BOLD);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //onClickRegister();
-                FetchTask task = new FetchTask(RegistrationActivity.this, FetchTask.BLOB_API);
-                SenzMsg msg = new SenzMsg("2323", "DATA");
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, msg);
+                onClickRegister();
             }
         });
 
@@ -189,8 +185,10 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
             String message = SenzParser.senzMsg(senzPayload, signature);
 
             ActivityUtil.showProgressDialog(this, "Please wait...");
-            SenzPublisher task = new SenzPublisher(this);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
+
+            SenzMsg senzMsg = new SenzMsg(senz.getAttributes().get("uid"), message);
+            PostTask task = new PostTask(senzMsg, RegistrationActivity.this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -234,7 +232,7 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
     }
 
     @Override
-    public void onFinishTask(Integer status) {
+    public void onFinishTask(String status) {
 
     }
 }

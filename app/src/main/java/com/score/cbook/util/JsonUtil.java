@@ -12,11 +12,15 @@ public class JsonUtil {
         jsonParam.put("Uid", senzMsg.getUid());
         jsonParam.put("Msg", senzMsg.getMsg());
 
-        return jsonParam.toString().replaceAll("\\\\","");
+        return jsonParam.toString().replaceAll("\\\\", "");
     }
 
     public static Senz toSenz(String jsonStr) throws JSONException {
-        JSONObject jsonObj = new JSONObject(jsonStr);
-        return SenzParser.parse(jsonObj.getString("Msg"));
+        if (jsonStr != null && !jsonStr.isEmpty()) {
+            JSONObject jsonObj = new JSONObject(jsonStr);
+            return SenzParser.parse(jsonObj.getString("Msg"));
+        }
+
+        throw new JSONException("Null jsonstr");
     }
 }
