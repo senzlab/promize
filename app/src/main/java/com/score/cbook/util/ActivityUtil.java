@@ -52,17 +52,8 @@ public class ActivityUtil {
     }
 
     public static void isValidRegistrationFields(String phone, String confirmPhone, String password, String confirmPassword) throws InvalidPhoneNumberException, InvalidPasswordException, MisMatchFieldException, MisMatchPhoneNumberException {
-        if (phone.isEmpty()) {
+        if (phone.isEmpty() || phone.length() != 9) {
             throw new InvalidPhoneNumberException();
-        }
-
-        if (phone.length() != 10 || phone.length() != 10) {
-            throw new InvalidPhoneNumberException();
-        } else if (phone.length() == 10) {
-            String pattern = "^(0)[0-9]*$";
-            if (!phone.matches(pattern)) {
-                throw new InvalidPhoneNumberException();
-            }
         }
 
         if (password.isEmpty() || password.length() < 8)

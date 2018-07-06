@@ -14,13 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.async.PostTask;
+import com.score.cbook.async.ContractExecutor;
 import com.score.cbook.exceptions.InvalidPasswordException;
 import com.score.cbook.exceptions.InvalidPhoneNumberException;
 import com.score.cbook.exceptions.MisMatchFieldException;
 import com.score.cbook.exceptions.MisMatchPhoneNumberException;
-import com.score.cbook.interfaces.IPostTaskListener;
-import com.score.cbook.interfaces.ISenzPublisherListener;
+import com.score.cbook.interfaces.IContractExecutorListener;
 import com.score.cbook.pojo.Account;
 import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
@@ -33,11 +32,14 @@ import com.score.cbook.util.SenzUtil;
 import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
+import java.util.List;
 
-public class RegistrationActivity extends BaseActivity implements ISenzPublisherListener, IPostTaskListener {
+public class RegistrationActivity extends BaseActivity implements IContractExecutorListener {
 
     // ui controls
     private Button registerBtn;
+    private EditText editTextCountryCode;
+    private EditText editTextCountryCode1;
     private EditText editTextPhone;
     private EditText editTextConfirmPhone;
     private EditText editTextPassword;
@@ -97,6 +99,8 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
     }
 
     private void initUi() {
+        editTextCountryCode = (EditText) findViewById(R.id.country_code);
+        editTextCountryCode1 = (EditText) findViewById(R.id.country_code1);
         editTextPhone = (EditText) findViewById(R.id.registering_user_id);
         editTextConfirmPhone = (EditText) findViewById(R.id.registering_confirm_user_id);
         editTextPassword = (EditText) findViewById(R.id.registering_password);
@@ -105,6 +109,8 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
         termsLink = (TextView) findViewById(R.id.terms_link);
         termsLink.setPaintFlags(termsLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
+        editTextCountryCode.setTypeface(typeface, Typeface.NORMAL);
+        editTextCountryCode1.setTypeface(typeface, Typeface.NORMAL);
         editTextPhone.setTypeface(typeface, Typeface.NORMAL);
         editTextConfirmPhone.setTypeface(typeface, Typeface.NORMAL);
         editTextPassword.setTypeface(typeface, Typeface.NORMAL);
@@ -185,7 +191,7 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
             ActivityUtil.showProgressDialog(this, "Please wait...");
 
             SenzMsg senzMsg = new SenzMsg(senz.getAttributes().get("uid"), message);
-            PostTask task = new PostTask(senzMsg, RegistrationActivity.this);
+            ContractExecutor task = new ContractExecutor(senzMsg, RegistrationActivity.this);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
             e.printStackTrace();
@@ -204,35 +210,9 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
     }
 
     @Override
-    public void onFinish(String senz) {
+    public void onFinishTask(List<Senz> senzes) {
         ActivityUtil.cancelProgressDialog();
-        if (senz == null) {
-            ActivityUtil.cancelProgressDialog();
-            displayInformationMessageDialog("Error", "Fail to register in igift");
-        } else {
-            Senz z = SenzParser.parse(senz);
-            if (z.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
-                // OK
-                Toast.makeText(this, "Registration done", Toast.LENGTH_LONG).show();
-
-                PreferenceUtil.put(this, PreferenceUtil.Z_ADDRESS, zaddress);
-                PreferenceUtil.put(this, PreferenceUtil.USERNAME, account.getUsername());
-                PreferenceUtil.put(this, PreferenceUtil.PASSWORD, account.getPassword());
-                navigateToQuestionInfo();
-            } else if (z.getAttributes().get("status").equalsIgnoreCase("403")) {
-                ActivityUtil.cancelProgressDialog();
-                displayInformationMessageDialog("Error", "Given phone no " + zaddress + " already registered in igift. Please contact sampath support center for verification");
-            } else {
-                ActivityUtil.cancelProgressDialog();
-                displayInformationMessageDialog("Error", "Something went wrong while registering.");
-            }
-        }
-    }
-
-    @Override
-    public void onFinishTask(String status) {
-        ActivityUtil.cancelProgressDialog();
-        if (status.equalsIgnoreCase("200")) {
+        if (senzes.size() > 0 && senzes.get(0).getAttributes().get("status").equalsIgnoreCase("200")) {
             // OK
             Toast.makeText(this, "Registration done", Toast.LENGTH_LONG).show();
 
@@ -240,7 +220,7 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
             PreferenceUtil.put(this, PreferenceUtil.USERNAME, account.getUsername());
             PreferenceUtil.put(this, PreferenceUtil.PASSWORD, account.getPassword());
             navigateToQuestionInfo();
-        } else if (status.equalsIgnoreCase("403")) {
+        } else if (senzes.size() > 0 && senzes.get(0).getAttributes().get("status").equalsIgnoreCase("403")) {
             ActivityUtil.cancelProgressDialog();
             displayInformationMessageDialog("Error", "Given phone no " + zaddress + " already registered in igift. Please contact sampath support center for verification");
         } else {
