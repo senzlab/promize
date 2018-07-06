@@ -13,6 +13,7 @@ import org.json.JSONException;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -23,7 +24,7 @@ public class PostTask extends AsyncTask<String, String, String> {
 
     private static final String TAG = PostTask.class.getName();
 
-    private static final String CONTRACTZ_API = "https://10.25.201.126:7171/api/v1/contractz";
+    private static final String CONTRACTZ_API = "https://uatweb.sampath.lk/igift/v1/contractz";
 
     private IPostTaskListener listener;
     private SenzMsg senzMsg;

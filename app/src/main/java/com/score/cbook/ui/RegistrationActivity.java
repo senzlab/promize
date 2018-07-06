@@ -36,8 +36,6 @@ import java.security.PrivateKey;
 
 public class RegistrationActivity extends BaseActivity implements ISenzPublisherListener, IPostTaskListener {
 
-    private static final String TAG = RegistrationActivity.class.getName();
-
     // ui controls
     private Button registerBtn;
     private EditText editTextPhone;
@@ -233,6 +231,21 @@ public class RegistrationActivity extends BaseActivity implements ISenzPublisher
 
     @Override
     public void onFinishTask(String status) {
+        ActivityUtil.cancelProgressDialog();
+        if (status.equalsIgnoreCase("200")) {
+            // OK
+            Toast.makeText(this, "Registration done", Toast.LENGTH_LONG).show();
 
+            PreferenceUtil.put(this, PreferenceUtil.Z_ADDRESS, zaddress);
+            PreferenceUtil.put(this, PreferenceUtil.USERNAME, account.getUsername());
+            PreferenceUtil.put(this, PreferenceUtil.PASSWORD, account.getPassword());
+            navigateToQuestionInfo();
+        } else if (status.equalsIgnoreCase("403")) {
+            ActivityUtil.cancelProgressDialog();
+            displayInformationMessageDialog("Error", "Given phone no " + zaddress + " already registered in igift. Please contact sampath support center for verification");
+        } else {
+            ActivityUtil.cancelProgressDialog();
+            displayInformationMessageDialog("Error", "Something went wrong while registering.");
+        }
     }
 }
