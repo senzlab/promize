@@ -11,8 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.score.cbook.R;
-import com.score.cbook.async.SenzPublisher;
-import com.score.cbook.interfaces.ISenzPublisherListener;
+import com.score.cbook.async.ContractExecutor;
+import com.score.cbook.interfaces.IContractExecutorListener;
+import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.PreferenceUtil;
@@ -21,13 +22,14 @@ import com.score.cbook.util.SenzUtil;
 import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
+import java.util.List;
 
 /**
  * Activity class that handles login
  *
  * @author erangaeb@gmail.com (eranga herath)
  */
-public class AccountVerifyInfoActivity extends BaseActivity implements ISenzPublisherListener {
+public class AccountVerifyInfoActivity extends BaseActivity implements IContractExecutorListener {
 
     // UI fields
     private TextView hi;
@@ -116,8 +118,9 @@ public class AccountVerifyInfoActivity extends BaseActivity implements ISenzPubl
             String message = SenzParser.senzMsg(senzPayload, signature);
 
             ActivityUtil.showProgressDialog(AccountVerifyInfoActivity.this, "Please wait...");
-            SenzPublisher task = new SenzPublisher(this);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
+            SenzMsg senzMsg = new SenzMsg(senz.getAttributes().get("uid"), message);
+            ContractExecutor task = new ContractExecutor(senzMsg, AccountVerifyInfoActivity.this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -132,19 +135,24 @@ public class AccountVerifyInfoActivity extends BaseActivity implements ISenzPubl
     }
 
     @Override
-    public void onFinish(String senz) {
+    public void onFinishTask(List<Senz> senzes) {
         ActivityUtil.cancelProgressDialog();
-        if (senz == null) {
+        if (senzes.size() == 0) {
             ActivityUtil.cancelProgressDialog();
             displayInformationMessageDialog("Error", "Fail to verify account");
         } else {
-            // reset account state
-            // save account
-            // navigate to salt confirm
-            PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_STATE, "PENDING");
-            PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_BANK, SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
-            PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_NO, account);
-            navigateToConfirm();
+            Senz z = senzes.get(0);
+            if (z.getAttributes().get("status").equalsIgnoreCase("200")) {
+                // reset account state
+                // save account
+                // navigate to salt confirm
+                PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_STATE, "PENDING");
+                PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_BANK, SenzUtil.SAMPATH_CHAIN_SENZIE_NAME);
+                PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_NO, account);
+                navigateToConfirm();
+            } else {
+                displayInformationMessageDialog("Error", "Fail to send request");
+            }
         }
     }
 }

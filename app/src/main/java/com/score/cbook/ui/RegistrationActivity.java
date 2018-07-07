@@ -25,7 +25,6 @@ import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
-import com.score.cbook.util.PhoneBookUtil;
 import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
@@ -38,8 +37,6 @@ public class RegistrationActivity extends BaseActivity implements IContractExecu
 
     // ui controls
     private Button registerBtn;
-    private EditText editTextCountryCode;
-    private EditText editTextCountryCode1;
     private EditText editTextPhone;
     private EditText editTextConfirmPhone;
     private EditText editTextPassword;
@@ -99,8 +96,6 @@ public class RegistrationActivity extends BaseActivity implements IContractExecu
     }
 
     private void initUi() {
-        editTextCountryCode = (EditText) findViewById(R.id.country_code);
-        editTextCountryCode1 = (EditText) findViewById(R.id.country_code1);
         editTextPhone = (EditText) findViewById(R.id.registering_user_id);
         editTextConfirmPhone = (EditText) findViewById(R.id.registering_confirm_user_id);
         editTextPassword = (EditText) findViewById(R.id.registering_password);
@@ -109,8 +104,6 @@ public class RegistrationActivity extends BaseActivity implements IContractExecu
         termsLink = (TextView) findViewById(R.id.terms_link);
         termsLink.setPaintFlags(termsLink.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        editTextCountryCode.setTypeface(typeface, Typeface.NORMAL);
-        editTextCountryCode1.setTypeface(typeface, Typeface.NORMAL);
         editTextPhone.setTypeface(typeface, Typeface.NORMAL);
         editTextConfirmPhone.setTypeface(typeface, Typeface.NORMAL);
         editTextPassword.setTypeface(typeface, Typeface.NORMAL);
@@ -149,11 +142,12 @@ public class RegistrationActivity extends BaseActivity implements IContractExecu
                 @Override
                 public void onClick(View v) {
                     if (NetworkUtil.isAvailableNetwork(RegistrationActivity.this)) {
+                        String formattedPhone = "+94" + phone.substring(1);
                         account = new Account();
-                        account.setUsername(phone);
+                        account.setUsername(formattedPhone);
                         account.setPassword(password);
                         if (PreferenceUtil.get(RegistrationActivity.this, PreferenceUtil.Z_ADDRESS).isEmpty())
-                            doReg(phone);
+                            doReg(formattedPhone);
                     } else {
                         Toast.makeText(RegistrationActivity.this, "No network connection", Toast.LENGTH_LONG).show();
                     }
@@ -179,7 +173,7 @@ public class RegistrationActivity extends BaseActivity implements IContractExecu
             // generate keypair
             // generate senzie address
             CryptoUtil.initKeys(this);
-            zaddress = PhoneBookUtil.getFormattedPhoneNo(this, phone);
+            zaddress = phone;
 
             // create senz
             Senz senz = SenzUtil.regSenz(this, zaddress);

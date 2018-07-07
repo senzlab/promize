@@ -12,10 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.async.PostTask;
-import com.score.cbook.async.SenzPublisher;
-import com.score.cbook.interfaces.IPostTaskListener;
-import com.score.cbook.interfaces.ISenzPublisherListener;
+import com.score.cbook.async.ContractExecutor;
+import com.score.cbook.interfaces.IContractExecutorListener;
 import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
@@ -25,39 +23,17 @@ import com.score.cbook.util.SenzUtil;
 import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
+import java.util.List;
 
 /**
  * Activity class that handles login
  *
  * @author erangaeb@gmail.com (eranga herath)
  */
-public class SaltConfirmActivity extends BaseActivity implements ISenzPublisherListener {
-
-    private static final String TAG = SaltConfirmActivity.class.getName();
+public class SaltConfirmActivity extends BaseActivity implements IContractExecutorListener {
 
     private EditText amount;
     private int retry = 0;
-
-    private void handleSenz(Senz senz) {
-        if (senz.getAttributes().containsKey("status")) {
-            String msg = senz.getAttributes().get("status");
-            if (msg != null && msg.equalsIgnoreCase("SUCCESS")) {
-                ActivityUtil.cancelProgressDialog();
-
-                // set account state as verified
-                PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_STATE, "VERIFIED");
-                Toast.makeText(this, "Your account has been verified", Toast.LENGTH_LONG).show();
-                SaltConfirmActivity.this.finish();
-            } else if (msg != null && msg.equalsIgnoreCase("ERROR")) {
-                ActivityUtil.cancelProgressDialog();
-                displayInformationMessageDialog("Error", "Fail to verify account");
-            } else if (msg != null && msg.equalsIgnoreCase("VERIFICATION_FAIL")) {
-                ActivityUtil.cancelProgressDialog();
-                String informationMessage = "Verification fail. Please contact sampath support regarding this issue";
-                displayInformationMessageDialog("Error", informationMessage);
-            }
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,8 +101,9 @@ public class SaltConfirmActivity extends BaseActivity implements ISenzPublisherL
             String message = SenzParser.senzMsg(senzPayload, signature);
 
             ActivityUtil.showProgressDialog(SaltConfirmActivity.this, "Please wait...");
-            SenzPublisher task = new SenzPublisher(this);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
+            SenzMsg senzMsg = new SenzMsg(senz.getAttributes().get("uid"), message);
+            ContractExecutor task = new ContractExecutor(senzMsg, SaltConfirmActivity.this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             retry++;
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,15 +111,20 @@ public class SaltConfirmActivity extends BaseActivity implements ISenzPublisherL
     }
 
     @Override
-    public void onFinish(String senz) {
+    public void onFinishTask(List<Senz> senzes) {
         ActivityUtil.cancelProgressDialog();
-        if (senz == null) {
+        if (senzes.size() == 0) {
             ActivityUtil.cancelProgressDialog();
             displayInformationMessageDialog("Error", "Fail to verify account");
         } else {
-            PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_STATE, "VERIFIED");
-            Toast.makeText(this, "Your account has been verified", Toast.LENGTH_LONG).show();
-            SaltConfirmActivity.this.finish();
+            Senz z = senzes.get(0);
+            if (z.getAttributes().get("status").equalsIgnoreCase("200")) {
+                PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_STATE, "VERIFIED");
+                Toast.makeText(this, "Your account has been verified", Toast.LENGTH_LONG).show();
+                SaltConfirmActivity.this.finish();
+            } else {
+                displayInformationMessageDialog("Error", "Fail to verify account");
+            }
         }
     }
 }

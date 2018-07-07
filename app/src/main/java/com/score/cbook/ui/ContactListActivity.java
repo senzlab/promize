@@ -16,12 +16,13 @@ import android.widget.Toast;
 
 import com.score.cbook.R;
 import com.score.cbook.async.ContactReader;
-import com.score.cbook.async.SenzPublisher;
+import com.score.cbook.async.ContractExecutor;
 import com.score.cbook.db.UserSource;
 import com.score.cbook.interfaces.IContactReaderListener;
-import com.score.cbook.interfaces.ISenzPublisherListener;
+import com.score.cbook.interfaces.IContractExecutorListener;
 import com.score.cbook.pojo.ChequeUser;
 import com.score.cbook.pojo.Contact;
+import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
@@ -32,8 +33,9 @@ import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
 import java.util.ArrayList;
+import java.util.List;
 
-public class ContactListActivity extends BaseActivity implements IContactReaderListener, ISenzPublisherListener {
+public class ContactListActivity extends BaseActivity implements IContactReaderListener, IContractExecutorListener {
 
     private EditText searchView;
 
@@ -152,8 +154,9 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
             String message = SenzParser.senzMsg(senzPayload, signature);
 
             ActivityUtil.showProgressDialog(ContactListActivity.this, "Requesting...");
-            SenzPublisher task = new SenzPublisher(this);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
+            SenzMsg senzMsg = new SenzMsg(senz.getAttributes().get("uid"), message);
+            ContractExecutor task = new ContractExecutor(senzMsg, ContactListActivity.this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -178,13 +181,13 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
     }
 
     @Override
-    public void onFinish(String senz) {
+    public void onFinishTask(List<Senz> senzes) {
         ActivityUtil.cancelProgressDialog();
-        if (senz == null) {
+        if (senzes.size() == 0) {
             displayInformationMessageDialog("Error", "Fail to send request");
         } else {
-            Senz z = SenzParser.parse(senz);
-            if (z.getAttributes().get("status").equalsIgnoreCase("SUCCESS")) {
+            Senz z = senzes.get(0);
+            if (z.getAttributes().get("status").equalsIgnoreCase("200")) {
                 // sent request
                 ChequeUser chequeUser = new ChequeUser(selectedContact.getPhoneNo());
                 chequeUser.setPhone(selectedContact.getPhoneNo());
@@ -199,5 +202,4 @@ public class ContactListActivity extends BaseActivity implements IContactReaderL
             }
         }
     }
-
 }

@@ -43,85 +43,40 @@
                 android:textSize="28sp"
                 android:visibility="gone" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/country_code"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="50dp"
-                    android:background="@drawable/edit_text_border_bottom"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:paddingBottom="10dp"
-                    android:text="+94"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textCursorDrawable="@drawable/cursor_drawable"
-                    android:textSize="25sp" />
-
-                <EditText
-                    android:id="@+id/registering_user_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="50dp"
-                    android:background="@drawable/edit_text_border_bottom"
-                    android:hint="Phone no "
-                    android:inputType="number"
-                    android:maxLength="9"
-                    android:paddingBottom="10dp"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textCursorDrawable="@drawable/cursor_drawable"
-                    android:textSize="25sp" />
-            </LinearLayout>
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/registering_user_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="35dp">
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:background="@drawable/edit_text_border_bottom"
+                android:hint="Phone no "
+                android:inputType="number"
+                android:maxLength="10"
+                android:paddingBottom="10dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textCursorDrawable="@drawable/cursor_drawable"
+                android:textSize="25sp" />
 
-                <EditText
-                    android:id="@+id/country_code1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="50dp"
-
-                    android:background="@drawable/edit_text_border_bottom"
-                    android:clickable="false"
-                    android:enabled="false"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:paddingBottom="10dp"
-                    android:text="+94"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textCursorDrawable="@drawable/cursor_drawable"
-                    android:textSize="25sp" />
-
-                <EditText
-                    android:id="@+id/registering_confirm_user_id"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="50dp"
-                    android:background="@drawable/edit_text_border_bottom"
-                    android:hint="Confirm phone no "
-                    android:inputType="number"
-                    android:maxLength="9"
-                    android:paddingBottom="10dp"
-                    android:textColor="@color/white"
-                    android:textColorHint="@color/white"
-                    android:textCursorDrawable="@drawable/cursor_drawable"
-                    android:textSize="25sp" />
-            </LinearLayout>
+            <EditText
+                android:id="@+id/registering_confirm_user_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="35dp"
+                android:background="@drawable/edit_text_border_bottom"
+                android:hint="Confirm Phone no "
+                android:inputType="number"
+                android:maxLength="10"
+                android:paddingBottom="10dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
+                android:textCursorDrawable="@drawable/cursor_drawable"
+                android:textSize="25sp" />
 
             <EditText
                 android:id="@+id/registering_password"
