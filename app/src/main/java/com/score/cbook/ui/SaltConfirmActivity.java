@@ -113,8 +113,8 @@ public class SaltConfirmActivity extends BaseActivity implements IContractExecut
     @Override
     public void onFinishTask(List<Senz> senzes) {
         ActivityUtil.cancelProgressDialog();
+        ActivityUtil.hideSoftKeyboard(this);
         if (senzes.size() == 0) {
-            ActivityUtil.cancelProgressDialog();
             displayInformationMessageDialog("Error", "Fail to verify account");
         } else {
             Senz z = senzes.get(0);

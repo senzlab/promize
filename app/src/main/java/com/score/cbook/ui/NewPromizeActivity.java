@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.async.SenzPublisher;
+import com.score.cbook.async.ContractExecutor;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.ChequeState;
 import com.score.cbook.enums.DeliveryState;
@@ -38,9 +38,10 @@ import com.score.cbook.exceptions.ExceedAmountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.InvalidMsgException;
 import com.score.cbook.exceptions.LessAmountException;
-import com.score.cbook.interfaces.ISenzPublisherListener;
+import com.score.cbook.interfaces.IContractExecutorListener;
 import com.score.cbook.pojo.Cheque;
 import com.score.cbook.pojo.ChequeUser;
+import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.ImageUtil;
@@ -52,8 +53,9 @@ import com.score.cbook.util.TimeUtil;
 import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
+import java.util.List;
 
-public class NewPromizeActivity extends BaseActivity implements View.OnTouchListener, ISenzPublisherListener {
+public class NewPromizeActivity extends BaseActivity implements View.OnTouchListener, IContractExecutorListener {
     protected static final String TAG = NewPromizeActivity.class.getName();
 
     // camera
@@ -489,8 +491,9 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
             String message = SenzParser.senzMsg(senzPayload, signature);
 
             ActivityUtil.showProgressDialog(NewPromizeActivity.this, "Sending ...");
-            SenzPublisher task = new SenzPublisher(NewPromizeActivity.this);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
+            SenzMsg senzMsg = new SenzMsg(transferSenz.getAttributes().get("uid"), message);
+            ContractExecutor task = new ContractExecutor(senzMsg, NewPromizeActivity.this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -592,18 +595,22 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
     }
 
     @Override
-    public void onFinish(String senz) {
+    public void onFinishTask(List<Senz> senzes) {
         ActivityUtil.cancelProgressDialog();
         ActivityUtil.hideSoftKeyboard(this);
-        if (senz == null) {
-            ActivityUtil.cancelProgressDialog();
+        if (senzes.size() == 0) {
             displayInformationMessageDialog("Error", "Failed to send igift");
         } else {
-            Toast.makeText(this, "Successfully sent igift", Toast.LENGTH_LONG).show();
+            Senz z = senzes.get(0);
+            if (z.getAttributes().get("status").equalsIgnoreCase("200")) {
+                Toast.makeText(this, "Successfully sent igift", Toast.LENGTH_LONG).show();
 
-            updateTodayLimit();
-            savePromize();
-            this.finish();
+                updateTodayLimit();
+                savePromize();
+                this.finish();
+            } else {
+                displayInformationMessageDialog("Error", "Fail to send request");
+            }
         }
     }
 }

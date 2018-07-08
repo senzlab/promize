@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -16,27 +15,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.async.SenzPublisher;
+import com.score.cbook.async.ContractExecutor;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.ChequeState;
 import com.score.cbook.exceptions.InvalidAccountException;
 import com.score.cbook.exceptions.InvalidInputFieldsException;
 import com.score.cbook.exceptions.MisMatchFieldException;
-import com.score.cbook.interfaces.ISenzPublisherListener;
+import com.score.cbook.interfaces.IContractExecutorListener;
 import com.score.cbook.pojo.Bank;
 import com.score.cbook.pojo.Cheque;
+import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.NetworkUtil;
 import com.score.cbook.util.PreferenceUtil;
 import com.score.cbook.util.SenzParser;
 import com.score.cbook.util.SenzUtil;
-import com.score.senzc.enums.SenzTypeEnum;
 import com.score.senzc.pojos.Senz;
 
 import java.security.PrivateKey;
+import java.util.List;
 
-public class RedeemActivity extends BaseActivity implements ISenzPublisherListener {
+public class RedeemActivity extends BaseActivity implements IContractExecutorListener {
 
     private static final String TAG = RedeemActivity.class.getName();
 
@@ -195,27 +195,32 @@ public class RedeemActivity extends BaseActivity implements ISenzPublisherListen
             String message = SenzParser.senzMsg(senzPayload, signature);
 
             ActivityUtil.showProgressDialog(RedeemActivity.this, "Please wait...");
-            SenzPublisher task = new SenzPublisher(RedeemActivity.this);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
+            SenzMsg senzMsg = new SenzMsg(redeemSenz.getAttributes().get("uid"), message);
+            ContractExecutor task = new ContractExecutor(senzMsg, RedeemActivity.this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void onFinish(String senz) {
+    public void onFinishTask(List<Senz> senzes) {
         ActivityUtil.cancelProgressDialog();
         ActivityUtil.hideSoftKeyboard(this);
-        if (senz == null) {
-            ActivityUtil.cancelProgressDialog();
+        if (senzes.size() == 0) {
             displayInformationMessageDialog("Error", "Failed to redeem igift");
         } else {
-            // update cheque status and account
-            ChequeSource.updateChequeState(this, cheque.getUid(), ChequeState.DEPOSIT);
-            ChequeSource.updateChequeAccount(this, cheque.getUid(), cheque.getAccount());
+            Senz z = senzes.get(0);
+            if (z.getAttributes().get("status").equalsIgnoreCase("200")) {
+                // update cheque status and account
+                ChequeSource.updateChequeState(this, cheque.getUid(), ChequeState.DEPOSIT);
+                ChequeSource.updateChequeAccount(this, cheque.getUid(), cheque.getAccount());
 
-            Toast.makeText(RedeemActivity.this, "Successfully redeemed the igift", Toast.LENGTH_LONG).show();
-            RedeemActivity.this.finish();
+                Toast.makeText(RedeemActivity.this, "Successfully redeemed the igift", Toast.LENGTH_LONG).show();
+                RedeemActivity.this.finish();
+            } else {
+                displayInformationMessageDialog("Error", "Fail to send request");
+            }
         }
     }
 }

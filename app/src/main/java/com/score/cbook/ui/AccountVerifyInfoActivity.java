@@ -138,7 +138,6 @@ public class AccountVerifyInfoActivity extends BaseActivity implements IContract
     public void onFinishTask(List<Senz> senzes) {
         ActivityUtil.cancelProgressDialog();
         if (senzes.size() == 0) {
-            ActivityUtil.cancelProgressDialog();
             displayInformationMessageDialog("Error", "Fail to verify account");
         } else {
             Senz z = senzes.get(0);

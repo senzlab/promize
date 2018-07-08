@@ -12,11 +12,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.score.cbook.R;
-import com.score.cbook.async.SenzPublisher;
+import com.score.cbook.async.ContractExecutor;
 import com.score.cbook.db.ChequeSource;
 import com.score.cbook.enums.ChequeState;
-import com.score.cbook.interfaces.ISenzPublisherListener;
+import com.score.cbook.interfaces.IContractExecutorListener;
 import com.score.cbook.pojo.Cheque;
+import com.score.cbook.pojo.SenzMsg;
 import com.score.cbook.util.ActivityUtil;
 import com.score.cbook.util.CryptoUtil;
 import com.score.cbook.util.ImageUtil;
@@ -27,9 +28,10 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.security.PrivateKey;
+import java.util.List;
 
 
-public class PromizePreviewActivity extends BaseActivity implements ISenzPublisherListener {
+public class PromizePreviewActivity extends BaseActivity implements IContractExecutorListener {
 
     private FloatingActionButton cancel;
     private FloatingActionButton done;
@@ -101,8 +103,9 @@ public class PromizePreviewActivity extends BaseActivity implements ISenzPublish
             String message = SenzParser.senzMsg(senzPayload, signature);
 
             ActivityUtil.showProgressDialog(this, "Fetching igift");
-            SenzPublisher task = new SenzPublisher(this);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, message);
+            SenzMsg senzMsg = new SenzMsg(senz.getAttributes().get("uid"), message);
+            ContractExecutor task = new ContractExecutor(senzMsg, PromizePreviewActivity.this);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -118,22 +121,21 @@ public class PromizePreviewActivity extends BaseActivity implements ISenzPublish
     }
 
     @Override
-    public void onFinish(String senz) {
+    public void onFinishTask(List<Senz> senzes) {
         ActivityUtil.cancelProgressDialog();
-        if (senz == null) {
+        if (senzes.size() == 0) {
             Toast.makeText(this, "Failed to fetch igift", Toast.LENGTH_LONG).show();
         } else {
-            // parse senz and get blob
-            Senz bSenz = SenzParser.parse(senz);
-            if (bSenz.getAttributes().containsKey("blob")) {
-                String imgName = bSenz.getAttributes().get("uid") + ".jpg";
-                ImageUtil.saveImg(imgName, bSenz.getAttributes().get("blob"));
+            Senz z = senzes.get(0);
+            if (z.getAttributes().get("status").equalsIgnoreCase("200")) {
+                String imgName = z.getAttributes().get("uid") + ".jpg";
+                ImageUtil.saveImg(imgName, z.getAttributes().get("blob"));
 
                 cheque.setViewed(true);
                 ChequeSource.markChequeViewed(this, cheque.getUid());
                 loadBitmap(imageView, cheque.getUid());
             } else {
-                Toast.makeText(this, "Failed to fetch igift", Toast.LENGTH_LONG).show();
+                displayInformationMessageDialog("Error", "Fail to send request");
             }
         }
     }
