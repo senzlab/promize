@@ -150,7 +150,7 @@ public class AccountVerifyInfoActivity extends BaseActivity implements IContract
                 PreferenceUtil.put(this, PreferenceUtil.ACCOUNT_NO, account);
                 navigateToConfirm();
             } else {
-                displayInformationMessageDialog("Error", "Fail to send request");
+                displayInformationMessageDialog("Error", "Fail to verify account");
             }
         }
     }

@@ -609,7 +609,7 @@ public class NewPromizeActivity extends BaseActivity implements View.OnTouchList
                 savePromize();
                 this.finish();
             } else {
-                displayInformationMessageDialog("Error", "Fail to send request");
+                displayInformationMessageDialog("Error", "Failed to send igift");
             }
         }
     }

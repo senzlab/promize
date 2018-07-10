@@ -219,7 +219,7 @@ public class RedeemActivity extends BaseActivity implements IContractExecutorLis
                 Toast.makeText(RedeemActivity.this, "Successfully redeemed the igift", Toast.LENGTH_LONG).show();
                 RedeemActivity.this.finish();
             } else {
-                displayInformationMessageDialog("Error", "Fail to send request");
+                displayInformationMessageDialog("Error", "Failed to redeem igift");
             }
         }
     }

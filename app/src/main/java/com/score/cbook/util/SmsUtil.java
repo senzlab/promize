@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 public class SmsUtil {
     public static void iGiftRequest(String phone) {
-        String msg = "Remembering every moment with Sampath igift. Plese, download Sampath igift from App Store or Play Store to receive my igift. Experience the new wave of gifting";
+        String msg = "Remembering every moment with Sampath igift. Please, download Sampath igift from App Store or Play Store to receive my igift. Experience the new wave of gifting";
         SmsManager.getDefault().sendTextMessage(phone, null, msg, null, null);
     }
 

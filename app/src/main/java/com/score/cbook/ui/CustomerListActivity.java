@@ -241,7 +241,7 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
         if (actionType == CustomerActionType.CUSTOMER_LIST) {
             final ChequeUser chequeUser = customerList.get(position);
-            if (!ChequeSource.hasChequesToRedeem(this, chequeUser.getUsername())) {
+            if (!chequeUser.isActive()) {
                 String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
                 displayConfirmationMessageDialog("Confirm", "Are you sure your want to remove " + contactName + " from igift contacts?", new View.OnClickListener() {
                     @Override
@@ -256,8 +256,6 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
                         SecretSource.deleteSecretsOfUser(CustomerListActivity.this, chequeUser.getUsername());
                     }
                 });
-            } else {
-                displayInformationMessageDialog("Error", "You have igifts from this contact which not yet redeemed. Please redeem them before removing the contact");
             }
         }
 

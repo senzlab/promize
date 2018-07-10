@@ -120,7 +120,7 @@ public class UserProfileActivity extends BaseActivity implements View.OnClickLis
                 }
             });
         } else {
-            displayInformationMessageDialog("Error", "You have igifts from this contact which not yet redeemed. Please redeem them before removing the contact");
+            displayInformationMessageDialog("Error", "You have igifts from this contact which not been redeemed. Please redeem them before removing the contact");
         }
     }
 

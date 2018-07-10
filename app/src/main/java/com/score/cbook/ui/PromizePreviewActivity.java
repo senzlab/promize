@@ -135,7 +135,7 @@ public class PromizePreviewActivity extends BaseActivity implements IContractExe
                 ChequeSource.markChequeViewed(this, cheque.getUid());
                 loadBitmap(imageView, cheque.getUid());
             } else {
-                displayInformationMessageDialog("Error", "Fail to send request");
+                displayInformationMessageDialog("Error", "Failed to fetch igift");
             }
         }
     }
