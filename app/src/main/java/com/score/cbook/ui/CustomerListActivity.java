@@ -241,20 +241,24 @@ public class CustomerListActivity extends BaseActivity implements AdapterView.On
     public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
         if (actionType == CustomerActionType.CUSTOMER_LIST) {
             final ChequeUser chequeUser = customerList.get(position);
-            String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
-            displayConfirmationMessageDialog("Confirm", "Are you sure your want to remove " + contactName + " from igift contacts?", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // delete item
-                    customerList.remove(position);
-                    customerListAdapter.notifyDataSetChanged();
+            if (!ChequeSource.hasChequesToRedeem(this, chequeUser.getUsername())) {
+                String contactName = PhoneBookUtil.getContactName(CustomerListActivity.this, chequeUser.getPhone());
+                displayConfirmationMessageDialog("Confirm", "Are you sure your want to remove " + contactName + " from igift contacts?", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // delete item
+                        customerList.remove(position);
+                        customerListAdapter.notifyDataSetChanged();
 
-                    // delete from db
-                    UserSource.deleteUser(CustomerListActivity.this, chequeUser.getUsername());
-                    ChequeSource.deleteChequesOfUser(CustomerListActivity.this, chequeUser.getUsername());
-                    SecretSource.deleteSecretsOfUser(CustomerListActivity.this, chequeUser.getUsername());
-                }
-            });
+                        // delete from db
+                        UserSource.deleteUser(CustomerListActivity.this, chequeUser.getUsername());
+                        ChequeSource.deleteChequesOfUser(CustomerListActivity.this, chequeUser.getUsername());
+                        SecretSource.deleteSecretsOfUser(CustomerListActivity.this, chequeUser.getUsername());
+                    }
+                });
+            } else {
+                displayInformationMessageDialog("Error", "You have igifts from this contact which not yet redeemed. Please redeem them before removing the contact");
+            }
         }
 
         return true;
