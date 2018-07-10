@@ -36,16 +36,16 @@ public class TermsOfUseActivity extends BaseActivity {
     private void initUi() {
         ((TextView) findViewById(R.id.message2)).setTypeface(typeface, Typeface.BOLD);
         ((TextView) findViewById(R.id.message3)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.message4)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.message5)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.message6)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.message7)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.message8)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.message9)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.message10)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.message11)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.message12)).setTypeface(typeface, Typeface.BOLD);
-        ((TextView) findViewById(R.id.message13)).setTypeface(typeface, Typeface.BOLD);
+        ((TextView) findViewById(R.id.message4)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.message5)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.message6)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.message7)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.message8)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.message9)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.message10)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.message11)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.message12)).setTypeface(typeface, Typeface.NORMAL);
+        ((TextView) findViewById(R.id.message13)).setTypeface(typeface, Typeface.NORMAL);
     }
 
     private void initActionBar() {
